@@ -96,6 +96,15 @@ export default function Home() {
       icon: '💾',
       color: 'from-blue-400 to-cyan-500',
       skills: ['SQL语言', '数据库设计', '数据建模', '数据库管理']
+    },
+    {
+      id: '6',
+      name: '财务数据分析',
+      description: '财务数据的分析方法和应用',
+      details: '学习财务数据的收集、整理、分析和可视化，掌握财务分析的核心技术和方法。',
+      icon: '💰',
+      color: 'from-green-400 to-emerald-500',
+      skills: ['财务报表分析', '财务指标计算', '财务预测', '财务风险评估']
     }
   ];
 
@@ -331,16 +340,56 @@ export default function Home() {
                           </span>
                         ))}
                       </div>
-                      {course.id === '2' && (
-                        <div className="mt-4">
+                      <div className="mt-4">
+                        {course.id === '1' && (
+                          <a 
+                            href="/python" 
+                            className="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
+                          >
+                            查看课程详情
+                          </a>
+                        )}
+                        {course.id === '2' && (
                           <a 
                             href="/data-analysis" 
                             className="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
                           >
                             查看课程详情
                           </a>
-                        </div>
-                      )}
+                        )}
+                        {course.id === '3' && (
+                          <a 
+                            href="/data-collection" 
+                            className="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
+                          >
+                            查看课程详情
+                          </a>
+                        )}
+                        {course.id === '4' && (
+                          <a 
+                            href="/supply-chain" 
+                            className="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
+                          >
+                            查看课程详情
+                          </a>
+                        )}
+                        {course.id === '5' && (
+                          <a 
+                            href="/database" 
+                            className="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
+                          >
+                            查看课程详情
+                          </a>
+                        )}
+                        {course.id === '6' && (
+                          <a 
+                            href="/financial-analysis" 
+                            className="inline-block px-4 py-2 bg-gradient-to-r from-green-400 to-emerald-500 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-green-500/30 transition-all duration-300"
+                          >
+                            查看课程详情
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
