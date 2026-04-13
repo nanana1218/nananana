@@ -496,6 +496,84 @@ export default function PythonCourse() {
         correctAnswer: 1,
         explanation: 'Python的模块通常放在单独的文件中，但也可以在同一文件中定义多个模块。'
       }))
+    ],
+    'chapter5': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 401,
+        type: 'single' as const,
+        question: `文件操作问题 ${i + 1}：Python中打开文件的函数是？`,
+        options: [
+          'open()',
+          'file()',
+          'read()',
+          'write()'
+        ],
+        correctAnswer: 0,
+        explanation: 'Python中使用open()函数打开文件。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 451,
+        type: 'multiple' as const,
+        question: `文件操作问题 ${i + 51}：下列哪些是Python文件打开模式？`,
+        options: [
+          'r（读取）',
+          'w（写入）',
+          'a（追加）',
+          'b（二进制）'
+        ],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: 'Python文件打开模式包括r（读取）、w（写入）、a（追加）、b（二进制）等。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 481,
+        type: 'judgment' as const,
+        question: `文件操作问题 ${i + 81}：Python的with语句会自动关闭文件。`,
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: 'Python的with语句会在退出代码块时自动关闭文件，无需手动调用close()方法。'
+      }))
+    ],
+    'chapter6': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 501,
+        type: 'single' as const,
+        question: `面向对象编程问题 ${i + 1}：Python中定义类的关键字是？`,
+        options: [
+          'class',
+          'def',
+          'object',
+          'type'
+        ],
+        correctAnswer: 0,
+        explanation: 'Python中使用class关键字定义类。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 551,
+        type: 'multiple' as const,
+        question: `面向对象编程问题 ${i + 51}：下列哪些是面向对象编程的核心原则？`,
+        options: [
+          '封装',
+          '继承',
+          '多态',
+          '抽象'
+        ],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '面向对象编程的核心原则包括封装、继承、多态和抽象。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 581,
+        type: 'judgment' as const,
+        question: `面向对象编程问题 ${i + 81}：Python支持多重继承。`,
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: 'Python支持多重继承，一个类可以继承多个父类。'
+      }))
     ]
   };
 
@@ -1043,6 +1121,23 @@ export default function PythonCourse() {
             {activeTab === 'progress' && !activeChapter && (
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
                 <h3 className="text-2xl font-semibold text-gray-100 mb-6">Python基础课程学习进度</h3>
+                {/* 总体进度条 */}
+                <div className="mb-8">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gray-300">总体进度</span>
+                    <span className="text-blue-400 font-medium">
+                      {progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-4">
+                    <div 
+                      className="bg-gradient-to-r from-blue-500 to-cyan-400 h-4 rounded-full transition-all duration-500"
+                      style={{ 
+                        width: `${(progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0) / progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)) * 100}%` 
+                      }}
+                    ></div>
+                  </div>
+                </div>
                 <div className="space-y-4">
                   {progressItems.map((item) => (
                     <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
@@ -1139,11 +1234,54 @@ export default function PythonCourse() {
                 resources={learningResources} 
               />
             )}
-            {activeTab === 'exercises' && (
-              <ExerciseComponent 
-                title="Python基础练习" 
-                questions={exercises} 
-              />
+            {activeTab === 'exercises' && !activeChapter && (
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+                <h3 className="text-2xl font-semibold text-gray-100 mb-6">章节练习测试</h3>
+                <p className="text-gray-400 mb-8">选择章节进行测试，每次测试包含30道题目（单选、多选、判断）</p>
+                <div className="space-y-4">
+                  {progressItems.map((item) => (
+                    <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                      <div className="flex items-center justify-between cursor-pointer" onClick={() => {
+                        setActiveChapter(item.id);
+                        setActiveChapterMode('exercise');
+                      }}>
+                        <div className="flex items-center">
+                          <div className="w-10 h-10 bg-blue-900/50 rounded-lg flex items-center justify-center mr-4">
+                            <span className="text-blue-400 text-xl">📝</span>
+                          </div>
+                          <h4 className="font-medium text-gray-300">
+                            {item.title}
+                          </h4>
+                        </div>
+                        <span className="text-gray-400 text-sm">
+                          400题题库
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {activeTab === 'exercises' && activeChapter && activeChapterMode === 'exercise' && (
+              <div>
+                <div className="flex items-center mb-4">
+                  <button
+                    onClick={() => setActiveChapter(null)}
+                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                  >
+                    <span className="mr-2">←</span> 返回章节列表
+                  </button>
+                </div>
+                <ChapterExercise
+                  chapterId={activeChapter}
+                  chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
+                  questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
+                  questionCount={30}
+                  onComplete={(score, total) => {
+                    console.log(`练习完成，得分：${score}/${total}`);
+                  }}
+                />
+              </div>
             )}
           </div>
         </div>

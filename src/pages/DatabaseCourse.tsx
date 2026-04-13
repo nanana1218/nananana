@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import LearningProgress from '../components/LearningProgress';
 import LearningResource from '../components/LearningResource';
 import ExerciseComponent from '../components/ExerciseComponent';
+import ChapterContent from '../components/ChapterContent';
+import ChapterExercise from '../components/ChapterExercise';
 
 interface Section {
   id: string;
@@ -15,7 +17,11 @@ interface ProgressItem {
   id: string;
   title: string;
   completed: boolean;
-  children?: ProgressItem[];
+  subItems?: {
+    id: string;
+    title: string;
+    completed: boolean;
+  }[];
 }
 
 interface Resource {
@@ -41,13 +47,15 @@ export default function DatabaseCourse() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [activeTab, setActiveTab] = useState('progress');
+  const [activeChapter, setActiveChapter] = useState<string | null>(null);
+  const [activeChapterMode, setActiveChapterMode] = useState<'content' | 'exercise' | null>(null);
 
   const progressItems: ProgressItem[] = [
     {
       id: 'chapter1',
       title: '第一章：数据库概述',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section1-1', title: '数据库的概念与特点', completed: false },
         { id: 'section1-2', title: '数据库系统的组成', completed: false },
         { id: 'section1-3', title: '数据库的发展历程', completed: false },
@@ -58,7 +66,7 @@ export default function DatabaseCourse() {
       id: 'chapter2',
       title: '第二章：数据模型',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section2-1', title: '数据模型的概念与分类', completed: false },
         { id: 'section2-2', title: '概念模型', completed: false },
         { id: 'section2-3', title: '逻辑模型', completed: false },
@@ -70,7 +78,7 @@ export default function DatabaseCourse() {
       id: 'chapter3',
       title: '第三章：关系数据库',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section3-1', title: '关系数据库的基本概念', completed: false },
         { id: 'section3-2', title: '关系代数', completed: false },
         { id: 'section3-3', title: '关系数据库规范化', completed: false },
@@ -82,7 +90,7 @@ export default function DatabaseCourse() {
       id: 'chapter4',
       title: '第四章：SQL语言',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section4-1', title: 'SQL语言概述', completed: false },
         { id: 'section4-2', title: '数据定义语言（DDL）', completed: false },
         { id: 'section4-3', title: '数据操作语言（DML）', completed: false },
@@ -94,7 +102,7 @@ export default function DatabaseCourse() {
       id: 'chapter5',
       title: '第五章：数据库设计',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section5-1', title: '数据库设计概述', completed: false },
         { id: 'section5-2', title: '需求分析', completed: false },
         { id: 'section5-3', title: '概念结构设计', completed: false },
@@ -106,7 +114,7 @@ export default function DatabaseCourse() {
       id: 'chapter6',
       title: '第六章：数据库应用开发',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section6-1', title: '数据库应用开发概述', completed: false },
         { id: 'section6-2', title: '数据库连接技术', completed: false },
         { id: 'section6-3', title: '数据库应用系统架构', completed: false },
@@ -115,6 +123,452 @@ export default function DatabaseCourse() {
       ]
     }
   ];
+
+  // 章节内容数据
+  const chapterContents = {
+    'chapter1': {
+      title: '第一章：数据库概述',
+      sections: [
+        {
+          id: 'section1-1',
+          title: '数据库的概念与特点',
+          content: '数据库是按照一定的数据模型组织、存储和管理数据的仓库。\n\n数据库的特点：\n1. 数据结构化：数据按照一定的结构组织\n2. 数据共享：多个用户可以同时使用数据\n3. 数据独立性：数据与应用程序相互独立\n4. 数据一致性：数据保持一致和准确\n5. 数据安全性：保护数据不被非法访问',
+          codeExamples: []
+        },
+        {
+          id: 'section1-2',
+          title: '数据库系统的组成',
+          content: '数据库系统由以下部分组成：\n\n1. 数据库（DB）：存储数据的集合\n2. 数据库管理系统（DBMS）：管理数据库的软件\n3. 应用程序：使用数据库的软件\n4. 数据库管理员（DBA）：负责数据库的管理和维护\n5. 用户：使用数据库的人员',
+          codeExamples: []
+        },
+        {
+          id: 'section1-3',
+          title: '数据库的发展历程',
+          content: '数据库的发展经历了以下阶段：\n\n1. 人工管理阶段：数据由人工管理\n2. 文件系统阶段：数据存储在文件中\n3. 数据库系统阶段：使用DBMS管理数据\n4. 高级数据库系统阶段：如分布式数据库、面向对象数据库等',
+          codeExamples: []
+        },
+        {
+          id: 'section1-4',
+          title: '数据库的应用领域',
+          content: '数据库广泛应用于以下领域：\n\n1. 企业管理：如财务、人事、库存管理\n2. 电子商务：如在线购物、支付系统\n3. 金融服务：如银行、证券、保险\n4. 教育：如学生信息、课程管理\n5. 医疗：如患者信息、医疗记录\n6. 科研：如实验数据、文献管理',
+          codeExamples: []
+        }
+      ]
+    },
+    'chapter2': {
+      title: '第二章：数据模型',
+      sections: [
+        {
+          id: 'section2-1',
+          title: '数据模型的概念与分类',
+          content: '数据模型是对现实世界数据特征的抽象，是数据库系统的核心和基础。\n\n数据模型的分类：\n1. 概念模型：面向现实世界，如ER模型\n2. 逻辑模型：面向数据库，如关系模型、层次模型、网状模型\n3. 物理模型：面向计算机存储，如存储结构、索引等',
+          codeExamples: []
+        },
+        {
+          id: 'section2-2',
+          title: '概念模型',
+          content: '概念模型是对现实世界的抽象，主要用于数据库设计。\n\n概念模型的基本概念：\n1. 实体（Entity）：客观存在并可相互区别的事物\n2. 属性（Attribute）：实体的特征\n3. 实体型（Entity Type）：具有相同属性的实体的集合\n4. 实体集（Entity Set）：同类型实体的集合\n5. 联系（Relationship）：实体之间的关联',
+          codeExamples: []
+        },
+        {
+          id: 'section2-3',
+          title: '逻辑模型',
+          content: '逻辑模型是面向数据库的模型，用于描述数据库的结构。\n\n常见的逻辑模型：\n1. 关系模型：用二维表表示数据\n2. 层次模型：用树形结构表示数据\n3. 网状模型：用网状结构表示数据\n4. 面向对象模型：用对象表示数据',
+          codeExamples: []
+        },
+        {
+          id: 'section2-4',
+          title: '物理模型',
+          content: '物理模型是面向计算机存储的模型，描述数据在存储介质上的存储方式。\n\n物理模型的考虑因素：\n1. 存储结构：数据如何组织和存储\n2. 索引：如何提高查询效率\n3. 存取路径：数据的访问方式\n4. 存储分配：如何分配存储空间',
+          codeExamples: []
+        },
+        {
+          id: 'section2-5',
+          title: '实体-关系模型设计',
+          content: '实体-关系（ER）模型是一种常用的概念模型，用于数据库设计。\n\nER模型的设计步骤：\n1. 确定实体：识别需要存储的实体\n2. 确定属性：为每个实体确定属性\n3. 确定联系：确定实体之间的联系\n4. 确定联系的类型：一对一、一对多、多对多\n5. 绘制ER图：用图形表示实体、属性和联系',
+          codeExamples: []
+        }
+      ]
+    },
+    'chapter3': {
+      title: '第三章：关系数据库',
+      sections: [
+        {
+          id: 'section3-1',
+          title: '关系数据库的基本概念',
+          content: '关系数据库是基于关系模型的数据库，用二维表表示数据。\n\n关系数据库的基本概念：\n1. 关系（Relation）：二维表\n2. 元组（Tuple）：表中的一行\n3. 属性（Attribute）：表中的一列\n4. 域（Domain）：属性的取值范围\n5. 分量（Component）：元组中的一个属性值\n6. 关系模式：关系的结构\n7. 关系实例：关系的具体数据',
+          codeExamples: []
+        },
+        {
+          id: 'section3-2',
+          title: '关系代数',
+          content: '关系代数是一种用于操作关系的数学工具，是SQL语言的理论基础。\n\n关系代数的基本操作：\n1. 选择（Selection）：选择满足条件的元组\n2. 投影（Projection）：选择指定的属性\n3. 连接（Join）：将两个关系连接起来\n4. 笛卡尔积（Cartesian Product）：两个关系的所有可能组合\n5. 并（Union）：两个关系的并集\n6. 差（Difference）：两个关系的差集\n7. 交（Intersection）：两个关系的交集',
+          codeExamples: []
+        },
+        {
+          id: 'section3-3',
+          title: '关系数据库规范化',
+          content: '关系数据库规范化是一种设计关系模式的方法，用于消除数据冗余和异常。\n\n规范化的目的：\n1. 消除数据冗余：减少数据重复\n2. 消除更新异常：避免数据不一致\n3. 消除插入异常：避免无法插入数据\n4. 消除删除异常：避免误删数据',
+          codeExamples: []
+        },
+        {
+          id: 'section3-4',
+          title: '函数依赖',
+          content: '函数依赖是关系中属性之间的一种约束关系。\n\n函数依赖的类型：\n1. 完全函数依赖：X→Y，且X的任何真子集都不能决定Y\n2. 部分函数依赖：X→Y，且X的某个真子集可以决定Y\n3. 传递函数依赖：X→Y，Y→Z，且Y不能决定X',
+          codeExamples: []
+        },
+        {
+          id: 'section3-5',
+          title: '范式',
+          content: '范式是关系模式的规范化程度，从低到高分为1NF、2NF、3NF、BCNF等。\n\n各范式的要求：\n1. 1NF：列不可再分\n2. 2NF：消除部分函数依赖\n3. 3NF：消除传递函数依赖\n4. BCNF：消除主属性对候选键的部分和传递函数依赖',
+          codeExamples: []
+        }
+      ]
+    },
+    'chapter4': {
+      title: '第四章：SQL语言',
+      sections: [
+        {
+          id: 'section4-1',
+          title: 'SQL语言概述',
+          content: 'SQL（Structured Query Language）是一种用于管理关系数据库的标准语言。\n\nSQL的特点：\n1. 综合统一：集数据定义、操作、查询、控制于一体\n2. 高度非过程化：只需要说明做什么，不需要说明怎么做\n3. 面向集合的操作方式：操作对象和结果都是集合\n4. 语言简洁，易学易用：核心功能只用少量语句即可实现',
+          codeExamples: []
+        },
+        {
+          id: 'section4-2',
+          title: '数据定义语言（DDL）',
+          content: 'DDL用于定义数据库的结构，包括创建、修改和删除数据库对象。\n\n常用的DDL语句：\n1. CREATE：创建数据库对象\n2. ALTER：修改数据库对象\n3. DROP：删除数据库对象\n4. TRUNCATE：清空表中的数据',
+          codeExamples: ['CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)', 'ALTER TABLE students ADD COLUMN gender VARCHAR(10)', 'DROP TABLE students']
+        },
+        {
+          id: 'section4-3',
+          title: '数据操作语言（DML）',
+          content: 'DML用于操作数据库中的数据，包括插入、更新和删除数据。\n\n常用的DML语句：\n1. INSERT：插入数据\n2. UPDATE：更新数据\n3. DELETE：删除数据',
+          codeExamples: ['INSERT INTO students (id, name, age) VALUES (1, "Alice", 20)', 'UPDATE students SET age = 21 WHERE id = 1', 'DELETE FROM students WHERE id = 1']
+        },
+        {
+          id: 'section4-4',
+          title: '数据查询语言（DQL）',
+          content: 'DQL用于查询数据库中的数据，是SQL中最常用的部分。\n\n常用的DQL语句：\n1. SELECT：查询数据\n2. FROM：指定表\n3. WHERE：指定条件\n4. GROUP BY：分组\n5. HAVING：分组条件\n6. ORDER BY：排序\n7. LIMIT：限制结果数量',
+          codeExamples: ['SELECT * FROM students', 'SELECT name, age FROM students WHERE age > 18', 'SELECT age, COUNT(*) FROM students GROUP BY age']
+        },
+        {
+          id: 'section4-5',
+          title: '数据控制语言（DCL）',
+          content: 'DCL用于控制数据库的访问权限，包括授权和回收权限。\n\n常用的DCL语句：\n1. GRANT：授予权限\n2. REVOKE：回收权限\n3. COMMIT：提交事务\n4. ROLLBACK：回滚事务',
+          codeExamples: ['GRANT SELECT ON students TO user1', 'REVOKE SELECT ON students FROM user1', 'COMMIT', 'ROLLBACK']
+        }
+      ]
+    },
+    'chapter5': {
+      title: '第五章：数据库设计',
+      sections: [
+        {
+          id: 'section5-1',
+          title: '数据库设计概述',
+          content: '数据库设计是指根据用户需求，设计数据库的结构和功能。\n\n数据库设计的步骤：\n1. 需求分析：了解用户需求\n2. 概念结构设计：设计概念模型\n3. 逻辑结构设计：设计逻辑模型\n4. 物理结构设计：设计物理模型\n5. 数据库实施：创建数据库\n6. 数据库运行和维护：维护数据库',
+          codeExamples: []
+        },
+        {
+          id: 'section5-2',
+          title: '需求分析',
+          content: '需求分析是数据库设计的第一步，用于了解用户的需求和业务流程。\n\n需求分析的内容：\n1. 数据需求：需要存储哪些数据\n2. 功能需求：需要实现哪些功能\n3. 性能需求：系统的性能要求\n4. 安全需求：数据的安全要求',
+          codeExamples: []
+        },
+        {
+          id: 'section5-3',
+          title: '概念结构设计',
+          content: '概念结构设计是设计概念模型，用于描述用户的业务需求。\n\n概念结构设计的方法：\n1. 实体分析法：识别实体、属性和联系\n2. 自顶向下法：从整体到局部\n3. 自底向上法：从局部到整体\n4. 混合法：结合自顶向下和自底向上',
+          codeExamples: []
+        },
+        {
+          id: 'section5-4',
+          title: '逻辑结构设计',
+          content: '逻辑结构设计是将概念模型转换为逻辑模型，用于数据库的实现。\n\n逻辑结构设计的步骤：\n1. 确定数据模型：选择合适的数据模型\n2. 转换概念模型：将ER模型转换为关系模式\n3. 规范化：对关系模式进行规范化\n4. 优化：优化关系模式',
+          codeExamples: []
+        },
+        {
+          id: 'section5-5',
+          title: '物理结构设计',
+          content: '物理结构设计是设计数据库的物理存储结构，用于提高数据库的性能。\n\n物理结构设计的内容：\n1. 存储结构设计：选择存储结构\n2. 索引设计：设计索引\n3. 分区设计：设计分区\n4. 优化：优化物理结构',
+          codeExamples: []
+        }
+      ]
+    },
+    'chapter6': {
+      title: '第六章：数据库应用开发',
+      sections: [
+        {
+          id: 'section6-1',
+          title: '数据库应用开发概述',
+          content: '数据库应用开发是指开发使用数据库的应用程序。\n\n数据库应用开发的步骤：\n1. 需求分析：了解用户需求\n2. 设计：设计应用程序和数据库\n3. 编码：编写应用程序代码\n4. 测试：测试应用程序\n5. 部署：部署应用程序\n6. 维护：维护应用程序',
+          codeExamples: []
+        },
+        {
+          id: 'section6-2',
+          title: '数据库连接技术',
+          content: '数据库连接技术是指应用程序与数据库之间的连接方法。\n\n常用的数据库连接技术：\n1. ODBC（Open Database Connectivity）：开放数据库连接\n2. JDBC（Java Database Connectivity）：Java数据库连接\n3. ADO.NET：.NET平台的数据库连接\n4. PDO（PHP Data Objects）：PHP的数据库对象\n5. ORM（Object-Relational Mapping）：对象关系映射',
+          codeExamples: ['import mysql.connector', 'conn = mysql.connector.connect(host="localhost", user="user", password="password", database="db")', 'cursor = conn.cursor()', 'cursor.execute("SELECT * FROM table")']
+        },
+        {
+          id: 'section6-3',
+          title: '数据库应用系统架构',
+          content: '数据库应用系统的架构是指应用程序的组织方式。\n\n常见的数据库应用系统架构：\n1. 单机架构：应用程序和数据库在同一台机器上\n2. 客户-服务器架构：应用程序作为客户端，数据库作为服务器\n3. 三层架构：表示层、业务逻辑层、数据访问层\n4. 多层架构：更多层次的架构',
+          codeExamples: []
+        },
+        {
+          id: 'section6-4',
+          title: '数据库应用开发工具',
+          content: '数据库应用开发工具是指用于开发数据库应用的软件。\n\n常用的数据库应用开发工具：\n1. IDE（Integrated Development Environment）：集成开发环境\n2. 数据库管理工具：如MySQL Workbench、SQL Server Management Studio\n3. ORM框架：如Hibernate、Entity Framework\n4. Web框架：如Spring、Django、Flask',
+          codeExamples: []
+        },
+        {
+          id: 'section6-5',
+          title: '数据库应用开发案例',
+          content: '数据库应用开发案例是指实际的数据库应用开发项目。\n\n常见的数据库应用开发案例：\n1. 学生管理系统：管理学生信息\n2. 图书管理系统：管理图书信息\n3. 库存管理系统：管理库存信息\n4. 订单管理系统：管理订单信息\n5. 客户关系管理系统：管理客户信息',
+          codeExamples: []
+        }
+      ]
+    }
+  };
+
+  // 400题题库（包含单选、多选和判断题）
+  const chapterQuestions = {
+    'chapter1': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 1,
+        type: 'single' as const,
+        question: `数据库概述问题 ${i + 1}：数据库的基本特点不包括？`,
+        options: [
+          '数据结构化',
+          '数据共享',
+          '数据独立性',
+          '数据不可修改'
+        ],
+        correctAnswer: 3,
+        explanation: '数据库的基本特点包括数据结构化、数据共享、数据独立性、数据一致性和数据安全性，数据是可以修改的。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 51,
+        type: 'multiple' as const,
+        question: `数据库概述问题 ${i + 51}：数据库系统的组成包括哪些？`,
+        options: [
+          '数据库（DB）',
+          '数据库管理系统（DBMS）',
+          '应用程序',
+          '数据库管理员（DBA）'
+        ],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '数据库系统由数据库（DB）、数据库管理系统（DBMS）、应用程序、数据库管理员（DBA）和用户组成。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 81,
+        type: 'judgment' as const,
+        question: `数据库概述问题 ${i + 81}：数据库的发展经历了人工管理、文件系统和数据库系统三个阶段。`,
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: '数据库的发展经历了人工管理阶段、文件系统阶段和数据库系统阶段三个主要阶段。'
+      }))
+    ],
+    'chapter2': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 101,
+        type: 'single' as const,
+        question: `数据模型问题 ${i + 1}：下列哪个不是数据模型的分类？`,
+        options: [
+          '概念模型',
+          '逻辑模型',
+          '物理模型',
+          '实体模型'
+        ],
+        correctAnswer: 3,
+        explanation: '数据模型分为概念模型、逻辑模型和物理模型，实体模型属于概念模型的一种。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 151,
+        type: 'multiple' as const,
+        question: `数据模型问题 ${i + 51}：概念模型的基本概念包括哪些？`,
+        options: [
+          '实体',
+          '属性',
+          '实体型',
+          '联系'
+        ],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '概念模型的基本概念包括实体、属性、实体型、实体集和联系。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 181,
+        type: 'judgment' as const,
+        question: `数据模型问题 ${i + 81}：ER模型是一种逻辑模型。`,
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: 'ER模型是一种概念模型，用于描述现实世界的实体和联系。'
+      }))
+    ],
+    'chapter3': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 201,
+        type: 'single' as const,
+        question: `关系数据库问题 ${i + 1}：关系数据库中，表中的一行称为？`,
+        options: [
+          '属性',
+          '元组',
+          '域',
+          '分量'
+        ],
+        correctAnswer: 1,
+        explanation: '关系数据库中，表中的一行称为元组，一列称为属性，属性的取值范围称为域，元组中的一个属性值称为分量。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 251,
+        type: 'multiple' as const,
+        question: `关系数据库问题 ${i + 51}：关系代数的基本操作包括哪些？`,
+        options: [
+          '选择',
+          '投影',
+          '连接',
+          '并'
+        ],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '关系代数的基本操作包括选择、投影、连接、笛卡尔积、并、差和交。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 281,
+        type: 'judgment' as const,
+        question: `关系数据库问题 ${i + 81}：3NF要求消除所有函数依赖。`,
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: '3NF要求消除传递函数依赖，而不是所有函数依赖。'
+      }))
+    ],
+    'chapter4': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 301,
+        type: 'single' as const,
+        question: `SQL语言问题 ${i + 1}：用于插入数据的SQL语句是？`,
+        options: [
+          'SELECT',
+          'INSERT',
+          'UPDATE',
+          'DELETE'
+        ],
+        correctAnswer: 1,
+        explanation: 'INSERT语句用于插入数据，SELECT语句用于查询数据，UPDATE语句用于更新数据，DELETE语句用于删除数据。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 351,
+        type: 'multiple' as const,
+        question: `SQL语言问题 ${i + 51}：下列哪些属于DDL语句？`,
+        options: [
+          'CREATE',
+          'ALTER',
+          'DROP',
+          'INSERT'
+        ],
+        correctAnswer: [0, 1, 2],
+        explanation: 'CREATE、ALTER和DROP属于DDL语句，INSERT属于DML语句。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 381,
+        type: 'judgment' as const,
+        question: `SQL语言问题 ${i + 81}：SQL是一种过程化语言。`,
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: 'SQL是一种非过程化语言，只需要说明做什么，不需要说明怎么做。'
+      }))
+    ],
+    'chapter5': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 401,
+        type: 'single' as const,
+        question: `数据库设计问题 ${i + 1}：数据库设计的第一步是？`,
+        options: [
+          '概念结构设计',
+          '逻辑结构设计',
+          '需求分析',
+          '物理结构设计'
+        ],
+        correctAnswer: 2,
+        explanation: '数据库设计的步骤是：需求分析 → 概念结构设计 → 逻辑结构设计 → 物理结构设计 → 数据库实施 → 数据库运行和维护。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 451,
+        type: 'multiple' as const,
+        question: `数据库设计问题 ${i + 51}：需求分析的内容包括哪些？`,
+        options: [
+          '数据需求',
+          '功能需求',
+          '性能需求',
+          '安全需求'
+        ],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '需求分析的内容包括数据需求、功能需求、性能需求和安全需求。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 481,
+        type: 'judgment' as const,
+        question: `数据库设计问题 ${i + 81}：物理结构设计是设计数据库的逻辑结构。`,
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: '物理结构设计是设计数据库的物理存储结构，逻辑结构设计是设计数据库的逻辑结构。'
+      }))
+    ],
+    'chapter6': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 501,
+        type: 'single' as const,
+        question: `数据库应用开发问题 ${i + 1}：下列哪个不是常用的数据库连接技术？`,
+        options: [
+          'ODBC',
+          'JDBC',
+          'ADO.NET',
+          'HTML'
+        ],
+        correctAnswer: 3,
+        explanation: 'ODBC、JDBC和ADO.NET都是常用的数据库连接技术，HTML是网页标记语言，不是数据库连接技术。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 551,
+        type: 'multiple' as const,
+        question: `数据库应用开发问题 ${i + 51}：常见的数据库应用系统架构包括哪些？`,
+        options: [
+          '单机架构',
+          '客户-服务器架构',
+          '三层架构',
+          '多层架构'
+        ],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '常见的数据库应用系统架构包括单机架构、客户-服务器架构、三层架构和多层架构。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 581,
+        type: 'judgment' as const,
+        question: `数据库应用开发问题 ${i + 81}：ORM框架可以将对象与关系数据库表映射起来。`,
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: 'ORM（Object-Relational Mapping）框架可以将对象与关系数据库表映射起来，简化数据库操作。'
+      }))
+    ]
+  };
 
   const learningResources: Resource[] = [
     {
@@ -633,54 +1087,215 @@ export default function DatabaseCourse() {
               学习中心
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              开始你的学习之旅，跟踪进度，访问学习资源，完成习题
+              在这里进行学习、练习和资源查阅
             </p>
           </div>
           
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-            <div className="flex flex-wrap mb-6">
-              <button 
-                onClick={() => setActiveTab('progress')}
-                className={`px-6 py-3 rounded-lg mr-4 mb-4 transition-all duration-300 ${activeTab === 'progress' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-              >
-                学习进度
-              </button>
-              <button 
-                onClick={() => setActiveTab('resources')}
-                className={`px-6 py-3 rounded-lg mr-4 mb-4 transition-all duration-300 ${activeTab === 'resources' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-              >
-                学习资源
-              </button>
-              <button 
-                onClick={() => setActiveTab('exercises')}
-                className={`px-6 py-3 rounded-lg mb-4 transition-all duration-300 ${activeTab === 'exercises' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-              >
-                习题练习
-              </button>
-            </div>
-            
-            <div className="min-h-[500px]">
-              {activeTab === 'progress' && (
-                <LearningProgress title="学习进度" items={progressItems.map(item => ({
-                  ...item,
-                  subItems: item.children
-                }))} />
-              )}
-              {activeTab === 'resources' && (
-                <LearningResource title="学习资源" resources={learningResources.map((resource, index) => ({
+          {/* 标签页导航 */}
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <button
+              onClick={() => setActiveTab('progress')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'progress'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              学习进度
+            </button>
+            <button
+              onClick={() => setActiveTab('resources')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'resources'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              学习资源
+            </button>
+            <button
+              onClick={() => setActiveTab('exercises')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'exercises'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              练习测试
+            </button>
+          </div>
+          
+          {/* 标签页内容 */}
+          <div className="mt-8">
+            {activeTab === 'progress' && !activeChapter && (
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+                <h3 className="text-2xl font-semibold text-gray-100 mb-6">数据库原理与应用课程学习进度</h3>
+                {/* 总体进度条 */}
+                <div className="mb-8">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gray-300">总体进度</span>
+                    <span className="text-blue-400 font-medium">
+                      {progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-4">
+                    <div 
+                      className="bg-gradient-to-r from-blue-500 to-cyan-400 h-4 rounded-full transition-all duration-500"
+                      style={{ 
+                        width: `${(progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0) / progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)) * 100}%` 
+                      }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  {progressItems.map((item) => (
+                    <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                      <div className="flex items-center justify-between cursor-pointer" onClick={() => setActiveChapter(item.id)}>
+                        <div className="flex items-center">
+                          <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
+                            item.completed
+                              ? 'border-blue-500 bg-blue-500 text-white'
+                              : 'border-gray-600'
+                          }`}>
+                            {item.completed ? '✓' : ''}
+                          </div>
+                          <h4 className={`font-medium ${item.completed ? 'text-blue-400' : 'text-gray-300'}`}>
+                            {item.title}
+                          </h4>
+                        </div>
+                        <span className="text-gray-400 text-sm">
+                          {item.subItems?.filter(sub => sub.completed).length}/{item.subItems?.length}
+                        </span>
+                      </div>
+                      {item.subItems && (
+                        <div className="mt-3 ml-9 space-y-2">
+                          {item.subItems.map(subItem => (
+                            <div key={subItem.id} className="flex items-center">
+                              <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-2 ${
+                                subItem.completed
+                                  ? 'border-blue-500 bg-blue-500 text-white'
+                                  : 'border-gray-600'
+                              }`}>
+                                {subItem.completed ? '✓' : ''}
+                              </div>
+                              <span className={`text-sm ${subItem.completed ? 'text-blue-400' : 'text-gray-400'}`}>
+                                {subItem.title}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {activeTab === 'progress' && activeChapter && activeChapterMode === 'content' && (
+              <div>
+                <div className="flex items-center mb-4">
+                  <button
+                    onClick={() => setActiveChapter(null)}
+                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                  >
+                    <span className="mr-2">←</span> 返回课程进度
+                  </button>
+                </div>
+                <ChapterContent
+                  chapterId={activeChapter}
+                  chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
+                  sections={chapterContents[activeChapter as keyof typeof chapterContents]?.sections || []}
+                  onComplete={() => {
+                    setActiveChapterMode('exercise');
+                  }}
+                />
+              </div>
+            )}
+            {activeTab === 'progress' && activeChapter && activeChapterMode === 'exercise' && (
+              <div>
+                <div className="flex items-center mb-4">
+                  <button
+                    onClick={() => setActiveChapterMode('content')}
+                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4 mr-4"
+                  >
+                    <span className="mr-2">←</span> 返回章节内容
+                  </button>
+                  <button
+                    onClick={() => setActiveChapter(null)}
+                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                  >
+                    <span className="mr-2">←</span> 返回课程进度
+                  </button>
+                </div>
+                <ChapterExercise
+                  chapterId={activeChapter}
+                  chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
+                  questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
+                  questionCount={30}
+                  onComplete={(score, total) => {
+                    console.log(`练习完成，得分：${score}/${total}`);
+                  }}
+                />
+              </div>
+            )}
+            {activeTab === 'resources' && (
+              <LearningResource 
+                title="数据库学习资源" 
+                resources={learningResources.map((resource, index) => ({
                   ...resource,
                   id: index + 1,
                   link: resource.url
-                }))} />
-              )}
-              {activeTab === 'exercises' && (
-                <ExerciseComponent title="习题练习" questions={exercises.map((exercise, index) => ({
-                  ...exercise,
-                  id: index + 1,
-                  question: exercise.text
-                }))} />
-              )}
-            </div>
+                }))} 
+              />
+            )}
+            {activeTab === 'exercises' && !activeChapter && (
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+                <h3 className="text-2xl font-semibold text-gray-100 mb-6">章节练习测试</h3>
+                <p className="text-gray-400 mb-8">选择章节进行测试，每次测试包含30道题目（单选、多选、判断）</p>
+                <div className="space-y-4">
+                  {progressItems.map((item) => (
+                    <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                      <div className="flex items-center justify-between cursor-pointer" onClick={() => {
+                        setActiveChapter(item.id);
+                        setActiveChapterMode('exercise');
+                      }}>
+                        <div className="flex items-center">
+                          <div className="w-10 h-10 bg-blue-900/50 rounded-lg flex items-center justify-center mr-4">
+                            <span className="text-blue-400 text-xl">📝</span>
+                          </div>
+                          <h4 className="font-medium text-gray-300">
+                            {item.title}
+                          </h4>
+                        </div>
+                        <span className="text-gray-400 text-sm">
+                          400题题库
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {activeTab === 'exercises' && activeChapter && activeChapterMode === 'exercise' && (
+              <div>
+                <div className="flex items-center mb-4">
+                  <button
+                    onClick={() => setActiveChapter(null)}
+                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                  >
+                    <span className="mr-2">←</span> 返回章节列表
+                  </button>
+                </div>
+                <ChapterExercise
+                  chapterId={activeChapter}
+                  chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
+                  questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
+                  questionCount={30}
+                  onComplete={(score, total) => {
+                    console.log(`练习完成，得分：${score}/${total}`);
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>
