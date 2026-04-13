@@ -48,6 +48,7 @@ export default function DatabaseCourse() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [activeChapter, setActiveChapter] = useState<string | null>(null);
   const [activeChapterMode, setActiveChapterMode] = useState<'content' | 'exercise' | null>(null);
+  const [activeTab, setActiveTab] = useState<'progress' | 'resources' | 'exercises'>('progress');
 
   const progressItems: ProgressItem[] = [
     {
@@ -1245,126 +1246,227 @@ export default function DatabaseCourse() {
         </div>
       </section>
 
-      {/* 学习进度 */}
+      {/* 学习中心 */}
       <section className="py-16 px-4 relative z-10" data-learning-section="true">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-              学习进度
+              学习中心
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              查看和管理你的学习进度
+              查看学习进度、获取学习资源和进行练习测试
             </p>
           </div>
           
-          {!activeChapter && (
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-              <h3 className="text-2xl font-semibold text-gray-100 mb-6">数据库原理与应用课程学习进度</h3>
-              {/* 总体进度条 */}
-              <div className="mb-8">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-gray-300">总体进度</span>
-                  <span className="text-blue-400 font-medium">
-                    {progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)}
-                  </span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-4">
-                  <div 
-                    className="bg-gradient-to-r from-blue-500 to-cyan-400 h-4 rounded-full transition-all duration-500"
-                    style={{ 
-                      width: `${(progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0) / progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)) * 100}%` 
-                    }}
-                  ></div>
-                </div>
-              </div>
-              <div className="space-y-4">
-                {progressItems.map((item) => (
-                  <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
-                    <div className="flex items-center justify-between cursor-pointer" onClick={() => setActiveChapter(item.id)}>
-                      <div className="flex items-center">
-                        <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
-                          item.completed
-                            ? 'border-blue-500 bg-blue-500 text-white'
-                            : 'border-gray-600'
-                        }`}>
-                          {item.completed ? '✓' : ''}
-                        </div>
-                        <h4 className={`font-medium ${item.completed ? 'text-blue-400' : 'text-gray-300'}`}>
-                          {item.title}
-                        </h4>
-                      </div>
-                      <span className="text-gray-400 text-sm">
-                        {item.subItems?.filter(sub => sub.completed).length}/{item.subItems?.length}
+          {/* 标签页导航 */}
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-1 mb-8 flex justify-center">
+            <button
+              onClick={() => setActiveTab('progress')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'progress' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'text-gray-400 hover:text-gray-300'}`}
+            >
+              学习进度
+            </button>
+            <button
+              onClick={() => setActiveTab('resources')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'resources' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'text-gray-400 hover:text-gray-300'}`}
+            >
+              学习资源
+            </button>
+            <button
+              onClick={() => setActiveTab('exercises')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'exercises' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'text-gray-400 hover:text-gray-300'}`}
+            >
+              练习测试
+            </button>
+          </div>
+          
+          {/* 标签页内容 */}
+          {activeTab === 'progress' && (
+            <div>
+              {!activeChapter && (
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+                  <h3 className="text-2xl font-semibold text-gray-100 mb-6">数据库原理与应用课程学习进度</h3>
+                  {/* 总体进度条 */}
+                  <div className="mb-8">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-gray-300">总体进度</span>
+                      <span className="text-blue-400 font-medium">
+                        {progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)}
                       </span>
                     </div>
-                    {item.subItems && (
-                      <div className="mt-3 ml-9 space-y-2">
-                        {item.subItems.map(subItem => (
-                          <div key={subItem.id} className="flex items-center">
-                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-2 ${
-                              subItem.completed
+                    <div className="w-full bg-gray-700 rounded-full h-4">
+                      <div 
+                        className="bg-gradient-to-r from-blue-500 to-cyan-400 h-4 rounded-full transition-all duration-500"
+                        style={{ 
+                          width: `${(progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0) / progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)) * 100}%` 
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    {progressItems.map((item) => (
+                      <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                        <div className="flex items-center justify-between cursor-pointer" onClick={() => setActiveChapter(item.id)}>
+                          <div className="flex items-center">
+                            <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
+                              item.completed
                                 ? 'border-blue-500 bg-blue-500 text-white'
                                 : 'border-gray-600'
                             }`}>
-                              {subItem.completed ? '✓' : ''}
+                              {item.completed ? '✓' : ''}
                             </div>
-                            <span className={`text-sm ${subItem.completed ? 'text-blue-400' : 'text-gray-400'}`}>
-                              {subItem.title}
-                            </span>
+                            <h4 className={`font-medium ${item.completed ? 'text-blue-400' : 'text-gray-300'}`}>
+                              {item.title}
+                            </h4>
                           </div>
-                        ))}
+                          <span className="text-gray-400 text-sm">
+                            {item.subItems?.filter(sub => sub.completed).length}/{item.subItems?.length}
+                          </span>
+                        </div>
+                        {item.subItems && (
+                          <div className="mt-3 ml-9 space-y-2">
+                            {item.subItems.map(subItem => (
+                              <div key={subItem.id} className="flex items-center">
+                                <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-2 ${
+                                  subItem.completed
+                                    ? 'border-blue-500 bg-blue-500 text-white'
+                                    : 'border-gray-600'
+                                }`}>
+                                  {subItem.completed ? '✓' : ''}
+                                </div>
+                                <span className={`text-sm ${subItem.completed ? 'text-blue-400' : 'text-gray-400'}`}>
+                                  {subItem.title}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    )}
+                    ))}
+                  </div>
+                </div>
+              )}
+              {activeChapter && activeChapterMode === 'content' && (
+                <div>
+                  <div className="flex items-center mb-4">
+                    <button
+                      onClick={() => setActiveChapter(null)}
+                      className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                    >
+                      <span className="mr-2">←</span> 返回课程进度
+                    </button>
+                  </div>
+                  <ChapterContent
+                    chapterId={activeChapter}
+                    chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
+                    sections={chapterContents[activeChapter as keyof typeof chapterContents]?.sections || []}
+                    onComplete={() => {
+                      setActiveChapterMode('exercise');
+                    }}
+                  />
+                </div>
+              )}
+              {activeChapter && activeChapterMode === 'exercise' && (
+                <div>
+                  <div className="flex items-center mb-4">
+                    <button
+                      onClick={() => setActiveChapterMode('content')}
+                      className="flex items-center text-blue-400 hover:text-blue-300 mb-4 mr-4"
+                    >
+                      <span className="mr-2">←</span> 返回章节内容
+                    </button>
+                    <button
+                      onClick={() => setActiveChapter(null)}
+                      className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                    >
+                      <span className="mr-2">←</span> 返回课程进度
+                    </button>
+                  </div>
+                  <ChapterExercise
+                    chapterId={activeChapter}
+                    chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
+                    questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
+                    questionCount={30}
+                    onComplete={(score, total) => {
+                      console.log(`练习完成，得分：${score}/${total}`);
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+          
+          {activeTab === 'resources' && (
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+              <h3 className="text-2xl font-semibold text-gray-100 mb-6">学习资源</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {learningResources.map((resource) => (
+                  <div key={resource.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                    <div className="flex items-start">
+                      <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mr-4">
+                        <span className="text-blue-400 text-xl">
+                          {resource.type === 'article' && '📄'}
+                          {resource.type === 'video' && '🎥'}
+                          {resource.type === 'document' && '📑'}
+                          {resource.type === 'code' && '💻'}
+                        </span>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-medium text-gray-100 mb-2">{resource.title}</h4>
+                        <p className="text-gray-400 text-sm mb-3">{resource.description}</p>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          <span className="px-2 py-1 bg-gray-700 rounded-full text-xs text-gray-300">
+                            {resource.difficulty === 'beginner' && '初级'}
+                            {resource.difficulty === 'intermediate' && '中级'}
+                            {resource.difficulty === 'advanced' && '高级'}
+                          </span>
+                          {resource.duration && (
+                            <span className="px-2 py-1 bg-gray-700 rounded-full text-xs text-gray-300">
+                              {resource.duration}
+                            </span>
+                          )}
+                        </div>
+                        <a
+                          href={resource.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm"
+                        >
+                          查看资源
+                          <span className="ml-2">→</span>
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
-          {activeChapter && activeChapterMode === 'content' && (
-            <div>
-              <div className="flex items-center mb-4">
-                <button
-                  onClick={() => setActiveChapter(null)}
-                  className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
-                >
-                  <span className="mr-2">←</span> 返回课程进度
-                </button>
+          
+          {activeTab === 'exercises' && (
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+              <h3 className="text-2xl font-semibold text-gray-100 mb-6">练习测试</h3>
+              <div className="space-y-6">
+                {exercises.map((exercise) => (
+                  <div key={exercise.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                    <h4 className="font-medium text-gray-100 mb-3">{exercise.text}</h4>
+                    <div className="space-y-2 mb-4">
+                      {exercise.options.map((option, index) => (
+                        <div key={index} className="flex items-center">
+                          <div className="w-5 h-5 rounded-full border border-gray-600 flex items-center justify-center mr-3">
+                            <span className="text-xs text-gray-400">{String.fromCharCode(65 + index)}</span>
+                          </div>
+                          <span className="text-gray-300">{option}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="pt-3 border-t border-gray-700">
+                      <p className="text-sm text-blue-400">正确答案: {String.fromCharCode(65 + exercise.correctAnswer)}</p>
+                      <p className="text-sm text-gray-400 mt-2">{exercise.explanation}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <ChapterContent
-                chapterId={activeChapter}
-                chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
-                sections={chapterContents[activeChapter as keyof typeof chapterContents]?.sections || []}
-                onComplete={() => {
-                  setActiveChapterMode('exercise');
-                }}
-              />
-            </div>
-          )}
-          {activeChapter && activeChapterMode === 'exercise' && (
-            <div>
-              <div className="flex items-center mb-4">
-                <button
-                  onClick={() => setActiveChapterMode('content')}
-                  className="flex items-center text-blue-400 hover:text-blue-300 mb-4 mr-4"
-                >
-                  <span className="mr-2">←</span> 返回章节内容
-                </button>
-                <button
-                  onClick={() => setActiveChapter(null)}
-                  className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
-                >
-                  <span className="mr-2">←</span> 返回课程进度
-                </button>
-              </div>
-              <ChapterExercise
-                chapterId={activeChapter}
-                chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
-                questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
-                questionCount={30}
-                onComplete={(score, total) => {
-                  console.log(`练习完成，得分：${score}/${total}`);
-                }}
-              />
             </div>
           )}
         </div>
