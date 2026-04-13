@@ -46,7 +46,6 @@ interface Question {
 export default function DatabaseCourse() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeTab, setActiveTab] = useState('progress');
   const [activeChapter, setActiveChapter] = useState<string | null>(null);
   const [activeChapterMode, setActiveChapterMode] = useState<'content' | 'exercise' | null>(null);
 
@@ -968,12 +967,7 @@ export default function DatabaseCourse() {
     setActiveSection(activeSection === sectionId ? null : sectionId);
   };
 
-  const scrollToLearningCenter = () => {
-    const learningCenterElement = document.querySelector('[data-learning-center="true"]');
-    if (learningCenterElement) {
-      learningCenterElement.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 relative overflow-hidden">
@@ -1083,10 +1077,8 @@ export default function DatabaseCourse() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              setActiveTab('progress');
                               setActiveChapter(section.id);
                               setActiveChapterMode('content');
-                              setTimeout(scrollToLearningCenter, 100);
                             }}
                             className="inline-block px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
                           >
@@ -1247,224 +1239,128 @@ export default function DatabaseCourse() {
         </div>
       </section>
 
-      {/* 学习功能 */}
-      <section className="py-16 px-4 relative z-10" data-learning-center="true">
+      {/* 学习进度 */}
+      <section className="py-16 px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-              学习中心
+              学习进度
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              在这里进行学习、练习和资源查阅
+              查看和管理你的学习进度
             </p>
           </div>
           
-          {/* 标签页导航 */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            <button
-              onClick={() => setActiveTab('progress')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                activeTab === 'progress'
-                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-              }`}
-            >
-              学习进度
-            </button>
-            <button
-              onClick={() => setActiveTab('resources')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                activeTab === 'resources'
-                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-              }`}
-            >
-              学习资源
-            </button>
-            <button
-              onClick={() => setActiveTab('exercises')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                activeTab === 'exercises'
-                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-              }`}
-            >
-              练习测试
-            </button>
-          </div>
-          
-          {/* 标签页内容 */}
-          <div className="mt-8">
-            {activeTab === 'progress' && !activeChapter && (
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-                <h3 className="text-2xl font-semibold text-gray-100 mb-6">数据库原理与应用课程学习进度</h3>
-                {/* 总体进度条 */}
-                <div className="mb-8">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-300">总体进度</span>
-                    <span className="text-blue-400 font-medium">
-                      {progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)}
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-700 rounded-full h-4">
-                    <div 
-                      className="bg-gradient-to-r from-blue-500 to-cyan-400 h-4 rounded-full transition-all duration-500"
-                      style={{ 
-                        width: `${(progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0) / progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)) * 100}%` 
-                      }}
-                    ></div>
-                  </div>
+          {!activeChapter && (
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+              <h3 className="text-2xl font-semibold text-gray-100 mb-6">数据库原理与应用课程学习进度</h3>
+              {/* 总体进度条 */}
+              <div className="mb-8">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-gray-300">总体进度</span>
+                  <span className="text-blue-400 font-medium">
+                    {progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)}
+                  </span>
                 </div>
-                <div className="space-y-4">
-                  {progressItems.map((item) => (
-                    <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
-                      <div className="flex items-center justify-between cursor-pointer" onClick={() => setActiveChapter(item.id)}>
-                        <div className="flex items-center">
-                          <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
-                            item.completed
-                              ? 'border-blue-500 bg-blue-500 text-white'
-                              : 'border-gray-600'
-                          }`}>
-                            {item.completed ? '✓' : ''}
-                          </div>
-                          <h4 className={`font-medium ${item.completed ? 'text-blue-400' : 'text-gray-300'}`}>
-                            {item.title}
-                          </h4>
+                <div className="w-full bg-gray-700 rounded-full h-4">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-cyan-400 h-4 rounded-full transition-all duration-500"
+                    style={{ 
+                      width: `${(progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0) / progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)) * 100}%` 
+                    }}
+                  ></div>
+                </div>
+              </div>
+              <div className="space-y-4">
+                {progressItems.map((item) => (
+                  <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                    <div className="flex items-center justify-between cursor-pointer" onClick={() => setActiveChapter(item.id)}>
+                      <div className="flex items-center">
+                        <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
+                          item.completed
+                            ? 'border-blue-500 bg-blue-500 text-white'
+                            : 'border-gray-600'
+                        }`}>
+                          {item.completed ? '✓' : ''}
                         </div>
-                        <span className="text-gray-400 text-sm">
-                          {item.subItems?.filter(sub => sub.completed).length}/{item.subItems?.length}
-                        </span>
+                        <h4 className={`font-medium ${item.completed ? 'text-blue-400' : 'text-gray-300'}`}>
+                          {item.title}
+                        </h4>
                       </div>
-                      {item.subItems && (
-                        <div className="mt-3 ml-9 space-y-2">
-                          {item.subItems.map(subItem => (
-                            <div key={subItem.id} className="flex items-center">
-                              <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-2 ${
-                                subItem.completed
-                                  ? 'border-blue-500 bg-blue-500 text-white'
-                                  : 'border-gray-600'
-                              }`}>
-                                {subItem.completed ? '✓' : ''}
-                              </div>
-                              <span className={`text-sm ${subItem.completed ? 'text-blue-400' : 'text-gray-400'}`}>
-                                {subItem.title}
-                              </span>
+                      <span className="text-gray-400 text-sm">
+                        {item.subItems?.filter(sub => sub.completed).length}/{item.subItems?.length}
+                      </span>
+                    </div>
+                    {item.subItems && (
+                      <div className="mt-3 ml-9 space-y-2">
+                        {item.subItems.map(subItem => (
+                          <div key={subItem.id} className="flex items-center">
+                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-2 ${
+                              subItem.completed
+                                ? 'border-blue-500 bg-blue-500 text-white'
+                                : 'border-gray-600'
+                            }`}>
+                              {subItem.completed ? '✓' : ''}
                             </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {activeTab === 'progress' && activeChapter && activeChapterMode === 'content' && (
-              <div>
-                <div className="flex items-center mb-4">
-                  <button
-                    onClick={() => setActiveChapter(null)}
-                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
-                  >
-                    <span className="mr-2">←</span> 返回课程进度
-                  </button>
-                </div>
-                <ChapterContent
-                  chapterId={activeChapter}
-                  chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
-                  sections={chapterContents[activeChapter as keyof typeof chapterContents]?.sections || []}
-                  onComplete={() => {
-                    setActiveChapterMode('exercise');
-                  }}
-                />
-              </div>
-            )}
-            {activeTab === 'progress' && activeChapter && activeChapterMode === 'exercise' && (
-              <div>
-                <div className="flex items-center mb-4">
-                  <button
-                    onClick={() => setActiveChapterMode('content')}
-                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4 mr-4"
-                  >
-                    <span className="mr-2">←</span> 返回章节内容
-                  </button>
-                  <button
-                    onClick={() => setActiveChapter(null)}
-                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
-                  >
-                    <span className="mr-2">←</span> 返回课程进度
-                  </button>
-                </div>
-                <ChapterExercise
-                  chapterId={activeChapter}
-                  chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
-                  questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
-                  questionCount={30}
-                  onComplete={(score, total) => {
-                    console.log(`练习完成，得分：${score}/${total}`);
-                  }}
-                />
-              </div>
-            )}
-            {activeTab === 'resources' && (
-              <LearningResource 
-                title="数据库学习资源" 
-                resources={learningResources.map((resource, index) => ({
-                  ...resource,
-                  id: index + 1,
-                  link: resource.url
-                }))} 
-              />
-            )}
-            {activeTab === 'exercises' && !activeChapter && (
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-                <h3 className="text-2xl font-semibold text-gray-100 mb-6">章节练习测试</h3>
-                <p className="text-gray-400 mb-8">选择章节进行测试，每次测试包含30道题目（单选、多选、判断）</p>
-                <div className="space-y-4">
-                  {progressItems.map((item) => (
-                    <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
-                      <div className="flex items-center justify-between cursor-pointer" onClick={() => {
-                        setActiveChapter(item.id);
-                        setActiveChapterMode('exercise');
-                      }}>
-                        <div className="flex items-center">
-                          <div className="w-10 h-10 bg-blue-900/50 rounded-lg flex items-center justify-center mr-4">
-                            <span className="text-blue-400 text-xl">📝</span>
+                            <span className={`text-sm ${subItem.completed ? 'text-blue-400' : 'text-gray-400'}`}>
+                              {subItem.title}
+                            </span>
                           </div>
-                          <h4 className="font-medium text-gray-300">
-                            {item.title}
-                          </h4>
-                        </div>
-                        <span className="text-gray-400 text-sm">
-                          400题题库
-                        </span>
+                        ))}
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    )}
+                  </div>
+                ))}
               </div>
-            )}
-            {activeTab === 'exercises' && activeChapter && activeChapterMode === 'exercise' && (
-              <div>
-                <div className="flex items-center mb-4">
-                  <button
-                    onClick={() => setActiveChapter(null)}
-                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
-                  >
-                    <span className="mr-2">←</span> 返回章节列表
-                  </button>
-                </div>
-                <ChapterExercise
-                  chapterId={activeChapter}
-                  chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
-                  questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
-                  questionCount={30}
-                  onComplete={(score, total) => {
-                    console.log(`练习完成，得分：${score}/${total}`);
-                  }}
-                />
+            </div>
+          )}
+          {activeChapter && activeChapterMode === 'content' && (
+            <div>
+              <div className="flex items-center mb-4">
+                <button
+                  onClick={() => setActiveChapter(null)}
+                  className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                >
+                  <span className="mr-2">←</span> 返回课程进度
+                </button>
               </div>
-            )}
-          </div>
+              <ChapterContent
+                chapterId={activeChapter}
+                chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
+                sections={chapterContents[activeChapter as keyof typeof chapterContents]?.sections || []}
+                onComplete={() => {
+                  setActiveChapterMode('exercise');
+                }}
+              />
+            </div>
+          )}
+          {activeChapter && activeChapterMode === 'exercise' && (
+            <div>
+              <div className="flex items-center mb-4">
+                <button
+                  onClick={() => setActiveChapterMode('content')}
+                  className="flex items-center text-blue-400 hover:text-blue-300 mb-4 mr-4"
+                >
+                  <span className="mr-2">←</span> 返回章节内容
+                </button>
+                <button
+                  onClick={() => setActiveChapter(null)}
+                  className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                >
+                  <span className="mr-2">←</span> 返回课程进度
+                </button>
+              </div>
+              <ChapterExercise
+                chapterId={activeChapter}
+                chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
+                questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
+                questionCount={30}
+                onComplete={(score, total) => {
+                  console.log(`练习完成，得分：${score}/${total}`);
+                }}
+              />
+            </div>
+          )}
         </div>
       </section>
 
