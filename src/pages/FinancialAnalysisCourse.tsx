@@ -985,7 +985,12 @@ export default function FinancialAnalysisCourse() {
     setActiveSection(activeSection === sectionId ? null : sectionId);
   };
 
-
+  const scrollToLearningSection = () => {
+    const learningSection = document.querySelector('[data-learning-section="true"]');
+    if (learningSection) {
+      learningSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 relative overflow-hidden">
@@ -1097,6 +1102,7 @@ export default function FinancialAnalysisCourse() {
                               e.stopPropagation();
                               setActiveChapter(section.id);
                               setActiveChapterMode('content');
+                              setTimeout(scrollToLearningSection, 100);
                             }}
                             className="inline-block px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-green-500/30 transition-all duration-300"
                           >
@@ -1258,7 +1264,7 @@ export default function FinancialAnalysisCourse() {
       </section>
 
       {/* 学习进度 */}
-      <section className="py-16 px-4 relative z-10">
+      <section className="py-16 px-4 relative z-10" data-learning-section="true">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-400">
