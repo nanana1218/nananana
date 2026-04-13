@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import LearningProgress from '../components/LearningProgress';
+import LearningResource from '../components/LearningResource';
+import ExerciseComponent from '../components/ExerciseComponent';
 
 interface Section {
   id: string;
@@ -8,9 +11,223 @@ interface Section {
   resources?: string[];
 }
 
+interface ProgressItem {
+  id: string;
+  title: string;
+  completed: boolean;
+  subItems?: {
+    id: string;
+    title: string;
+    completed: boolean;
+  }[];
+}
+
+interface Resource {
+  id: number;
+  title: string;
+  type: 'article' | 'video' | 'document' | 'code';
+  description: string;
+  link: string;
+  duration?: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+}
+
+interface Question {
+  id: number;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation?: string;
+}
+
 export default function PythonCourse() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [activeTab, setActiveTab] = useState('progress');
+
+  // 学习进度数据
+  const progressItems: ProgressItem[] = [
+    {
+      id: 'chapter1',
+      title: '第一章：Python语言基础',
+      completed: false,
+      subItems: [
+        { id: 'chapter1-1', title: 'Python简介与安装', completed: false },
+        { id: 'chapter1-2', title: '基本数据类型', completed: false },
+        { id: 'chapter1-3', title: '变量与赋值', completed: false },
+        { id: 'chapter1-4', title: '基本运算符与表达式', completed: false },
+        { id: 'chapter1-5', title: '输入输出函数', completed: false }
+      ]
+    },
+    {
+      id: 'chapter2',
+      title: '第二章：控制结构',
+      completed: false,
+      subItems: [
+        { id: 'chapter2-1', title: '条件语句', completed: false },
+        { id: 'chapter2-2', title: 'for循环', completed: false },
+        { id: 'chapter2-3', title: 'while循环', completed: false },
+        { id: 'chapter2-4', title: '循环控制语句', completed: false },
+        { id: 'chapter2-5', title: '嵌套循环与条件', completed: false }
+      ]
+    },
+    {
+      id: 'chapter3',
+      title: '第三章：数据结构',
+      completed: false,
+      subItems: [
+        { id: 'chapter3-1', title: '列表的创建与操作', completed: false },
+        { id: 'chapter3-2', title: '元组的创建与操作', completed: false },
+        { id: 'chapter3-3', title: '字典的创建与操作', completed: false },
+        { id: 'chapter3-4', title: '集合的创建与操作', completed: false },
+        { id: 'chapter3-5', title: '数据结构的选择与应用', completed: false }
+      ]
+    },
+    {
+      id: 'chapter4',
+      title: '第四章：函数与模块',
+      completed: false,
+      subItems: [
+        { id: 'chapter4-1', title: '函数的定义与调用', completed: false },
+        { id: 'chapter4-2', title: '函数参数与返回值', completed: false },
+        { id: 'chapter4-3', title: '函数的作用域', completed: false },
+        { id: 'chapter4-4', title: '模块的导入与使用', completed: false },
+        { id: 'chapter4-5', title: '标准库的应用', completed: false }
+      ]
+    },
+    {
+      id: 'chapter5',
+      title: '第五章：文件操作',
+      completed: false,
+      subItems: [
+        { id: 'chapter5-1', title: '文件的打开与关闭', completed: false },
+        { id: 'chapter5-2', title: '文件的读取操作', completed: false },
+        { id: 'chapter5-3', title: '文件的写入操作', completed: false },
+        { id: 'chapter5-4', title: '文件的异常处理', completed: false },
+        { id: 'chapter5-5', title: 'CSV文件的读写', completed: false }
+      ]
+    },
+    {
+      id: 'chapter6',
+      title: '第六章：面向对象编程',
+      completed: false,
+      subItems: [
+        { id: 'chapter6-1', title: '类与对象的概念', completed: false },
+        { id: 'chapter6-2', title: '类的定义与实例化', completed: false },
+        { id: 'chapter6-3', title: '类的属性与方法', completed: false },
+        { id: 'chapter6-4', title: '继承与多态', completed: false },
+        { id: 'chapter6-5', title: '面向对象编程实践', completed: false }
+      ]
+    }
+  ];
+
+  // 学习资源数据
+  const learningResources: Resource[] = [
+    {
+      id: 1,
+      title: 'Python官方文档',
+      type: 'document',
+      description: 'Python官方提供的完整文档，包含语言参考、标准库等内容',
+      link: 'https://docs.python.org/zh-cn/3/',
+      difficulty: 'beginner'
+    },
+    {
+      id: 2,
+      title: 'Python编程：从入门到实践',
+      type: 'document',
+      description: '一本适合初学者的Python入门书籍，包含基础语法和实践项目',
+      link: 'https://book.douban.com/subject/26829016/',
+      difficulty: 'beginner'
+    },
+    {
+      id: 3,
+      title: 'Python基础教程（第3版）',
+      type: 'document',
+      description: '全面介绍Python语言的基础知识，适合初学者和中级开发者',
+      link: 'https://book.douban.com/subject/26829016/',
+      difficulty: 'beginner'
+    },
+    {
+      id: 4,
+      title: 'Python进阶：从入门到精通',
+      type: 'article',
+      description: 'Python进阶教程，涵盖面向对象编程、模块开发等高级主题',
+      link: 'https://www.runoob.com/python3/python3-tutorial.html',
+      difficulty: 'intermediate'
+    },
+    {
+      id: 5,
+      title: 'Python数据科学入门',
+      type: 'video',
+      description: '视频教程，介绍如何使用Python进行数据分析和可视化',
+      link: 'https://www.bilibili.com/video/BV12E411A7ZQ/',
+      duration: '10小时',
+      difficulty: 'intermediate'
+    },
+    {
+      id: 6,
+      title: 'Python标准库实例',
+      type: 'code',
+      description: 'Python标准库的使用示例，包含常用模块的代码示例',
+      link: 'https://github.com/python/cpython/tree/main/Lib',
+      difficulty: 'intermediate'
+    },
+    {
+      id: 7,
+      title: 'Python设计模式',
+      type: 'article',
+      description: '介绍Python中常用的设计模式及其实现',
+      link: 'https://refactoringguru.cn/design-patterns/python',
+      difficulty: 'advanced'
+    },
+    {
+      id: 8,
+      title: 'Python性能优化',
+      type: 'article',
+      description: 'Python代码性能优化的技巧和方法',
+      link: 'https://realpython.com/python-performance/',
+      difficulty: 'advanced'
+    }
+  ];
+
+  // 练习数据
+  const exercises: Question[] = [
+    {
+      id: 1,
+      question: '以下哪个不是Python的基本数据类型？',
+      options: ['整数', '浮点数', '字符串', '数组'],
+      correctAnswer: 3,
+      explanation: 'Python的基本数据类型包括整数、浮点数、字符串、布尔值等，数组不是Python的基本数据类型，而是通过列表实现的。'
+    },
+    {
+      id: 2,
+      question: 'Python中用于定义函数的关键字是？',
+      options: ['function', 'def', 'func', 'define'],
+      correctAnswer: 1,
+      explanation: '在Python中，使用def关键字来定义函数。'
+    },
+    {
+      id: 3,
+      question: '以下哪个语句用于退出循环？',
+      options: ['break', 'continue', 'exit', 'return'],
+      correctAnswer: 0,
+      explanation: 'break语句用于退出循环，continue语句用于跳过当前循环的剩余部分并进入下一次循环，exit()函数用于退出程序，return语句用于从函数返回值。'
+    },
+    {
+      id: 4,
+      question: 'Python中列表的特点是？',
+      options: ['不可变', '有序', '不可重复', '键值对'],
+      correctAnswer: 1,
+      explanation: 'Python中列表是有序的、可变的、可重复的集合类型。'
+    },
+    {
+      id: 5,
+      question: '以下哪个模块用于处理CSV文件？',
+      options: ['csv', 'json', 'xml', 'pickle'],
+      correctAnswer: 0,
+      explanation: 'csv模块用于处理CSV文件，json模块用于处理JSON数据，xml模块用于处理XML数据，pickle模块用于对象序列化。'
+    }
+  ];
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -393,6 +610,76 @@ export default function PythonCourse() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 学习功能 */}
+      <section className="py-16 px-4 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+              学习中心
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              在这里进行学习、练习和资源查阅
+            </p>
+          </div>
+          
+          {/* 标签页导航 */}
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <button
+              onClick={() => setActiveTab('progress')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'progress'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              学习进度
+            </button>
+            <button
+              onClick={() => setActiveTab('resources')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'resources'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              学习资源
+            </button>
+            <button
+              onClick={() => setActiveTab('exercises')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'exercises'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              练习测试
+            </button>
+          </div>
+          
+          {/* 标签页内容 */}
+          <div className="mt-8">
+            {activeTab === 'progress' && (
+              <LearningProgress 
+                title="Python基础课程学习进度" 
+                items={progressItems} 
+              />
+            )}
+            {activeTab === 'resources' && (
+              <LearningResource 
+                title="Python学习资源" 
+                resources={learningResources} 
+              />
+            )}
+            {activeTab === 'exercises' && (
+              <ExerciseComponent 
+                title="Python基础练习" 
+                questions={exercises} 
+              />
+            )}
           </div>
         </div>
       </section>
