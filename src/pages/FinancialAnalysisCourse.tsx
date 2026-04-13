@@ -927,7 +927,7 @@ export default function FinancialAnalysisCourse() {
                         ))}
                       </ul>
                       {section.resources && (
-                        <div>
+                        <div className="mb-6">
                           <h4 className="font-medium text-gray-200 mb-3">学习资源</h4>
                           <ul className="space-y-2">
                             {section.resources.map((resource, index) => (
@@ -937,6 +937,21 @@ export default function FinancialAnalysisCourse() {
                               </li>
                             ))}
                           </ul>
+                        </div>
+                      )}
+                      {section.id !== 'intro' && (
+                        <div className="mt-4">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveTab('progress');
+                              setActiveChapter(section.id);
+                              setActiveChapterMode('content');
+                            }}
+                            className="inline-block px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-green-500/30 transition-all duration-300"
+                          >
+                            开始学习本章
+                          </button>
                         </div>
                       )}
                     </div>
