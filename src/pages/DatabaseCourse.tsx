@@ -133,25 +133,45 @@ export default function DatabaseCourse() {
           id: 'section1-1',
           title: '数据库的概念与特点',
           content: '数据库是按照一定的数据模型组织、存储和管理数据的仓库。\n\n数据库的特点：\n1. 数据结构化：数据按照一定的结构组织\n2. 数据共享：多个用户可以同时使用数据\n3. 数据独立性：数据与应用程序相互独立\n4. 数据一致性：数据保持一致和准确\n5. 数据安全性：保护数据不被非法访问',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '《数据库系统概论》教材',
+            '数据库基础知识教程',
+            '数据库应用案例分析'
+          ]
         },
         {
           id: 'section1-2',
           title: '数据库系统的组成',
           content: '数据库系统由以下部分组成：\n\n1. 数据库（DB）：存储数据的集合\n2. 数据库管理系统（DBMS）：管理数据库的软件\n3. 应用程序：使用数据库的软件\n4. 数据库管理员（DBA）：负责数据库的管理和维护\n5. 用户：使用数据库的人员',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据库系统组成图',
+            'DBMS功能详解',
+            'DBA职责指南'
+          ]
         },
         {
           id: 'section1-3',
           title: '数据库的发展历程',
           content: '数据库的发展经历了以下阶段：\n\n1. 人工管理阶段：数据由人工管理\n2. 文件系统阶段：数据存储在文件中\n3. 数据库系统阶段：使用DBMS管理数据\n4. 高级数据库系统阶段：如分布式数据库、面向对象数据库等',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据库发展历程时间线',
+            '各阶段数据库特点对比',
+            '未来数据库发展趋势'
+          ]
         },
         {
           id: 'section1-4',
           title: '数据库的应用领域',
           content: '数据库广泛应用于以下领域：\n\n1. 企业管理：如财务、人事、库存管理\n2. 电子商务：如在线购物、支付系统\n3. 金融服务：如银行、证券、保险\n4. 教育：如学生信息、课程管理\n5. 医疗：如患者信息、医疗记录\n6. 科研：如实验数据、文献管理',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据库应用领域案例集',
+            '各行业数据库应用特点',
+            '数据库应用成功案例'
+          ]
         }
       ]
     },
@@ -162,31 +182,56 @@ export default function DatabaseCourse() {
           id: 'section2-1',
           title: '数据模型的概念与分类',
           content: '数据模型是对现实世界数据特征的抽象，是数据库系统的核心和基础。\n\n数据模型的分类：\n1. 概念模型：面向现实世界，如ER模型\n2. 逻辑模型：面向数据库，如关系模型、层次模型、网状模型\n3. 物理模型：面向计算机存储，如存储结构、索引等',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据模型概念详解',
+            '数据模型分类对比',
+            '数据模型选择指南'
+          ]
         },
         {
           id: 'section2-2',
           title: '概念模型',
           content: '概念模型是对现实世界的抽象，主要用于数据库设计。\n\n概念模型的基本概念：\n1. 实体（Entity）：客观存在并可相互区别的事物\n2. 属性（Attribute）：实体的特征\n3. 实体型（Entity Type）：具有相同属性的实体的集合\n4. 实体集（Entity Set）：同类型实体的集合\n5. 联系（Relationship）：实体之间的关联',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '概念模型基本概念图解',
+            '实体与属性识别指南',
+            '概念模型设计技巧'
+          ]
         },
         {
           id: 'section2-3',
           title: '逻辑模型',
           content: '逻辑模型是面向数据库的模型，用于描述数据库的结构。\n\n常见的逻辑模型：\n1. 关系模型：用二维表表示数据\n2. 层次模型：用树形结构表示数据\n3. 网状模型：用网状结构表示数据\n4. 面向对象模型：用对象表示数据',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '逻辑模型对比分析',
+            '关系模型详解',
+            '面向对象模型设计'
+          ]
         },
         {
           id: 'section2-4',
           title: '物理模型',
           content: '物理模型是面向计算机存储的模型，描述数据在存储介质上的存储方式。\n\n物理模型的考虑因素：\n1. 存储结构：数据如何组织和存储\n2. 索引：如何提高查询效率\n3. 存取路径：数据的访问方式\n4. 存储分配：如何分配存储空间',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '物理模型设计指南',
+            '数据库存储结构详解',
+            '索引设计最佳实践'
+          ]
         },
         {
           id: 'section2-5',
           title: '实体-关系模型设计',
           content: '实体-关系（ER）模型是一种常用的概念模型，用于数据库设计。\n\nER模型的设计步骤：\n1. 确定实体：识别需要存储的实体\n2. 确定属性：为每个实体确定属性\n3. 确定联系：确定实体之间的联系\n4. 确定联系的类型：一对一、一对多、多对多\n5. 绘制ER图：用图形表示实体、属性和联系',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            'ER模型设计教程',
+            'ER图绘制工具',
+            'ER模型设计案例'
+          ]
         }
       ]
     },
@@ -197,31 +242,56 @@ export default function DatabaseCourse() {
           id: 'section3-1',
           title: '关系数据库的基本概念',
           content: '关系数据库是基于关系模型的数据库，用二维表表示数据。\n\n关系数据库的基本概念：\n1. 关系（Relation）：二维表\n2. 元组（Tuple）：表中的一行\n3. 属性（Attribute）：表中的一列\n4. 域（Domain）：属性的取值范围\n5. 分量（Component）：元组中的一个属性值\n6. 关系模式：关系的结构\n7. 关系实例：关系的具体数据',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '关系数据库基本概念详解',
+            '关系模式设计指南',
+            '关系数据库实例分析'
+          ]
         },
         {
           id: 'section3-2',
           title: '关系代数',
           content: '关系代数是一种用于操作关系的数学工具，是SQL语言的理论基础。\n\n关系代数的基本操作：\n1. 选择（Selection）：选择满足条件的元组\n2. 投影（Projection）：选择指定的属性\n3. 连接（Join）：将两个关系连接起来\n4. 笛卡尔积（Cartesian Product）：两个关系的所有可能组合\n5. 并（Union）：两个关系的并集\n6. 差（Difference）：两个关系的差集\n7. 交（Intersection）：两个关系的交集',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '关系代数教程',
+            '关系代数运算实例',
+            '关系代数与SQL对照'
+          ]
         },
         {
           id: 'section3-3',
           title: '关系数据库规范化',
           content: '关系数据库规范化是一种设计关系模式的方法，用于消除数据冗余和异常。\n\n规范化的目的：\n1. 消除数据冗余：减少数据重复\n2. 消除更新异常：避免数据不一致\n3. 消除插入异常：避免无法插入数据\n4. 消除删除异常：避免误删数据',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据库规范化教程',
+            '规范化异常示例',
+            '规范化实践指南'
+          ]
         },
         {
           id: 'section3-4',
           title: '函数依赖',
           content: '函数依赖是关系中属性之间的一种约束关系。\n\n函数依赖的类型：\n1. 完全函数依赖：X→Y，且X的任何真子集都不能决定Y\n2. 部分函数依赖：X→Y，且X的某个真子集可以决定Y\n3. 传递函数依赖：X→Y，Y→Z，且Y不能决定X',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '函数依赖详解',
+            '函数依赖识别方法',
+            '函数依赖与规范化关系'
+          ]
         },
         {
           id: 'section3-5',
           title: '范式',
           content: '范式是关系模式的规范化程度，从低到高分为1NF、2NF、3NF、BCNF等。\n\n各范式的要求：\n1. 1NF：列不可再分\n2. 2NF：消除部分函数依赖\n3. 3NF：消除传递函数依赖\n4. BCNF：消除主属性对候选键的部分和传递函数依赖',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据库范式详解',
+            '范式转换方法',
+            '范式应用案例'
+          ]
         }
       ]
     },
@@ -232,31 +302,56 @@ export default function DatabaseCourse() {
           id: 'section4-1',
           title: 'SQL语言概述',
           content: 'SQL（Structured Query Language）是一种用于管理关系数据库的标准语言。\n\nSQL的特点：\n1. 综合统一：集数据定义、操作、查询、控制于一体\n2. 高度非过程化：只需要说明做什么，不需要说明怎么做\n3. 面向集合的操作方式：操作对象和结果都是集合\n4. 语言简洁，易学易用：核心功能只用少量语句即可实现',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            'SQL语言教程',
+            'SQL标准参考',
+            'SQL方言差异'
+          ]
         },
         {
           id: 'section4-2',
           title: '数据定义语言（DDL）',
           content: 'DDL用于定义数据库的结构，包括创建、修改和删除数据库对象。\n\n常用的DDL语句：\n1. CREATE：创建数据库对象\n2. ALTER：修改数据库对象\n3. DROP：删除数据库对象\n4. TRUNCATE：清空表中的数据',
-          codeExamples: ['CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)', 'ALTER TABLE students ADD COLUMN gender VARCHAR(10)', 'DROP TABLE students']
+          codeExamples: ['CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)', 'ALTER TABLE students ADD COLUMN gender VARCHAR(10)', 'DROP TABLE students'],
+          resources: [
+            'DDL语句参考',
+            '表结构设计指南',
+            'DDL操作实例'
+          ]
         },
         {
           id: 'section4-3',
           title: '数据操作语言（DML）',
           content: 'DML用于操作数据库中的数据，包括插入、更新和删除数据。\n\n常用的DML语句：\n1. INSERT：插入数据\n2. UPDATE：更新数据\n3. DELETE：删除数据',
-          codeExamples: ['INSERT INTO students (id, name, age) VALUES (1, "Alice", 20)', 'UPDATE students SET age = 21 WHERE id = 1', 'DELETE FROM students WHERE id = 1']
+          codeExamples: ['INSERT INTO students (id, name, age) VALUES (1, "Alice", 20)', 'UPDATE students SET age = 21 WHERE id = 1', 'DELETE FROM students WHERE id = 1'],
+          resources: [
+            'DML语句参考',
+            '数据操作最佳实践',
+            'DML性能优化'
+          ]
         },
         {
           id: 'section4-4',
           title: '数据查询语言（DQL）',
           content: 'DQL用于查询数据库中的数据，是SQL中最常用的部分。\n\n常用的DQL语句：\n1. SELECT：查询数据\n2. FROM：指定表\n3. WHERE：指定条件\n4. GROUP BY：分组\n5. HAVING：分组条件\n6. ORDER BY：排序\n7. LIMIT：限制结果数量',
-          codeExamples: ['SELECT * FROM students', 'SELECT name, age FROM students WHERE age > 18', 'SELECT age, COUNT(*) FROM students GROUP BY age']
+          codeExamples: ['SELECT * FROM students', 'SELECT name, age FROM students WHERE age > 18', 'SELECT age, COUNT(*) FROM students GROUP BY age'],
+          resources: [
+            'DQL查询技巧',
+            '复杂查询示例',
+            '查询性能优化'
+          ]
         },
         {
           id: 'section4-5',
           title: '数据控制语言（DCL）',
           content: 'DCL用于控制数据库的访问权限，包括授权和回收权限。\n\n常用的DCL语句：\n1. GRANT：授予权限\n2. REVOKE：回收权限\n3. COMMIT：提交事务\n4. ROLLBACK：回滚事务',
-          codeExamples: ['GRANT SELECT ON students TO user1', 'REVOKE SELECT ON students FROM user1', 'COMMIT', 'ROLLBACK']
+          codeExamples: ['GRANT SELECT ON students TO user1', 'REVOKE SELECT ON students FROM user1', 'COMMIT', 'ROLLBACK'],
+          resources: [
+            'DCL语句参考',
+            '数据库权限管理',
+            '事务处理指南'
+          ]
         }
       ]
     },
@@ -267,31 +362,56 @@ export default function DatabaseCourse() {
           id: 'section5-1',
           title: '数据库设计概述',
           content: '数据库设计是指根据用户需求，设计数据库的结构和功能。\n\n数据库设计的步骤：\n1. 需求分析：了解用户需求\n2. 概念结构设计：设计概念模型\n3. 逻辑结构设计：设计逻辑模型\n4. 物理结构设计：设计物理模型\n5. 数据库实施：创建数据库\n6. 数据库运行和维护：维护数据库',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据库设计指南',
+            '设计步骤详解',
+            '数据库设计工具'
+          ]
         },
         {
           id: 'section5-2',
           title: '需求分析',
           content: '需求分析是数据库设计的第一步，用于了解用户的需求和业务流程。\n\n需求分析的内容：\n1. 数据需求：需要存储哪些数据\n2. 功能需求：需要实现哪些功能\n3. 性能需求：系统的性能要求\n4. 安全需求：数据的安全要求',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '需求分析方法',
+            '需求文档模板',
+            '业务流程分析技巧'
+          ]
         },
         {
           id: 'section5-3',
           title: '概念结构设计',
           content: '概念结构设计是设计概念模型，用于描述用户的业务需求。\n\n概念结构设计的方法：\n1. 实体分析法：识别实体、属性和联系\n2. 自顶向下法：从整体到局部\n3. 自底向上法：从局部到整体\n4. 混合法：结合自顶向下和自底向上',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '概念结构设计方法',
+            '实体识别技巧',
+            'ER模型设计案例'
+          ]
         },
         {
           id: 'section5-4',
           title: '逻辑结构设计',
           content: '逻辑结构设计是将概念模型转换为逻辑模型，用于数据库的实现。\n\n逻辑结构设计的步骤：\n1. 确定数据模型：选择合适的数据模型\n2. 转换概念模型：将ER模型转换为关系模式\n3. 规范化：对关系模式进行规范化\n4. 优化：优化关系模式',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '逻辑结构设计指南',
+            'ER模型转关系模式方法',
+            '关系模式优化技巧'
+          ]
         },
         {
           id: 'section5-5',
           title: '物理结构设计',
           content: '物理结构设计是设计数据库的物理存储结构，用于提高数据库的性能。\n\n物理结构设计的内容：\n1. 存储结构设计：选择存储结构\n2. 索引设计：设计索引\n3. 分区设计：设计分区\n4. 优化：优化物理结构',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '物理结构设计指南',
+            '索引设计最佳实践',
+            '数据库性能优化'
+          ]
         }
       ]
     },
@@ -302,31 +422,56 @@ export default function DatabaseCourse() {
           id: 'section6-1',
           title: '数据库应用开发概述',
           content: '数据库应用开发是指开发使用数据库的应用程序。\n\n数据库应用开发的步骤：\n1. 需求分析：了解用户需求\n2. 设计：设计应用程序和数据库\n3. 编码：编写应用程序代码\n4. 测试：测试应用程序\n5. 部署：部署应用程序\n6. 维护：维护应用程序',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据库应用开发指南',
+            '开发流程详解',
+            '应用开发工具推荐'
+          ]
         },
         {
           id: 'section6-2',
           title: '数据库连接技术',
           content: '数据库连接技术是指应用程序与数据库之间的连接方法。\n\n常用的数据库连接技术：\n1. ODBC（Open Database Connectivity）：开放数据库连接\n2. JDBC（Java Database Connectivity）：Java数据库连接\n3. ADO.NET：.NET平台的数据库连接\n4. PDO（PHP Data Objects）：PHP的数据库对象\n5. ORM（Object-Relational Mapping）：对象关系映射',
-          codeExamples: ['import mysql.connector', 'conn = mysql.connector.connect(host="localhost", user="user", password="password", database="db")', 'cursor = conn.cursor()', 'cursor.execute("SELECT * FROM table")']
+          codeExamples: ['import mysql.connector', 'conn = mysql.connector.connect(host="localhost", user="user", password="password", database="db")', 'cursor = conn.cursor()', 'cursor.execute("SELECT * FROM table")'],
+          resources: [
+            '数据库连接技术对比',
+            'ORM框架使用指南',
+            '连接池配置最佳实践'
+          ]
         },
         {
           id: 'section6-3',
           title: '数据库应用系统架构',
           content: '数据库应用系统的架构是指应用程序的组织方式。\n\n常见的数据库应用系统架构：\n1. 单机架构：应用程序和数据库在同一台机器上\n2. 客户-服务器架构：应用程序作为客户端，数据库作为服务器\n3. 三层架构：表示层、业务逻辑层、数据访问层\n4. 多层架构：更多层次的架构',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '应用系统架构设计',
+            '三层架构详解',
+            '架构选择指南'
+          ]
         },
         {
           id: 'section6-4',
           title: '数据库应用开发工具',
           content: '数据库应用开发工具是指用于开发数据库应用的软件。\n\n常用的数据库应用开发工具：\n1. IDE（Integrated Development Environment）：集成开发环境\n2. 数据库管理工具：如MySQL Workbench、SQL Server Management Studio\n3. ORM框架：如Hibernate、Entity Framework\n4. Web框架：如Spring、Django、Flask',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '开发工具推荐',
+            'IDE配置指南',
+            '数据库管理工具使用技巧'
+          ]
         },
         {
           id: 'section6-5',
           title: '数据库应用开发案例',
           content: '数据库应用开发案例是指实际的数据库应用开发项目。\n\n常见的数据库应用开发案例：\n1. 学生管理系统：管理学生信息\n2. 图书管理系统：管理图书信息\n3. 库存管理系统：管理库存信息\n4. 订单管理系统：管理订单信息\n5. 客户关系管理系统：管理客户信息',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据库应用开发案例集',
+            '系统设计模板',
+            '开发经验分享'
+          ]
         }
       ]
     }

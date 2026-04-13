@@ -7,6 +7,7 @@ interface Section {
   codeExamples?: string[];
   images?: string[];
   exercises?: number;
+  resources?: string[];
 }
 
 interface ChapterContentProps {
@@ -90,6 +91,20 @@ export default function ChapterContent({ chapterId, chapterTitle, sections, onCo
                       <code className="text-blue-300">{code}</code>
                     </pre>
                   ))}
+                </div>
+              )}
+              
+              {section.resources && section.resources.length > 0 && (
+                <div className="mt-6">
+                  <h5 className="text-lg font-medium text-gray-200 mb-3">学习资源</h5>
+                  <ul className="space-y-2">
+                    {section.resources.map((resource, index) => (
+                      <li key={index} className="flex items-start">
+                        <span className="text-cyan-400 mr-3 mt-1">📚</span>
+                        <span className="text-gray-300">{resource}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </div>

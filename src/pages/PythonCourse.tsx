@@ -134,25 +134,45 @@ export default function PythonCourse() {
           id: 'section1-1',
           title: 'Python简介与安装',
           content: 'Python是一种高级编程语言，由Guido van Rossum于1989年创立。它以简洁的语法和强大的功能而闻名，广泛应用于Web开发、数据分析、人工智能等领域。\n\n安装Python的步骤：\n1. 访问Python官方网站（https://www.python.org/）\n2. 下载适合您操作系统的Python安装包\n3. 运行安装程序，确保勾选"Add Python to PATH"选项\n4. 完成安装后，打开命令提示符或终端，输入python --version验证安装成功',
-          codeExamples: ['python --version']
+          codeExamples: ['python --version'],
+          resources: [
+            'Python官方网站：https://www.python.org/',
+            'Python安装指南',
+            'Python入门视频教程'
+          ]
         },
         {
           id: 'section1-2',
           title: '基本数据类型',
           content: 'Python的基本数据类型包括：\n\n1. 整数（int）：如1, 2, 3\n2. 浮点数（float）：如1.0, 2.5, 3.14\n3. 字符串（str）：如"Hello", \'Python\'\n4. 布尔值（bool）：True, False\n\n可以使用type()函数查看数据类型。',
-          codeExamples: ['type(1)', 'type(1.0)', 'type("Hello")', 'type(True)']
+          codeExamples: ['type(1)', 'type(1.0)', 'type("Hello")', 'type(True)'],
+          resources: [
+            'Python数据类型文档',
+            '数据类型转换指南',
+            '数据类型练习题库'
+          ]
         },
         {
           id: 'section1-3',
           title: '变量与赋值',
           content: '变量是用来存储数据的容器。在Python中，变量不需要声明类型，直接赋值即可。\n\n变量命名规则：\n1. 变量名只能包含字母、数字和下划线\n2. 变量名不能以数字开头\n3. 变量名区分大小写\n4. 变量名不能是Python关键字',
-          codeExamples: ['x = 10', 'y = 3.14', 'name = "Python"', 'is_valid = True']
+          codeExamples: ['x = 10', 'y = 3.14', 'name = "Python"', 'is_valid = True'],
+          resources: [
+            'Python变量命名规范',
+            '变量作用域详解',
+            '变量赋值技巧' 
+          ]
         },
         {
           id: 'section1-4',
           title: '基本运算符与表达式',
           content: 'Python支持多种运算符：\n\n1. 算术运算符：+, -, *, /, //, %, **\n2. 比较运算符：==, !=, >, <, >=, <=\n3. 逻辑运算符：and, or, not\n4. 赋值运算符：=, +=, -=, *=, /=\n\n表达式是由运算符和操作数组成的组合。',
-          codeExamples: ['1 + 2', '3 * 4', '5 > 3', 'True and False']
+          codeExamples: ['1 + 2', '3 * 4', '5 > 3', 'True and False'],
+          resources: [
+            'Python运算符优先级表',
+            '表达式计算指南',
+            '运算符练习题库'
+          ]
         },
         {
           id: 'section1-5',

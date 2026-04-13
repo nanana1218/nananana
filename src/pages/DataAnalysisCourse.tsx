@@ -133,25 +133,45 @@ export default function DataAnalysisCourse() {
           id: 'section1-1',
           title: '数据分析的定义与重要性',
           content: '数据分析是指使用适当的统计分析方法对收集到的数据进行处理、分析和解释，以发现数据中的模式、趋势和关系，为决策提供依据。\n\n数据分析的重要性：\n1. 帮助企业做出数据驱动的决策\n2. 发现业务中的问题和机会\n3. 优化业务流程和提高效率\n4. 预测未来趋势和市场变化',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '《数据分析基础》教材',
+            '数据分析流程图表',
+            '案例分析：电商平台用户行为分析'
+          ]
         },
         {
           id: 'section1-2',
           title: '数据分析的基本流程',
           content: '数据分析的基本流程包括：\n\n1. 问题定义：明确分析的目标和问题\n2. 数据收集：获取相关的数据\n3. 数据清洗：处理缺失值、异常值等\n4. 数据探索：了解数据的基本特征\n5. 数据分析：使用适当的方法分析数据\n6. 结果可视化：通过图表展示分析结果\n7. 结论与建议：基于分析结果提出结论和建议',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据分析流程图解',
+            '数据清洗最佳实践指南',
+            '案例：某企业数据分析项目流程'
+          ]
         },
         {
           id: 'section1-3',
           title: '数据类型与数据结构',
           content: '数据类型包括：\n\n1. 数值型数据：整数、浮点数等\n2. 分类型数据：类别、标签等\n3. 时间序列数据：按时间顺序排列的数据\n4. 文本数据：文字、文档等\n\n数据结构包括：\n1. 表格数据：行和列组成的数据\n2. 层次数据：树状结构的数据\n3. 网络数据：节点和边组成的数据',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据类型与结构详解',
+            'Python数据结构教程',
+            '数据类型转换练习'
+          ]
         },
         {
           id: 'section1-4',
           title: '数据分析的常用方法分类',
           content: '数据分析方法可分为：\n\n1. 描述性分析：描述数据的基本特征\n2. 诊断性分析：分析数据发生的原因\n3. 预测性分析：预测未来的趋势\n4. 规范性分析：提供最优决策建议',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据分析方法分类表',
+            '各分析方法适用场景',
+            '分析方法选择指南'
+          ]
         }
       ]
     },
@@ -162,31 +182,56 @@ export default function DataAnalysisCourse() {
           id: 'section2-1',
           title: '数据可视化的基本原理',
           content: '数据可视化是通过图表、图形等方式将数据以视觉形式展示出来，帮助人们更直观地理解数据。\n\n数据可视化的基本原则：\n1. 准确性：正确反映数据的真实情况\n2. 清晰性：易于理解和解读\n3. 美观性：视觉效果良好\n4. 有效性：能够有效传达信息',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据可视化原理教程',
+            '视觉设计基础',
+            '数据可视化案例集'
+          ]
         },
         {
           id: 'section2-2',
           title: 'Matplotlib库的使用',
           content: 'Matplotlib是Python中最常用的数据可视化库，可用于创建各种类型的图表。\n\n基本使用步骤：\n1. 导入Matplotlib库\n2. 创建图表和子图\n3. 绘制数据\n4. 设置图表属性\n5. 显示或保存图表',
-          codeExamples: ['import matplotlib.pyplot as plt', 'plt.figure(figsize=(10, 6))', 'plt.plot(x, y)', 'plt.title("标题")', 'plt.xlabel("X轴")', 'plt.ylabel("Y轴")', 'plt.show()']
+          codeExamples: ['import matplotlib.pyplot as plt', 'plt.figure(figsize=(10, 6))', 'plt.plot(x, y)', 'plt.title("标题")', 'plt.xlabel("X轴")', 'plt.ylabel("Y轴")', 'plt.show()'],
+          resources: [
+            'Matplotlib官方文档',
+            'Matplotlib基础教程',
+            '常见图表绘制示例'
+          ]
         },
         {
           id: 'section2-3',
           title: 'Seaborn库的高级可视化',
           content: 'Seaborn是基于Matplotlib的高级数据可视化库，提供了更美观的默认样式和更高级的图表类型。\n\n常用图表类型：\n1. 散点图：展示两个变量之间的关系\n2. 直方图：展示数据的分布\n3. 箱线图：展示数据的分布和异常值\n4. 热力图：展示变量之间的相关性',
-          codeExamples: ['import seaborn as sns', 'sns.scatterplot(x="x", y="y", data=data)', 'sns.histplot(data["value"])']
+          codeExamples: ['import seaborn as sns', 'sns.scatterplot(x="x", y="y", data=data)', 'sns.histplot(data["value"])'],
+          resources: [
+            'Seaborn官方教程',
+            'Seaborn图表类型详解',
+            'Seaborn实战案例'
+          ]
         },
         {
           id: 'section2-4',
           title: '交互式数据可视化工具',
           content: '交互式数据可视化工具允许用户与图表进行交互，如缩放、悬停查看详情等。\n\n常用工具：\n1. Plotly：创建交互式图表\n2. Dash：创建交互式数据应用\n3. Bokeh：创建交互式Web可视化',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            'Plotly入门教程',
+            'Dash应用开发指南',
+            '交互式可视化案例'
+          ]
         },
         {
           id: 'section2-5',
           title: '数据可视化最佳实践',
           content: '数据可视化的最佳实践：\n\n1. 选择合适的图表类型\n2. 保持简洁明了\n3. 使用适当的颜色和标签\n4. 提供必要的上下文信息\n5. 避免图表欺诈',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据可视化最佳实践指南',
+            '图表类型选择参考',
+            '数据可视化设计原则'
+          ]
         }
       ]
     },
@@ -197,31 +242,56 @@ export default function DataAnalysisCourse() {
           id: 'section3-1',
           title: '描述性统计分析',
           content: '描述性统计分析用于描述数据的基本特征，包括：\n\n1. 集中趋势：均值、中位数、众数\n2. 离散程度：方差、标准差、范围\n3. 分布形状：偏度、峰度\n4. 分位数：四分位数、百分位数',
-          codeExamples: ['import numpy as np', 'np.mean(data)', 'np.median(data)', 'np.std(data)']
+          codeExamples: ['import numpy as np', 'np.mean(data)', 'np.median(data)', 'np.std(data)'],
+          resources: [
+            '《统计学原理》教材',
+            '描述性统计分析指南',
+            '统计量计算练习'
+          ]
         },
         {
           id: 'section3-2',
           title: '假设检验',
           content: '假设检验用于判断样本数据是否支持某个假设。\n\n常见的假设检验：\n1. t检验：比较两个样本的均值\n2. 卡方检验：比较分类变量的分布\n3. F检验：比较多个样本的方差',
-          codeExamples: ['from scipy import stats', 'stats.ttest_ind(sample1, sample2)']
+          codeExamples: ['from scipy import stats', 'stats.ttest_ind(sample1, sample2)'],
+          resources: [
+            '假设检验原理详解',
+            't检验、卡方检验、F检验应用场景',
+            '假设检验案例分析'
+          ]
         },
         {
           id: 'section3-3',
           title: '方差分析',
           content: '方差分析用于比较多个组之间的均值差异。\n\n类型：\n1. 单因素方差分析：一个自变量\n2. 双因素方差分析：两个自变量\n3. 多因素方差分析：多个自变量',
-          codeExamples: ['from scipy import stats', 'f_stat, p_value = stats.f_oneway(group1, group2, group3)']
+          codeExamples: ['from scipy import stats', 'f_stat, p_value = stats.f_oneway(group1, group2, group3)'],
+          resources: [
+            '方差分析教程',
+            '方差分析假设条件',
+            '方差分析案例练习'
+          ]
         },
         {
           id: 'section3-4',
           title: '相关分析与回归分析',
           content: '相关分析用于衡量变量之间的线性关系强度，回归分析用于建立变量之间的预测模型。\n\n类型：\n1. 简单线性回归：一个自变量\n2. 多元线性回归：多个自变量\n3. 非线性回归：非线性关系',
-          codeExamples: ['import numpy as np', 'from sklearn.linear_model import LinearRegression', 'X = np.array([[1], [2], [3]])', 'y = np.array([2, 4, 6])', 'model = LinearRegression()', 'model.fit(X, y)']
+          codeExamples: ['import numpy as np', 'from sklearn.linear_model import LinearRegression', 'X = np.array([[1], [2], [3]])', 'y = np.array([2, 4, 6])', 'model = LinearRegression()', 'model.fit(X, y)'],
+          resources: [
+            '相关分析与回归分析教程',
+            '回归模型评估指标',
+            '回归分析案例实战'
+          ]
         },
         {
           id: 'section3-5',
           title: '时间序列分析',
           content: '时间序列分析用于分析和预测时间相关的数据。\n\n方法：\n1. 移动平均：平滑时间序列\n2. 指数平滑：对近期数据赋予更高权重\n3. ARIMA模型：自回归综合移动平均模型',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '时间序列分析基础',
+            'ARIMA模型详解',
+            '时间序列预测案例'
+          ]
         }
       ]
     },
@@ -232,31 +302,56 @@ export default function DataAnalysisCourse() {
           id: 'section4-1',
           title: '机器学习概述',
           content: '机器学习是人工智能的一个分支，通过算法让计算机从数据中学习规律，而不需要明确的编程指令。\n\n机器学习的应用：\n1. 图像识别\n2. 语音识别\n3. 自然语言处理\n4. 推荐系统\n5. 预测分析',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '机器学习入门教程',
+            '机器学习应用案例集',
+            '机器学习算法分类表'
+          ]
         },
         {
           id: 'section4-2',
           title: '监督学习与无监督学习',
           content: '监督学习：使用标记数据进行训练，目标是预测未知数据的标签。\n\n无监督学习：使用未标记数据进行训练，目标是发现数据中的模式和结构。\n\n半监督学习：结合标记和未标记数据进行训练。',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '监督学习与无监督学习对比',
+            '半监督学习方法介绍',
+            '学习方法选择指南'
+          ]
         },
         {
           id: 'section4-3',
           title: '线性回归与逻辑回归',
           content: '线性回归：用于预测连续值的监督学习算法。\n\n逻辑回归：用于预测分类标签的监督学习算法，输出是概率值。',
-          codeExamples: ['from sklearn.linear_model import LinearRegression, LogisticRegression', 'model = LinearRegression()', 'model.fit(X_train, y_train)']
+          codeExamples: ['from sklearn.linear_model import LinearRegression, LogisticRegression', 'model = LinearRegression()', 'model.fit(X_train, y_train)'],
+          resources: [
+            '线性回归原理与实践',
+            '逻辑回归详解',
+            '回归模型调优指南'
+          ]
         },
         {
           id: 'section4-4',
           title: '决策树与随机森林',
           content: '决策树：通过树状结构进行决策的监督学习算法。\n\n随机森林：由多个决策树组成的集成学习算法，通过投票机制提高预测准确性。',
-          codeExamples: ['from sklearn.tree import DecisionTreeClassifier', 'from sklearn.ensemble import RandomForestClassifier', 'model = RandomForestClassifier(n_estimators=100)']
+          codeExamples: ['from sklearn.tree import DecisionTreeClassifier', 'from sklearn.ensemble import RandomForestClassifier', 'model = RandomForestClassifier(n_estimators=100)'],
+          resources: [
+            '决策树算法原理',
+            '随机森林参数调优',
+            '树模型可视化工具'
+          ]
         },
         {
           id: 'section4-5',
           title: '聚类分析',
           content: '聚类分析是一种无监督学习方法，用于将相似的数据点分组。\n\n常见的聚类算法：\n1. K-means：基于距离的聚类\n2. 层次聚类：基于层次结构的聚类\n3. DBSCAN：基于密度的聚类',
-          codeExamples: ['from sklearn.cluster import KMeans', 'model = KMeans(n_clusters=3)', 'model.fit(X)']
+          codeExamples: ['from sklearn.cluster import KMeans', 'model = KMeans(n_clusters=3)', 'model.fit(X)'],
+          resources: [
+            '聚类算法原理',
+            'K-means聚类实践',
+            '聚类结果评估方法'
+          ]
         }
       ]
     },
@@ -267,31 +362,56 @@ export default function DataAnalysisCourse() {
           id: 'section5-1',
           title: '市场数据分析',
           content: '市场数据分析用于了解市场趋势、竞争对手和消费者行为。\n\n分析内容：\n1. 市场规模和增长趋势\n2. 竞争对手分析\n3. 消费者行为分析\n4. 市场份额分析',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '市场数据分析指南',
+            '竞争对手分析框架',
+            '市场分析案例集'
+          ]
         },
         {
           id: 'section5-2',
           title: '客户行为分析',
           content: '客户行为分析用于了解客户的购买习惯、偏好和价值。\n\n分析内容：\n1. 客户细分\n2. 购买行为分析\n3. 客户生命周期价值\n4. 客户流失预测',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '客户行为分析方法',
+            'RFM模型应用',
+            '客户流失预测模型'
+          ]
         },
         {
           id: 'section5-3',
           title: '销售数据分析',
           content: '销售数据分析用于优化销售策略和提高销售业绩。\n\n分析内容：\n1. 销售趋势分析\n2. 产品销售分析\n3. 区域销售分析\n4. 销售渠道分析',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '销售数据分析模板',
+            '销售趋势预测方法',
+            '销售分析案例'
+          ]
         },
         {
           id: 'section5-4',
           title: '供应链数据分析',
           content: '供应链数据分析用于优化供应链流程和降低成本。\n\n分析内容：\n1. 库存分析\n2. 物流成本分析\n3. 供应商绩效分析\n4. 需求预测',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '供应链数据分析指南',
+            '库存优化模型',
+            '供应商评估体系'
+          ]
         },
         {
           id: 'section5-5',
           title: '财务数据分析',
           content: '财务数据分析用于评估企业的财务状况和业绩。\n\n分析内容：\n1. 财务比率分析\n2. 成本分析\n3. 盈利能力分析\n4. 现金流分析',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '财务分析指标体系',
+            '成本分析方法',
+            '财务报表分析案例'
+          ]
         }
       ]
     },
@@ -302,31 +422,56 @@ export default function DataAnalysisCourse() {
           id: 'section6-1',
           title: '项目选题与规划',
           content: '项目选题应结合实际业务需求，具有明确的目标和可行性。\n\n规划内容：\n1. 确定项目目标和范围\n2. 制定项目计划和时间表\n3. 确定数据需求和来源\n4. 评估项目风险',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '项目选题指南',
+            '项目计划模板',
+            '项目风险管理方法'
+          ]
         },
         {
           id: 'section6-2',
           title: '数据获取与清洗',
           content: '数据获取：从各种来源收集数据，如数据库、API、文件等。\n\n数据清洗：处理数据中的缺失值、异常值、重复值等问题。',
-          codeExamples: ['import pandas as pd', 'df = pd.read_csv("data.csv")', 'df = df.dropna()', 'df = df.drop_duplicates()']
+          codeExamples: ['import pandas as pd', 'df = pd.read_csv("data.csv")', 'df = df.dropna()', 'df = df.drop_duplicates()'],
+          resources: [
+            '数据获取方法汇总',
+            '数据清洗工具推荐',
+            '数据质量评估标准'
+          ]
         },
         {
           id: 'section6-3',
           title: '数据分析与建模',
           content: '根据项目目标选择合适的分析方法和模型。\n\n步骤：\n1. 数据探索和可视化\n2. 特征工程\n3. 模型选择和训练\n4. 模型评估和优化',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据分析方法选择指南',
+            '特征工程技巧',
+            '模型评估指标详解'
+          ]
         },
         {
           id: 'section6-4',
           title: '结果可视化与报告',
           content: '将分析结果以清晰、直观的方式展示，并撰写详细的分析报告。\n\n报告内容：\n1. 项目背景和目标\n2. 数据来源和处理方法\n3. 分析过程和结果\n4. 结论和建议',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据分析报告模板',
+            '数据可视化最佳实践',
+            '报告撰写技巧'
+          ]
         },
         {
           id: 'section6-5',
           title: '项目展示与评估',
           content: '项目展示：向相关人员展示分析结果和建议。\n\n项目评估：评估项目的成功度和影响力。',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '项目展示技巧',
+            '项目评估标准',
+            '成功项目案例分析'
+          ]
         }
       ]
     }

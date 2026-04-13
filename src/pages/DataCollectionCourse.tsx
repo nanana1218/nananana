@@ -133,25 +133,45 @@ export default function DataCollectionCourse() {
           id: 'section1-1',
           title: '数据采集的概念与意义',
           content: '数据采集是指从各种数据源获取数据的过程，是数据分析的第一步。\n\n数据采集的意义：\n1. 为数据分析提供原始数据\n2. 帮助企业了解市场和客户\n3. 支持数据驱动的决策\n4. 发现业务机会和问题',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '《数据采集与预处理》教材',
+            '数据采集技术综述',
+            '数据采集在企业中的应用案例'
+          ]
         },
         {
           id: 'section1-2',
           title: '数据采集的类型与方法',
           content: '数据采集的类型：\n\n1. 内部数据：企业内部系统产生的数据\n2. 外部数据：来自企业外部的数据源\n3. 结构化数据：有固定格式的数据\n4. 非结构化数据：无固定格式的数据\n\n数据采集的方法：\n1. 网络爬虫\n2. API接口\n3. 传感器采集\n4. 问卷调查',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据采集方法对比分析',
+            '不同类型数据的采集策略',
+            '数据采集工具选型指南'
+          ]
         },
         {
           id: 'section1-3',
           title: '数据采集的工具与技术',
           content: '常用的数据采集工具和技术：\n\n1. Python库：Requests、BeautifulSoup、Scrapy\n2. API工具：Postman、Insomnia\n3. 数据库工具：MySQL、PostgreSQL\n4. 数据存储：CSV、JSON、数据库',
-          codeExamples: ['import requests', 'from bs4 import BeautifulSoup', 'import scrapy']
+          codeExamples: ['import requests', 'from bs4 import BeautifulSoup', 'import scrapy'],
+          resources: [
+            'Python爬虫库使用指南',
+            'API测试工具教程',
+            '数据存储格式对比'
+          ]
         },
         {
           id: 'section1-4',
           title: '数据采集的伦理与规范',
           content: '数据采集的伦理和规范：\n\n1. 遵守法律法规\n2. 尊重用户隐私\n3. 避免过度采集\n4. 注明数据来源\n5. 遵守网站的robots.txt规则',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据采集伦理指南',
+            '网络爬虫法律规范',
+            '数据隐私保护最佳实践'
+          ]
         }
       ]
     },
@@ -162,31 +182,56 @@ export default function DataCollectionCourse() {
           id: 'section2-1',
           title: 'HTTP协议基础',
           content: 'HTTP（HyperText Transfer Protocol）是用于在Web上传输数据的协议。\n\nHTTP请求方法：\n1. GET：获取资源\n2. POST：提交数据\n3. PUT：更新资源\n4. DELETE：删除资源\n\nHTTP响应状态码：\n1. 2xx：成功\n2. 3xx：重定向\n3. 4xx：客户端错误\n4. 5xx：服务器错误',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            'HTTP协议详解',
+            'RESTful API设计指南',
+            'HTTP状态码速查手册'
+          ]
         },
         {
           id: 'section2-2',
           title: 'HTML与CSS基础',
           content: 'HTML（HyperText Markup Language）是用于创建网页的标记语言。\n\nCSS（Cascading Style Sheets）是用于描述网页样式的语言。\n\n常用的HTML标签：\n1. <div>：块级元素\n2. <span>：行内元素\n3. <a>：链接\n4. <table>：表格\n5. <form>：表单',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            'HTML基础教程',
+            'CSS选择器参考',
+            '网页结构分析指南'
+          ]
         },
         {
           id: 'section2-3',
           title: 'Python爬虫库介绍',
           content: 'Python中常用的爬虫库：\n\n1. Requests：用于发送HTTP请求\n2. BeautifulSoup：用于解析HTML和XML\n3. Scrapy：功能强大的爬虫框架\n4. Selenium：用于处理动态网页',
-          codeExamples: ['import requests', 'from bs4 import BeautifulSoup', 'import scrapy', 'from selenium import webdriver']
+          codeExamples: ['import requests', 'from bs4 import BeautifulSoup', 'import scrapy', 'from selenium import webdriver'],
+          resources: [
+            'Requests库官方文档',
+            'BeautifulSoup使用教程',
+            'Scrapy框架指南'
+          ]
         },
         {
           id: 'section2-4',
           title: '静态网页数据采集',
           content: '静态网页是指内容固定的网页，数据直接嵌入在HTML中。\n\n采集步骤：\n1. 发送HTTP请求获取网页内容\n2. 解析HTML提取数据\n3. 存储提取的数据',
-          codeExamples: ['import requests', 'from bs4 import BeautifulSoup', 'response = requests.get("https://example.com")', 'soup = BeautifulSoup(response.text, "html.parser")', 'data = soup.find_all("div", class_="item")']
+          codeExamples: ['import requests', 'from bs4 import BeautifulSoup', 'response = requests.get("https://example.com")', 'soup = BeautifulSoup(response.text, "html.parser")', 'data = soup.find_all("div", class_="item")'],
+          resources: [
+            '静态网页爬取实战',
+            'HTML解析技巧',
+            '数据提取最佳实践'
+          ]
         },
         {
           id: 'section2-5',
           title: '动态网页数据采集',
           content: '动态网页是指内容通过JavaScript动态生成的网页。\n\n采集方法：\n1. 分析API接口\n2. 使用Selenium模拟浏览器行为\n3. 使用Pyppeteer或Playwright',
-          codeExamples: ['from selenium import webdriver', 'driver = webdriver.Chrome()', 'driver.get("https://example.com")', 'data = driver.find_elements_by_class_name("item")']
+          codeExamples: ['from selenium import webdriver', 'driver = webdriver.Chrome()', 'driver.get("https://example.com")', 'data = driver.find_elements_by_class_name("item")'],
+          resources: [
+            '动态网页爬取技术',
+            'Selenium自动化测试指南',
+            'API接口分析方法'
+          ]
         }
       ]
     },
@@ -197,31 +242,56 @@ export default function DataCollectionCourse() {
           id: 'section3-1',
           title: 'API基本概念',
           content: 'API（Application Programming Interface）是应用程序编程接口，用于不同软件系统之间的通信。\n\nAPI的类型：\n1. RESTful API\n2. SOAP API\n3. GraphQL API\n4. WebSocket API',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            'API设计基础',
+            'RESTful API详解',
+            '不同API类型对比'
+          ]
         },
         {
           id: 'section3-2',
           title: 'RESTful API设计原则',
           content: 'RESTful API的设计原则：\n\n1. 资源标识：使用URL标识资源\n2. 统一接口：使用标准HTTP方法\n3. 无状态：服务器不保存客户端状态\n4. 缓存：支持缓存机制\n5. 分层系统：支持分层架构',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            'RESTful API设计最佳实践',
+            'API版本控制策略',
+            'RESTful API测试方法'
+          ]
         },
         {
           id: 'section3-3',
           title: 'API认证与授权',
           content: 'API认证和授权机制：\n\n1. API Key：简单的认证方式\n2. OAuth 2.0：流行的授权框架\n3. JWT（JSON Web Token）：无状态认证\n4. Basic Auth：基本的用户名密码认证',
-          codeExamples: ['import requests', 'headers = {"Authorization": "Bearer YOUR_TOKEN"}', 'response = requests.get("https://api.example.com/data", headers=headers)']
+          codeExamples: ['import requests', 'headers = {"Authorization": "Bearer YOUR_TOKEN"}', 'response = requests.get("https://api.example.com/data", headers=headers)'],
+          resources: [
+            'API认证机制详解',
+            'OAuth 2.0实战指南',
+            'JWT使用教程'
+          ]
         },
         {
           id: 'section3-4',
           title: 'API数据获取与处理',
           content: 'API数据获取和处理步骤：\n\n1. 了解API文档\n2. 构建API请求\n3. 发送请求获取数据\n4. 解析和处理数据\n5. 存储数据',
-          codeExamples: ['import requests', 'import json', 'response = requests.get("https://api.example.com/data")', 'data = response.json()', 'with open("data.json", "w") as f:', '    json.dump(data, f)']
+          codeExamples: ['import requests', 'import json', 'response = requests.get("https://api.example.com/data")', 'data = response.json()', 'with open("data.json", "w") as f:', '    json.dump(data, f)'],
+          resources: [
+            'API文档阅读指南',
+            'API请求构建技巧',
+            'JSON数据处理方法'
+          ]
         },
         {
           id: 'section3-5',
           title: '常见API使用案例',
           content: '常见的API使用案例：\n\n1. 天气API：获取天气数据\n2. 地图API：获取地理位置信息\n3. 社交媒体API：获取社交数据\n4. 金融API：获取金融市场数据\n5. 新闻API：获取新闻数据',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '公开API资源汇总',
+            'API调用实战案例',
+            'API速率限制处理'
+          ]
         }
       ]
     },
@@ -232,31 +302,56 @@ export default function DataCollectionCourse() {
           id: 'section4-1',
           title: '数据质量评估',
           content: '数据质量评估的维度：\n\n1. 完整性：数据是否完整\n2. 准确性：数据是否准确\n3. 一致性：数据是否一致\n4. 时效性：数据是否及时\n5. 可靠性：数据是否可靠',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据质量评估方法',
+            '数据质量指标体系',
+            '数据质量改进策略'
+          ]
         },
         {
           id: 'section4-2',
           title: '数据清洗方法',
           content: '数据清洗的方法：\n\n1. 处理缺失值：删除、填充、插值\n2. 处理异常值：删除、替换、转换\n3. 处理重复值：删除重复记录\n4. 处理不一致值：标准化、转换',
-          codeExamples: ['import pandas as pd', 'df = pd.read_csv("data.csv")', 'df = df.dropna()', 'df = df.drop_duplicates()']
+          codeExamples: ['import pandas as pd', 'df = pd.read_csv("data.csv")', 'df = df.dropna()', 'df = df.drop_duplicates()'],
+          resources: [
+            '数据清洗技术指南',
+            'Pandas数据清洗教程',
+            '缺失值处理方法对比'
+          ]
         },
         {
           id: 'section4-3',
           title: '数据转换技术',
           content: '数据转换的技术：\n\n1. 数据类型转换：转换数据类型\n2. 数据标准化：将数据缩放到特定范围\n3. 数据离散化：将连续数据转换为离散数据\n4. 特征工程：创建新的特征',
-          codeExamples: ['import pandas as pd', 'df["age"] = df["age"].astype(int)', 'from sklearn.preprocessing import StandardScaler', 'scaler = StandardScaler()', 'df["scaled_feature"] = scaler.fit_transform(df[["feature"]])']
+          codeExamples: ['import pandas as pd', 'df["age"] = df["age"].astype(int)', 'from sklearn.preprocessing import StandardScaler', 'scaler = StandardScaler()', 'df["scaled_feature"] = scaler.fit_transform(df[["feature"]])'],
+          resources: [
+            '数据转换技术详解',
+            '特征工程实践指南',
+            '数据标准化方法'
+          ]
         },
         {
           id: 'section4-4',
           title: '数据集成方法',
           content: '数据集成的方法：\n\n1. 合并：将多个数据集合并为一个\n2. 连接：基于共同字段连接数据集\n3. 追加：将一个数据集追加到另一个数据集\n4. 转换：将数据转换为统一格式',
-          codeExamples: ['import pandas as pd', 'df1 = pd.read_csv("data1.csv")', 'df2 = pd.read_csv("data2.csv")', 'merged_df = pd.merge(df1, df2, on="id")', 'appended_df = pd.concat([df1, df2])']
+          codeExamples: ['import pandas as pd', 'df1 = pd.read_csv("data1.csv")', 'df2 = pd.read_csv("data2.csv")', 'merged_df = pd.merge(df1, df2, on="id")', 'appended_df = pd.concat([df1, df2])'],
+          resources: [
+            '数据集成技术',
+            'Pandas数据合并指南',
+            '数据集成最佳实践'
+          ]
         },
         {
           id: 'section4-5',
           title: '数据预处理工具',
           content: '常用的数据预处理工具：\n\n1. Pandas：Python数据处理库\n2. NumPy：Python科学计算库\n3. scikit-learn：机器学习库，包含数据预处理模块\n4. OpenRefine：开源数据清洗工具',
-          codeExamples: ['import pandas as pd', 'import numpy as np', 'from sklearn.preprocessing import MinMaxScaler']
+          codeExamples: ['import pandas as pd', 'import numpy as np', 'from sklearn.preprocessing import MinMaxScaler'],
+          resources: [
+            'Pandas官方文档',
+            'scikit-learn预处理模块指南',
+            'OpenRefine使用教程'
+          ]
         }
       ]
     },
@@ -267,31 +362,56 @@ export default function DataCollectionCourse() {
           id: 'section5-1',
           title: '数据存储技术概述',
           content: '数据存储技术的类型：\n\n1. 文件存储：CSV、JSON、Excel等\n2. 关系型数据库：MySQL、PostgreSQL、Oracle等\n3. 非关系型数据库：MongoDB、Redis、Cassandra等\n4. 数据仓库：Hive、BigQuery等\n5. 数据湖：S3、HDFS等',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据存储技术综述',
+            '不同存储技术对比',
+            '存储技术选型指南'
+          ]
         },
         {
           id: 'section5-2',
           title: '文件存储格式',
           content: '常见的文件存储格式：\n\n1. CSV（逗号分隔值）：简单的表格格式\n2. JSON（JavaScript Object Notation）：轻量级数据交换格式\n3. Excel：电子表格格式\n4. Parquet：列式存储格式，适合大数据\n5. Avro：序列化格式，适合Hadoop生态系统',
-          codeExamples: ['import pandas as pd', 'df = pd.read_csv("data.csv")', 'df.to_json("data.json")', 'df.to_excel("data.xlsx")']
+          codeExamples: ['import pandas as pd', 'df = pd.read_csv("data.csv")', 'df.to_json("data.json")', 'df.to_excel("data.xlsx")'],
+          resources: [
+            '文件存储格式对比',
+            '大数据存储格式指南',
+            '数据格式转换工具'
+          ]
         },
         {
           id: 'section5-3',
           title: '数据库存储',
           content: '数据库存储的类型：\n\n1. 关系型数据库：使用SQL查询，适合结构化数据\n2. 非关系型数据库：使用NoSQL查询，适合非结构化数据\n3. 内存数据库：存储在内存中，速度快\n4. 时序数据库：适合时间序列数据',
-          codeExamples: ['import mysql.connector', 'conn = mysql.connector.connect(host="localhost", user="user", password="password", database="db")', 'cursor = conn.cursor()', 'cursor.execute("SELECT * FROM table")', 'import pymongo', 'client = pymongo.MongoClient("mongodb://localhost:27017/")', 'db = client["mydatabase"]', 'collection = db["mycollection"]']
+          codeExamples: ['import mysql.connector', 'conn = mysql.connector.connect(host="localhost", user="user", password="password", database="db")', 'cursor = conn.cursor()', 'cursor.execute("SELECT * FROM table")', 'import pymongo', 'client = pymongo.MongoClient("mongodb://localhost:27017/")', 'db = client["mydatabase"]', 'collection = db["mycollection"]'],
+          resources: [
+            'SQL基础教程',
+            'MongoDB使用指南',
+            '数据库设计最佳实践'
+          ]
         },
         {
           id: 'section5-4',
           title: '数据存储最佳实践',
           content: '数据存储的最佳实践：\n\n1. 根据数据类型选择合适的存储方式\n2. 建立合理的索引\n3. 定期备份数据\n4. 优化存储结构\n5. 考虑数据安全和隐私',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据存储最佳实践指南',
+            '数据库索引优化',
+            '数据备份策略'
+          ]
         },
         {
           id: 'section5-5',
           title: '数据安全与隐私',
           content: '数据安全和隐私保护：\n\n1. 数据加密：加密存储和传输\n2. 访问控制：限制数据访问权限\n3. 数据脱敏：对敏感数据进行处理\n4. 遵守数据保护法规：如GDPR、CCPA等\n5. 数据生命周期管理：定期清理不需要的数据',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据安全最佳实践',
+            '数据隐私保护指南',
+            '数据保护法规解读'
+          ]
         }
       ]
     },
@@ -302,31 +422,56 @@ export default function DataCollectionCourse() {
           id: 'section6-1',
           title: '项目需求分析',
           content: '项目需求分析的步骤：\n\n1. 明确项目目标\n2. 确定数据需求\n3. 分析数据源\n4. 制定项目计划\n5. 评估项目风险',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '项目需求分析指南',
+            '数据需求文档模板',
+            '项目风险评估方法'
+          ]
         },
         {
           id: 'section6-2',
           title: '数据采集方案设计',
           content: '数据采集方案设计的内容：\n\n1. 选择数据采集方法\n2. 设计数据采集流程\n3. 确定数据存储方案\n4. 制定数据质量控制措施\n5. 规划数据采集工具和技术',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '数据采集方案模板',
+            '采集流程设计指南',
+            '数据质量控制计划'
+          ]
         },
         {
           id: 'section6-3',
           title: '数据采集实现',
           content: '数据采集实现的步骤：\n\n1. 搭建开发环境\n2. 实现数据采集代码\n3. 测试数据采集功能\n4. 优化采集效率\n5. 处理异常情况',
-          codeExamples: ['import requests', 'from bs4 import BeautifulSoup', 'import pandas as pd', 'def scrape_data(url):', '    response = requests.get(url)', '    soup = BeautifulSoup(response.text, "html.parser")', '    # 提取数据的代码', '    return data']
+          codeExamples: ['import requests', 'from bs4 import BeautifulSoup', 'import pandas as pd', 'def scrape_data(url):', '    response = requests.get(url)', '    soup = BeautifulSoup(response.text, "html.parser")', '    # 提取数据的代码', '    return data'],
+          resources: [
+            '数据采集代码模板',
+            '爬虫效率优化技巧',
+            '异常处理最佳实践'
+          ]
         },
         {
           id: 'section6-4',
           title: '数据预处理',
           content: '数据预处理的步骤：\n\n1. 数据清洗：处理缺失值、异常值、重复值\n2. 数据转换：转换数据类型、标准化数据\n3. 数据集成：合并多个数据源\n4. 数据验证：验证数据质量\n5. 数据存储：存储处理后的数据',
-          codeExamples: ['import pandas as pd', 'df = pd.read_csv("raw_data.csv")', 'df = df.dropna()', 'df = df.drop_duplicates()', 'df["date"] = pd.to_datetime(df["date"])']
+          codeExamples: ['import pandas as pd', 'df = pd.read_csv("raw_data.csv")', 'df = df.dropna()', 'df = df.drop_duplicates()', 'df["date"] = pd.to_datetime(df["date"])'],
+          resources: [
+            '数据预处理流程指南',
+            '数据质量验证方法',
+            '预处理后数据存储方案'
+          ]
         },
         {
           id: 'section6-5',
           title: '项目展示与评估',
           content: '项目展示和评估的内容：\n\n1. 项目成果展示：数据采集和预处理的结果\n2. 项目文档：技术文档、用户手册\n3. 项目评估：评估项目的成功度\n4. 经验总结：总结项目中的经验和教训\n5. 未来改进：提出未来改进的方向',
-          codeExamples: []
+          codeExamples: [],
+          resources: [
+            '项目展示技巧',
+            '技术文档模板',
+            '项目评估标准'
+          ]
         }
       ]
     }
