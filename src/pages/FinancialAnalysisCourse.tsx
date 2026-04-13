@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import LearningProgress from '../components/LearningProgress';
+import LearningResource from '../components/LearningResource';
+import ExerciseComponent from '../components/ExerciseComponent';
 
 interface Section {
   id: string;
@@ -8,9 +11,236 @@ interface Section {
   resources?: string[];
 }
 
+interface ProgressItem {
+  id: string;
+  title: string;
+  completed: boolean;
+  children?: ProgressItem[];
+}
+
+interface Resource {
+  id: string;
+  title: string;
+  type: 'article' | 'video' | 'document' | 'code';
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  url: string;
+  description: string;
+  duration?: string;
+}
+
+interface Question {
+  id: string;
+  text: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+}
+
 export default function FinancialAnalysisCourse() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [activeTab, setActiveTab] = useState('progress');
+
+  const progressItems: ProgressItem[] = [
+    {
+      id: 'chapter1',
+      title: '第一章：财务数据基础',
+      completed: false,
+      children: [
+        { id: 'section1-1', title: '财务数据的概念与类型', completed: false },
+        { id: 'section1-2', title: '财务报表的结构与内容', completed: false },
+        { id: 'section1-3', title: '财务数据的收集方法', completed: false },
+        { id: 'section1-4', title: '财务数据的整理与预处理', completed: false },
+        { id: 'section1-5', title: '财务数据的质量评估', completed: false }
+      ]
+    },
+    {
+      id: 'chapter2',
+      title: '第二章：财务指标分析',
+      completed: false,
+      children: [
+        { id: 'section2-1', title: '盈利能力指标', completed: false },
+        { id: 'section2-2', title: '偿债能力指标', completed: false },
+        { id: 'section2-3', title: '运营能力指标', completed: false },
+        { id: 'section2-4', title: '发展能力指标', completed: false },
+        { id: 'section2-5', title: '财务指标的综合分析', completed: false }
+      ]
+    },
+    {
+      id: 'chapter3',
+      title: '第三章：财务数据可视化',
+      completed: false,
+      children: [
+        { id: 'section3-1', title: '财务数据可视化的原则', completed: false },
+        { id: 'section3-2', title: '常用的财务图表类型', completed: false },
+        { id: 'section3-3', title: '使用Python进行财务数据可视化', completed: false },
+        { id: 'section3-4', title: '财务仪表盘的设计', completed: false },
+        { id: 'section3-5', title: '财务数据可视化最佳实践', completed: false }
+      ]
+    },
+    {
+      id: 'chapter4',
+      title: '第四章：财务预测与预算',
+      completed: false,
+      children: [
+        { id: 'section4-1', title: '财务预测的基本原理', completed: false },
+        { id: 'section4-2', title: '时间序列分析在财务预测中的应用', completed: false },
+        { id: 'section4-3', title: '回归分析在财务预测中的应用', completed: false },
+        { id: 'section4-4', title: '预算编制的方法与流程', completed: false },
+        { id: 'section4-5', title: '财务预测的评估与调整', completed: false }
+      ]
+    },
+    {
+      id: 'chapter5',
+      title: '第五章：财务风险分析',
+      completed: false,
+      children: [
+        { id: 'section5-1', title: '财务风险的类型与特征', completed: false },
+        { id: 'section5-2', title: '财务风险的识别方法', completed: false },
+        { id: 'section5-3', title: '财务风险的评估模型', completed: false },
+        { id: 'section5-4', title: '财务风险的管理策略', completed: false },
+        { id: 'section5-5', title: '财务风险的监控与预警', completed: false }
+      ]
+    },
+    {
+      id: 'chapter6',
+      title: '第六章：财务数据分析实战',
+      completed: false,
+      children: [
+        { id: 'section6-1', title: '财务数据分析的流程', completed: false },
+        { id: 'section6-2', title: '财务报表分析案例', completed: false },
+        { id: 'section6-3', title: '企业财务状况综合分析', completed: false },
+        { id: 'section6-4', title: '行业对比分析', completed: false },
+        { id: 'section6-5', title: '财务分析报告的撰写', completed: false }
+      ]
+    }
+  ];
+
+  const learningResources: Resource[] = [
+    {
+      id: 'resource1',
+      title: '财务数据分析基础',
+      type: 'document',
+      difficulty: 'beginner',
+      url: '#',
+      description: '财务数据分析的基本概念和方法',
+      duration: '10小时'
+    },
+    {
+      id: 'resource2',
+      title: '财务报表分析教程',
+      type: 'video',
+      difficulty: 'beginner',
+      url: '#',
+      description: '财务报表的结构和分析方法',
+      duration: '8小时'
+    },
+    {
+      id: 'resource3',
+      title: '财务指标计算与分析',
+      type: 'article',
+      difficulty: 'intermediate',
+      url: '#',
+      description: '常用财务指标的计算方法和分析技巧',
+      duration: '6小时'
+    },
+    {
+      id: 'resource4',
+      title: 'Python财务数据可视化',
+      type: 'code',
+      difficulty: 'intermediate',
+      url: '#',
+      description: '使用Python进行财务数据可视化的实例',
+      duration: '5小时'
+    },
+    {
+      id: 'resource5',
+      title: '财务预测与预算',
+      type: 'article',
+      difficulty: 'advanced',
+      url: '#',
+      description: '财务预测和预算编制的高级方法',
+      duration: '7小时'
+    },
+    {
+      id: 'resource6',
+      title: '财务风险分析',
+      type: 'video',
+      difficulty: 'advanced',
+      url: '#',
+      description: '财务风险的识别、评估和管理',
+      duration: '9小时'
+    }
+  ];
+
+  const exercises: Question[] = [
+    {
+      id: 'exercise1',
+      text: '下列不属于财务报表的是：',
+      options: [
+        '资产负债表',
+        '利润表',
+        '现金流量表',
+        '销售明细表'
+      ],
+      correctAnswer: 3,
+      explanation: '销售明细表属于内部管理报表，不属于主要的财务报表。',
+      difficulty: 'easy'
+    },
+    {
+      id: 'exercise2',
+      text: '反映企业盈利能力的指标是：',
+      options: [
+        '资产负债率',
+        '毛利率',
+        '存货周转率',
+        '流动比率'
+      ],
+      correctAnswer: 1,
+      explanation: '毛利率反映了企业产品的盈利能力，是盈利能力指标。',
+      difficulty: 'medium'
+    },
+    {
+      id: 'exercise3',
+      text: '财务数据可视化的主要目的是：',
+      options: [
+        '美化数据',
+        '提高数据处理速度',
+        '更直观地理解数据',
+        '减少数据存储空间'
+      ],
+      correctAnswer: 2,
+      explanation: '财务数据可视化的主要目的是通过图表等方式更直观地理解数据。',
+      difficulty: 'easy'
+    },
+    {
+      id: 'exercise4',
+      text: '下列关于财务预测的说法，正确的是：',
+      options: [
+        '财务预测只需要历史数据',
+        '财务预测不需要考虑外部因素',
+        '财务预测可以完全准确',
+        '财务预测是基于历史数据和趋势的估计'
+      ],
+      correctAnswer: 3,
+      explanation: '财务预测是基于历史数据和趋势对未来财务状况的估计，不可能完全准确。',
+      difficulty: 'medium'
+    },
+    {
+      id: 'exercise5',
+      text: '财务风险分析的首要步骤是：',
+      options: [
+        '风险评估',
+        '风险识别',
+        '风险应对',
+        '风险监控'
+      ],
+      correctAnswer: 1,
+      explanation: '财务风险分析的首要步骤是风险识别，只有识别出风险才能进行后续的评估和应对。',
+      difficulty: 'hard'
+    }
+  ];
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -392,6 +622,66 @@ export default function FinancialAnalysisCourse() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 学习功能 */}
+      <section className="py-16 px-4 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-400">
+              学习中心
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              开始你的学习之旅，跟踪进度，访问学习资源，完成习题
+            </p>
+          </div>
+          
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+            <div className="flex flex-wrap mb-6">
+              <button 
+                onClick={() => setActiveTab('progress')}
+                className={`px-6 py-3 rounded-lg mr-4 mb-4 transition-all duration-300 ${activeTab === 'progress' ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                学习进度
+              </button>
+              <button 
+                onClick={() => setActiveTab('resources')}
+                className={`px-6 py-3 rounded-lg mr-4 mb-4 transition-all duration-300 ${activeTab === 'resources' ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                学习资源
+              </button>
+              <button 
+                onClick={() => setActiveTab('exercises')}
+                className={`px-6 py-3 rounded-lg mb-4 transition-all duration-300 ${activeTab === 'exercises' ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                习题练习
+              </button>
+            </div>
+            
+            <div className="min-h-[500px]">
+              {activeTab === 'progress' && (
+                <LearningProgress title="学习进度" items={progressItems.map(item => ({
+                  ...item,
+                  subItems: item.children
+                }))} />
+              )}
+              {activeTab === 'resources' && (
+                <LearningResource title="学习资源" resources={learningResources.map((resource, index) => ({
+                  ...resource,
+                  id: index + 1,
+                  link: resource.url
+                }))} />
+              )}
+              {activeTab === 'exercises' && (
+                <ExerciseComponent title="习题练习" questions={exercises.map((exercise, index) => ({
+                  ...exercise,
+                  id: index + 1,
+                  question: exercise.text
+                }))} />
+              )}
             </div>
           </div>
         </div>

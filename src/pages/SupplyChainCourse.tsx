@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import LearningProgress from '../components/LearningProgress';
+import LearningResource from '../components/LearningResource';
+import ExerciseComponent from '../components/ExerciseComponent';
 
 interface Section {
   id: string;
@@ -8,9 +11,235 @@ interface Section {
   resources?: string[];
 }
 
+interface ProgressItem {
+  id: string;
+  title: string;
+  completed: boolean;
+  children?: ProgressItem[];
+}
+
+interface Resource {
+  id: string;
+  title: string;
+  type: 'article' | 'video' | 'document' | 'code';
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  url: string;
+  description: string;
+  duration?: string;
+}
+
+interface Question {
+  id: string;
+  text: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+}
+
 export default function SupplyChainCourse() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [activeTab, setActiveTab] = useState('progress');
+
+  const progressItems: ProgressItem[] = [
+    {
+      id: 'chapter1',
+      title: '第一章：供应链管理概述',
+      completed: false,
+      children: [
+        { id: 'section1-1', title: '供应链管理的概念与意义', completed: false },
+        { id: 'section1-2', title: '供应链管理的发展历程', completed: false },
+        { id: 'section1-3', title: '供应链管理的核心流程', completed: false },
+        { id: 'section1-4', title: '供应链管理的挑战与机遇', completed: false }
+      ]
+    },
+    {
+      id: 'chapter2',
+      title: '第二章：供应链数据采集与预处理',
+      completed: false,
+      children: [
+        { id: 'section2-1', title: '供应链数据的类型与来源', completed: false },
+        { id: 'section2-2', title: '供应链数据采集方法', completed: false },
+        { id: 'section2-3', title: '供应链数据质量评估', completed: false },
+        { id: 'section2-4', title: '供应链数据预处理技术', completed: false },
+        { id: 'section2-5', title: '供应链数据存储与管理', completed: false }
+      ]
+    },
+    {
+      id: 'chapter3',
+      title: '第三章：供应链数据分析方法',
+      completed: false,
+      children: [
+        { id: 'section3-1', title: '描述性分析方法', completed: false },
+        { id: 'section3-2', title: '预测性分析方法', completed: false },
+        { id: 'section3-3', title: '规范性分析方法', completed: false },
+        { id: 'section3-4', title: '供应链数据分析工具', completed: false },
+        { id: 'section3-5', title: '供应链数据分析案例', completed: false }
+      ]
+    },
+    {
+      id: 'chapter4',
+      title: '第四章：供应链绩效分析',
+      completed: false,
+      children: [
+        { id: 'section4-1', title: '供应链绩效指标体系', completed: false },
+        { id: 'section4-2', title: '供应链绩效评估方法', completed: false },
+        { id: 'section4-3', title: '供应链绩效分析工具', completed: false },
+        { id: 'section4-4', title: '供应链绩效改进策略', completed: false },
+        { id: 'section4-5', title: '供应链绩效分析案例', completed: false }
+      ]
+    },
+    {
+      id: 'chapter5',
+      title: '第五章：供应链风险管理',
+      completed: false,
+      children: [
+        { id: 'section5-1', title: '供应链风险的类型与特征', completed: false },
+        { id: 'section5-2', title: '供应链风险评估方法', completed: false },
+        { id: 'section5-3', title: '供应链风险预测模型', completed: false },
+        { id: 'section5-4', title: '供应链风险应对策略', completed: false },
+        { id: 'section5-5', title: '供应链风险管理案例', completed: false }
+      ]
+    },
+    {
+      id: 'chapter6',
+      title: '第六章：供应链数据分析项目实战',
+      completed: false,
+      children: [
+        { id: 'section6-1', title: '项目需求分析', completed: false },
+        { id: 'section6-2', title: '数据采集与预处理', completed: false },
+        { id: 'section6-3', title: '数据分析方案设计', completed: false },
+        { id: 'section6-4', title: '数据分析实现', completed: false },
+        { id: 'section6-5', title: '项目展示与评估', completed: false }
+      ]
+    }
+  ];
+
+  const learningResources: Resource[] = [
+    {
+      id: 'resource1',
+      title: '供应链管理概述',
+      type: 'document',
+      difficulty: 'beginner',
+      url: '#',
+      description: '供应链管理的基本概念和核心流程',
+      duration: '8小时'
+    },
+    {
+      id: 'resource2',
+      title: '供应链数据采集技术',
+      type: 'video',
+      difficulty: 'beginner',
+      url: '#',
+      description: '供应链数据的采集方法和工具',
+      duration: '6小时'
+    },
+    {
+      id: 'resource3',
+      title: '供应链数据分析方法',
+      type: 'article',
+      difficulty: 'intermediate',
+      url: '#',
+      description: '供应链数据分析的常用方法和技术',
+      duration: '5小时'
+    },
+    {
+      id: 'resource4',
+      title: '供应链绩效评估指标',
+      type: 'code',
+      difficulty: 'intermediate',
+      url: '#',
+      description: '供应链绩效评估的指标体系和计算方法',
+      duration: '4小时'
+    },
+    {
+      id: 'resource5',
+      title: '供应链风险管理',
+      type: 'article',
+      difficulty: 'advanced',
+      url: '#',
+      description: '供应链风险的识别、评估和应对策略',
+      duration: '6小时'
+    },
+    {
+      id: 'resource6',
+      title: '供应链数据分析项目实战',
+      type: 'video',
+      difficulty: 'advanced',
+      url: '#',
+      description: '完整的供应链数据分析项目案例',
+      duration: '10小时'
+    }
+  ];
+
+  const exercises: Question[] = [
+    {
+      id: 'exercise1',
+      text: '下列关于供应链管理的说法，正确的是：',
+      options: [
+        '供应链管理只关注物流环节',
+        '供应链管理包括从供应商到客户的全过程',
+        '供应链管理与企业战略无关',
+        '供应链管理不需要数据分析'
+      ],
+      correctAnswer: 1,
+      explanation: '供应链管理是指从供应商到客户的全过程管理，包括物流、信息流和资金流的协调。',
+      difficulty: 'easy'
+    },
+    {
+      id: 'exercise2',
+      text: '供应链数据的主要来源不包括：',
+      options: [
+        '企业内部系统',
+        '供应商系统',
+        '客户反馈',
+        '竞争对手内部数据'
+      ],
+      correctAnswer: 3,
+      explanation: '竞争对手内部数据通常无法直接获取，不是供应链数据的主要来源。',
+      difficulty: 'medium'
+    },
+    {
+      id: 'exercise3',
+      text: '供应链绩效评估的核心指标不包括：',
+      options: [
+        '成本指标',
+        '质量指标',
+        '时间指标',
+        '员工满意度'
+      ],
+      correctAnswer: 3,
+      explanation: '员工满意度是企业内部管理指标，不是供应链绩效评估的核心指标。',
+      difficulty: 'medium'
+    },
+    {
+      id: 'exercise4',
+      text: '供应链风险管理的首要步骤是：',
+      options: [
+        '风险评估',
+        '风险识别',
+        '风险应对',
+        '风险监控'
+      ],
+      correctAnswer: 1,
+      explanation: '供应链风险管理的首要步骤是风险识别，只有识别出风险才能进行后续的评估和应对。',
+      difficulty: 'easy'
+    },
+    {
+      id: 'exercise5',
+      text: '下列关于供应链数据分析的说法，错误的是：',
+      options: [
+        '描述性分析用于了解过去的情况',
+        '预测性分析用于预测未来趋势',
+        '规范性分析用于提供决策建议',
+        '供应链数据分析不需要考虑数据质量'
+      ],
+      correctAnswer: 3,
+      explanation: '数据质量是供应链数据分析的基础，直接影响分析结果的准确性和可靠性。',
+      difficulty: 'hard'
+    }
+  ];
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -391,6 +620,66 @@ export default function SupplyChainCourse() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 学习功能 */}
+      <section className="py-16 px-4 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+              学习中心
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              开始你的学习之旅，跟踪进度，访问学习资源，完成习题
+            </p>
+          </div>
+          
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+            <div className="flex flex-wrap mb-6">
+              <button 
+                onClick={() => setActiveTab('progress')}
+                className={`px-6 py-3 rounded-lg mr-4 mb-4 transition-all duration-300 ${activeTab === 'progress' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                学习进度
+              </button>
+              <button 
+                onClick={() => setActiveTab('resources')}
+                className={`px-6 py-3 rounded-lg mr-4 mb-4 transition-all duration-300 ${activeTab === 'resources' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                学习资源
+              </button>
+              <button 
+                onClick={() => setActiveTab('exercises')}
+                className={`px-6 py-3 rounded-lg mb-4 transition-all duration-300 ${activeTab === 'exercises' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                习题练习
+              </button>
+            </div>
+            
+            <div className="min-h-[500px]">
+              {activeTab === 'progress' && (
+                <LearningProgress title="学习进度" items={progressItems.map(item => ({
+                  ...item,
+                  subItems: item.children
+                }))} />
+              )}
+              {activeTab === 'resources' && (
+                <LearningResource title="学习资源" resources={learningResources.map((resource, index) => ({
+                  ...resource,
+                  id: index + 1,
+                  link: resource.url
+                }))} />
+              )}
+              {activeTab === 'exercises' && (
+                <ExerciseComponent title="习题练习" questions={exercises.map((exercise, index) => ({
+                  ...exercise,
+                  id: index + 1,
+                  question: exercise.text
+                }))} />
+              )}
             </div>
           </div>
         </div>

@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import LearningProgress from '../components/LearningProgress';
+import LearningResource from '../components/LearningResource';
+import ExerciseComponent from '../components/ExerciseComponent';
 
 interface Section {
   id: string;
@@ -8,9 +11,223 @@ interface Section {
   resources?: string[];
 }
 
+interface ProgressItem {
+  id: string;
+  title: string;
+  completed: boolean;
+  subItems?: {
+    id: string;
+    title: string;
+    completed: boolean;
+  }[];
+}
+
+interface Resource {
+  id: number;
+  title: string;
+  type: 'article' | 'video' | 'document' | 'code';
+  description: string;
+  link: string;
+  duration?: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+}
+
+interface Question {
+  id: number;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation?: string;
+}
+
 export default function DataAnalysisCourse() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [activeTab, setActiveTab] = useState('progress');
+
+  // 学习进度数据
+  const progressItems: ProgressItem[] = [
+    {
+      id: 'chapter1',
+      title: '第一章：数据分析基础',
+      completed: false,
+      subItems: [
+        { id: 'chapter1-1', title: '数据分析的定义与重要性', completed: false },
+        { id: 'chapter1-2', title: '数据分析的基本流程', completed: false },
+        { id: 'chapter1-3', title: '数据类型与数据结构', completed: false },
+        { id: 'chapter1-4', title: '数据分析的常用方法分类', completed: false }
+      ]
+    },
+    {
+      id: 'chapter2',
+      title: '第二章：数据可视化技术',
+      completed: false,
+      subItems: [
+        { id: 'chapter2-1', title: '数据可视化的基本原理', completed: false },
+        { id: 'chapter2-2', title: 'Matplotlib库的使用', completed: false },
+        { id: 'chapter2-3', title: 'Seaborn库的高级可视化', completed: false },
+        { id: 'chapter2-4', title: '交互式数据可视化工具', completed: false },
+        { id: 'chapter2-5', title: '数据可视化最佳实践', completed: false }
+      ]
+    },
+    {
+      id: 'chapter3',
+      title: '第三章：统计分析方法',
+      completed: false,
+      subItems: [
+        { id: 'chapter3-1', title: '描述性统计分析', completed: false },
+        { id: 'chapter3-2', title: '假设检验', completed: false },
+        { id: 'chapter3-3', title: '方差分析', completed: false },
+        { id: 'chapter3-4', title: '相关分析与回归分析', completed: false },
+        { id: 'chapter3-5', title: '时间序列分析', completed: false }
+      ]
+    },
+    {
+      id: 'chapter4',
+      title: '第四章：机器学习基础',
+      completed: false,
+      subItems: [
+        { id: 'chapter4-1', title: '机器学习概述', completed: false },
+        { id: 'chapter4-2', title: '监督学习与无监督学习', completed: false },
+        { id: 'chapter4-3', title: '线性回归与逻辑回归', completed: false },
+        { id: 'chapter4-4', title: '决策树与随机森林', completed: false },
+        { id: 'chapter4-5', title: '聚类分析', completed: false }
+      ]
+    },
+    {
+      id: 'chapter5',
+      title: '第五章：商务数据分析应用',
+      completed: false,
+      subItems: [
+        { id: 'chapter5-1', title: '市场数据分析', completed: false },
+        { id: 'chapter5-2', title: '客户行为分析', completed: false },
+        { id: 'chapter5-3', title: '销售数据分析', completed: false },
+        { id: 'chapter5-4', title: '供应链数据分析', completed: false },
+        { id: 'chapter5-5', title: '财务数据分析', completed: false }
+      ]
+    },
+    {
+      id: 'chapter6',
+      title: '第六章：数据分析项目实战',
+      completed: false,
+      subItems: [
+        { id: 'chapter6-1', title: '项目选题与规划', completed: false },
+        { id: 'chapter6-2', title: '数据获取与清洗', completed: false },
+        { id: 'chapter6-3', title: '数据分析与建模', completed: false },
+        { id: 'chapter6-4', title: '结果可视化与报告', completed: false },
+        { id: 'chapter6-5', title: '项目展示与评估', completed: false }
+      ]
+    }
+  ];
+
+  // 学习资源数据
+  const learningResources: Resource[] = [
+    {
+      id: 1,
+      title: 'Python数据分析入门',
+      type: 'document',
+      description: 'Python数据分析的基础教程，涵盖NumPy、Pandas等库的使用',
+      link: 'https://pandas.pydata.org/docs/getting_started/intro_tutorials/',
+      difficulty: 'beginner'
+    },
+    {
+      id: 2,
+      title: '数据可视化实战',
+      type: 'video',
+      description: '使用Matplotlib和Seaborn创建专业的数据可视化图表',
+      link: 'https://www.bilibili.com/video/BV17Y4y157yf/',
+      duration: '8小时',
+      difficulty: 'intermediate'
+    },
+    {
+      id: 3,
+      title: '统计学基础',
+      type: 'document',
+      description: '数据分析所需的统计学基础知识',
+      link: 'https://www.statlearning.com/',
+      difficulty: 'beginner'
+    },
+    {
+      id: 4,
+      title: '机器学习实战',
+      type: 'document',
+      description: '使用Scikit-learn进行机器学习的实践指南',
+      link: 'https://scikit-learn.org/stable/tutorial/index.html',
+      difficulty: 'intermediate'
+    },
+    {
+      id: 5,
+      title: '商务数据分析案例',
+      type: 'article',
+      description: '真实的商务数据分析案例分析',
+      link: 'https://www.kaggle.com/datasets',
+      difficulty: 'intermediate'
+    },
+    {
+      id: 6,
+      title: 'Pandas高级教程',
+      type: 'code',
+      description: 'Pandas库的高级使用技巧和最佳实践',
+      link: 'https://pandas.pydata.org/docs/user_guide/advanced.html',
+      difficulty: 'advanced'
+    },
+    {
+      id: 7,
+      title: '数据科学实战',
+      type: 'video',
+      description: '从数据获取到模型部署的完整数据科学流程',
+      link: 'https://www.coursera.org/specializations/jhu-data-science',
+      duration: '10小时',
+      difficulty: 'advanced'
+    },
+    {
+      id: 8,
+      title: '时间序列分析',
+      type: 'article',
+      description: '使用Python进行时间序列分析的方法和技巧',
+      link: 'https://www.statsmodels.org/stable/tsa.html',
+      difficulty: 'advanced'
+    }
+  ];
+
+  // 练习数据
+  const exercises: Question[] = [
+    {
+      id: 1,
+      question: '以下哪个库不是Python中常用的数据分析库？',
+      options: ['NumPy', 'Pandas', 'Matplotlib', 'Flask'],
+      correctAnswer: 3,
+      explanation: 'Flask是一个Web框架，不是数据分析库。NumPy、Pandas和Matplotlib都是常用的数据分析库。'
+    },
+    {
+      id: 2,
+      question: '数据可视化的主要目的是什么？',
+      options: ['使数据更复杂', '帮助理解数据', '占用更多存储空间', '增加数据量'],
+      correctAnswer: 1,
+      explanation: '数据可视化的主要目的是帮助人们更直观地理解数据，发现数据中的模式和趋势。'
+    },
+    {
+      id: 3,
+      question: '以下哪种分析方法属于监督学习？',
+      options: ['K-means聚类', '主成分分析', '线性回归', '层次聚类'],
+      correctAnswer: 2,
+      explanation: '线性回归是一种监督学习算法，用于预测连续值。K-means聚类、主成分分析和层次聚类都属于无监督学习。'
+    },
+    {
+      id: 4,
+      question: 'Pandas中用于读取CSV文件的函数是？',
+      options: ['read_csv()', 'load_csv()', 'import_csv()', 'fetch_csv()'],
+      correctAnswer: 0,
+      explanation: 'Pandas中使用read_csv()函数来读取CSV文件。'
+    },
+    {
+      id: 5,
+      question: '以下哪个图表类型最适合展示数据的分布情况？',
+      options: ['折线图', '散点图', '柱状图', '直方图'],
+      correctAnswer: 3,
+      explanation: '直方图最适合展示数据的分布情况，它将数据分成多个 bins 并显示每个 bin 中的数据频率。'
+    }
+  ];
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -395,6 +612,76 @@ export default function DataAnalysisCourse() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 学习功能 */}
+      <section className="py-16 px-4 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+              学习中心
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              在这里进行学习、练习和资源查阅
+            </p>
+          </div>
+          
+          {/* 标签页导航 */}
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <button
+              onClick={() => setActiveTab('progress')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'progress'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              学习进度
+            </button>
+            <button
+              onClick={() => setActiveTab('resources')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'resources'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              学习资源
+            </button>
+            <button
+              onClick={() => setActiveTab('exercises')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'exercises'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              练习测试
+            </button>
+          </div>
+          
+          {/* 标签页内容 */}
+          <div className="mt-8">
+            {activeTab === 'progress' && (
+              <LearningProgress 
+                title="数据分析技术课程学习进度" 
+                items={progressItems} 
+              />
+            )}
+            {activeTab === 'resources' && (
+              <LearningResource 
+                title="数据分析学习资源" 
+                resources={learningResources} 
+              />
+            )}
+            {activeTab === 'exercises' && (
+              <ExerciseComponent 
+                title="数据分析技术练习" 
+                questions={exercises} 
+              />
+            )}
           </div>
         </div>
       </section>

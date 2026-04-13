@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import LearningProgress from '../components/LearningProgress';
+import LearningResource from '../components/LearningResource';
+import ExerciseComponent from '../components/ExerciseComponent';
 
 interface Section {
   id: string;
@@ -8,9 +11,222 @@ interface Section {
   resources?: string[];
 }
 
+interface ProgressItem {
+  id: string;
+  title: string;
+  completed: boolean;
+  subItems?: {
+    id: string;
+    title: string;
+    completed: boolean;
+  }[];
+}
+
+interface Resource {
+  id: number;
+  title: string;
+  type: 'article' | 'video' | 'document' | 'code';
+  description: string;
+  link: string;
+  duration?: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+}
+
+interface Question {
+  id: number;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation?: string;
+}
+
 export default function DataCollectionCourse() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [activeTab, setActiveTab] = useState('progress');
+
+  // 学习进度数据
+  const progressItems: ProgressItem[] = [
+    {
+      id: 'chapter1',
+      title: '第一章：数据采集概述',
+      completed: false,
+      subItems: [
+        { id: 'chapter1-1', title: '数据采集的概念与意义', completed: false },
+        { id: 'chapter1-2', title: '数据采集的类型与方法', completed: false },
+        { id: 'chapter1-3', title: '数据采集的工具与技术', completed: false },
+        { id: 'chapter1-4', title: '数据采集的伦理与规范', completed: false }
+      ]
+    },
+    {
+      id: 'chapter2',
+      title: '第二章：Web数据采集',
+      completed: false,
+      subItems: [
+        { id: 'chapter2-1', title: 'HTTP协议基础', completed: false },
+        { id: 'chapter2-2', title: 'HTML与CSS基础', completed: false },
+        { id: 'chapter2-3', title: 'Python爬虫库介绍', completed: false },
+        { id: 'chapter2-4', title: '静态网页数据采集', completed: false },
+        { id: 'chapter2-5', title: '动态网页数据采集', completed: false }
+      ]
+    },
+    {
+      id: 'chapter3',
+      title: '第三章：API数据采集',
+      completed: false,
+      subItems: [
+        { id: 'chapter3-1', title: 'API基本概念', completed: false },
+        { id: 'chapter3-2', title: 'RESTful API设计原则', completed: false },
+        { id: 'chapter3-3', title: 'API认证与授权', completed: false },
+        { id: 'chapter3-4', title: 'API数据获取与处理', completed: false },
+        { id: 'chapter3-5', title: '常见API使用案例', completed: false }
+      ]
+    },
+    {
+      id: 'chapter4',
+      title: '第四章：数据预处理',
+      completed: false,
+      subItems: [
+        { id: 'chapter4-1', title: '数据质量评估', completed: false },
+        { id: 'chapter4-2', title: '数据清洗方法', completed: false },
+        { id: 'chapter4-3', title: '数据转换技术', completed: false },
+        { id: 'chapter4-4', title: '数据集成方法', completed: false },
+        { id: 'chapter4-5', title: '数据预处理工具', completed: false }
+      ]
+    },
+    {
+      id: 'chapter5',
+      title: '第五章：数据存储',
+      completed: false,
+      subItems: [
+        { id: 'chapter5-1', title: '数据存储技术概述', completed: false },
+        { id: 'chapter5-2', title: '文件存储格式', completed: false },
+        { id: 'chapter5-3', title: '数据库存储', completed: false },
+        { id: 'chapter5-4', title: '数据存储最佳实践', completed: false },
+        { id: 'chapter5-5', title: '数据安全与隐私', completed: false }
+      ]
+    },
+    {
+      id: 'chapter6',
+      title: '第六章：数据采集项目实战',
+      completed: false,
+      subItems: [
+        { id: 'chapter6-1', title: '项目需求分析', completed: false },
+        { id: 'chapter6-2', title: '数据采集方案设计', completed: false },
+        { id: 'chapter6-3', title: '数据采集实现', completed: false },
+        { id: 'chapter6-4', title: '数据预处理', completed: false },
+        { id: 'chapter6-5', title: '项目展示与评估', completed: false }
+      ]
+    }
+  ];
+
+  // 学习资源数据
+  const learningResources: Resource[] = [
+    {
+      id: 1,
+      title: 'Python网络爬虫入门',
+      type: 'document',
+      description: 'Python网络爬虫的基础知识和实践指南',
+      link: 'https://docs.scrapy.org/en/latest/',
+      difficulty: 'beginner'
+    },
+    {
+      id: 2,
+      title: 'BeautifulSoup使用教程',
+      type: 'article',
+      description: '使用BeautifulSoup解析HTML和XML文档',
+      link: 'https://www.crummy.com/software/BeautifulSoup/bs4/doc/',
+      difficulty: 'beginner'
+    },
+    {
+      id: 3,
+      title: 'Requests库使用指南',
+      type: 'code',
+      description: 'Python Requests库的使用方法和最佳实践',
+      link: 'https://docs.python-requests.org/en/latest/',
+      difficulty: 'beginner'
+    },
+    {
+      id: 4,
+      title: 'Web爬虫实战',
+      type: 'video',
+      description: '从基础到进阶的Web爬虫实战教程',
+      link: 'https://www.bilibili.com/video/BV12E411A7ZQ/',
+      duration: '6小时',
+      difficulty: 'intermediate'
+    },
+    {
+      id: 5,
+      title: 'API设计与开发',
+      type: 'document',
+      description: 'RESTful API的设计原则和开发方法',
+      link: 'https://restfulapi.net/',
+      difficulty: 'intermediate'
+    },
+    {
+      id: 6,
+      title: '数据清洗与预处理',
+      type: 'article',
+      description: '数据清洗和预处理的技术和方法',
+      link: 'https://pandas.pydata.org/docs/user_guide/cleaning.html',
+      difficulty: 'intermediate'
+    },
+    {
+      id: 7,
+      title: 'Scrapy框架实战',
+      type: 'code',
+      description: '使用Scrapy框架进行大规模数据采集',
+      link: 'https://docs.scrapy.org/en/latest/intro/tutorial.html',
+      difficulty: 'advanced'
+    },
+    {
+      id: 8,
+      title: '数据采集伦理与法律',
+      type: 'document',
+      description: '数据采集的伦理规范和法律问题',
+      link: 'https://www.eff.org/issues/net-neutrality',
+      difficulty: 'advanced'
+    }
+  ];
+
+  // 练习数据
+  const exercises: Question[] = [
+    {
+      id: 1,
+      question: '以下哪个库不是Python中常用的网络爬虫库？',
+      options: ['BeautifulSoup', 'Scrapy', 'Requests', 'Django'],
+      correctAnswer: 3,
+      explanation: 'Django是一个Web框架，不是网络爬虫库。BeautifulSoup、Scrapy和Requests都是常用的网络爬虫库。'
+    },
+    {
+      id: 2,
+      question: 'HTTP请求中，用于获取资源的方法是？',
+      options: ['POST', 'GET', 'PUT', 'DELETE'],
+      correctAnswer: 1,
+      explanation: 'GET方法用于从服务器获取资源，POST方法用于向服务器提交数据，PUT方法用于更新资源，DELETE方法用于删除资源。'
+    },
+    {
+      id: 3,
+      question: '以下哪种数据格式不是常见的API响应格式？',
+      options: ['JSON', 'XML', 'CSV', 'HTML'],
+      correctAnswer: 3,
+      explanation: 'HTML是网页格式，不是常见的API响应格式。JSON、XML和CSV都是常见的API响应格式。'
+    },
+    {
+      id: 4,
+      question: '数据清洗的主要目的是什么？',
+      options: ['增加数据量', '提高数据质量', '降低数据存储成本', '加快数据传输速度'],
+      correctAnswer: 1,
+      explanation: '数据清洗的主要目的是提高数据质量，包括处理缺失值、异常值、重复值等问题。'
+    },
+    {
+      id: 5,
+      question: '以下哪种存储格式最适合存储结构化数据？',
+      options: ['JSON', 'CSV', 'XML', 'YAML'],
+      correctAnswer: 1,
+      explanation: 'CSV（逗号分隔值）格式最适合存储结构化数据，它是一种简单的表格存储格式，易于处理和分析。'
+    }
+  ];
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -392,6 +608,76 @@ export default function DataCollectionCourse() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 学习功能 */}
+      <section className="py-16 px-4 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+              学习中心
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              在这里进行学习、练习和资源查阅
+            </p>
+          </div>
+          
+          {/* 标签页导航 */}
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <button
+              onClick={() => setActiveTab('progress')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'progress'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              学习进度
+            </button>
+            <button
+              onClick={() => setActiveTab('resources')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'resources'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              学习资源
+            </button>
+            <button
+              onClick={() => setActiveTab('exercises')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === 'exercises'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              练习测试
+            </button>
+          </div>
+          
+          {/* 标签页内容 */}
+          <div className="mt-8">
+            {activeTab === 'progress' && (
+              <LearningProgress 
+                title="数据采集与处理课程学习进度" 
+                items={progressItems} 
+              />
+            )}
+            {activeTab === 'resources' && (
+              <LearningResource 
+                title="数据采集学习资源" 
+                resources={learningResources} 
+              />
+            )}
+            {activeTab === 'exercises' && (
+              <ExerciseComponent 
+                title="数据采集与处理练习" 
+                questions={exercises} 
+              />
+            )}
           </div>
         </div>
       </section>

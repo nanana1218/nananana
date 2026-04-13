@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import LearningProgress from '../components/LearningProgress';
 import LearningResource from '../components/LearningResource';
 import ExerciseComponent from '../components/ExerciseComponent';
+import ChapterContent from '../components/ChapterContent';
+import ChapterExercise from '../components/ChapterExercise';
 
 interface Section {
   id: string;
@@ -44,6 +46,8 @@ export default function PythonCourse() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [activeTab, setActiveTab] = useState('progress');
+  const [activeChapter, setActiveChapter] = useState<string | null>(null);
+  const [activeChapterMode, setActiveChapterMode] = useState<'content' | 'exercise' | null>(null);
 
   // 学习进度数据
   const progressItems: ProgressItem[] = [
@@ -120,6 +124,380 @@ export default function PythonCourse() {
       ]
     }
   ];
+
+  // 章节内容数据
+  const chapterContents = {
+    'chapter1': {
+      title: '第一章：Python语言基础',
+      sections: [
+        {
+          id: 'section1-1',
+          title: 'Python简介与安装',
+          content: 'Python是一种高级编程语言，由Guido van Rossum于1989年创立。它以简洁的语法和强大的功能而闻名，广泛应用于Web开发、数据分析、人工智能等领域。\n\n安装Python的步骤：\n1. 访问Python官方网站（https://www.python.org/）\n2. 下载适合您操作系统的Python安装包\n3. 运行安装程序，确保勾选"Add Python to PATH"选项\n4. 完成安装后，打开命令提示符或终端，输入python --version验证安装成功',
+          codeExamples: ['python --version']
+        },
+        {
+          id: 'section1-2',
+          title: '基本数据类型',
+          content: 'Python的基本数据类型包括：\n\n1. 整数（int）：如1, 2, 3\n2. 浮点数（float）：如1.0, 2.5, 3.14\n3. 字符串（str）：如"Hello", \'Python\'\n4. 布尔值（bool）：True, False\n\n可以使用type()函数查看数据类型。',
+          codeExamples: ['type(1)', 'type(1.0)', 'type("Hello")', 'type(True)']
+        },
+        {
+          id: 'section1-3',
+          title: '变量与赋值',
+          content: '变量是用来存储数据的容器。在Python中，变量不需要声明类型，直接赋值即可。\n\n变量命名规则：\n1. 变量名只能包含字母、数字和下划线\n2. 变量名不能以数字开头\n3. 变量名区分大小写\n4. 变量名不能是Python关键字',
+          codeExamples: ['x = 10', 'y = 3.14', 'name = "Python"', 'is_valid = True']
+        },
+        {
+          id: 'section1-4',
+          title: '基本运算符与表达式',
+          content: 'Python支持多种运算符：\n\n1. 算术运算符：+, -, *, /, //, %, **\n2. 比较运算符：==, !=, >, <, >=, <=\n3. 逻辑运算符：and, or, not\n4. 赋值运算符：=, +=, -=, *=, /=\n\n表达式是由运算符和操作数组成的组合。',
+          codeExamples: ['1 + 2', '3 * 4', '5 > 3', 'True and False']
+        },
+        {
+          id: 'section1-5',
+          title: '输入输出函数',
+          content: 'Python提供了input()和print()函数用于输入输出。\n\ninput()函数用于从用户获取输入，返回字符串类型。\nprint()函数用于输出内容到控制台。',
+          codeExamples: ['name = input("请输入你的名字：")', 'print("Hello, " + name)', 'print(f"Hello, {name}")']
+        }
+      ]
+    },
+    'chapter2': {
+      title: '第二章：控制结构',
+      sections: [
+        {
+          id: 'section2-1',
+          title: '条件语句',
+          content: '条件语句用于根据条件执行不同的代码块。\n\nPython的条件语句包括：\n1. if语句\n2. if-else语句\n3. if-elif-else语句',
+          codeExamples: ['if x > 0:\n    print("正数")\nelif x < 0:\n    print("负数")\nelse:\n    print("零")']
+        },
+        {
+          id: 'section2-2',
+          title: 'for循环',
+          content: 'for循环用于遍历序列（如列表、元组、字符串）中的元素。',
+          codeExamples: ['for i in range(5):\n    print(i)', 'for item in [1, 2, 3]:\n    print(item)', 'for char in "Python":\n    print(char)']
+        },
+        {
+          id: 'section2-3',
+          title: 'while循环',
+          content: 'while循环用于在条件为真时重复执行代码块。',
+          codeExamples: ['i = 0\nwhile i < 5:\n    print(i)\n    i += 1']
+        },
+        {
+          id: 'section2-4',
+          title: '循环控制语句',
+          content: '循环控制语句用于控制循环的执行流程：\n\n1. break：跳出循环\n2. continue：跳过当前循环的剩余部分，进入下一次循环',
+          codeExamples: ['for i in range(10):\n    if i == 5:\n        break\n    print(i)', 'for i in range(10):\n    if i % 2 == 0:\n        continue\n    print(i)']
+        },
+        {
+          id: 'section2-5',
+          title: '嵌套循环与条件',
+          content: '循环和条件语句可以嵌套使用，以处理更复杂的逻辑。',
+          codeExamples: ['for i in range(3):\n    for j in range(3):\n        if i == j:\n            print(f"({i}, {j})")']
+        }
+      ]
+    },
+    'chapter3': {
+      title: '第三章：数据结构',
+      sections: [
+        {
+          id: 'section3-1',
+          title: '列表的创建与操作',
+          content: '列表是Python中最常用的数据结构之一，用于存储多个元素。\n\n列表的特点：\n1. 有序\n2. 可变\n3. 可重复\n\n列表操作包括：创建、访问、修改、添加、删除等。',
+          codeExamples: ['# 创建列表\nlst = [1, 2, 3, 4, 5]\n# 访问元素\nprint(lst[0])  # 输出第一个元素\n# 修改元素\nlst[0] = 10\n# 添加元素\nlst.append(6)\n# 删除元素\ndel lst[0]']
+        },
+        {
+          id: 'section3-2',
+          title: '元组的创建与操作',
+          content: '元组与列表类似，但元组是不可变的。\n\n元组的特点：\n1. 有序\n2. 不可变\n3. 可重复\n\n元组操作包括：创建、访问等。',
+          codeExamples: ['# 创建元组\ntup = (1, 2, 3, 4, 5)\n# 访问元素\nprint(tup[0])  # 输出第一个元素\n# 元组不可修改\n# tup[0] = 10  # 会报错']
+        },
+        {
+          id: 'section3-3',
+          title: '字典的创建与操作',
+          content: '字典是Python中另一个重要的数据结构，用于存储键值对。\n\n字典的特点：\n1. 无序（Python 3.7+有序）\n2. 可变\n3. 键唯一\n\n字典操作包括：创建、访问、修改、添加、删除等。',
+          codeExamples: ['# 创建字典\ndict = {"name": "Python", "version": 3.8}\n# 访问元素\nprint(dict["name"])  # 输出值\n# 修改元素\ndict["version"] = 3.9\n# 添加元素\ndict["author"] = "Guido van Rossum"\n# 删除元素\ndel dict["version"]']
+        },
+        {
+          id: 'section3-4',
+          title: '集合的创建与操作',
+          content: '集合用于存储唯一的元素。\n\n集合的特点：\n1. 无序\n2. 可变\n3. 元素唯一\n\n集合操作包括：创建、添加、删除、交集、并集等。',
+          codeExamples: ['# 创建集合\ns = {1, 2, 3, 4, 5}\n# 添加元素\ns.add(6)\n# 删除元素\ns.remove(1)\n# 交集\ns1 = {1, 2, 3}\ns2 = {2, 3, 4}\nprint(s1 & s2)  # 输出 {2, 3}\n# 并集\nprint(s1 | s2)  # 输出 {1, 2, 3, 4}']
+        },
+        {
+          id: 'section3-5',
+          title: '数据结构的选择与应用',
+          content: '根据不同的需求选择合适的数据结构：\n\n1. 列表：适合存储有序的、可修改的元素集合\n2. 元组：适合存储有序的、不可修改的元素集合\n3. 字典：适合存储键值对数据\n4. 集合：适合存储唯一的元素集合',
+          codeExamples: ['# 列表应用\nstudents = ["Alice", "Bob", "Charlie"]\n# 元组应用\ncoordinates = (10, 20)\n# 字典应用\nstudent_info = {"name": "Alice", "age": 20, "grade": "A"}\n# 集合应用\nunique_numbers = {1, 2, 3, 4, 5}']
+        }
+      ]
+    },
+    'chapter4': {
+      title: '第四章：函数与模块',
+      sections: [
+        {
+          id: 'section4-1',
+          title: '函数的定义与调用',
+          content: '函数是一段可重用的代码块，用于执行特定的任务。\n\n在Python中，使用def关键字定义函数。',
+          codeExamples: ['def greet(name):\n    """打招呼函数"""\n    print(f"Hello, {name}!")\n\n# 调用函数\ngreet("Alice")']
+        },
+        {
+          id: 'section4-2',
+          title: '函数参数与返回值',
+          content: '函数可以接受参数，并返回值。\n\n参数类型：\n1. 位置参数\n2. 默认参数\n3. 关键字参数\n4. 可变参数',
+          codeExamples: ['def add(a, b=10):\n    """加法函数"""\n    return a + b\n\n# 调用函数\nprint(add(5))  # 使用默认参数\nprint(add(5, 20))  # 覆盖默认参数\nprint(add(a=5, b=20))  # 使用关键字参数']
+        },
+        {
+          id: 'section4-3',
+          title: '函数的作用域',
+          content: '变量的作用域是指变量可访问的范围。\n\nPython的作用域包括：\n1. 局部作用域：函数内部\n2. 全局作用域：模块级别\n3. 内置作用域：Python内置函数和变量',
+          codeExamples: ['# 全局变量\nx = 10\n\ndef func():\n    # 局部变量\n    y = 20\n    print(x)  # 可以访问全局变量\n    print(y)  # 可以访问局部变量\n\nfunc()\nprint(x)  # 可以访问全局变量\n# print(y)  # 会报错，无法访问局部变量']
+        },
+        {
+          id: 'section4-4',
+          title: '模块的导入与使用',
+          content: '模块是一个包含Python定义和语句的文件。\n\n导入模块的方式：\n1. import module\n2. from module import function\n3. from module import *',
+          codeExamples: ['# 导入整个模块\nimport math\nprint(math.pi)\n\n# 导入特定函数\nfrom math import sqrt\nprint(sqrt(16))\n\n# 导入所有函数\nfrom math import *\nprint(pi)']
+        },
+        {
+          id: 'section4-5',
+          title: '标准库的应用',
+          content: 'Python标准库提供了许多有用的模块，如：\n\n1. math：数学函数\n2. random：随机数生成\n3. datetime：日期和时间处理\n4. os：操作系统接口\n5. sys：系统相关参数和函数',
+          codeExamples: ['import random\nprint(random.randint(1, 10))\n\nimport datetime\nprint(datetime.datetime.now())\n\nimport os\nprint(os.getcwd())']
+        }
+      ]
+    },
+    'chapter5': {
+      title: '第五章：文件操作',
+      sections: [
+        {
+          id: 'section5-1',
+          title: '文件的打开与关闭',
+          content: '在Python中，使用open()函数打开文件，使用close()方法关闭文件。\n\nopen()函数的参数：\n1. 文件路径\n2. 模式：r（读取）、w（写入）、a（追加）、b（二进制）等',
+          codeExamples: ['# 打开文件\nf = open("example.txt", "w")\n# 关闭文件\nf.close()']
+        },
+        {
+          id: 'section5-2',
+          title: '文件的读取操作',
+          content: '文件读取操作包括：\n1. read()：读取整个文件\n2. readline()：读取一行\n3. readlines()：读取所有行到列表',
+          codeExamples: ['# 读取整个文件\nf = open("example.txt", "r")\ncontent = f.read()\nprint(content)\nf.close()\n\n# 读取一行\nf = open("example.txt", "r")\nline = f.readline()\nprint(line)\nf.close()\n\n# 读取所有行\nf = open("example.txt", "r")\nlines = f.readlines()\nprint(lines)\nf.close()']
+        },
+        {
+          id: 'section5-3',
+          title: '文件的写入操作',
+          content: '文件写入操作包括：\n1. write()：写入字符串\n2. writelines()：写入字符串列表',
+          codeExamples: ['# 写入字符串\nf = open("example.txt", "w")\nf.write("Hello, Python!")\nf.close()\n\n# 写入字符串列表\nf = open("example.txt", "w")\nf.writelines(["Line 1\n", "Line 2\n", "Line 3\n"])\nf.close()']
+        },
+        {
+          id: 'section5-4',
+          title: '文件的异常处理',
+          content: '使用try-except语句处理文件操作中的异常。\n\n推荐使用with语句，它会自动关闭文件。',
+          codeExamples: ['# 使用try-except\ntry:\n    f = open("example.txt", "r")\n    content = f.read()\n    print(content)\nexcept FileNotFoundError:\n    print("文件不存在")\nfinally:\n    if f:\n        f.close()\n\n# 使用with语句\nwith open("example.txt", "r") as f:\n    content = f.read()\n    print(content)']
+        },
+        {
+          id: 'section5-5',
+          title: 'CSV文件的读写',
+          content: 'CSV（逗号分隔值）是一种常见的文件格式，用于存储表格数据。\n\n使用csv模块读写CSV文件。',
+          codeExamples: ['import csv\n\n# 写入CSV文件\nwith open("data.csv", "w", newline="") as f:\n    writer = csv.writer(f)\n    writer.writerow(["Name", "Age", "Grade"])\n    writer.writerow(["Alice", 20, "A"])\n    writer.writerow(["Bob", 21, "B"])\n\n# 读取CSV文件\nwith open("data.csv", "r") as f:\n    reader = csv.reader(f)\n    for row in reader:\n        print(row)']
+        }
+      ]
+    },
+    'chapter6': {
+      title: '第六章：面向对象编程',
+      sections: [
+        {
+          id: 'section6-1',
+          title: '类与对象的概念',
+          content: '面向对象编程（OOP）是一种编程范式，使用类和对象来组织代码。\n\n类是对象的蓝图，定义了对象的属性和方法。\n对象是类的实例。',
+          codeExamples: ['# 定义类\nclass Person:\n    pass\n\n# 创建对象\np = Person()']
+        },
+        {
+          id: 'section6-2',
+          title: '类的定义与实例化',
+          content: '在Python中，使用class关键字定义类。\n\n__init__方法是类的构造函数，用于初始化对象。',
+          codeExamples: ['class Person:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\n# 实例化对象\np = Person("Alice", 20)\nprint(p.name)\nprint(p.age)']
+        },
+        {
+          id: 'section6-3',
+          title: '类的属性与方法',
+          content: '类的属性是对象的特征，类的方法是对象的行为。\n\n方法是定义在类中的函数，第一个参数是self，指向对象本身。',
+          codeExamples: ['class Person:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n    \n    def greet(self):\n        print(f"Hello, my name is {self.name}.")\n\np = Person("Alice", 20)\np.greet()']
+        },
+        {
+          id: 'section6-4',
+          title: '继承与多态',
+          content: '继承是一种机制，允许一个类继承另一个类的属性和方法。\n\n多态是指不同类的对象可以响应相同的方法调用。',
+          codeExamples: ['class Animal:\n    def speak(self):\n        pass\n\nclass Dog(Animal):\n    def speak(self):\n        print("Woof!")\n\nclass Cat(Animal):\n    def speak(self):\n        print("Meow!")\n\ndog = Dog()\ncat = Cat()\ndog.speak()\ncat.speak()']
+        },
+        {
+          id: 'section6-5',
+          title: '面向对象编程实践',
+          content: '面向对象编程的核心原则：\n1. 封装：将数据和方法封装在类中\n2. 继承：通过继承复用代码\n3. 多态：通过多态实现代码的灵活性',
+          codeExamples: ['class BankAccount:\n    def __init__(self, balance=0):\n        self.balance = balance\n    \n    def deposit(self, amount):\n        self.balance += amount\n    \n    def withdraw(self, amount):\n        if amount <= self.balance:\n            self.balance -= amount\n        else:\n            print("Insufficient funds")\n    \n    def get_balance(self):\n        return self.balance\n\n# 使用类\naccount = BankAccount(1000)\naccount.deposit(500)\naccount.withdraw(200)\nprint(account.get_balance())']
+        }
+      ]
+    }
+  };
+
+  // 400题题库（包含单选、多选和判断题）
+  const chapterQuestions = {
+    'chapter1': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 1,
+        type: 'single' as const,
+        question: `Python基础问题 ${i + 1}：关于Python的基本概念，下列说法正确的是？`,
+        options: [
+          'Python是一种编译型语言',
+          'Python是一种解释型语言',
+          'Python是一种汇编语言',
+          'Python是一种机器语言'
+        ],
+        correctAnswer: 1,
+        explanation: 'Python是一种解释型语言，代码在运行时由解释器逐行执行。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 51,
+        type: 'multiple' as const,
+        question: `Python基础问题 ${i + 51}：下列哪些是Python的基本数据类型？`,
+        options: [
+          '整数（int）',
+          '浮点数（float）',
+          '字符串（str）',
+          '数组（array）'
+        ],
+        correctAnswer: [0, 1, 2],
+        explanation: 'Python的基本数据类型包括整数、浮点数、字符串、布尔值等，数组不是Python的基本数据类型。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 81,
+        type: 'judgment' as const,
+        question: `Python基础问题 ${i + 81}：Python的变量需要声明类型。`,
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: 'Python是动态类型语言，变量不需要声明类型，直接赋值即可。'
+      }))
+    ],
+    'chapter2': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 101,
+        type: 'single' as const,
+        question: `控制结构问题 ${i + 1}：下列关于Python循环的说法，正确的是？`,
+        options: [
+          'for循环只能用于遍历列表',
+          'while循环的条件必须是布尔值',
+          'break语句用于跳过当前循环的剩余部分',
+          'continue语句用于跳出整个循环'
+        ],
+        correctAnswer: 1,
+        explanation: 'while循环的条件必须是布尔值，当条件为True时执行循环体。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 151,
+        type: 'multiple' as const,
+        question: `控制结构问题 ${i + 51}：下列哪些是Python的循环控制语句？`,
+        options: [
+          'break',
+          'continue',
+          'return',
+          'pass'
+        ],
+        correctAnswer: [0, 1],
+        explanation: 'Python的循环控制语句包括break和continue，return用于从函数返回，pass是一个空语句。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 181,
+        type: 'judgment' as const,
+        question: `控制结构问题 ${i + 81}：Python的for循环只能用于遍历序列。`,
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: 'Python的for循环可以用于遍历任何可迭代对象，不仅仅是序列。'
+      }))
+    ],
+    'chapter3': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 201,
+        type: 'single' as const,
+        question: `数据结构问题 ${i + 1}：下列关于Python列表的说法，正确的是？`,
+        options: [
+          '列表是不可变的',
+          '列表中的元素必须是相同类型',
+          '列表可以包含不同类型的元素',
+          '列表的索引从1开始'
+        ],
+        correctAnswer: 2,
+        explanation: 'Python列表是可变的，可以包含不同类型的元素，索引从0开始。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 251,
+        type: 'multiple' as const,
+        question: `数据结构问题 ${i + 51}：下列哪些是Python的内置数据结构？`,
+        options: [
+          '列表（list）',
+          '元组（tuple）',
+          '字典（dict）',
+          '集合（set）'
+        ],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: 'Python的内置数据结构包括列表、元组、字典和集合。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 281,
+        type: 'judgment' as const,
+        question: `数据结构问题 ${i + 81}：Python的字典是有序的。`,
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: 'Python 3.7+中，字典是有序的，按照插入顺序保存键值对。'
+      }))
+    ],
+    'chapter4': [
+      // 单选题
+      ...Array.from({ length: 50 }, (_, i) => ({
+        id: i + 301,
+        type: 'single' as const,
+        question: `函数与模块问题 ${i + 1}：下列关于Python函数的说法，正确的是？`,
+        options: [
+          '函数必须有返回值',
+          '函数参数不能有默认值',
+          '函数可以嵌套定义',
+          '函数名可以是Python关键字'
+        ],
+        correctAnswer: 2,
+        explanation: 'Python函数可以嵌套定义，即在一个函数内部定义另一个函数。'
+      })),
+      // 多选题
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: i + 351,
+        type: 'multiple' as const,
+        question: `函数与模块问题 ${i + 51}：下列哪些是Python函数的参数类型？`,
+        options: [
+          '位置参数',
+          '默认参数',
+          '关键字参数',
+          '可变参数'
+        ],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: 'Python函数的参数类型包括位置参数、默认参数、关键字参数和可变参数。'
+      })),
+      // 判断题
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: i + 381,
+        type: 'judgment' as const,
+        question: `函数与模块问题 ${i + 81}：Python的模块必须放在单独的文件中。`,
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: 'Python的模块通常放在单独的文件中，但也可以在同一文件中定义多个模块。'
+      }))
+    ]
+  };
 
   // 学习资源数据
   const learningResources: Resource[] = [
@@ -662,11 +1040,98 @@ export default function PythonCourse() {
           
           {/* 标签页内容 */}
           <div className="mt-8">
-            {activeTab === 'progress' && (
-              <LearningProgress 
-                title="Python基础课程学习进度" 
-                items={progressItems} 
-              />
+            {activeTab === 'progress' && !activeChapter && (
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+                <h3 className="text-2xl font-semibold text-gray-100 mb-6">Python基础课程学习进度</h3>
+                <div className="space-y-4">
+                  {progressItems.map((item) => (
+                    <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                      <div className="flex items-center justify-between cursor-pointer" onClick={() => setActiveChapter(item.id)}>
+                        <div className="flex items-center">
+                          <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
+                            item.completed
+                              ? 'border-blue-500 bg-blue-500 text-white'
+                              : 'border-gray-600'
+                          }`}>
+                            {item.completed ? '✓' : ''}
+                          </div>
+                          <h4 className={`font-medium ${item.completed ? 'text-blue-400' : 'text-gray-300'}`}>
+                            {item.title}
+                          </h4>
+                        </div>
+                        <span className="text-gray-400 text-sm">
+                          {item.subItems?.filter(sub => sub.completed).length}/{item.subItems?.length}
+                        </span>
+                      </div>
+                      {item.subItems && (
+                        <div className="mt-3 ml-9 space-y-2">
+                          {item.subItems.map(subItem => (
+                            <div key={subItem.id} className="flex items-center">
+                              <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-2 ${
+                                subItem.completed
+                                  ? 'border-blue-500 bg-blue-500 text-white'
+                                  : 'border-gray-600'
+                              }`}>
+                                {subItem.completed ? '✓' : ''}
+                              </div>
+                              <span className={`text-sm ${subItem.completed ? 'text-blue-400' : 'text-gray-400'}`}>
+                                {subItem.title}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {activeTab === 'progress' && activeChapter && activeChapterMode === 'content' && (
+              <div>
+                <div className="flex items-center mb-4">
+                  <button
+                    onClick={() => setActiveChapter(null)}
+                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                  >
+                    <span className="mr-2">←</span> 返回课程进度
+                  </button>
+                </div>
+                <ChapterContent
+                  chapterId={activeChapter}
+                  chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
+                  sections={chapterContents[activeChapter as keyof typeof chapterContents]?.sections || []}
+                  onComplete={() => {
+                    setActiveChapterMode('exercise');
+                  }}
+                />
+              </div>
+            )}
+            {activeTab === 'progress' && activeChapter && activeChapterMode === 'exercise' && (
+              <div>
+                <div className="flex items-center mb-4">
+                  <button
+                    onClick={() => setActiveChapterMode('content')}
+                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4 mr-4"
+                  >
+                    <span className="mr-2">←</span> 返回章节内容
+                  </button>
+                  <button
+                    onClick={() => setActiveChapter(null)}
+                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                  >
+                    <span className="mr-2">←</span> 返回课程进度
+                  </button>
+                </div>
+                <ChapterExercise
+                  chapterId={activeChapter}
+                  chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
+                  questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
+                  questionCount={30}
+                  onComplete={(score, total) => {
+                    console.log(`练习完成，得分：${score}/${total}`);
+                  }}
+                />
+              </div>
             )}
             {activeTab === 'resources' && (
               <LearningResource 

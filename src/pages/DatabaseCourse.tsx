@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import LearningProgress from '../components/LearningProgress';
+import LearningResource from '../components/LearningResource';
+import ExerciseComponent from '../components/ExerciseComponent';
 
 interface Section {
   id: string;
@@ -8,9 +11,235 @@ interface Section {
   resources?: string[];
 }
 
+interface ProgressItem {
+  id: string;
+  title: string;
+  completed: boolean;
+  children?: ProgressItem[];
+}
+
+interface Resource {
+  id: string;
+  title: string;
+  type: 'article' | 'video' | 'document' | 'code';
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  url: string;
+  description: string;
+  duration?: string;
+}
+
+interface Question {
+  id: string;
+  text: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+}
+
 export default function DatabaseCourse() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [activeTab, setActiveTab] = useState('progress');
+
+  const progressItems: ProgressItem[] = [
+    {
+      id: 'chapter1',
+      title: '第一章：数据库概述',
+      completed: false,
+      children: [
+        { id: 'section1-1', title: '数据库的概念与特点', completed: false },
+        { id: 'section1-2', title: '数据库系统的组成', completed: false },
+        { id: 'section1-3', title: '数据库的发展历程', completed: false },
+        { id: 'section1-4', title: '数据库的应用领域', completed: false }
+      ]
+    },
+    {
+      id: 'chapter2',
+      title: '第二章：数据模型',
+      completed: false,
+      children: [
+        { id: 'section2-1', title: '数据模型的概念与分类', completed: false },
+        { id: 'section2-2', title: '概念模型', completed: false },
+        { id: 'section2-3', title: '逻辑模型', completed: false },
+        { id: 'section2-4', title: '物理模型', completed: false },
+        { id: 'section2-5', title: '实体-关系模型设计', completed: false }
+      ]
+    },
+    {
+      id: 'chapter3',
+      title: '第三章：关系数据库',
+      completed: false,
+      children: [
+        { id: 'section3-1', title: '关系数据库的基本概念', completed: false },
+        { id: 'section3-2', title: '关系代数', completed: false },
+        { id: 'section3-3', title: '关系数据库规范化', completed: false },
+        { id: 'section3-4', title: '函数依赖', completed: false },
+        { id: 'section3-5', title: '范式', completed: false }
+      ]
+    },
+    {
+      id: 'chapter4',
+      title: '第四章：SQL语言',
+      completed: false,
+      children: [
+        { id: 'section4-1', title: 'SQL语言概述', completed: false },
+        { id: 'section4-2', title: '数据定义语言（DDL）', completed: false },
+        { id: 'section4-3', title: '数据操作语言（DML）', completed: false },
+        { id: 'section4-4', title: '数据查询语言（DQL）', completed: false },
+        { id: 'section4-5', title: '数据控制语言（DCL）', completed: false }
+      ]
+    },
+    {
+      id: 'chapter5',
+      title: '第五章：数据库设计',
+      completed: false,
+      children: [
+        { id: 'section5-1', title: '数据库设计概述', completed: false },
+        { id: 'section5-2', title: '需求分析', completed: false },
+        { id: 'section5-3', title: '概念结构设计', completed: false },
+        { id: 'section5-4', title: '逻辑结构设计', completed: false },
+        { id: 'section5-5', title: '物理结构设计', completed: false }
+      ]
+    },
+    {
+      id: 'chapter6',
+      title: '第六章：数据库应用开发',
+      completed: false,
+      children: [
+        { id: 'section6-1', title: '数据库应用开发概述', completed: false },
+        { id: 'section6-2', title: '数据库连接技术', completed: false },
+        { id: 'section6-3', title: '数据库应用系统架构', completed: false },
+        { id: 'section6-4', title: '数据库应用开发工具', completed: false },
+        { id: 'section6-5', title: '数据库应用开发案例', completed: false }
+      ]
+    }
+  ];
+
+  const learningResources: Resource[] = [
+    {
+      id: 'resource1',
+      title: '数据库系统概论',
+      type: 'document',
+      difficulty: 'beginner',
+      url: '#',
+      description: '数据库基础知识的权威教材，适合初学者',
+      duration: '10小时'
+    },
+    {
+      id: 'resource2',
+      title: 'SQL语言入门教程',
+      type: 'video',
+      difficulty: 'beginner',
+      url: '#',
+      description: 'SQL语言的基础语法和使用方法',
+      duration: '5小时'
+    },
+    {
+      id: 'resource3',
+      title: '关系数据库理论',
+      type: 'article',
+      difficulty: 'intermediate',
+      url: '#',
+      description: '深入理解关系数据库的理论基础',
+      duration: '3小时'
+    },
+    {
+      id: 'resource4',
+      title: '数据库设计实战',
+      type: 'code',
+      difficulty: 'intermediate',
+      url: '#',
+      description: '数据库设计的实际案例和最佳实践',
+      duration: '4小时'
+    },
+    {
+      id: 'resource5',
+      title: '高级SQL查询技巧',
+      type: 'article',
+      difficulty: 'advanced',
+      url: '#',
+      description: '复杂SQL查询的优化和技巧',
+      duration: '3小时'
+    },
+    {
+      id: 'resource6',
+      title: '数据库性能优化',
+      type: 'video',
+      difficulty: 'advanced',
+      url: '#',
+      description: '数据库性能调优的方法和技巧',
+      duration: '6小时'
+    }
+  ];
+
+  const exercises: Question[] = [
+    {
+      id: 'exercise1',
+      text: '下列关于数据库的说法，正确的是：',
+      options: [
+        '数据库是存储数据的文件系统',
+        '数据库是管理数据的软件系统',
+        '数据库是存储数据的仓库',
+        '数据库是数据的集合'
+      ],
+      correctAnswer: 2,
+      explanation: '数据库是按照一定的数据模型组织、存储和管理数据的仓库，是数据的集合。',
+      difficulty: 'easy'
+    },
+    {
+      id: 'exercise2',
+      text: '关系数据库中，主键的作用是：',
+      options: [
+        '唯一标识表中的记录',
+        '加速数据查询',
+        '保证数据的完整性',
+        '以上都是'
+      ],
+      correctAnswer: 3,
+      explanation: '主键的作用包括唯一标识表中的记录、加速数据查询和保证数据的完整性。',
+      difficulty: 'medium'
+    },
+    {
+      id: 'exercise3',
+      text: 'SQL中，用于查询数据的语句是：',
+      options: [
+        'INSERT',
+        'UPDATE',
+        'SELECT',
+        'DELETE'
+      ],
+      correctAnswer: 2,
+      explanation: 'SELECT语句用于从数据库中查询数据。',
+      difficulty: 'easy'
+    },
+    {
+      id: 'exercise4',
+      text: '数据库设计的正确步骤是：',
+      options: [
+        '需求分析 → 概念结构设计 → 逻辑结构设计 → 物理结构设计',
+        '概念结构设计 → 需求分析 → 逻辑结构设计 → 物理结构设计',
+        '需求分析 → 逻辑结构设计 → 概念结构设计 → 物理结构设计',
+        '概念结构设计 → 逻辑结构设计 → 需求分析 → 物理结构设计'
+      ],
+      correctAnswer: 0,
+      explanation: '数据库设计的正确步骤是：需求分析 → 概念结构设计 → 逻辑结构设计 → 物理结构设计。',
+      difficulty: 'medium'
+    },
+    {
+      id: 'exercise5',
+      text: '下列关于范式的说法，错误的是：',
+      options: [
+        '1NF要求列不可再分',
+        '2NF要求消除部分函数依赖',
+        '3NF要求消除传递函数依赖',
+        'BCNF要求消除所有函数依赖'
+      ],
+      correctAnswer: 3,
+      explanation: 'BCNF要求消除主属性对候选键的部分和传递函数依赖，而不是所有函数依赖。',
+      difficulty: 'hard'
+    }
+  ];
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -391,6 +620,66 @@ export default function DatabaseCourse() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 学习功能 */}
+      <section className="py-16 px-4 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+              学习中心
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              开始你的学习之旅，跟踪进度，访问学习资源，完成习题
+            </p>
+          </div>
+          
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+            <div className="flex flex-wrap mb-6">
+              <button 
+                onClick={() => setActiveTab('progress')}
+                className={`px-6 py-3 rounded-lg mr-4 mb-4 transition-all duration-300 ${activeTab === 'progress' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                学习进度
+              </button>
+              <button 
+                onClick={() => setActiveTab('resources')}
+                className={`px-6 py-3 rounded-lg mr-4 mb-4 transition-all duration-300 ${activeTab === 'resources' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                学习资源
+              </button>
+              <button 
+                onClick={() => setActiveTab('exercises')}
+                className={`px-6 py-3 rounded-lg mb-4 transition-all duration-300 ${activeTab === 'exercises' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                习题练习
+              </button>
+            </div>
+            
+            <div className="min-h-[500px]">
+              {activeTab === 'progress' && (
+                <LearningProgress title="学习进度" items={progressItems.map(item => ({
+                  ...item,
+                  subItems: item.children
+                }))} />
+              )}
+              {activeTab === 'resources' && (
+                <LearningResource title="学习资源" resources={learningResources.map((resource, index) => ({
+                  ...resource,
+                  id: index + 1,
+                  link: resource.url
+                }))} />
+              )}
+              {activeTab === 'exercises' && (
+                <ExerciseComponent title="习题练习" questions={exercises.map((exercise, index) => ({
+                  ...exercise,
+                  id: index + 1,
+                  question: exercise.text
+                }))} />
+              )}
             </div>
           </div>
         </div>
