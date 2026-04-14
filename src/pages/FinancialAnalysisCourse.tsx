@@ -555,7 +555,7 @@ export default function FinancialAnalysisCourse() {
   const chapterQuestions: { [key: string]: ChapterQuestion[] } = {
     'chapter1': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
+      ...Array.from({ length: 200 }, (_, i) => ({
         id: i + 1,
         type: 'single' as const,
         question: `财务数据基础问题 ${i + 1}：下列哪项不属于主要的财务报表？`,
@@ -569,10 +569,10 @@ export default function FinancialAnalysisCourse() {
         explanation: '销售明细表属于内部管理报表，不属于主要的财务报表。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 51,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 201,
         type: 'multiple' as const,
-        question: `财务数据基础问题 ${i + 51}：下列哪些属于财务数据的类型？`,
+        question: `财务数据基础问题 ${i + 201}：下列哪些属于财务数据的类型？`,
         options: [
           '资产负债表数据',
           '利润表数据',
@@ -583,10 +583,10 @@ export default function FinancialAnalysisCourse() {
         explanation: '财务数据的类型包括资产负债表数据、利润表数据、现金流量表数据和所有者权益变动表数据，市场调研数据不属于财务数据。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 81,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 321,
         type: 'judgment' as const,
-        question: `财务数据基础问题 ${i + 81}：资产负债表反映企业在一定会计期间的经营成果。`,
+        question: `财务数据基础问题 ${i + 321}：资产负债表反映企业在一定会计期间的经营成果。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '资产负债表反映企业在某一特定日期的财务状况，利润表反映企业在一定会计期间的经营成果。'
@@ -594,8 +594,8 @@ export default function FinancialAnalysisCourse() {
     ],
     'chapter2': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 101,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 401,
         type: 'single' as const,
         question: `财务指标分析问题 ${i + 1}：下列哪项属于盈利能力指标？`,
         options: [
@@ -608,10 +608,10 @@ export default function FinancialAnalysisCourse() {
         explanation: '毛利率属于盈利能力指标，资产负债率和流动比率属于偿债能力指标，存货周转率属于运营能力指标。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 151,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 601,
         type: 'multiple' as const,
-        question: `财务指标分析问题 ${i + 51}：下列哪些属于偿债能力指标？`,
+        question: `财务指标分析问题 ${i + 201}：下列哪些属于偿债能力指标？`,
         options: [
           '流动比率',
           '速动比率',
@@ -622,10 +622,10 @@ export default function FinancialAnalysisCourse() {
         explanation: '流动比率、速动比率和资产负债率属于偿债能力指标，总资产收益率属于盈利能力指标。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 181,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 721,
         type: 'judgment' as const,
-        question: `财务指标分析问题 ${i + 81}：存货周转率越高，说明企业的运营能力越强。`,
+        question: `财务指标分析问题 ${i + 321}：存货周转率越高，说明企业的运营能力越强。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: '存货周转率越高，说明企业的存货周转速度越快，运营能力越强。'
@@ -633,8 +633,8 @@ export default function FinancialAnalysisCourse() {
     ],
     'chapter3': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 201,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 801,
         type: 'single' as const,
         question: `财务数据可视化问题 ${i + 1}：下列哪种图表最适合展示时间序列数据的变化趋势？`,
         options: [
@@ -647,10 +647,10 @@ export default function FinancialAnalysisCourse() {
         explanation: '折线图最适合展示时间序列数据的变化趋势。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 251,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1001,
         type: 'multiple' as const,
-        question: `财务数据可视化问题 ${i + 51}：Python中用于财务数据可视化的库包括哪些？`,
+        question: `财务数据可视化问题 ${i + 201}：Python中用于财务数据可视化的库包括哪些？`,
         options: [
           'Matplotlib',
           'Seaborn',
@@ -661,10 +661,10 @@ export default function FinancialAnalysisCourse() {
         explanation: 'Matplotlib、Seaborn、Plotly和Pandas都可以用于财务数据可视化。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 281,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1121,
         type: 'judgment' as const,
-        question: `财务数据可视化问题 ${i + 81}：财务数据可视化的主要目的是美化数据。`,
+        question: `财务数据可视化问题 ${i + 321}：财务数据可视化的主要目的是美化数据。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '财务数据可视化的主要目的是更直观地理解数据，而不仅仅是美化数据。'
@@ -672,8 +672,8 @@ export default function FinancialAnalysisCourse() {
     ],
     'chapter4': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 301,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1201,
         type: 'single' as const,
         question: `财务预测与预算问题 ${i + 1}：下列哪种方法是基于历史数据的预测方法？`,
         options: [
@@ -686,10 +686,10 @@ export default function FinancialAnalysisCourse() {
         explanation: '时间序列分析是基于历史数据的预测方法。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 351,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1401,
         type: 'multiple' as const,
-        question: `财务预测与预算问题 ${i + 51}：预算编制的方法包括哪些？`,
+        question: `财务预测与预算问题 ${i + 201}：预算编制的方法包括哪些？`,
         options: [
           '增量预算法',
           '零基预算法',
@@ -700,10 +700,10 @@ export default function FinancialAnalysisCourse() {
         explanation: '预算编制的方法包括增量预算法、零基预算法、滚动预算法和弹性预算法。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 381,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1521,
         type: 'judgment' as const,
-        question: `财务预测与预算问题 ${i + 81}：财务预测可以完全准确。`,
+        question: `财务预测与预算问题 ${i + 321}：财务预测可以完全准确。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '财务预测是基于历史数据和趋势的估计，不可能完全准确。'
@@ -711,8 +711,8 @@ export default function FinancialAnalysisCourse() {
     ],
     'chapter5': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 401,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1601,
         type: 'single' as const,
         question: `财务风险分析问题 ${i + 1}：财务风险分析的首要步骤是？`,
         options: [
@@ -725,10 +725,10 @@ export default function FinancialAnalysisCourse() {
         explanation: '财务风险分析的首要步骤是风险识别，只有识别出风险才能进行后续的评估和应对。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 451,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1801,
         type: 'multiple' as const,
-        question: `财务风险分析问题 ${i + 51}：财务风险的类型包括哪些？`,
+        question: `财务风险分析问题 ${i + 201}：财务风险的类型包括哪些？`,
         options: [
           '市场风险',
           '信用风险',
@@ -739,10 +739,10 @@ export default function FinancialAnalysisCourse() {
         explanation: '财务风险的类型包括市场风险、信用风险、流动性风险、操作风险等。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 481,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1921,
         type: 'judgment' as const,
-        question: `财务风险分析问题 ${i + 81}：风险转移是指完全避免从事高风险活动。`,
+        question: `财务风险分析问题 ${i + 321}：风险转移是指完全避免从事高风险活动。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '风险转移是通过保险、衍生品等方式转移风险，而不是完全避免从事高风险活动。'
@@ -750,8 +750,8 @@ export default function FinancialAnalysisCourse() {
     ],
     'chapter6': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 501,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 2001,
         type: 'single' as const,
         question: `财务数据分析实战问题 ${i + 1}：财务分析报告的核心部分是？`,
         options: [
@@ -764,10 +764,10 @@ export default function FinancialAnalysisCourse() {
         explanation: '分析结果是财务分析报告的核心部分，展示了分析的具体内容和发现。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 551,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 2201,
         type: 'multiple' as const,
-        question: `财务数据分析实战问题 ${i + 51}：财务数据分析的流程包括哪些步骤？`,
+        question: `财务数据分析实战问题 ${i + 201}：财务数据分析的流程包括哪些步骤？`,
         options: [
           '确定分析目标',
           '收集数据',
@@ -778,10 +778,10 @@ export default function FinancialAnalysisCourse() {
         explanation: '财务数据分析的流程包括确定分析目标、收集数据、数据预处理、数据分析、结果解释、报告生成和跟踪反馈等步骤。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 581,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 2321,
         type: 'judgment' as const,
-        question: `财务数据分析实战问题 ${i + 81}：行业对比分析是将企业的财务指标与同行业企业进行比较。`,
+        question: `财务数据分析实战问题 ${i + 321}：行业对比分析是将企业的财务指标与同行业企业进行比较。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: '行业对比分析是将企业的财务指标与同行业企业进行比较，了解企业在行业中的地位和竞争力。'

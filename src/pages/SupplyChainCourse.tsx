@@ -477,7 +477,7 @@ export default function SupplyChainCourse() {
   const chapterQuestions = {
     'chapter1': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
+      ...Array.from({ length: 200 }, (_, i) => ({
         id: i + 1,
         type: 'single' as const,
         question: `供应链管理概述问题 ${i + 1}：供应链管理的核心是？`,
@@ -491,10 +491,10 @@ export default function SupplyChainCourse() {
         explanation: '供应链管理的核心是协调供应链各环节，实现整体优化。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 51,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 201,
         type: 'multiple' as const,
-        question: `供应链管理概述问题 ${i + 51}：供应链管理的核心流程包括哪些？`,
+        question: `供应链管理概述问题 ${i + 201}：供应链管理的核心流程包括哪些？`,
         options: [
           '计划',
           '采购',
@@ -505,10 +505,10 @@ export default function SupplyChainCourse() {
         explanation: '供应链管理的核心流程包括计划、采购、制造、配送和退货。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 81,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 321,
         type: 'judgment' as const,
-        question: `供应链管理概述问题 ${i + 81}：供应链管理只关注企业内部的流程。`,
+        question: `供应链管理概述问题 ${i + 321}：供应链管理只关注企业内部的流程。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '供应链管理关注从供应商到客户的整个流程，不仅仅是企业内部。'
@@ -516,8 +516,8 @@ export default function SupplyChainCourse() {
     ],
     'chapter2': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 101,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 401,
         type: 'single' as const,
         question: `供应链数据采集与预处理问题 ${i + 1}：下列哪项不是供应链数据的类型？`,
         options: [
@@ -530,10 +530,10 @@ export default function SupplyChainCourse() {
         explanation: '员工数据不属于供应链数据的类型，供应链数据包括采购数据、生产数据、库存数据、物流数据和销售数据。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 151,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 601,
         type: 'multiple' as const,
-        question: `供应链数据采集与预处理问题 ${i + 51}：供应链数据采集的方法包括哪些？`,
+        question: `供应链数据采集与预处理问题 ${i + 201}：供应链数据采集的方法包括哪些？`,
         options: [
           '手动采集',
           '自动采集',
@@ -544,10 +544,10 @@ export default function SupplyChainCourse() {
         explanation: '供应链数据采集的方法包括手动采集、自动采集、系统集成、网络爬虫和问卷调查。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 181,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 721,
         type: 'judgment' as const,
-        question: `供应链数据采集与预处理问题 ${i + 81}：数据预处理是数据分析的可选步骤。`,
+        question: `供应链数据采集与预处理问题 ${i + 321}：数据预处理是数据分析的可选步骤。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '数据预处理是数据分析的必要步骤，它可以提高数据质量和分析效果。'
@@ -555,8 +555,8 @@ export default function SupplyChainCourse() {
     ],
     'chapter3': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 201,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 801,
         type: 'single' as const,
         question: `供应链数据分析方法问题 ${i + 1}：下列哪项属于预测性分析方法？`,
         options: [
@@ -569,10 +569,10 @@ export default function SupplyChainCourse() {
         explanation: '时间序列分析属于预测性分析方法，用于预测未来趋势。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 251,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1001,
         type: 'multiple' as const,
-        question: `供应链数据分析方法问题 ${i + 51}：供应链数据分析的工具包括哪些？`,
+        question: `供应链数据分析方法问题 ${i + 201}：供应链数据分析的工具包括哪些？`,
         options: [
           'Tableau',
           'Python',
@@ -583,10 +583,10 @@ export default function SupplyChainCourse() {
         explanation: '供应链数据分析的工具包括商业智能工具、数据分析工具、供应链专业工具等。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 281,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1121,
         type: 'judgment' as const,
-        question: `供应链数据分析方法问题 ${i + 81}：规范性分析可以提供最优决策建议。`,
+        question: `供应链数据分析方法问题 ${i + 321}：规范性分析可以提供最优决策建议。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: '规范性分析基于数据提供最优决策建议，帮助企业做出更好的决策。'
@@ -594,8 +594,8 @@ export default function SupplyChainCourse() {
     ],
     'chapter4': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 301,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1201,
         type: 'single' as const,
         question: `供应链绩效分析问题 ${i + 1}：下列哪项属于供应链绩效的成本指标？`,
         options: [
@@ -608,10 +608,10 @@ export default function SupplyChainCourse() {
         explanation: '采购成本属于供应链绩效的成本指标，准时交付率和客户满意度属于服务指标，库存周转率属于资产指标。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 351,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1401,
         type: 'multiple' as const,
-        question: `供应链绩效分析问题 ${i + 51}：供应链绩效评估的方法包括哪些？`,
+        question: `供应链绩效分析问题 ${i + 201}：供应链绩效评估的方法包括哪些？`,
         options: [
           '平衡计分卡',
           'SCOR模型',
@@ -622,10 +622,10 @@ export default function SupplyChainCourse() {
         explanation: '供应链绩效评估的方法包括平衡计分卡、SCOR模型、标杆管理、六西格玛和精益管理等。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 381,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1521,
         type: 'judgment' as const,
-        question: `供应链绩效分析问题 ${i + 81}：供应链绩效指标越多越好。`,
+        question: `供应链绩效分析问题 ${i + 321}：供应链绩效指标越多越好。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '供应链绩效指标不是越多越好，应该选择与业务目标相关、可测量、可操作的指标。'
@@ -633,8 +633,8 @@ export default function SupplyChainCourse() {
     ],
     'chapter5': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 401,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1601,
         type: 'single' as const,
         question: `供应链风险管理问题 ${i + 1}：下列哪项不属于供应链风险的类型？`,
         options: [
@@ -647,10 +647,10 @@ export default function SupplyChainCourse() {
         explanation: '市场风险是一个更广泛的概念，供应链风险包括供应风险、需求风险、运营风险、物流风险、财务风险、环境风险和网络风险等。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 451,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1801,
         type: 'multiple' as const,
-        question: `供应链风险管理问题 ${i + 51}：供应链风险应对的策略包括哪些？`,
+        question: `供应链风险管理问题 ${i + 201}：供应链风险应对的策略包括哪些？`,
         options: [
           '风险规避',
           '风险降低',
@@ -661,10 +661,10 @@ export default function SupplyChainCourse() {
         explanation: '供应链风险应对的策略包括风险规避、风险降低、风险转移、风险保留和风险共享。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 481,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1921,
         type: 'judgment' as const,
-        question: `供应链风险管理问题 ${i + 81}：供应链风险管理可以完全消除风险。`,
+        question: `供应链风险管理问题 ${i + 321}：供应链风险管理可以完全消除风险。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '供应链风险管理不能完全消除风险，只能降低风险发生的概率和影响。'
@@ -672,8 +672,8 @@ export default function SupplyChainCourse() {
     ],
     'chapter6': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 501,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 2001,
         type: 'single' as const,
         question: `供应链数据分析项目实战问题 ${i + 1}：供应链数据分析项目的第一步是？`,
         options: [
@@ -686,10 +686,10 @@ export default function SupplyChainCourse() {
         explanation: '供应链数据分析项目的第一步是需求分析，明确要解决的业务问题和目标。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 551,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 2201,
         type: 'multiple' as const,
-        question: `供应链数据分析项目实战问题 ${i + 51}：供应链数据分析项目的阶段包括哪些？`,
+        question: `供应链数据分析项目实战问题 ${i + 201}：供应链数据分析项目的阶段包括哪些？`,
         options: [
           '需求分析',
           '数据采集与预处理',
@@ -700,10 +700,10 @@ export default function SupplyChainCourse() {
         explanation: '供应链数据分析项目的阶段包括需求分析、数据采集与预处理、数据分析方案设计、数据分析实现、项目展示与评估。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 581,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 2321,
         type: 'judgment' as const,
-        question: `供应链数据分析项目实战问题 ${i + 81}：项目展示只需要展示分析结果，不需要展示分析过程。`,
+        question: `供应链数据分析项目实战问题 ${i + 321}：项目展示只需要展示分析结果，不需要展示分析过程。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '项目展示不仅需要展示分析结果，还需要展示分析过程，以便 stakeholders 理解结果的来源和可靠性。'
