@@ -1443,30 +1443,53 @@ export default function DatabaseCourse() {
             </div>
           )}
           
-          {activeTab === 'exercises' && (
+          {activeTab === 'exercises' && !activeChapter && (
             <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-              <h3 className="text-2xl font-semibold text-gray-100 mb-6">练习测试</h3>
-              <div className="space-y-6">
-                {exercises.map((exercise) => (
-                  <div key={exercise.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
-                    <h4 className="font-medium text-gray-100 mb-3">{exercise.text}</h4>
-                    <div className="space-y-2 mb-4">
-                      {exercise.options.map((option, index) => (
-                        <div key={index} className="flex items-center">
-                          <div className="w-5 h-5 rounded-full border border-gray-600 flex items-center justify-center mr-3">
-                            <span className="text-xs text-gray-400">{String.fromCharCode(65 + index)}</span>
-                          </div>
-                          <span className="text-gray-300">{option}</span>
+              <h3 className="text-2xl font-semibold text-gray-100 mb-6">章节练习测试</h3>
+              <p className="text-gray-400 mb-8">选择章节进行测试，每次测试包含30道题目（单选、多选、判断）</p>
+              <div className="space-y-4">
+                {progressItems.map((item) => (
+                  <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                    <div className="flex items-center justify-between cursor-pointer" onClick={() => {
+                      setActiveChapter(item.id);
+                      setActiveChapterMode('exercise');
+                    }}>
+                      <div className="flex items-center">
+                        <div className="w-10 h-10 bg-blue-900/50 rounded-lg flex items-center justify-center mr-4">
+                          <span className="text-blue-400 text-xl">📝</span>
                         </div>
-                      ))}
-                    </div>
-                    <div className="pt-3 border-t border-gray-700">
-                      <p className="text-sm text-blue-400">正确答案: {String.fromCharCode(65 + exercise.correctAnswer)}</p>
-                      <p className="text-sm text-gray-400 mt-2">{exercise.explanation}</p>
+                        <h4 className="font-medium text-gray-300">
+                          {item.title}
+                        </h4>
+                      </div>
+                      <span className="text-gray-400 text-sm">
+                        400题题库
+                      </span>
                     </div>
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+          {activeTab === 'exercises' && activeChapter && activeChapterMode === 'exercise' && (
+            <div>
+              <div className="flex items-center mb-4">
+                <button
+                  onClick={() => setActiveChapter(null)}
+                  className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                >
+                  <span className="mr-2">←</span> 返回章节列表
+                </button>
+              </div>
+              <ChapterExercise
+                chapterId={activeChapter}
+                chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
+                questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
+                questionCount={30}
+                onComplete={(score, total) => {
+                  console.log(`练习完成，得分：${score}/${total}`);
+                }}
+              />
             </div>
           )}
         </div>
