@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface Question {
   id: number;
@@ -25,24 +25,30 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState<(number | number[])[]>([]);
   const [randomQuestions, setRandomQuestions] = useState<Question[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // 初始化时随机抽取题目
+  // 只在组件挂载时随机抽取题目
   useEffect(() => {
-    const shuffled = [...questions].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, questionCount);
-    setRandomQuestions(selected);
-  }, [questions, questionCount]);
+    if (questions.length > 0) {
+      const shuffled = [...questions].sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, questionCount);
+      setRandomQuestions(selected);
+      setIsLoading(false);
+    }
+  }, []);
 
   // 重置状态当题目索引变化时
   useEffect(() => {
-    setSelectedAnswer(null);
-    setShowAnswer(false);
-  }, [currentQuestionIndex]);
+    if (!isLoading) {
+      setSelectedAnswer(null);
+      setShowAnswer(false);
+    }
+  }, [currentQuestionIndex, isLoading]);
 
   const currentQuestion = randomQuestions[currentQuestionIndex];
 
-  // 确保currentQuestion存在
-  if (!currentQuestion) {
+  // 确保currentQuestion存在且加载完成
+  if (isLoading || !currentQuestion) {
     return (
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 flex items-center justify-center">
         <p className="text-gray-400">正在加载题目...</p>
@@ -50,7 +56,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
     );
   }
 
-  const handleAnswerSelect = (index: number) => {
+  const handleAnswerSelect = useCallback((index: number) => {
     if (!showAnswer) {
       if (currentQuestion.type === 'multiple') {
         if (selectedAnswer === null) {
@@ -66,16 +72,16 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
         setSelectedAnswer(index);
       }
     }
-  };
+  }, [currentQuestion.type, selectedAnswer, showAnswer]);
 
-  const handleCheckAnswer = () => {
+  const handleCheckAnswer = useCallback(() => {
     if (selectedAnswer !== null) {
       setShowAnswer(true);
     }
-  };
+  }, [selectedAnswer]);
 
-  const handleNext = () => {
-    if (selectedAnswer !== null) {
+  const handleNext = useCallback(() => {
+    if (selectedAnswer !== null && showAnswer) {
       let isCorrect = false;
       if (currentQuestion.type === 'multiple') {
         if (Array.isArray(selectedAnswer) && Array.isArray(currentQuestion.correctAnswer)) {
@@ -88,6 +94,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
       } else {
         isCorrect = selectedAnswer === currentQuestion.correctAnswer;
       }
+      
       if (isCorrect) {
         setScore(prevScore => prevScore + 1);
       }
@@ -100,9 +107,9 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
         onComplete(score + (isCorrect ? 1 : 0), randomQuestions.length);
       }
     }
-  };
+  }, [selectedAnswer, showAnswer, currentQuestion, currentQuestionIndex, randomQuestions.length, score, onComplete]);
 
-  const handleRestart = () => {
+  const handleRestart = useCallback(() => {
     // 重新随机抽取题目
     const shuffled = [...questions].sort(() => 0.5 - Math.random());
     const selected = shuffled.slice(0, questionCount);
@@ -115,7 +122,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
     setShowResult(false);
     setScore(0);
     setAnswers([]);
-  };
+  }, [questions, questionCount]);
 
   if (showResult) {
     return (
@@ -172,7 +179,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
                         q.options[userAnswer as number] || ''
                       )}
                     </span>
-                    {userAnswer !== null && !isCorrect && (
+                    {userAnswer !== null && (
                       <span className="ml-4 text-green-400">
                         正确答案: {q.type === 'multiple' && Array.isArray(q.correctAnswer) ? (
                           q.correctAnswer.map(ans => q.options[ans]).join(', ')
