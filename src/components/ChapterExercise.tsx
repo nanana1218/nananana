@@ -21,6 +21,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | number[] | null>(null);
   const [showResult, setShowResult] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState<(number | number[])[]>([]);
   const [randomQuestions, setRandomQuestions] = useState<Question[]>([]);
@@ -31,6 +32,12 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
     const selected = shuffled.slice(0, questionCount);
     setRandomQuestions(selected);
   }, [questions, questionCount]);
+
+  // 重置状态当题目索引变化时
+  useEffect(() => {
+    setSelectedAnswer(null);
+    setShowAnswer(false);
+  }, [currentQuestionIndex]);
 
   const currentQuestion = randomQuestions[currentQuestionIndex];
 
@@ -44,18 +51,26 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
   }
 
   const handleAnswerSelect = (index: number) => {
-    if (currentQuestion.type === 'multiple') {
-      if (selectedAnswer === null) {
-        setSelectedAnswer([index]);
-      } else if (Array.isArray(selectedAnswer)) {
-        if (selectedAnswer.includes(index)) {
-          setSelectedAnswer(selectedAnswer.filter(i => i !== index));
-        } else {
-          setSelectedAnswer([...selectedAnswer, index]);
+    if (!showAnswer) {
+      if (currentQuestion.type === 'multiple') {
+        if (selectedAnswer === null) {
+          setSelectedAnswer([index]);
+        } else if (Array.isArray(selectedAnswer)) {
+          if (selectedAnswer.includes(index)) {
+            setSelectedAnswer(selectedAnswer.filter(i => i !== index));
+          } else {
+            setSelectedAnswer([...selectedAnswer, index]);
+          }
         }
+      } else {
+        setSelectedAnswer(index);
       }
-    } else {
-      setSelectedAnswer(index);
+    }
+  };
+
+  const handleCheckAnswer = () => {
+    if (selectedAnswer !== null) {
+      setShowAnswer(true);
     }
   };
 
@@ -80,7 +95,6 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
       
       if (currentQuestionIndex < randomQuestions.length - 1) {
         setCurrentQuestionIndex(prev => prev + 1);
-        setSelectedAnswer(null);
       } else {
         setShowResult(true);
         onComplete(score + (isCorrect ? 1 : 0), randomQuestions.length);
@@ -97,6 +111,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
     // 重置状态
     setCurrentQuestionIndex(0);
     setSelectedAnswer(null);
+    setShowAnswer(false);
     setShowResult(false);
     setScore(0);
     setAnswers([]);
@@ -105,7 +120,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
   if (showResult) {
     return (
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-        <h3 className="text-2xl font-semibold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+        <h3 className="text-2xl font-semibold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
           {chapterTitle} - 练习结果
         </h3>
         <div className="text-center mb-8">
@@ -195,6 +210,23 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
     );
   }
 
+  // 检查答案是否正确
+  const isCorrect = () => {
+    if (selectedAnswer === null) return false;
+    if (currentQuestion.type === 'multiple') {
+      if (Array.isArray(selectedAnswer) && Array.isArray(currentQuestion.correctAnswer)) {
+        return selectedAnswer.length === currentQuestion.correctAnswer.length && 
+               selectedAnswer.every(ans => {
+                 const correctAnswers = currentQuestion.correctAnswer as number[];
+                 return correctAnswers.includes(ans);
+               });
+      }
+    } else {
+      return selectedAnswer === currentQuestion.correctAnswer;
+    }
+    return false;
+  };
+
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
       <div className="flex justify-between items-center mb-6">
@@ -219,49 +251,142 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
           </span>
         </div>
         <div className="space-y-3">
-          {currentQuestion.options.map((option, index) => (
-            <div
-              key={index}
-              className={`p-4 rounded-lg border cursor-pointer transition-all duration-300 ${
-                (currentQuestion.type === 'multiple' && Array.isArray(selectedAnswer) && selectedAnswer.includes(index)) ||
-                (currentQuestion.type !== 'multiple' && selectedAnswer === index)
-                  ? 'border-blue-500 bg-blue-500/10'
-                  : 'border-gray-700 hover:border-blue-700/50'
-              }`}
-              onClick={() => handleAnswerSelect(index)}
-            >
-              <div className="flex items-center">
-                <span className={`w-6 h-6 ${currentQuestion.type === 'multiple' ? 'rounded' : 'rounded-full'} border flex items-center justify-center mr-3 ${
-                  (currentQuestion.type === 'multiple' && Array.isArray(selectedAnswer) && selectedAnswer.includes(index)) ||
-                  (currentQuestion.type !== 'multiple' && selectedAnswer === index)
-                    ? 'border-blue-500 bg-blue-500 text-white'
-                    : 'border-gray-600'
-                }`}>
-                  {currentQuestion.type === 'multiple' ? (
-                    Array.isArray(selectedAnswer) && selectedAnswer.includes(index) ? '✓' : ''
+          {currentQuestion.options.map((option, index) => {
+            // 检查是否是正确答案
+            const isOptionCorrect = () => {
+              if (currentQuestion.type === 'multiple') {
+                if (Array.isArray(currentQuestion.correctAnswer)) {
+                  return currentQuestion.correctAnswer.includes(index);
+                }
+              } else {
+                return currentQuestion.correctAnswer === index;
+              }
+              return false;
+            };
+
+            // 检查是否是用户选择的答案
+            const isSelected = () => {
+              if (currentQuestion.type === 'multiple') {
+                return Array.isArray(selectedAnswer) && selectedAnswer.includes(index);
+              } else {
+                return selectedAnswer === index;
+              }
+            };
+
+            return (
+              <div
+                key={index}
+                className={`p-4 rounded-lg border transition-all duration-300 ${
+                  showAnswer ? (
+                    isOptionCorrect() 
+                      ? 'border-green-500 bg-green-500/10'
+                      : isSelected() && !isOptionCorrect()
+                        ? 'border-red-500 bg-red-500/10'
+                        : 'border-gray-700'
                   ) : (
-                    String.fromCharCode(65 + index)
-                  )}
-                </span>
-                <span className={`${
-                  (currentQuestion.type === 'multiple' && Array.isArray(selectedAnswer) && selectedAnswer.includes(index)) ||
-                  (currentQuestion.type !== 'multiple' && selectedAnswer === index)
-                    ? 'text-blue-300'
-                    : 'text-gray-300'
+                    isSelected()
+                      ? 'border-blue-500 bg-blue-500/10'
+                      : 'border-gray-700 hover:border-blue-700/50 cursor-pointer'
+                  )
+                }`}
+                onClick={() => handleAnswerSelect(index)}
+              >
+                <div className="flex items-center">
+                  <span className={`w-6 h-6 ${currentQuestion.type === 'multiple' ? 'rounded' : 'rounded-full'} border flex items-center justify-center mr-3 ${
+                    showAnswer ? (
+                      isOptionCorrect()
+                        ? 'border-green-500 bg-green-500 text-white'
+                        : isSelected() && !isOptionCorrect()
+                          ? 'border-red-500 bg-red-500 text-white'
+                          : 'border-gray-600'
+                    ) : (
+                      isSelected()
+                        ? 'border-blue-500 bg-blue-500 text-white'
+                        : 'border-gray-600'
+                    )
+                  }`}>
+                    {showAnswer ? (
+                      isOptionCorrect() ? '✓' : isSelected() && !isOptionCorrect() ? '✗' : ''
+                    ) : (
+                      currentQuestion.type === 'multiple' ? (
+                        isSelected() ? '✓' : ''
+                      ) : (
+                        String.fromCharCode(65 + index)
+                      )
+                    )}
+                  </span>
+                  <span className={`${
+                    showAnswer ? (
+                      isOptionCorrect()
+                        ? 'text-green-400'
+                        : isSelected() && !isOptionCorrect()
+                          ? 'text-red-400'
+                          : 'text-gray-300'
+                    ) : (
+                      isSelected()
+                        ? 'text-blue-300'
+                        : 'text-gray-300'
+                    )
+                  }`}>
+                    {option}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        
+        {/* 显示答案和解析 */}
+        {showAnswer && (
+          <div className="mt-4 p-4 bg-gray-700/50 rounded-lg">
+            <div className="flex items-center mb-2">
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${
+                isCorrect() ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+              }`}>
+                {isCorrect() ? '✓' : '✗'}
+              </span>
+              <div>
+                <span className={`font-medium ${
+                  isCorrect() ? 'text-green-400' : 'text-red-400'
                 }`}>
-                  {option}
+                  {isCorrect() ? '回答正确！' : '回答错误！'}
+                </span>
+                <span className="ml-4 text-green-400">
+                  正确答案: {currentQuestion.type === 'multiple' && Array.isArray(currentQuestion.correctAnswer) ? (
+                    currentQuestion.correctAnswer.map(ans => currentQuestion.options[ans]).join(', ')
+                  ) : (
+                    currentQuestion.options[currentQuestion.correctAnswer as number]
+                  )}
                 </span>
               </div>
             </div>
-          ))}
-        </div>
+            {currentQuestion.explanation && (
+              <div className="mt-2 text-gray-300">
+                <strong>解析:</strong> {currentQuestion.explanation}
+              </div>
+            )}
+          </div>
+        )}
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-end space-x-4">
+        {!showAnswer && (
+          <button
+            onClick={handleCheckAnswer}
+            disabled={selectedAnswer === null}
+            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+              selectedAnswer === null
+                ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
+          >
+            检查答案
+          </button>
+        )}
         <button
           onClick={handleNext}
-          disabled={selectedAnswer === null}
+          disabled={selectedAnswer === null || !showAnswer}
           className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-            selectedAnswer === null
+            selectedAnswer === null || !showAnswer
               ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
               : 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white hover:shadow-lg hover:shadow-blue-500/30'
           }`}
