@@ -34,6 +34,15 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
 
   const currentQuestion = randomQuestions[currentQuestionIndex];
 
+  // 确保currentQuestion存在
+  if (!currentQuestion) {
+    return (
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 flex items-center justify-center">
+        <p className="text-gray-400">正在加载题目...</p>
+      </div>
+    );
+  }
+
   const handleAnswerSelect = (index: number) => {
     if (currentQuestion.type === 'multiple') {
       if (selectedAnswer === null) {
@@ -182,14 +191,6 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
             返回章节
           </button>
         </div>
-      </div>
-    );
-  }
-
-  if (randomQuestions.length === 0) {
-    return (
-      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 flex items-center justify-center">
-        <p className="text-gray-400">正在加载题目...</p>
       </div>
     );
   }
