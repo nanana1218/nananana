@@ -481,7 +481,7 @@ export default function DataCollectionCourse() {
   const chapterQuestions = {
     'chapter1': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
+      ...Array.from({ length: 200 }, (_, i) => ({
         id: i + 1,
         type: 'single' as const,
         question: `数据采集概述问题 ${i + 1}：数据采集的主要目的是什么？`,
@@ -495,10 +495,10 @@ export default function DataCollectionCourse() {
         explanation: '数据采集的主要目的是从各种数据源获取数据，为后续的数据分析和处理做准备。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 51,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 201,
         type: 'multiple' as const,
-        question: `数据采集概述问题 ${i + 51}：下列哪些属于数据采集的方法？`,
+        question: `数据采集概述问题 ${i + 201}：下列哪些属于数据采集的方法？`,
         options: [
           '网络爬虫',
           'API接口',
@@ -509,10 +509,10 @@ export default function DataCollectionCourse() {
         explanation: '网络爬虫、API接口、传感器采集和问卷调查都是常见的数据采集方法。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 81,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 321,
         type: 'judgment' as const,
-        question: `数据采集概述问题 ${i + 81}：数据采集只需要考虑技术因素，不需要考虑伦理和法律问题。`,
+        question: `数据采集概述问题 ${i + 321}：数据采集只需要考虑技术因素，不需要考虑伦理和法律问题。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '数据采集不仅需要考虑技术因素，还需要考虑伦理和法律问题，如用户隐私、数据使用权限等。'
@@ -520,8 +520,8 @@ export default function DataCollectionCourse() {
     ],
     'chapter2': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 101,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 401,
         type: 'single' as const,
         question: `Web数据采集问题 ${i + 1}：下列哪个HTTP方法用于获取资源？`,
         options: [
@@ -534,10 +534,10 @@ export default function DataCollectionCourse() {
         explanation: 'GET方法用于从服务器获取资源，POST方法用于向服务器提交数据，PUT方法用于更新资源，DELETE方法用于删除资源。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 151,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 601,
         type: 'multiple' as const,
-        question: `Web数据采集问题 ${i + 51}：下列哪些是Python中常用的爬虫库？`,
+        question: `Web数据采集问题 ${i + 201}：下列哪些是Python中常用的爬虫库？`,
         options: [
           'Requests',
           'BeautifulSoup',
@@ -548,10 +548,10 @@ export default function DataCollectionCourse() {
         explanation: 'Requests、BeautifulSoup和Scrapy都是Python中常用的爬虫库，Django是一个Web框架，不是爬虫库。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 181,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 721,
         type: 'judgment' as const,
-        question: `Web数据采集问题 ${i + 81}：静态网页的数据直接嵌入在HTML中，更容易采集。`,
+        question: `Web数据采集问题 ${i + 321}：静态网页的数据直接嵌入在HTML中，更容易采集。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: '静态网页的数据直接嵌入在HTML中，不需要执行JavaScript，因此更容易采集。'
@@ -559,8 +559,8 @@ export default function DataCollectionCourse() {
     ],
     'chapter3': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 201,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 801,
         type: 'single' as const,
         question: `API数据采集问题 ${i + 1}：下列哪种API设计风格最流行？`,
         options: [
@@ -573,10 +573,10 @@ export default function DataCollectionCourse() {
         explanation: 'RESTful API是目前最流行的API设计风格，它使用标准的HTTP方法和URL路径来操作资源。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 251,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1001,
         type: 'multiple' as const,
-        question: `API数据采集问题 ${i + 51}：下列哪些属于API认证方式？`,
+        question: `API数据采集问题 ${i + 201}：下列哪些属于API认证方式？`,
         options: [
           'API Key',
           'OAuth 2.0',
@@ -587,10 +587,10 @@ export default function DataCollectionCourse() {
         explanation: 'API Key、OAuth 2.0、JWT和Basic Auth都是常见的API认证方式。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 281,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1121,
         type: 'judgment' as const,
-        question: `API数据采集问题 ${i + 81}：使用API采集数据时，不需要遵守API的使用限制。`,
+        question: `API数据采集问题 ${i + 321}：使用API采集数据时，不需要遵守API的使用限制。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '使用API采集数据时，需要遵守API的使用限制，如请求频率限制、数据使用权限等。'
@@ -598,8 +598,8 @@ export default function DataCollectionCourse() {
     ],
     'chapter4': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 301,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1201,
         type: 'single' as const,
         question: `数据预处理问题 ${i + 1}：下列哪种方法不是处理缺失值的方法？`,
         options: [
@@ -612,10 +612,10 @@ export default function DataCollectionCourse() {
         explanation: '删除、填充和插值都是处理缺失值的方法，加密是数据安全措施，不是处理缺失值的方法。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 351,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1401,
         type: 'multiple' as const,
-        question: `数据预处理问题 ${i + 51}：下列哪些属于数据转换技术？`,
+        question: `数据预处理问题 ${i + 201}：下列哪些属于数据转换技术？`,
         options: [
           '数据类型转换',
           '数据标准化',
@@ -626,10 +626,10 @@ export default function DataCollectionCourse() {
         explanation: '数据类型转换、数据标准化、数据离散化和特征工程都是常见的数据转换技术。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 381,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1521,
         type: 'judgment' as const,
-        question: `数据预处理问题 ${i + 81}：数据预处理是数据分析的重要步骤，可以提高数据分析的准确性。`,
+        question: `数据预处理问题 ${i + 321}：数据预处理是数据分析的重要步骤，可以提高数据分析的准确性。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: '数据预处理是数据分析的重要步骤，通过清洗、转换和集成数据，可以提高数据分析的准确性和可靠性。'
@@ -637,8 +637,8 @@ export default function DataCollectionCourse() {
     ],
     'chapter5': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 401,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1601,
         type: 'single' as const,
         question: `数据存储问题 ${i + 1}：下列哪种存储格式最适合存储结构化数据？`,
         options: [
@@ -651,10 +651,10 @@ export default function DataCollectionCourse() {
         explanation: 'CSV（逗号分隔值）格式最适合存储结构化数据，它是一种简单的表格存储格式，易于处理和分析。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 451,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1801,
         type: 'multiple' as const,
-        question: `数据存储问题 ${i + 51}：下列哪些属于非关系型数据库？`,
+        question: `数据存储问题 ${i + 201}：下列哪些属于非关系型数据库？`,
         options: [
           'MySQL',
           'MongoDB',
@@ -665,10 +665,10 @@ export default function DataCollectionCourse() {
         explanation: 'MongoDB和Redis属于非关系型数据库，MySQL和PostgreSQL属于关系型数据库。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 481,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1921,
         type: 'judgment' as const,
-        question: `数据存储问题 ${i + 81}：数据存储只需要考虑存储容量，不需要考虑数据安全。`,
+        question: `数据存储问题 ${i + 321}：数据存储只需要考虑存储容量，不需要考虑数据安全。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '数据存储不仅需要考虑存储容量，还需要考虑数据安全，如数据加密、访问控制、备份等。'
@@ -676,8 +676,8 @@ export default function DataCollectionCourse() {
     ],
     'chapter6': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 501,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 2001,
         type: 'single' as const,
         question: `数据采集项目实战问题 ${i + 1}：项目需求分析的第一步是什么？`,
         options: [
@@ -690,10 +690,10 @@ export default function DataCollectionCourse() {
         explanation: '项目需求分析的第一步是明确项目目标，只有明确了目标，才能确定数据需求和分析数据源。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 551,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 2201,
         type: 'multiple' as const,
-        question: `数据采集项目实战问题 ${i + 51}：数据采集实现的步骤包括哪些？`,
+        question: `数据采集项目实战问题 ${i + 201}：数据采集实现的步骤包括哪些？`,
         options: [
           '搭建开发环境',
           '实现数据采集代码',
@@ -704,10 +704,10 @@ export default function DataCollectionCourse() {
         explanation: '数据采集实现的步骤包括搭建开发环境、实现数据采集代码、测试数据采集功能和优化采集效率。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 581,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 2321,
         type: 'judgment' as const,
-        question: `数据采集项目实战问题 ${i + 81}：项目展示只需要展示最终结果，不需要展示过程。`,
+        question: `数据采集项目实战问题 ${i + 321}：项目展示只需要展示最终结果，不需要展示过程。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '项目展示不仅需要展示最终结果，还需要展示项目的过程，如数据采集方法、预处理步骤等，这样可以更好地说明项目的价值和可靠性。'

@@ -481,7 +481,7 @@ export default function DataAnalysisCourse() {
   const chapterQuestions = {
     'chapter1': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
+      ...Array.from({ length: 200 }, (_, i) => ({
         id: i + 1,
         type: 'single' as const,
         question: `数据分析基础问题 ${i + 1}：数据分析的主要目的是什么？`,
@@ -495,10 +495,10 @@ export default function DataAnalysisCourse() {
         explanation: '数据分析的主要目的是从数据中提取有价值的信息，为决策提供依据。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 51,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 201,
         type: 'multiple' as const,
-        question: `数据分析基础问题 ${i + 51}：下列哪些属于数据分析的基本流程？`,
+        question: `数据分析基础问题 ${i + 201}：下列哪些属于数据分析的基本流程？`,
         options: [
           '问题定义',
           '数据收集',
@@ -509,10 +509,10 @@ export default function DataAnalysisCourse() {
         explanation: '数据分析的基本流程包括问题定义、数据收集、数据清洗、数据探索、数据分析、结果可视化、结论与建议。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 81,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 321,
         type: 'judgment' as const,
-        question: `数据分析基础问题 ${i + 81}：描述性分析是数据分析的最高层次。`,
+        question: `数据分析基础问题 ${i + 321}：描述性分析是数据分析的最高层次。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '数据分析的层次从低到高依次是：描述性分析、诊断性分析、预测性分析、规范性分析。'
@@ -520,8 +520,8 @@ export default function DataAnalysisCourse() {
     ],
     'chapter2': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 101,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 401,
         type: 'single' as const,
         question: `数据可视化问题 ${i + 1}：下列哪个库是Python中最常用的数据可视化库？`,
         options: [
@@ -534,10 +534,10 @@ export default function DataAnalysisCourse() {
         explanation: 'Matplotlib是Python中最常用的数据可视化库。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 151,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 601,
         type: 'multiple' as const,
-        question: `数据可视化问题 ${i + 51}：下列哪些是常用的数据可视化图表类型？`,
+        question: `数据可视化问题 ${i + 201}：下列哪些是常用的数据可视化图表类型？`,
         options: [
           '散点图',
           '直方图',
@@ -548,10 +548,10 @@ export default function DataAnalysisCourse() {
         explanation: '散点图、直方图、箱线图和热力图都是常用的数据可视化图表类型。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 181,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 721,
         type: 'judgment' as const,
-        question: `数据可视化问题 ${i + 81}：数据可视化的主要目的是使数据看起来更美观。`,
+        question: `数据可视化问题 ${i + 321}：数据可视化的主要目的是使数据看起来更美观。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '数据可视化的主要目的是帮助人们更直观地理解数据，发现数据中的模式和趋势。'
@@ -559,8 +559,8 @@ export default function DataAnalysisCourse() {
     ],
     'chapter3': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 201,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 801,
         type: 'single' as const,
         question: `统计分析问题 ${i + 1}：下列哪个指标用于衡量数据的集中趋势？`,
         options: [
@@ -573,10 +573,10 @@ export default function DataAnalysisCourse() {
         explanation: '均值是衡量数据集中趋势的指标，方差、标准差和范围是衡量数据离散程度的指标。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 251,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1001,
         type: 'multiple' as const,
-        question: `统计分析问题 ${i + 51}：下列哪些属于假设检验的类型？`,
+        question: `统计分析问题 ${i + 201}：下列哪些属于假设检验的类型？`,
         options: [
           't检验',
           '卡方检验',
@@ -587,10 +587,10 @@ export default function DataAnalysisCourse() {
         explanation: 't检验、卡方检验、F检验和Z检验都是常见的假设检验类型。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 281,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1121,
         type: 'judgment' as const,
-        question: `统计分析问题 ${i + 81}：相关分析可以确定变量之间的因果关系。`,
+        question: `统计分析问题 ${i + 321}：相关分析可以确定变量之间的因果关系。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '相关分析只能衡量变量之间的线性关系强度，不能确定因果关系。'
@@ -598,8 +598,8 @@ export default function DataAnalysisCourse() {
     ],
     'chapter4': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 301,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1201,
         type: 'single' as const,
         question: `机器学习问题 ${i + 1}：下列哪种学习方式使用标记数据进行训练？`,
         options: [
@@ -612,10 +612,10 @@ export default function DataAnalysisCourse() {
         explanation: '监督学习使用标记数据进行训练，目标是预测未知数据的标签。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 351,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1401,
         type: 'multiple' as const,
-        question: `机器学习问题 ${i + 51}：下列哪些属于监督学习算法？`,
+        question: `机器学习问题 ${i + 201}：下列哪些属于监督学习算法？`,
         options: [
           '线性回归',
           '逻辑回归',
@@ -626,10 +626,10 @@ export default function DataAnalysisCourse() {
         explanation: '线性回归、逻辑回归和决策树属于监督学习算法，K-means聚类属于无监督学习算法。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 381,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1521,
         type: 'judgment' as const,
-        question: `机器学习问题 ${i + 81}：随机森林是由多个决策树组成的集成学习算法。`,
+        question: `机器学习问题 ${i + 321}：随机森林是由多个决策树组成的集成学习算法。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: '随机森林是由多个决策树组成的集成学习算法，通过投票机制提高预测准确性。'
@@ -637,8 +637,8 @@ export default function DataAnalysisCourse() {
     ],
     'chapter5': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 401,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1601,
         type: 'single' as const,
         question: `商务数据分析问题 ${i + 1}：下列哪种分析用于了解客户的购买习惯和偏好？`,
         options: [
@@ -651,10 +651,10 @@ export default function DataAnalysisCourse() {
         explanation: '客户行为分析用于了解客户的购买习惯、偏好和价值。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 451,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1801,
         type: 'multiple' as const,
-        question: `商务数据分析问题 ${i + 51}：下列哪些属于财务数据分析的内容？`,
+        question: `商务数据分析问题 ${i + 201}：下列哪些属于财务数据分析的内容？`,
         options: [
           '财务比率分析',
           '成本分析',
@@ -665,10 +665,10 @@ export default function DataAnalysisCourse() {
         explanation: '财务比率分析、成本分析和盈利能力分析属于财务数据分析的内容，客户流失预测属于客户行为分析的内容。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 481,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1921,
         type: 'judgment' as const,
-        question: `商务数据分析问题 ${i + 81}：销售数据分析可以帮助企业优化销售策略和提高销售业绩。`,
+        question: `商务数据分析问题 ${i + 321}：销售数据分析可以帮助企业优化销售策略和提高销售业绩。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: '销售数据分析用于优化销售策略和提高销售业绩，包括销售趋势分析、产品销售分析、区域销售分析和销售渠道分析。'
@@ -676,8 +676,8 @@ export default function DataAnalysisCourse() {
     ],
     'chapter6': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 501,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 2001,
         type: 'single' as const,
         question: `数据分析项目实战问题 ${i + 1}：数据分析项目的第一步是什么？`,
         options: [
@@ -690,10 +690,10 @@ export default function DataAnalysisCourse() {
         explanation: '数据分析项目的第一步是问题定义，明确分析的目标和问题。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 551,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 2201,
         type: 'multiple' as const,
-        question: `数据分析项目实战问题 ${i + 51}：下列哪些属于数据清洗的内容？`,
+        question: `数据分析项目实战问题 ${i + 201}：下列哪些属于数据清洗的内容？`,
         options: [
           '处理缺失值',
           '处理异常值',
@@ -704,10 +704,10 @@ export default function DataAnalysisCourse() {
         explanation: '数据清洗的内容包括处理缺失值、异常值和重复值，数据可视化属于数据分析的内容。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 581,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 2321,
         type: 'judgment' as const,
-        question: `数据分析项目实战问题 ${i + 81}：数据分析报告只需要包含分析结果，不需要包含分析过程。`,
+        question: `数据分析项目实战问题 ${i + 321}：数据分析报告只需要包含分析结果，不需要包含分析过程。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '数据分析报告应该包含项目背景和目标、数据来源和处理方法、分析过程和结果、结论和建议等内容。'

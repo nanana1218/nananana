@@ -521,7 +521,7 @@ export default function PythonCourse() {
   const chapterQuestions = {
     'chapter1': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
+      ...Array.from({ length: 200 }, (_, i) => ({
         id: i + 1,
         type: 'single' as const,
         question: `Python基础问题 ${i + 1}：关于Python的基本概念，下列说法正确的是？`,
@@ -535,10 +535,10 @@ export default function PythonCourse() {
         explanation: 'Python是一种解释型语言，代码在运行时由解释器逐行执行。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 51,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 201,
         type: 'multiple' as const,
-        question: `Python基础问题 ${i + 51}：下列哪些是Python的基本数据类型？`,
+        question: `Python基础问题 ${i + 201}：下列哪些是Python的基本数据类型？`,
         options: [
           '整数（int）',
           '浮点数（float）',
@@ -549,10 +549,10 @@ export default function PythonCourse() {
         explanation: 'Python的基本数据类型包括整数、浮点数、字符串、布尔值等，数组不是Python的基本数据类型。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 81,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 321,
         type: 'judgment' as const,
-        question: `Python基础问题 ${i + 81}：Python的变量需要声明类型。`,
+        question: `Python基础问题 ${i + 321}：Python的变量需要声明类型。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: 'Python是动态类型语言，变量不需要声明类型，直接赋值即可。'
@@ -560,8 +560,8 @@ export default function PythonCourse() {
     ],
     'chapter2': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 101,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 401,
         type: 'single' as const,
         question: `控制结构问题 ${i + 1}：下列关于Python循环的说法，正确的是？`,
         options: [
@@ -574,10 +574,10 @@ export default function PythonCourse() {
         explanation: 'while循环的条件必须是布尔值，当条件为True时执行循环体。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 151,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 601,
         type: 'multiple' as const,
-        question: `控制结构问题 ${i + 51}：下列哪些是Python的循环控制语句？`,
+        question: `控制结构问题 ${i + 201}：下列哪些是Python的循环控制语句？`,
         options: [
           'break',
           'continue',
@@ -588,10 +588,10 @@ export default function PythonCourse() {
         explanation: 'Python的循环控制语句包括break和continue，return用于从函数返回，pass是一个空语句。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 181,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 721,
         type: 'judgment' as const,
-        question: `控制结构问题 ${i + 81}：Python的for循环只能用于遍历序列。`,
+        question: `控制结构问题 ${i + 321}：Python的for循环只能用于遍历序列。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: 'Python的for循环可以用于遍历任何可迭代对象，不仅仅是序列。'
@@ -599,8 +599,8 @@ export default function PythonCourse() {
     ],
     'chapter3': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 201,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 801,
         type: 'single' as const,
         question: `数据结构问题 ${i + 1}：下列关于Python列表的说法，正确的是？`,
         options: [
@@ -613,10 +613,10 @@ export default function PythonCourse() {
         explanation: 'Python列表是可变的，可以包含不同类型的元素，索引从0开始。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 251,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1001,
         type: 'multiple' as const,
-        question: `数据结构问题 ${i + 51}：下列哪些是Python的内置数据结构？`,
+        question: `数据结构问题 ${i + 201}：下列哪些是Python的内置数据结构？`,
         options: [
           '列表（list）',
           '元组（tuple）',
@@ -627,10 +627,10 @@ export default function PythonCourse() {
         explanation: 'Python的内置数据结构包括列表、元组、字典和集合。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 281,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1121,
         type: 'judgment' as const,
-        question: `数据结构问题 ${i + 81}：Python的字典是有序的。`,
+        question: `数据结构问题 ${i + 321}：Python的字典是有序的。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: 'Python 3.7+中，字典是有序的，按照插入顺序保存键值对。'
@@ -638,8 +638,8 @@ export default function PythonCourse() {
     ],
     'chapter4': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 301,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1201,
         type: 'single' as const,
         question: `函数与模块问题 ${i + 1}：下列关于Python函数的说法，正确的是？`,
         options: [
@@ -652,10 +652,10 @@ export default function PythonCourse() {
         explanation: 'Python函数可以嵌套定义，即在一个函数内部定义另一个函数。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 351,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1401,
         type: 'multiple' as const,
-        question: `函数与模块问题 ${i + 51}：下列哪些是Python函数的参数类型？`,
+        question: `函数与模块问题 ${i + 201}：下列哪些是Python函数的参数类型？`,
         options: [
           '位置参数',
           '默认参数',
@@ -666,10 +666,10 @@ export default function PythonCourse() {
         explanation: 'Python函数的参数类型包括位置参数、默认参数、关键字参数和可变参数。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 381,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1521,
         type: 'judgment' as const,
-        question: `函数与模块问题 ${i + 81}：Python的模块必须放在单独的文件中。`,
+        question: `函数与模块问题 ${i + 321}：Python的模块必须放在单独的文件中。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: 'Python的模块通常放在单独的文件中，但也可以在同一文件中定义多个模块。'
@@ -677,8 +677,8 @@ export default function PythonCourse() {
     ],
     'chapter5': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 401,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1601,
         type: 'single' as const,
         question: `文件操作问题 ${i + 1}：Python中打开文件的函数是？`,
         options: [
@@ -691,10 +691,10 @@ export default function PythonCourse() {
         explanation: 'Python中使用open()函数打开文件。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 451,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1801,
         type: 'multiple' as const,
-        question: `文件操作问题 ${i + 51}：下列哪些是Python文件打开模式？`,
+        question: `文件操作问题 ${i + 201}：下列哪些是Python文件打开模式？`,
         options: [
           'r（读取）',
           'w（写入）',
@@ -705,10 +705,10 @@ export default function PythonCourse() {
         explanation: 'Python文件打开模式包括r（读取）、w（写入）、a（追加）、b（二进制）等。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 481,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1921,
         type: 'judgment' as const,
-        question: `文件操作问题 ${i + 81}：Python的with语句会自动关闭文件。`,
+        question: `文件操作问题 ${i + 321}：Python的with语句会自动关闭文件。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: 'Python的with语句会在退出代码块时自动关闭文件，无需手动调用close()方法。'
@@ -716,8 +716,8 @@ export default function PythonCourse() {
     ],
     'chapter6': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 501,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 2001,
         type: 'single' as const,
         question: `面向对象编程问题 ${i + 1}：Python中定义类的关键字是？`,
         options: [
@@ -730,10 +730,10 @@ export default function PythonCourse() {
         explanation: 'Python中使用class关键字定义类。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 551,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 2201,
         type: 'multiple' as const,
-        question: `面向对象编程问题 ${i + 51}：下列哪些是面向对象编程的核心原则？`,
+        question: `面向对象编程问题 ${i + 201}：下列哪些是面向对象编程的核心原则？`,
         options: [
           '封装',
           '继承',
@@ -744,10 +744,10 @@ export default function PythonCourse() {
         explanation: '面向对象编程的核心原则包括封装、继承、多态和抽象。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 581,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 2321,
         type: 'judgment' as const,
-        question: `面向对象编程问题 ${i + 81}：Python支持多重继承。`,
+        question: `面向对象编程问题 ${i + 321}：Python支持多重继承。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: 'Python支持多重继承，一个类可以继承多个父类。'

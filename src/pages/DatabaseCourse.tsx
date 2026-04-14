@@ -481,7 +481,7 @@ export default function DatabaseCourse() {
   const chapterQuestions = {
     'chapter1': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
+      ...Array.from({ length: 200 }, (_, i) => ({
         id: i + 1,
         type: 'single' as const,
         question: `数据库概述问题 ${i + 1}：数据库的基本特点不包括？`,
@@ -495,10 +495,10 @@ export default function DatabaseCourse() {
         explanation: '数据库的基本特点包括数据结构化、数据共享、数据独立性、数据一致性和数据安全性，数据是可以修改的。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 51,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 201,
         type: 'multiple' as const,
-        question: `数据库概述问题 ${i + 51}：数据库系统的组成包括哪些？`,
+        question: `数据库概述问题 ${i + 201}：数据库系统的组成包括哪些？`,
         options: [
           '数据库（DB）',
           '数据库管理系统（DBMS）',
@@ -509,10 +509,10 @@ export default function DatabaseCourse() {
         explanation: '数据库系统由数据库（DB）、数据库管理系统（DBMS）、应用程序、数据库管理员（DBA）和用户组成。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 81,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 321,
         type: 'judgment' as const,
-        question: `数据库概述问题 ${i + 81}：数据库的发展经历了人工管理、文件系统和数据库系统三个阶段。`,
+        question: `数据库概述问题 ${i + 321}：数据库的发展经历了人工管理、文件系统和数据库系统三个阶段。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: '数据库的发展经历了人工管理阶段、文件系统阶段和数据库系统阶段三个主要阶段。'
@@ -520,8 +520,8 @@ export default function DatabaseCourse() {
     ],
     'chapter2': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 101,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 401,
         type: 'single' as const,
         question: `数据模型问题 ${i + 1}：下列哪个不是数据模型的分类？`,
         options: [
@@ -534,10 +534,10 @@ export default function DatabaseCourse() {
         explanation: '数据模型分为概念模型、逻辑模型和物理模型，实体模型属于概念模型的一种。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 151,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 601,
         type: 'multiple' as const,
-        question: `数据模型问题 ${i + 51}：概念模型的基本概念包括哪些？`,
+        question: `数据模型问题 ${i + 201}：概念模型的基本概念包括哪些？`,
         options: [
           '实体',
           '属性',
@@ -548,10 +548,10 @@ export default function DatabaseCourse() {
         explanation: '概念模型的基本概念包括实体、属性、实体型、实体集和联系。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 181,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 721,
         type: 'judgment' as const,
-        question: `数据模型问题 ${i + 81}：ER模型是一种逻辑模型。`,
+        question: `数据模型问题 ${i + 321}：ER模型是一种逻辑模型。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: 'ER模型是一种概念模型，用于描述现实世界的实体和联系。'
@@ -559,8 +559,8 @@ export default function DatabaseCourse() {
     ],
     'chapter3': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 201,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 801,
         type: 'single' as const,
         question: `关系数据库问题 ${i + 1}：关系数据库中，表中的一行称为？`,
         options: [
@@ -573,10 +573,10 @@ export default function DatabaseCourse() {
         explanation: '关系数据库中，表中的一行称为元组，一列称为属性，属性的取值范围称为域，元组中的一个属性值称为分量。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 251,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1001,
         type: 'multiple' as const,
-        question: `关系数据库问题 ${i + 51}：关系代数的基本操作包括哪些？`,
+        question: `关系数据库问题 ${i + 201}：关系代数的基本操作包括哪些？`,
         options: [
           '选择',
           '投影',
@@ -587,10 +587,10 @@ export default function DatabaseCourse() {
         explanation: '关系代数的基本操作包括选择、投影、连接、笛卡尔积、并、差和交。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 281,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1121,
         type: 'judgment' as const,
-        question: `关系数据库问题 ${i + 81}：3NF要求消除所有函数依赖。`,
+        question: `关系数据库问题 ${i + 321}：3NF要求消除所有函数依赖。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '3NF要求消除传递函数依赖，而不是所有函数依赖。'
@@ -598,8 +598,8 @@ export default function DatabaseCourse() {
     ],
     'chapter4': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 301,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1201,
         type: 'single' as const,
         question: `SQL语言问题 ${i + 1}：用于插入数据的SQL语句是？`,
         options: [
@@ -612,10 +612,10 @@ export default function DatabaseCourse() {
         explanation: 'INSERT语句用于插入数据，SELECT语句用于查询数据，UPDATE语句用于更新数据，DELETE语句用于删除数据。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 351,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1401,
         type: 'multiple' as const,
-        question: `SQL语言问题 ${i + 51}：下列哪些属于DDL语句？`,
+        question: `SQL语言问题 ${i + 201}：下列哪些属于DDL语句？`,
         options: [
           'CREATE',
           'ALTER',
@@ -626,10 +626,10 @@ export default function DatabaseCourse() {
         explanation: 'CREATE、ALTER和DROP属于DDL语句，INSERT属于DML语句。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 381,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1521,
         type: 'judgment' as const,
-        question: `SQL语言问题 ${i + 81}：SQL是一种过程化语言。`,
+        question: `SQL语言问题 ${i + 321}：SQL是一种过程化语言。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: 'SQL是一种非过程化语言，只需要说明做什么，不需要说明怎么做。'
@@ -637,8 +637,8 @@ export default function DatabaseCourse() {
     ],
     'chapter5': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 401,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1601,
         type: 'single' as const,
         question: `数据库设计问题 ${i + 1}：数据库设计的第一步是？`,
         options: [
@@ -651,10 +651,10 @@ export default function DatabaseCourse() {
         explanation: '数据库设计的步骤是：需求分析 → 概念结构设计 → 逻辑结构设计 → 物理结构设计 → 数据库实施 → 数据库运行和维护。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 451,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 1801,
         type: 'multiple' as const,
-        question: `数据库设计问题 ${i + 51}：需求分析的内容包括哪些？`,
+        question: `数据库设计问题 ${i + 201}：需求分析的内容包括哪些？`,
         options: [
           '数据需求',
           '功能需求',
@@ -665,10 +665,10 @@ export default function DatabaseCourse() {
         explanation: '需求分析的内容包括数据需求、功能需求、性能需求和安全需求。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 481,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 1921,
         type: 'judgment' as const,
-        question: `数据库设计问题 ${i + 81}：物理结构设计是设计数据库的逻辑结构。`,
+        question: `数据库设计问题 ${i + 321}：物理结构设计是设计数据库的逻辑结构。`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '物理结构设计是设计数据库的物理存储结构，逻辑结构设计是设计数据库的逻辑结构。'
@@ -676,8 +676,8 @@ export default function DatabaseCourse() {
     ],
     'chapter6': [
       // 单选题
-      ...Array.from({ length: 50 }, (_, i) => ({
-        id: i + 501,
+      ...Array.from({ length: 200 }, (_, i) => ({
+        id: i + 2001,
         type: 'single' as const,
         question: `数据库应用开发问题 ${i + 1}：下列哪个不是常用的数据库连接技术？`,
         options: [
@@ -690,10 +690,10 @@ export default function DatabaseCourse() {
         explanation: 'ODBC、JDBC和ADO.NET都是常用的数据库连接技术，HTML是网页标记语言，不是数据库连接技术。'
       })),
       // 多选题
-      ...Array.from({ length: 30 }, (_, i) => ({
-        id: i + 551,
+      ...Array.from({ length: 120 }, (_, i) => ({
+        id: i + 2201,
         type: 'multiple' as const,
-        question: `数据库应用开发问题 ${i + 51}：常见的数据库应用系统架构包括哪些？`,
+        question: `数据库应用开发问题 ${i + 201}：常见的数据库应用系统架构包括哪些？`,
         options: [
           '单机架构',
           '客户-服务器架构',
@@ -704,10 +704,10 @@ export default function DatabaseCourse() {
         explanation: '常见的数据库应用系统架构包括单机架构、客户-服务器架构、三层架构和多层架构。'
       })),
       // 判断题
-      ...Array.from({ length: 20 }, (_, i) => ({
-        id: i + 581,
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: i + 2321,
         type: 'judgment' as const,
-        question: `数据库应用开发问题 ${i + 81}：ORM框架可以将对象与关系数据库表映射起来。`,
+        question: `数据库应用开发问题 ${i + 321}：ORM框架可以将对象与关系数据库表映射起来。`,
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: 'ORM（Object-Relational Mapping）框架可以将对象与关系数据库表映射起来，简化数据库操作。'
