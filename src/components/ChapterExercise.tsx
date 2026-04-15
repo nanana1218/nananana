@@ -29,33 +29,22 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
 
   // 当questions或questionCount变化时重新抽取题目
   useEffect(() => {
-    let animationFrameId: number;
-    
     if (questions.length > 0) {
       setIsLoading(true);
-      // 优化：使用requestAnimationFrame代替setTimeout，提高性能
-      animationFrameId = requestAnimationFrame(() => {
-        // 优化：使用更高效的洗牌算法
-        const shuffled = [...questions];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        const selected = shuffled.slice(0, questionCount);
-        setRandomQuestions(selected);
-        setIsLoading(false);
-      });
+      
+      // 直接处理，不使用requestAnimationFrame，避免延迟
+      const shuffled = [...questions];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      const selected = shuffled.slice(0, questionCount);
+      setRandomQuestions(selected);
+      setIsLoading(false);
     } else {
       // 如果没有题目，也设置为非加载状态，避免无限加载
       setIsLoading(false);
     }
-    
-    // 清理函数：取消requestAnimationFrame，防止内存泄漏
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-    };
   }, [questions, questionCount]);
 
   // 重置状态当题目索引变化时
@@ -140,17 +129,15 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
     // 重置状态，确保状态更新的顺序正确
     setIsLoading(true);
     
-    // 使用requestAnimationFrame确保状态更新的顺序
-    requestAnimationFrame(() => {
-      setRandomQuestions(selected);
-      setCurrentQuestionIndex(0);
-      setSelectedAnswer(null);
-      setShowAnswer(false);
-      setShowResult(false);
-      setScore(0);
-      setAnswers([]);
-      setIsLoading(false);
-    });
+    // 直接处理，不使用requestAnimationFrame，避免延迟
+    setRandomQuestions(selected);
+    setCurrentQuestionIndex(0);
+    setSelectedAnswer(null);
+    setShowAnswer(false);
+    setShowResult(false);
+    setScore(0);
+    setAnswers([]);
+    setIsLoading(false);
   }, [questions, questionCount]);
 
   const currentQuestion = randomQuestions[currentQuestionIndex];
