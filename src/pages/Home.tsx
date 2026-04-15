@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 
 interface Course {
   id: string;
@@ -12,44 +12,6 @@ interface Course {
 
 export default function Home() {
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number; speed: number; opacity: number }[]>([]);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  useEffect(() => {
-    const createParticles = () => {
-      const newParticles = Array.from({ length: 50 }, (_, i) => ({
-        id: i,
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        size: Math.random() * 2 + 1,
-        speed: Math.random() * 0.5 + 0.1,
-        opacity: Math.random() * 0.5 + 0.1
-      }));
-      setParticles(newParticles);
-    };
-
-    createParticles();
-    const interval = setInterval(() => {
-      setParticles(prev => prev.map(p => ({
-        ...p,
-        y: p.y - p.speed,
-        x: p.x + Math.sin(p.y * 0.01) * 0.5,
-        opacity: p.y < 0 ? 0 : p.opacity
-      })).filter(p => p.y > -50));
-    }, 30);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const courses: Course[] = [
     {
@@ -115,10 +77,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 relative overflow-hidden">
       {/* 背景效果 */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.3),transparent_70%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.2),transparent_70%)]"></div>
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSI+PHBhdGggZD0iTTAgMCBMIDUwIDAgTCA1MCA1MCBMIDAgNTAiIGZpbGw9IiMzYjgyZjYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjxwYXRoIGQ9Ik01MCAwIEwgMTAwIDAgTCAxMDAgNTAgTCA1MCA1MCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PHBhdGggZD0iTTAgNTAiIGQ9Ik01MCA1MCBMIDAgNTAgTCAwIDEwMCBMIDUwIDEwMCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PHBhdGggZD0iTTUwIDUwIEwgMTAwIDUwIEwgMTAwIDEwMCBMIDUwIDEwMCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9nPjwvc3ZnPg==')]"></div>
       
-      {/* 动态网格背景 */}
+      {/* 静态背景效果 */}
       <div className="absolute inset-0 opacity-20">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -126,63 +88,6 @@ export default function Home() {
           </pattern>
           <rect width="100%" height="100%" fill="url(#grid)"/>
         </svg>
-      </div>
-      
-      {/* 电路图案 */}
-      <div className="absolute inset-0 opacity-15">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,50 L200,50 L200,150 L400,150 L400,250 L600,250 L600,350 L800,350 L800,450 L1000,450" stroke="#3b82f6" strokeWidth="1" fill="none"/>
-          <path d="M50,0 L50,200 L150,200 L150,400 L250,400 L250,600 L350,600 L350,800 L450,800 L450,1000" stroke="#3b82f6" strokeWidth="1" fill="none"/>
-          <circle cx="200" cy="50" r="3" fill="#3b82f6" className="animate-pulse"/>
-          <circle cx="200" cy="150" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '0.2s'}}/>
-          <circle cx="400" cy="150" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '0.4s'}}/>
-          <circle cx="400" cy="250" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '0.6s'}}/>
-          <circle cx="600" cy="250" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '0.8s'}}/>
-          <circle cx="600" cy="350" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '1s'}}/>
-          <circle cx="800" cy="350" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '1.2s'}}/>
-          <circle cx="800" cy="450" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '1.4s'}}/>
-          <circle cx="50" cy="200" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '0.3s'}}/>
-          <circle cx="150" cy="200" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '0.5s'}}/>
-          <circle cx="150" cy="400" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '0.7s'}}/>
-          <circle cx="250" cy="400" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '0.9s'}}/>
-          <circle cx="250" cy="600" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '1.1s'}}/>
-          <circle cx="350" cy="600" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '1.3s'}}/>
-          <circle cx="350" cy="800" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '1.5s'}}/>
-          <circle cx="450" cy="800" r="3" fill="#3b82f6" className="animate-pulse" style={{animationDelay: '1.7s'}}/>
-        </svg>
-      </div>
-      
-      {/* 粒子效果 */}
-      {particles.map(particle => (
-        <div
-          key={particle.id}
-          className="absolute rounded-full bg-gradient-to-r from-blue-400 to-cyan-300 animate-pulse"
-          style={{
-            left: `${particle.x}px`,
-            top: `${particle.y}px`,
-            width: `${particle.size}px`,
-            height: `${particle.size}px`,
-            opacity: particle.opacity,
-            boxShadow: '0 0 15px 3px rgba(59, 130, 246, 0.6)',
-            animationDuration: `${Math.random() * 2 + 1}s`
-          }}
-        />
-      ))}
-      
-      {/* 鼠标跟随效果 */}
-      <div 
-        className="absolute w-[800px] h-[800px] rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 filter blur-[250px] opacity-15 pointer-events-none"
-        style={{
-          left: `${mousePosition.x - 400}px`,
-          top: `${mousePosition.y - 400}px`,
-          transition: 'left 0.08s ease, top 0.08s ease'
-        }}
-      ></div>
-      
-      {/* 动态光效 */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-blue-500 filter blur-[150px] opacity-5 animate-pulse" style={{animationDuration: '8s'}}></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-cyan-400 filter blur-[150px] opacity-5 animate-pulse" style={{animationDuration: '10s', animationDelay: '2s'}}></div>
       </div>
 
       {/* 个人信息区 */}
@@ -275,10 +180,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        
-        {/* 装饰线条 */}
-        <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
-        <div className="absolute top-0 left-1/2 h-full w-px bg-gradient-to-b from-transparent via-cyan-500 to-transparent"></div>
       </section>
 
       {/* 课程列表区 */}

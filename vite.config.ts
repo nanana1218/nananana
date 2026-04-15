@@ -15,6 +15,27 @@ export default defineConfig({
         drop_debugger: true,
       },
     },
+    // 优化：代码分割
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // 将课程页面拆分为独立的chunk
+          'courses': [
+            './src/pages/DataAnalysisCourse.tsx',
+            './src/pages/PythonCourse.tsx',
+            './src/pages/FinancialAnalysisCourse.tsx',
+            './src/pages/DataCollectionCourse.tsx',
+            './src/pages/SupplyChainCourse.tsx',
+            './src/pages/DatabaseCourse.tsx'
+          ],
+          // 将组件拆分为独立的chunk
+          'components': [
+            './src/components/ChapterExercise.tsx',
+            './src/components/ChapterContent.tsx'
+          ],
+        },
+      },
+    },
   },
   plugins: [
     react({
