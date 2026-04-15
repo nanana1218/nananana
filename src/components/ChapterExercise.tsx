@@ -87,10 +87,11 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
   }, [randomQuestions, currentQuestionIndex, selectedAnswer, showAnswer]);
 
   const handleCheckAnswer = useCallback(() => {
-    if (selectedAnswer !== null) {
+    const currentQuestion = randomQuestions[currentQuestionIndex];
+    if (selectedAnswer !== null && currentQuestion) {
       setShowAnswer(true);
     }
-  }, [selectedAnswer]);
+  }, [selectedAnswer, randomQuestions, currentQuestionIndex]);
 
   const handleNext = useCallback(() => {
     const currentQuestion = randomQuestions[currentQuestionIndex];
@@ -108,24 +109,24 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
         isCorrect = selectedAnswer === currentQuestion.correctAnswer;
       }
       
-      // 使用函数式更新来获取最新的score值，避免闭包问题
-      setScore(prevScore => {
-        const newScore = prevScore + (isCorrect ? 1 : 0);
-        // 只有在最后一题时才调用onComplete，确保score值是最新的
-        if (currentQuestionIndex >= randomQuestions.length - 1) {
-          setShowResult(true);
-          onComplete(newScore, randomQuestions.length);
-        }
-        return newScore;
-      });
-      
+      // 先更新答案记录
       setAnswers(prev => [...prev, selectedAnswer]);
       
+      // 然后更新分数
+      setScore(prevScore => prevScore + (isCorrect ? 1 : 0));
+      
+      // 最后处理题目切换或完成
       if (currentQuestionIndex < randomQuestions.length - 1) {
+        // 切换到下一题
         setCurrentQuestionIndex(prev => prev + 1);
+      } else {
+        // 完成练习
+        const finalScore = score + (isCorrect ? 1 : 0);
+        setShowResult(true);
+        onComplete(finalScore, randomQuestions.length);
       }
     }
-  }, [selectedAnswer, showAnswer, randomQuestions, currentQuestionIndex, onComplete]);
+  }, [selectedAnswer, showAnswer, randomQuestions, currentQuestionIndex, score, onComplete]);
 
   const handleRestart = useCallback(() => {
     // 重新随机抽取题目（使用更高效的洗牌算法）
@@ -383,7 +384,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
         </div>
         
         {/* 显示答案和解析 */}
-        {showAnswer && (
+        {showAnswer && currentQuestion && (
           <div className="mt-4 p-4 bg-gray-700/50 rounded-lg">
             <div className="flex items-center mb-2">
               <span className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${
