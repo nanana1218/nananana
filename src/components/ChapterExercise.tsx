@@ -27,15 +27,18 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
   const [randomQuestions, setRandomQuestions] = useState<Question[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 只在组件挂载时随机抽取题目
+  // 当questions或questionCount变化时重新抽取题目
   useEffect(() => {
     if (questions.length > 0) {
       const shuffled = [...questions].sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, questionCount);
       setRandomQuestions(selected);
       setIsLoading(false);
+    } else {
+      // 如果没有题目，也设置为非加载状态，避免无限加载
+      setIsLoading(false);
     }
-  }, []);
+  }, [questions, questionCount]);
 
   // 重置状态当题目索引变化时
   useEffect(() => {
@@ -51,7 +54,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
   if (isLoading || !currentQuestion) {
     return (
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 flex items-center justify-center">
-        <p className="text-gray-400">正在加载题目...</p>
+        <p className="text-gray-400">{isLoading ? '正在加载题目...' : '暂无题目数据'}</p>
       </div>
     );
   }
