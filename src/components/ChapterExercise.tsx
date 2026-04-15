@@ -29,19 +29,33 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
 
   // 当questions或questionCount变化时重新抽取题目
   useEffect(() => {
+    let animationFrameId: number;
+    
     if (questions.length > 0) {
       setIsLoading(true);
-      // 使用setTimeout确保状态更新的顺序
-      setTimeout(() => {
-        const shuffled = [...questions].sort(() => 0.5 - Math.random());
+      // 优化：使用requestAnimationFrame代替setTimeout，提高性能
+      animationFrameId = requestAnimationFrame(() => {
+        // 优化：使用更高效的洗牌算法
+        const shuffled = [...questions];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
         const selected = shuffled.slice(0, questionCount);
         setRandomQuestions(selected);
         setIsLoading(false);
-      }, 0);
+      });
     } else {
       // 如果没有题目，也设置为非加载状态，避免无限加载
       setIsLoading(false);
     }
+    
+    // 清理函数：取消requestAnimationFrame，防止内存泄漏
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, [questions, questionCount]);
 
   // 重置状态当题目索引变化时
@@ -94,33 +108,48 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
         isCorrect = selectedAnswer === currentQuestion.correctAnswer;
       }
       
-      if (isCorrect) {
-        setScore(prevScore => prevScore + 1);
-      }
+      // 使用函数式更新来获取最新的score值，避免闭包问题
+      setScore(prevScore => {
+        const newScore = prevScore + (isCorrect ? 1 : 0);
+        // 只有在最后一题时才调用onComplete，确保score值是最新的
+        if (currentQuestionIndex >= randomQuestions.length - 1) {
+          setShowResult(true);
+          onComplete(newScore, randomQuestions.length);
+        }
+        return newScore;
+      });
+      
       setAnswers(prev => [...prev, selectedAnswer]);
       
       if (currentQuestionIndex < randomQuestions.length - 1) {
         setCurrentQuestionIndex(prev => prev + 1);
-      } else {
-        setShowResult(true);
-        onComplete(score + (isCorrect ? 1 : 0), randomQuestions.length);
       }
     }
-  }, [selectedAnswer, showAnswer, randomQuestions, currentQuestionIndex, score, onComplete]);
+  }, [selectedAnswer, showAnswer, randomQuestions, currentQuestionIndex, onComplete]);
 
   const handleRestart = useCallback(() => {
-    // 重新随机抽取题目
-    const shuffled = [...questions].sort(() => 0.5 - Math.random());
+    // 重新随机抽取题目（使用更高效的洗牌算法）
+    const shuffled = [...questions];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
     const selected = shuffled.slice(0, questionCount);
-    setRandomQuestions(selected);
     
-    // 重置状态
-    setCurrentQuestionIndex(0);
-    setSelectedAnswer(null);
-    setShowAnswer(false);
-    setShowResult(false);
-    setScore(0);
-    setAnswers([]);
+    // 重置状态，确保状态更新的顺序正确
+    setIsLoading(true);
+    
+    // 使用requestAnimationFrame确保状态更新的顺序
+    requestAnimationFrame(() => {
+      setRandomQuestions(selected);
+      setCurrentQuestionIndex(0);
+      setSelectedAnswer(null);
+      setShowAnswer(false);
+      setShowResult(false);
+      setScore(0);
+      setAnswers([]);
+      setIsLoading(false);
+    });
   }, [questions, questionCount]);
 
   const currentQuestion = randomQuestions[currentQuestionIndex];
@@ -228,8 +257,8 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
   }
 
   // 检查答案是否正确
-  const isCorrect = () => {
-    if (selectedAnswer === null) return false;
+  const isCorrect = useCallback(() => {
+    if (selectedAnswer === null || !currentQuestion) return false;
     if (currentQuestion.type === 'multiple') {
       if (Array.isArray(selectedAnswer) && Array.isArray(currentQuestion.correctAnswer)) {
         return selectedAnswer.length === currentQuestion.correctAnswer.length && 
@@ -242,7 +271,28 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
       return selectedAnswer === currentQuestion.correctAnswer;
     }
     return false;
-  };
+  }, [selectedAnswer, currentQuestion]);
+
+  // 检查选项是否正确
+  const isOptionCorrect = useCallback((question: Question, index: number) => {
+    if (question.type === 'multiple') {
+      if (Array.isArray(question.correctAnswer)) {
+        return question.correctAnswer.includes(index);
+      }
+    } else {
+      return question.correctAnswer === index;
+    }
+    return false;
+  }, []);
+
+  // 检查选项是否被选中
+  const isSelected = useCallback((question: Question, index: number) => {
+    if (question.type === 'multiple') {
+      return Array.isArray(selectedAnswer) && selectedAnswer.includes(index);
+    } else {
+      return selectedAnswer === index;
+    }
+  }, [selectedAnswer]);
 
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
@@ -269,39 +319,18 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
         </div>
         <div className="space-y-3">
           {currentQuestion.options.map((option, index) => {
-            // 检查是否是正确答案
-            const isOptionCorrect = () => {
-              if (currentQuestion.type === 'multiple') {
-                if (Array.isArray(currentQuestion.correctAnswer)) {
-                  return currentQuestion.correctAnswer.includes(index);
-                }
-              } else {
-                return currentQuestion.correctAnswer === index;
-              }
-              return false;
-            };
-
-            // 检查是否是用户选择的答案
-            const isSelected = () => {
-              if (currentQuestion.type === 'multiple') {
-                return Array.isArray(selectedAnswer) && selectedAnswer.includes(index);
-              } else {
-                return selectedAnswer === index;
-              }
-            };
-
             return (
               <div
                 key={index}
                 className={`p-4 rounded-lg border transition-all duration-300 ${
                   showAnswer ? (
-                    isOptionCorrect() 
+                    isOptionCorrect(currentQuestion, index) 
                       ? 'border-green-500 bg-green-500/10'
-                      : isSelected() && !isOptionCorrect()
+                      : isSelected(currentQuestion, index) && !isOptionCorrect(currentQuestion, index)
                         ? 'border-red-500 bg-red-500/10'
                         : 'border-gray-700'
                   ) : (
-                    isSelected()
+                    isSelected(currentQuestion, index)
                       ? 'border-blue-500 bg-blue-500/10'
                       : 'border-gray-700 hover:border-blue-700/50 cursor-pointer'
                   )
@@ -311,22 +340,22 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
                 <div className="flex items-center">
                   <span className={`w-6 h-6 ${currentQuestion.type === 'multiple' ? 'rounded' : 'rounded-full'} border flex items-center justify-center mr-3 ${
                     showAnswer ? (
-                      isOptionCorrect()
+                      isOptionCorrect(currentQuestion, index)
                         ? 'border-green-500 bg-green-500 text-white'
-                        : isSelected() && !isOptionCorrect()
+                        : isSelected(currentQuestion, index) && !isOptionCorrect(currentQuestion, index)
                           ? 'border-red-500 bg-red-500 text-white'
                           : 'border-gray-600'
                     ) : (
-                      isSelected()
+                      isSelected(currentQuestion, index)
                         ? 'border-blue-500 bg-blue-500 text-white'
                         : 'border-gray-600'
                     )
                   }`}>
                     {showAnswer ? (
-                      isOptionCorrect() ? '✓' : isSelected() && !isOptionCorrect() ? '✗' : ''
+                      isOptionCorrect(currentQuestion, index) ? '✓' : isSelected(currentQuestion, index) && !isOptionCorrect(currentQuestion, index) ? '✗' : ''
                     ) : (
                       currentQuestion.type === 'multiple' ? (
-                        isSelected() ? '✓' : ''
+                        isSelected(currentQuestion, index) ? '✓' : ''
                       ) : (
                         String.fromCharCode(65 + index)
                       )
@@ -334,13 +363,13 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
                   </span>
                   <span className={`${
                     showAnswer ? (
-                      isOptionCorrect()
+                      isOptionCorrect(currentQuestion, index)
                         ? 'text-green-400'
-                        : isSelected() && !isOptionCorrect()
+                        : isSelected(currentQuestion, index) && !isOptionCorrect(currentQuestion, index)
                           ? 'text-red-400'
                           : 'text-gray-300'
                     ) : (
-                      isSelected()
+                      isSelected(currentQuestion, index)
                         ? 'text-blue-300'
                         : 'text-gray-300'
                     )
