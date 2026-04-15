@@ -30,10 +30,14 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
   // 当questions或questionCount变化时重新抽取题目
   useEffect(() => {
     if (questions.length > 0) {
-      const shuffled = [...questions].sort(() => 0.5 - Math.random());
-      const selected = shuffled.slice(0, questionCount);
-      setRandomQuestions(selected);
-      setIsLoading(false);
+      setIsLoading(true);
+      // 使用setTimeout确保状态更新的顺序
+      setTimeout(() => {
+        const shuffled = [...questions].sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, questionCount);
+        setRandomQuestions(selected);
+        setIsLoading(false);
+      }, 0);
     } else {
       // 如果没有题目，也设置为非加载状态，避免无限加载
       setIsLoading(false);
@@ -48,19 +52,10 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
     }
   }, [currentQuestionIndex, isLoading]);
 
-  const currentQuestion = randomQuestions[currentQuestionIndex];
-
-  // 确保currentQuestion存在且加载完成
-  if (isLoading || !currentQuestion) {
-    return (
-      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 flex items-center justify-center">
-        <p className="text-gray-400">{isLoading ? '正在加载题目...' : '暂无题目数据'}</p>
-      </div>
-    );
-  }
-
+  // 移动所有useCallback钩子到组件顶层，确保Hooks顺序一致
   const handleAnswerSelect = useCallback((index: number) => {
-    if (!showAnswer) {
+    const currentQuestion = randomQuestions[currentQuestionIndex];
+    if (!showAnswer && currentQuestion) {
       if (currentQuestion.type === 'multiple') {
         if (selectedAnswer === null) {
           setSelectedAnswer([index]);
@@ -75,7 +70,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
         setSelectedAnswer(index);
       }
     }
-  }, [currentQuestion.type, selectedAnswer, showAnswer]);
+  }, [randomQuestions, currentQuestionIndex, selectedAnswer, showAnswer]);
 
   const handleCheckAnswer = useCallback(() => {
     if (selectedAnswer !== null) {
@@ -84,7 +79,8 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
   }, [selectedAnswer]);
 
   const handleNext = useCallback(() => {
-    if (selectedAnswer !== null && showAnswer) {
+    const currentQuestion = randomQuestions[currentQuestionIndex];
+    if (selectedAnswer !== null && showAnswer && currentQuestion) {
       let isCorrect = false;
       if (currentQuestion.type === 'multiple') {
         if (Array.isArray(selectedAnswer) && Array.isArray(currentQuestion.correctAnswer)) {
@@ -110,7 +106,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
         onComplete(score + (isCorrect ? 1 : 0), randomQuestions.length);
       }
     }
-  }, [selectedAnswer, showAnswer, currentQuestion, currentQuestionIndex, randomQuestions.length, score, onComplete]);
+  }, [selectedAnswer, showAnswer, randomQuestions, currentQuestionIndex, score, onComplete]);
 
   const handleRestart = useCallback(() => {
     // 重新随机抽取题目
@@ -126,6 +122,17 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
     setScore(0);
     setAnswers([]);
   }, [questions, questionCount]);
+
+  const currentQuestion = randomQuestions[currentQuestionIndex];
+
+  // 确保currentQuestion存在且加载完成
+  if (isLoading || !currentQuestion) {
+    return (
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 flex items-center justify-center">
+        <p className="text-gray-400">{isLoading ? '正在加载题目...' : '暂无题目数据'}</p>
+      </div>
+    );
+  }
 
   if (showResult) {
     return (
