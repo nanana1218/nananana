@@ -17,7 +17,11 @@ interface ProgressItem {
   id: string;
   title: string;
   completed: boolean;
-  children?: ProgressItem[];
+  subItems?: {
+    id: string;
+    title: string;
+    completed: boolean;
+  }[];
 }
 
 interface Resource {
@@ -51,7 +55,7 @@ export default function SupplyChainCourse() {
       id: 'chapter1',
       title: '第一章：供应链管理概述',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section1-1', title: '供应链管理的概念与意义', completed: false },
         { id: 'section1-2', title: '供应链管理的发展历程', completed: false },
         { id: 'section1-3', title: '供应链管理的核心流程', completed: false },
@@ -62,7 +66,7 @@ export default function SupplyChainCourse() {
       id: 'chapter2',
       title: '第二章：供应链数据采集与预处理',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section2-1', title: '供应链数据的类型与来源', completed: false },
         { id: 'section2-2', title: '供应链数据采集方法', completed: false },
         { id: 'section2-3', title: '供应链数据质量评估', completed: false },
@@ -74,7 +78,7 @@ export default function SupplyChainCourse() {
       id: 'chapter3',
       title: '第三章：供应链数据分析方法',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section3-1', title: '描述性分析方法', completed: false },
         { id: 'section3-2', title: '预测性分析方法', completed: false },
         { id: 'section3-3', title: '规范性分析方法', completed: false },
@@ -86,7 +90,7 @@ export default function SupplyChainCourse() {
       id: 'chapter4',
       title: '第四章：供应链绩效分析',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section4-1', title: '供应链绩效指标体系', completed: false },
         { id: 'section4-2', title: '供应链绩效评估方法', completed: false },
         { id: 'section4-3', title: '供应链绩效分析工具', completed: false },
@@ -98,7 +102,7 @@ export default function SupplyChainCourse() {
       id: 'chapter5',
       title: '第五章：供应链风险管理',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section5-1', title: '供应链风险的类型与特征', completed: false },
         { id: 'section5-2', title: '供应链风险评估方法', completed: false },
         { id: 'section5-3', title: '供应链风险预测模型', completed: false },
@@ -110,7 +114,7 @@ export default function SupplyChainCourse() {
       id: 'chapter6',
       title: '第六章：供应链数据分析项目实战',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section6-1', title: '项目需求分析', completed: false },
         { id: 'section6-2', title: '数据采集与预处理', completed: false },
         { id: 'section6-3', title: '数据分析方案设计', completed: false },
@@ -1299,14 +1303,14 @@ export default function SupplyChainCourse() {
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-300">总体进度</span>
                     <span className="text-blue-400 font-medium">
-                      {progressItems.reduce((total, item) => total + (item.children?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.children?.length || 0), 0)}
+                      {progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)}
                     </span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-4">
                     <div 
                       className="bg-gradient-to-r from-blue-500 to-cyan-400 h-4 rounded-full transition-all duration-500"
                       style={{ 
-                        width: `${(progressItems.reduce((total, item) => total + (item.children?.filter(sub => sub.completed).length || 0), 0) / progressItems.reduce((total, item) => total + (item.children?.length || 0), 0)) * 100}%` 
+                        width: `${(progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0) / progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)) * 100}%` 
                       }}
                     ></div>
                   </div>
@@ -1314,7 +1318,10 @@ export default function SupplyChainCourse() {
                 <div className="space-y-4">
                   {progressItems.map((item) => (
                     <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
-                      <div className="flex items-center justify-between cursor-pointer" onClick={() => setActiveChapter(item.id)}>
+                      <div className="flex items-center justify-between cursor-pointer" onClick={() => {
+                        setActiveChapter(item.id);
+                        setActiveChapterMode('content');
+                      }}>
                         <div className="flex items-center">
                           <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
                             item.completed
@@ -1328,12 +1335,12 @@ export default function SupplyChainCourse() {
                           </h4>
                         </div>
                         <span className="text-gray-400 text-sm">
-                          {item.children?.filter(sub => sub.completed).length}/{item.children?.length}
+                          {item.subItems?.filter(sub => sub.completed).length}/{item.subItems?.length}
                         </span>
                       </div>
-                      {item.children && (
+                      {item.subItems && (
                         <div className="mt-3 ml-9 space-y-2">
-                          {item.children.map(subItem => (
+                          {item.subItems.map(subItem => (
                             <div key={subItem.id} className="flex items-center">
                               <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-2 ${
                                 subItem.completed

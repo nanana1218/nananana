@@ -17,7 +17,11 @@ interface ProgressItem {
   id: string;
   title: string;
   completed: boolean;
-  children?: ProgressItem[];
+  subItems?: {
+    id: string;
+    title: string;
+    completed: boolean;
+  }[];
 }
 
 interface Resource {
@@ -60,7 +64,7 @@ export default function FinancialAnalysisCourse() {
       id: 'chapter1',
       title: '第一章：财务数据基础',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section1-1', title: '财务数据的概念与类型', completed: false },
         { id: 'section1-2', title: '财务报表的结构与内容', completed: false },
         { id: 'section1-3', title: '财务数据的收集方法', completed: false },
@@ -72,7 +76,7 @@ export default function FinancialAnalysisCourse() {
       id: 'chapter2',
       title: '第二章：财务指标分析',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section2-1', title: '盈利能力指标', completed: false },
         { id: 'section2-2', title: '偿债能力指标', completed: false },
         { id: 'section2-3', title: '运营能力指标', completed: false },
@@ -84,7 +88,7 @@ export default function FinancialAnalysisCourse() {
       id: 'chapter3',
       title: '第三章：财务数据可视化',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section3-1', title: '财务数据可视化的原则', completed: false },
         { id: 'section3-2', title: '常用的财务图表类型', completed: false },
         { id: 'section3-3', title: '使用Python进行财务数据可视化', completed: false },
@@ -96,7 +100,7 @@ export default function FinancialAnalysisCourse() {
       id: 'chapter4',
       title: '第四章：财务预测与预算',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section4-1', title: '财务预测的基本原理', completed: false },
         { id: 'section4-2', title: '时间序列分析在财务预测中的应用', completed: false },
         { id: 'section4-3', title: '回归分析在财务预测中的应用', completed: false },
@@ -108,7 +112,7 @@ export default function FinancialAnalysisCourse() {
       id: 'chapter5',
       title: '第五章：财务风险分析',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section5-1', title: '财务风险的类型与特征', completed: false },
         { id: 'section5-2', title: '财务风险的识别方法', completed: false },
         { id: 'section5-3', title: '财务风险的评估模型', completed: false },
@@ -120,7 +124,7 @@ export default function FinancialAnalysisCourse() {
       id: 'chapter6',
       title: '第六章：财务数据分析实战',
       completed: false,
-      children: [
+      subItems: [
         { id: 'section6-1', title: '财务数据分析的流程', completed: false },
         { id: 'section6-2', title: '财务报表分析案例', completed: false },
         { id: 'section6-3', title: '企业财务状况综合分析', completed: false },
@@ -1309,14 +1313,14 @@ export default function FinancialAnalysisCourse() {
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-gray-300">总体进度</span>
                       <span className="text-green-400 font-medium">
-                        {progressItems.reduce((total, item) => total + (item.children?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.children?.length || 0), 0)}
+                        {progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)}
                       </span>
                     </div>
                     <div className="w-full bg-gray-700 rounded-full h-4">
                       <div 
                         className="bg-gradient-to-r from-green-500 to-emerald-400 h-4 rounded-full transition-all duration-500"
                         style={{ 
-                          width: `${(progressItems.reduce((total, item) => total + (item.children?.filter(sub => sub.completed).length || 0), 0) / progressItems.reduce((total, item) => total + (item.children?.length || 0), 0)) * 100}%` 
+                          width: `${(progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0) / progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)) * 100}%` 
                         }}
                       ></div>
                     </div>
@@ -1324,7 +1328,10 @@ export default function FinancialAnalysisCourse() {
                   <div className="space-y-4">
                     {progressItems.map((item) => (
                       <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-green-500/50 transition-all duration-300">
-                        <div className="flex items-center justify-between cursor-pointer" onClick={() => setActiveChapter(item.id)}>
+                        <div className="flex items-center justify-between cursor-pointer" onClick={() => {
+                          setActiveChapter(item.id);
+                          setActiveChapterMode('content');
+                        }}>
                           <div className="flex items-center">
                             <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
                               item.completed
@@ -1338,12 +1345,12 @@ export default function FinancialAnalysisCourse() {
                             </h4>
                           </div>
                           <span className="text-gray-400 text-sm">
-                            {item.children?.filter(sub => sub.completed).length}/{item.children?.length}
+                            {item.subItems?.filter(sub => sub.completed).length}/{item.subItems?.length}
                           </span>
                         </div>
-                        {item.children && (
+                        {item.subItems && (
                           <div className="mt-3 ml-9 space-y-2">
-                            {item.children.map(subItem => (
+                            {item.subItems.map(subItem => (
                               <div key={subItem.id} className="flex items-center">
                                 <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-2 ${
                                   subItem.completed

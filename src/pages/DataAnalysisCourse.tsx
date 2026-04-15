@@ -1293,7 +1293,10 @@ export default function DataAnalysisCourse() {
                   <div className="space-y-4">
                     {progressItems.map((item) => (
                       <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
-                        <div className="flex items-center justify-between cursor-pointer" onClick={() => setActiveChapter(item.id)}>
+                        <div className="flex items-center justify-between cursor-pointer" onClick={() => {
+                          setActiveChapter(item.id);
+                          setActiveChapterMode('content');
+                        }}>
                           <div className="flex items-center">
                             <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
                               item.completed
