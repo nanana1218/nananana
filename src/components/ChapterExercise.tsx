@@ -40,6 +40,7 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
       }
       const selected = shuffled.slice(0, questionCount);
       setRandomQuestions(selected);
+      setCurrentQuestionIndex(0); // 重置题目索引，避免超出范围
       setIsLoading(false);
     } else {
       // 如果没有题目，也设置为非加载状态，避免无限加载
@@ -102,7 +103,8 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
       setAnswers(prev => [...prev, selectedAnswer]);
       
       // 然后更新分数
-      setScore(prevScore => prevScore + (isCorrect ? 1 : 0));
+      const updatedScore = score + (isCorrect ? 1 : 0);
+      setScore(updatedScore);
       
       // 最后处理题目切换或完成
       if (currentQuestionIndex < randomQuestions.length - 1) {
@@ -110,9 +112,8 @@ export default function ChapterExercise({ chapterId, chapterTitle, questions, qu
         setCurrentQuestionIndex(prev => prev + 1);
       } else {
         // 完成练习
-        const finalScore = score + (isCorrect ? 1 : 0);
         setShowResult(true);
-        onComplete(finalScore, randomQuestions.length);
+        onComplete(updatedScore, randomQuestions.length);
       }
     }
   }, [selectedAnswer, showAnswer, randomQuestions, currentQuestionIndex, score, onComplete]);
