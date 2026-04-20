@@ -2311,6 +2311,7 @@ export default function DataAnalysisCourse() {
   const [executionResult, setExecutionResult] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [randomQuestions, setRandomQuestions] = useState<Question[]>([]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -2567,6 +2568,14 @@ export default function DataAnalysisCourse() {
   };
 
   const goToPhase = (phase: 'learn' | 'practice' | 'test') => {
+    if (phase === 'test') {
+      const project = getCurrentProject();
+      if (project) {
+        // 随机打乱题目顺序
+        const shuffled = [...project.questions].sort(() => Math.random() - 0.5);
+        setRandomQuestions(shuffled);
+      }
+    }
     setLearningState(prev => ({
       ...prev,
       currentPhase: phase
@@ -2609,7 +2618,8 @@ export default function DataAnalysisCourse() {
     if (!project) return;
 
     let correctCount = 0;
-    project.questions.forEach(q => {
+    const questionsToUse = randomQuestions.length > 0 ? randomQuestions : project.questions;
+    questionsToUse.forEach(q => {
       const userAnswer = testAnswers[q.id];
       if (userAnswer !== undefined) {
         if (q.type === 'multiple' && Array.isArray(q.correctAnswer) && Array.isArray(userAnswer)) {
@@ -2623,7 +2633,7 @@ export default function DataAnalysisCourse() {
       }
     });
 
-    const score = Math.round((correctCount / project.questions.length) * 100);
+    const score = Math.round((correctCount / questionsToUse.length) * 100);
     
     setLearningState(prev => ({
       ...prev,
@@ -3168,7 +3178,7 @@ export default function DataAnalysisCourse() {
                     <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
                       <h2 className="text-xl font-semibold mb-4">测试题目</h2>
                       <div className="space-y-6">
-                        {currentProject.questions.map((question) => {
+                        {(randomQuestions.length > 0 ? randomQuestions : currentProject.questions).map((question, index) => {
                           const userAnswer = testAnswers[question.id];
                           const isCorrect = userAnswer !== undefined ? (
                             question.type === 'multiple' && Array.isArray(question.correctAnswer) && Array.isArray(userAnswer)
@@ -3178,7 +3188,7 @@ export default function DataAnalysisCourse() {
 
                           return (
                             <div key={question.id} className={`bg-gray-700/30 rounded-lg p-4 ${showResults ? (isCorrect ? 'border border-green-500/50' : 'border border-red-500/50') : ''}`}>
-                              <p className="text-gray-300 mb-3">{question.id}. {question.question}</p>
+                              <p className="text-gray-300 mb-3">{index + 1}. {question.question}</p>
                               <div className="space-y-2">
                                 {question.options.map((option, i) => (
                                   <label key={i} className="flex items-center gap-3">
