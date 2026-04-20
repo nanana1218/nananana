@@ -2195,71 +2195,192 @@ export default function DataAnalysisCourse() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
-                      <h2 className="text-xl font-semibold mb-4">项目简介</h2>
-                      <p className="text-gray-300 mb-4">{currentProject.description}</p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div className="bg-gray-700/30 rounded-lg p-4">
-                          <h3 className="text-sm font-medium text-gray-400 mb-2">业务场景</h3>
-                          <p className="text-gray-300">{currentProject.businessScenario}</p>
+                    {/* 项目概览卡片 */}
+                    <motion.div 
+                      className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6 overflow-hidden relative"
+                      whileHover={{ scale: 1.01 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {/* 背景渐变 */}
+                      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${currentProject.color}`}></div>
+                      <div className="relative z-10">
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${currentProject.color} flex items-center justify-center shadow-lg shadow-current/30`}>
+                            <span className="text-2xl">{currentProject.icon}</span>
+                          </div>
+                          <div>
+                            <h2 className="text-2xl font-semibold text-gray-100">项目概览</h2>
+                            <p className="text-sm text-gray-400">{currentProject.duration} · {currentProject.difficulty === 'beginner' ? '入门' : currentProject.difficulty === 'intermediate' ? '进阶' : '高级'}</p>
+                          </div>
                         </div>
-                        <div className="bg-gray-700/30 rounded-lg p-4">
-                          <h3 className="text-sm font-medium text-gray-400 mb-2">核心知识点</h3>
-                          <ul className="space-y-2">
-                            {currentProject.coreKnowledge.map((knowledge, i) => (
-                              <li key={i} className="flex items-center gap-2">
-                                <span className="text-blue-400">•</span>
-                                <span className="text-gray-300">{knowledge}</span>
-                              </li>
-                            ))}
-                          </ul>
+                        <p className="text-gray-300 mb-6 leading-relaxed">{currentProject.description}</p>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                          {/* 业务场景 */}
+                          <div className="bg-gray-700/30 rounded-lg p-4 hover:bg-gray-700/40 transition-all">
+                            <div className="flex items-center gap-2 mb-3">
+                              <span className="text-blue-400 text-xl">📋</span>
+                              <h3 className="text-md font-medium text-gray-200">业务场景</h3>
+                            </div>
+                            <p className="text-gray-300 text-sm leading-relaxed">{currentProject.businessScenario}</p>
+                          </div>
+                          
+                          {/* 核心知识点 */}
+                          <div className="bg-gray-700/30 rounded-lg p-4 hover:bg-gray-700/40 transition-all">
+                            <div className="flex items-center gap-2 mb-3">
+                              <span className="text-blue-400 text-xl">💡</span>
+                              <h3 className="text-md font-medium text-gray-200">核心知识点</h3>
+                            </div>
+                            <ul className="space-y-2">
+                              {currentProject.coreKnowledge.map((knowledge, i) => (
+                                <li key={i} className="flex items-start gap-2">
+                                  <span className="text-blue-400 mt-1">•</span>
+                                  <span className="text-gray-300 text-sm">{knowledge}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
 
-                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
-                      <h2 className="text-xl font-semibold mb-4">学习任务</h2>
-                      <ul className="space-y-3">
+                    {/* 学习任务卡片 */}
+                    <motion.div 
+                      className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6"
+                      whileHover={{ scale: 1.01 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="text-blue-400 text-xl">🎯</span>
+                        <h2 className="text-xl font-semibold text-gray-100">学习任务</h2>
+                      </div>
+                      <div className="space-y-4">
                         {currentProject.tasks.map((task, i) => (
-                          <li key={i} className="flex items-start gap-3">
-                            <span className="text-blue-400 font-medium">{i + 1}.</span>
-                            <span className="text-gray-300">{task}</span>
-                          </li>
+                          <motion.div 
+                            key={i} 
+                            className="bg-gray-700/30 rounded-lg p-4 hover:bg-gray-700/40 transition-all"
+                            whileHover={{ x: 5 }}
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${currentProject.color} flex items-center justify-center flex-shrink-0 shadow-md shadow-current/20`}>
+                                <span className="text-sm font-medium text-white">{i + 1}</span>
+                              </div>
+                              <div>
+                                <p className="text-gray-300 mb-2">{task}</p>
+                                {currentProject.taskHints[i] && (
+                                  <div className="bg-gray-600/30 rounded p-3 text-sm">
+                                    <p className="text-blue-300 font-medium mb-1">💡 提示</p>
+                                    <p className="text-gray-300 text-xs leading-relaxed">{currentProject.taskHints[i]}</p>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </motion.div>
                         ))}
-                      </ul>
-                    </div>
+                      </div>
+                    </motion.div>
 
-                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
-                      <h2 className="text-xl font-semibold mb-4">常见陷阱</h2>
-                      <ul className="space-y-3">
+                    {/* 常见陷阱卡片 */}
+                    <motion.div 
+                      className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6"
+                      whileHover={{ scale: 1.01 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="text-red-400 text-xl">⚠️</span>
+                        <h2 className="text-xl font-semibold text-gray-100">常见陷阱</h2>
+                      </div>
+                      <div className="space-y-3">
                         {currentProject.pitfalls.map((pitfall, i) => (
-                          <li key={i} className="flex items-start gap-3">
-                            <span className="text-red-400">⚠️</span>
-                            <span className="text-gray-300">{pitfall}</span>
-                          </li>
+                          <motion.div 
+                            key={i} 
+                            className="bg-gray-700/30 rounded-lg p-4 hover:bg-gray-700/40 transition-all"
+                            whileHover={{ x: 5 }}
+                          >
+                            <div className="flex items-start gap-3">
+                              <span className="text-red-400 mt-1">•</span>
+                              <span className="text-gray-300">{pitfall}</span>
+                            </div>
+                          </motion.div>
                         ))}
-                      </ul>
-                    </div>
+                      </div>
+                    </motion.div>
 
-                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
-                      <h2 className="text-xl font-semibold mb-4">交付物</h2>
-                      <ul className="space-y-2">
+                    {/* 交付物卡片 */}
+                    <motion.div 
+                      className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6"
+                      whileHover={{ scale: 1.01 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="text-green-400 text-xl">📦</span>
+                        <h2 className="text-xl font-semibold text-gray-100">交付物</h2>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {currentProject.deliverables.map((deliverable, i) => (
-                          <li key={i} className="flex items-center gap-2">
+                          <motion.div 
+                            key={i} 
+                            className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all"
+                            whileHover={{ y: -2 }}
+                          >
                             <span className="text-green-400">✅</span>
                             <span className="text-gray-300">{deliverable}</span>
-                          </li>
+                          </motion.div>
                         ))}
-                      </ul>
-                    </div>
+                      </div>
+                    </motion.div>
+
+                    {/* 学习资源卡片 */}
+                    <motion.div 
+                      className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6"
+                      whileHover={{ scale: 1.01 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="text-yellow-400 text-xl">📚</span>
+                        <h2 className="text-xl font-semibold text-gray-100">学习资源</h2>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <motion.div 
+                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all"
+                          whileHover={{ y: -2 }}
+                        >
+                          <span className="text-yellow-400">📖</span>
+                          <span className="text-gray-300">相关文档</span>
+                        </motion.div>
+                        <motion.div 
+                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all"
+                          whileHover={{ y: -2 }}
+                        >
+                          <span className="text-yellow-400">🎥</span>
+                          <span className="text-gray-300">视频教程</span>
+                        </motion.div>
+                        <motion.div 
+                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all"
+                          whileHover={{ y: -2 }}
+                        >
+                          <span className="text-yellow-400">💻</span>
+                          <span className="text-gray-300">代码示例</span>
+                        </motion.div>
+                        <motion.div 
+                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all"
+                          whileHover={{ y: -2 }}
+                        >
+                          <span className="text-yellow-400">🤝</span>
+                          <span className="text-gray-300">社区支持</span>
+                        </motion.div>
+                      </div>
+                    </motion.div>
 
                     <div className="flex justify-end">
-                      <button
+                      <motion.button
                         onClick={markPhaseComplete}
                         className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         完成学习，进入实操
-                      </button>
+                      </motion.button>
                     </div>
                   </motion.div>
                 )}
@@ -2289,7 +2410,10 @@ export default function DataAnalysisCourse() {
                             <span>▶</span>
                             运行代码
                           </button>
-                          <button className="px-4 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-300 text-sm font-medium transition-all">
+                          <button 
+                            onClick={() => setUserCode(currentProject?.id === 1 ? currentProject.codeExample : '')}
+                            className="px-4 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-300 text-sm font-medium transition-all"
+                          >
                             重置代码
                           </button>
                           <button 
