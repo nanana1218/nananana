@@ -60,11 +60,11 @@ const projects: Project[] = [
       '数据标准化并保存处理后的数据'
     ],
     taskHints: [
-      '使用 df = pd.read_csv("user_behavior.csv") 读取数据',
-      '使用 df.fillna() 方法填充缺失值，中位数填充数值型字段',
-      '使用 3σ原则：mean ± 3*std 识别异常值',
-      '使用 pd.qcut() 进行分桶，pd.cut() 进行离散化',
-      '使用 StandardScaler 进行数据标准化'
+      '第一步：导入必要的库，然后使用 df = pd.read_csv("user_behavior.csv") 读取数据',
+      '第二步：使用 df.fillna() 方法填充缺失值，数值型字段用中位数填充，类别型字段用"未知"填充',
+      '第三步：使用 3σ原则（mean ± 3*std）识别并处理异常值，用中位数替换异常值',
+      '第四步：使用 pd.qcut() 对消费金额进行分桶，使用 pd.cut() 对浏览时长进行离散化',
+      '第五步：使用 StandardScaler 对数值型特征进行标准化，保存处理后的数据'
     ],
     pitfalls: [
       '用均值填充含异常值的字段（导致数据失真）',
@@ -187,11 +187,11 @@ print("✅ 数据预处理完成！")`,
       '得出核心结论'
     ],
     taskHints: [
-      '使用 df = pd.read_csv("processed_data.csv") 读取数据',
-      '使用 df[列名列表].describe() 进行描述统计',
-      '使用 df.corr(method="pearson") 计算皮尔逊相关系数',
-      '使用 seaborn 的 heatmap() 绘制相关性热力图',
-      '分析相关系数大于0.7的强相关指标'
+      '第一步：导入必要的库，使用 df = pd.read_csv("processed_data.csv") 读取数据',
+      '第二步：新增营收字段，使用 df[列名列表].describe() 进行描述统计',
+      '第三步：使用 df.corr(method="pearson") 计算皮尔逊相关系数',
+      '第四步：使用 seaborn 的 heatmap() 绘制相关性热力图，添加注释和标题',
+      '第五步：分析相关系数大于0.7的强相关指标，识别多重共线性'
     ],
     pitfalls: [
       '混淆皮尔逊和斯皮尔曼相关系数',
@@ -308,11 +308,11 @@ print(strong_corr.stack())`,
       '给出捆绑销售建议'
     ],
     taskHints: [
-      '使用 pd.read_csv("cart_data.csv") 读取数据',
-      '使用 groupby() 和 unstack() 将数据转换成one-hot编码格式',
-      '使用 apriori() 函数挖掘频繁项集',
-      '使用 association_rules() 函数生成关联规则',
-      '筛选 lift>1 的规则，分析有效关联关系'
+      '第一步：导入必要的库，使用 pd.read_csv("cart_data.csv") 读取购物车数据',
+      '第二步：使用 groupby() 和 unstack() 将数据转换成one-hot编码格式',
+      '第三步：使用 apriori() 函数挖掘频繁项集，设置合适的 min_support 参数',
+      '第四步：使用 association_rules() 函数生成关联规则，设置合适的 min_threshold',
+      '第五步：筛选 lift>1 的规则，分析有效关联关系，给出捆绑销售建议'
     ],
     pitfalls: [
       '支持度设置过高或过低',
@@ -433,11 +433,11 @@ for _, row in rules.head(3).iterrows():
       '给出业务落地建议'
     ],
     taskHints: [
-      '使用 StandardScaler() 进行数据标准化',
-      '用肘部法则确定最佳k值，查看inertia的变化',
-      '使用 KMeans() 进行聚类，设置合适的n_clusters',
-      '使用 PCA() 进行降维，方便可视化聚类结果',
-      '分析每个分群的特征，给出业务建议'
+      '第一步：导入必要的库，读取数据并选择需要的特征',
+      '第二步：使用 StandardScaler() 对数据进行标准化处理',
+      '第三步：使用肘部法则确定最佳k值，查看inertia的变化趋势',
+      '第四步：使用 KMeans() 进行聚类，设置合适的 n_clusters 参数',
+      '第五步：使用 PCA() 进行降维，可视化聚类结果，分析每个分群的特征'
     ],
     pitfalls: [
       '聚类前不标准化数据',
@@ -585,11 +585,11 @@ print("分群2：流失用户 → 推送唤醒优惠券")`,
       '制定具体的运营策略'
     ],
     taskHints: [
-      '使用 pd.read_csv("user_rfm.csv") 读取RFM数据',
-      '使用 pd.qcut() 进行分位数分箱',
-      '注意R指标需要反向打分：最近消费天数越少分数越高',
-      '使用 groupby() 统计各层级的数据',
-      '使用 matplotlib.pyplot 绘制饼图进行可视化'
+      '第一步：导入必要的库，使用 pd.read_csv("user_rfm.csv") 读取RFM数据',
+      '第二步：使用 pd.qcut() 对R、F、M三个指标进行分位数分箱',
+      '第三步：注意R指标需要反向打分：最近消费天数越少分数越高',
+      '第四步：计算RFM总分，定义分层函数并应用到数据中',
+      '第五步：使用 groupby() 统计各层级的数据，绘制饼图进行可视化'
     ],
     pitfalls: [
       'R指标打分错误（没有反向）',
@@ -749,11 +749,11 @@ print("""
       '预测应用'
     ],
     taskHints: [
-      '使用 LinearRegression() 进行一元线性回归建模',
-      '使用 r2_score、mean_absolute_error 评估模型性能',
-      '使用 variance_inflation_factor 计算VIF值检测多重共线性',
-      '删除VIF>10的特征来优化模型',
-      '使用 .coef_ 和 .intercept_ 解读回归系数'
+      '第一步：导入必要的库，读取销量数据并准备特征和目标变量',
+      '第二步：使用 LinearRegression() 进行一元线性回归建模并评估',
+      '第三步：使用 LinearRegression() 进行多元线性回归建模并评估',
+      '第四步：使用 variance_inflation_factor 计算VIF值检测多重共线性',
+      '第五步：删除VIF>10的特征来优化模型，使用 .coef_ 和 .intercept_ 解读回归系数'
     ],
     pitfalls: [
       '忽略多重共线性',
@@ -904,11 +904,11 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
       '对比分析：与多元线性回归模型对比'
     ],
     taskHints: [
-      '使用 train_test_split() 按7:3拆分训练集和测试集',
-      '使用 RandomForestRegressor() 进行随机森林回归建模',
-      '调整 n_estimators 和 max_depth 参数进行调优',
-      '使用 .feature_importances_ 获取特征重要性',
-      '使用 seaborn.barplot 绘制特征重要性图表'
+      '第一步：导入必要的库，读取销量数据并准备特征和目标变量',
+      '第二步：使用 train_test_split() 按7:3拆分训练集和测试集',
+      '第三步：使用 RandomForestRegressor() 进行随机森林回归建模',
+      '第四步：调整 n_estimators 和 max_depth 参数进行调优，找到最佳参数组合',
+      '第五步：使用 .feature_importances_ 获取特征重要性，绘制特征重要性图表'
     ],
     pitfalls: [
       '模型参数设置过于极端',
@@ -1078,11 +1078,11 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
       '结果评估与库存建议'
     ],
     taskHints: [
-      '使用 pd.to_datetime() 转换日期格式',
-      '使用 resample("M") 按月度重采样数据',
-      '使用 rolling(window=3).mean() 计算移动平均',
-      '使用 pivot() 重塑数据并绘制热力图',
-      '使用 ARIMA() 模型进行时序预测'
+      '第一步：导入必要的库，读取时间序列数据并使用 pd.to_datetime() 转换日期格式',
+      '第二步：使用 resample("M") 按月度重采样数据，计算月度总销量',
+      '第三步：使用 rolling(window=3).mean() 计算移动平均，分析销量趋势',
+      '第四步：使用 pivot() 重塑数据并绘制月度销量热力图，识别周期性',
+      '第五步：使用 ARIMA() 模型进行时序预测，预测未来3个月的销量' 
     ],
     pitfalls: [
       '未做日期格式转换',
@@ -1253,11 +1253,11 @@ print(f"建议安全库存量：{forecast_mean * 1.2:.0f}")`,
       '业务处理：针对不同类型异常给出处理建议'
     ],
     taskHints: [
-      '使用 mean ± 3*std 进行3σ原则异常检测',
-      '使用 IQR 进行箱线图异常检测',
-      '使用 IsolationForest() 进行孤立森林异常检测',
-      '注意 contamination 参数设置预期异常比例',
-      '结合多种方法的异常结果，分析异常类型'
+      '第一步：导入必要的库，读取订单数据',
+      '第二步：使用 3σ原则（mean ± 3*std）进行统计异常检测',
+      '第三步：使用 IQR 方法进行箱线图异常检测',
+      '第四步：使用 IsolationForest() 进行孤立森林异常检测，注意设置 contamination 参数',
+      '第五步：结合多种方法的异常结果，分析异常类型并给出业务处理建议' 
     ],
     pitfalls: [
       '将"正常极端值"当作异常值',
@@ -1439,11 +1439,11 @@ print("""
       '输出报告'
     ],
     taskHints: [
-      '整合前期所有项目的数据和分析方法',
-      '复用RFM分层、随机森林、时间序列等方法',
-      '重点关注高价值用户和关键影响因素',
-      '结合多种分析方法的结果，给出综合业务建议',
-      '使用清晰的可视化图表展示核心发现'
+      '第一步：导入必要的库，整合前期所有项目的数据集',
+      '第二步：计算核心业务指标，如总营收、客单价、订单数等',
+      '第三步：复用RFM用户分层方法，分析用户价值分布',
+      '第四步：复用随机森林和时间序列分析方法，分析销量影响因素和趋势',
+      '第五步：结合多种分析方法的结果，给出综合业务建议，生成可视化报告' 
     ],
     pitfalls: [
       '数据整合混乱',
