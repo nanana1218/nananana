@@ -1506,4 +1506,45 @@ export default function DataAnalysisCourse() {
                       <motion.div
                         key={project.id}
                         whileHover={{ scale: 1.02, y: -4 }}
-                        className={`bg-gray-800/50 backdrop-blur-sm rounded-xl border ${isCompleted ? 'border-green-500/50' : 'border-gray-700'} overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow
+                        className={`bg-gray-800/50 backdrop-blur-sm rounded-xl border ${isCompleted ? 'border-green-500/50' : 'border-gray-700'} overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20`}
+                        onClick={() => selectProject(project.id)}
+                      >
+                        <div className={`h-2 bg-gradient-to-r ${project.color}`}></div>
+                        <div className="p-6">
+                          <div className="flex items-start justify-between mb-4">
+                            <span className="text-3xl">{project.icon}</span>
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.difficulty === 'beginner' ? 'bg-green-500/20 text-green-400' : project.difficulty === 'intermediate' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'}`}>
+                              {project.difficulty === 'beginner' ? '入门' : project.difficulty === 'intermediate' ? '进阶' : '高级'}
+                            </span>
+                          </div>
+                          <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                          <p className="text-gray-400 text-sm mb-4">{project.description}</p>
+                          <div className="flex items-center justify-between mb-4">
+                            <span className="text-sm text-gray-400">{project.duration}</span>
+                            {isCompleted && (
+                              <span className="flex items-center text-sm text-green-400">
+                                ✅ 已完成
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex gap-2 mb-4">
+                            {project.coreKnowledge.slice(0, 3).map((knowledge, i) => (
+                              <span key={i} className="px-2 py-1 bg-gray-700/50 rounded-full text-xs text-gray-300">
+                                {knowledge.split('（')[0]}
+                              </span>
+                            ))}
+                          </div>
+                          <button
+                            className="w-full py-2 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg text-sm font-medium transition-all"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              selectProject(project.id);
+                            }}
+                          >
+                            开始学习
+                          </button>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
