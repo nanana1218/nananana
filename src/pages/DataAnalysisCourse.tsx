@@ -1375,7 +1375,7 @@ export default function DataAnalysisCourse() {
       if (userAnswer !== undefined) {
         if (q.type === 'multiple' && Array.isArray(q.correctAnswer) && Array.isArray(userAnswer)) {
           if (userAnswer.length === q.correctAnswer.length && 
-              userAnswer.every(a => q.correctAnswer.includes(a))) {
+              userAnswer.every(a => (q.correctAnswer as number[]).includes(a))) {
             correctCount++;
           }
         } else if (userAnswer === q.correctAnswer) {
@@ -1548,3 +1548,325 @@ export default function DataAnalysisCourse() {
                     );
                   })}
                 </div>
+              </motion.div>
+            ) : (
+              /* 项目详情视图 */
+              <motion.div
+                key="project-detail"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* 阶段导航 */}
+                <div className="flex gap-4 mb-8 border-b border-gray-700/50 pb-4">
+                  <button
+                    onClick={() => goToPhase('learn')}
+                    className={`flex-1 py-3 px-4 rounded-t-lg transition-all ${learningState.currentPhase === 'learn' ? 'bg-gray-700/50 border-b-2 border-blue-500 text-blue-400' : 'bg-gray-800/50 hover:bg-gray-700/30'}`}
+                  >
+                    📚 学习
+                  </button>
+                  <button
+                    onClick={() => goToPhase('practice')}
+                    className={`flex-1 py-3 px-4 rounded-t-lg transition-all ${learningState.currentPhase === 'practice' ? 'bg-gray-700/50 border-b-2 border-blue-500 text-blue-400' : 'bg-gray-800/50 hover:bg-gray-700/30'}`}
+                  >
+                    💻 实操
+                  </button>
+                  <button
+                    onClick={() => goToPhase('test')}
+                    className={`flex-1 py-3 px-4 rounded-t-lg transition-all ${learningState.currentPhase === 'test' ? 'bg-gray-700/50 border-b-2 border-blue-500 text-blue-400' : 'bg-gray-800/50 hover:bg-gray-700/30'}`}
+                  >
+                    📝 测试
+                  </button>
+                </div>
+
+                {/* 学习阶段 */}
+                {learningState.currentPhase === 'learn' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
+                      <h2 className="text-xl font-semibold mb-4">项目简介</h2>
+                      <p className="text-gray-300 mb-4">{currentProject.description}</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div className="bg-gray-700/30 rounded-lg p-4">
+                          <h3 className="text-sm font-medium text-gray-400 mb-2">业务场景</h3>
+                          <p className="text-gray-300">{currentProject.businessScenario}</p>
+                        </div>
+                        <div className="bg-gray-700/30 rounded-lg p-4">
+                          <h3 className="text-sm font-medium text-gray-400 mb-2">核心知识点</h3>
+                          <ul className="space-y-2">
+                            {currentProject.coreKnowledge.map((knowledge, i) => (
+                              <li key={i} className="flex items-center gap-2">
+                                <span className="text-blue-400">•</span>
+                                <span className="text-gray-300">{knowledge}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
+                      <h2 className="text-xl font-semibold mb-4">学习任务</h2>
+                      <ul className="space-y-3">
+                        {currentProject.tasks.map((task, i) => (
+                          <li key={i} className="flex items-start gap-3">
+                            <span className="text-blue-400 font-medium">{i + 1}.</span>
+                            <span className="text-gray-300">{task}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
+                      <h2 className="text-xl font-semibold mb-4">常见陷阱</h2>
+                      <ul className="space-y-3">
+                        {currentProject.pitfalls.map((pitfall, i) => (
+                          <li key={i} className="flex items-start gap-3">
+                            <span className="text-red-400">⚠️</span>
+                            <span className="text-gray-300">{pitfall}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
+                      <h2 className="text-xl font-semibold mb-4">交付物</h2>
+                      <ul className="space-y-2">
+                        {currentProject.deliverables.map((deliverable, i) => (
+                          <li key={i} className="flex items-center gap-2">
+                            <span className="text-green-400">✅</span>
+                            <span className="text-gray-300">{deliverable}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="flex justify-end">
+                      <button
+                        onClick={markPhaseComplete}
+                        className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all"
+                      >
+                        完成学习，进入实操
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 实操阶段 */}
+                {learningState.currentPhase === 'practice' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
+                      <h2 className="text-xl font-semibold mb-4">实操代码</h2>
+                      <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+                        <pre className="text-gray-300 text-sm">{currentProject.codeExample}</pre>
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
+                      <h2 className="text-xl font-semibold mb-4">数据集说明</h2>
+                      <p className="text-gray-300 mb-4">
+                        本项目使用 <code className="bg-gray-700 px-2 py-1 rounded">create_datas.py</code> 生成的数据集，包含真实的业务场景数据。
+                      </p>
+                      <div className="bg-gray-700/30 rounded-lg p-4">
+                        <h3 className="text-sm font-medium text-gray-400 mb-2">数据集文件</h3>
+                        <ul className="space-y-2">
+                          {currentProject.id === 1 && (
+                            <li className="flex items-center gap-2">
+                              <span className="text-blue-400">📄</span>
+                              <span className="text-gray-300">user_behavior.csv</span>
+                            </li>
+                          )}
+                          {currentProject.id === 2 && (
+                            <li className="flex items-center gap-2">
+                              <span className="text-blue-400">📄</span>
+                              <span className="text-gray-300">processed_data.csv</span>
+                            </li>
+                          )}
+                          {currentProject.id === 3 && (
+                            <li className="flex items-center gap-2">
+                              <span className="text-blue-400">📄</span>
+                              <span className="text-gray-300">cart_data.csv</span>
+                            </li>
+                          )}
+                          {currentProject.id === 4 && (
+                            <li className="flex items-center gap-2">
+                              <span className="text-blue-400">📄</span>
+                              <span className="text-gray-300">processed_data.csv</span>
+                            </li>
+                          )}
+                          {currentProject.id === 5 && (
+                            <li className="flex items-center gap-2">
+                              <span className="text-blue-400">📄</span>
+                              <span className="text-gray-300">user_rfm.csv</span>
+                            </li>
+                          )}
+                          {currentProject.id === 6 && (
+                            <li className="flex items-center gap-2">
+                              <span className="text-blue-400">📄</span>
+                              <span className="text-gray-300">sales_data.csv</span>
+                            </li>
+                          )}
+                          {currentProject.id === 7 && (
+                            <li className="flex items-center gap-2">
+                              <span className="text-blue-400">📄</span>
+                              <span className="text-gray-300">sales_data.csv</span>
+                            </li>
+                          )}
+                          {currentProject.id === 8 && (
+                            <li className="flex items-center gap-2">
+                              <span className="text-blue-400">📄</span>
+                              <span className="text-gray-300">time_series_sales.csv</span>
+                            </li>
+                          )}
+                          {currentProject.id === 9 && (
+                            <li className="flex items-center gap-2">
+                              <span className="text-blue-400">📄</span>
+                              <span className="text-gray-300">order_data.csv</span>
+                            </li>
+                          )}
+                          {currentProject.id === 10 && (
+                            <>
+                              <li className="flex items-center gap-2">
+                                <span className="text-blue-400">📄</span>
+                                <span className="text-gray-300">processed_data.csv</span>
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <span className="text-blue-400">📄</span>
+                                <span className="text-gray-300">sales_data.csv</span>
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <span className="text-blue-400">📄</span>
+                                <span className="text-gray-300">time_series_sales.csv</span>
+                              </li>
+                            </>
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end">
+                      <button
+                        onClick={markPhaseComplete}
+                        className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all"
+                      >
+                        完成实操，进入测试
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 测试阶段 */}
+                {learningState.currentPhase === 'test' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
+                      <h2 className="text-xl font-semibold mb-4">测试题目</h2>
+                      <div className="space-y-6">
+                        {currentProject.questions.map((question) => {
+                          const userAnswer = testAnswers[question.id];
+                          const isCorrect = userAnswer !== undefined ? (
+                            question.type === 'multiple' && Array.isArray(question.correctAnswer) && Array.isArray(userAnswer)
+                              ? userAnswer.length === question.correctAnswer.length && userAnswer.every(a => (question.correctAnswer as number[]).includes(a))
+                              : userAnswer === question.correctAnswer
+                          ) : false;
+
+                          return (
+                            <div key={question.id} className={`bg-gray-700/30 rounded-lg p-4 ${showResults ? (isCorrect ? 'border border-green-500/50' : 'border border-red-500/50') : ''}`}>
+                              <p className="text-gray-300 mb-3">{question.id}. {question.question}</p>
+                              <div className="space-y-2">
+                                {question.options.map((option, i) => (
+                                  <label key={i} className="flex items-center gap-3">
+                                    <input
+                                      type={question.type === 'multiple' ? 'checkbox' : 'radio'}
+                                      name={`question-${question.id}`}
+                                      checked={userAnswer === i || (Array.isArray(userAnswer) && userAnswer.includes(i))}
+                                      onChange={() => {
+                                        const answer = question.type === 'multiple' ? 
+                                          (Array.isArray(userAnswer) 
+                                            ? userAnswer.includes(i) 
+                                              ? userAnswer.filter(a => a !== i)
+                                              : [...userAnswer, i]
+                                            : [i])
+                                          : i;
+                                        selectAnswer(question.id, answer);
+                                      }}
+                                      disabled={showResults}
+                                      className="w-4 h-4 text-blue-500"
+                                    />
+                                    <span className={`text-gray-300 ${showResults ? (question.correctAnswer === i || (Array.isArray(question.correctAnswer) && (question.correctAnswer as number[]).includes(i)) ? 'text-green-400' : '') : ''}`}>
+                                      {option}
+                                    </span>
+                                  </label>
+                                ))}
+                              </div>
+                              {showResults && (
+                                <div className="mt-3 p-3 bg-gray-800/50 rounded-lg">
+                                  <p className={`text-sm ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
+                                    {isCorrect ? '✓ 回答正确' : '✗ 回答错误'}
+                                  </p>
+                                  <p className="text-sm text-gray-400 mt-1">{question.explanation}</p>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {!showResults ? (
+                      <div className="flex justify-end">
+                        <button
+                          onClick={submitTest}
+                          className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all"
+                        >
+                          提交答案
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
+                        <h2 className="text-xl font-semibold mb-4">测试结果</h2>
+                        <div className="flex items-center gap-4">
+                          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+                            <span className="text-3xl font-bold text-white">
+                              {learningState.projectProgress[learningState.currentProject!]?.testScore || 0}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="text-gray-300">
+                              {learningState.projectProgress[learningState.currentProject!]?.testScore >= 80 
+                                ? '🎉 测试通过！' 
+                                : '⚠️ 测试未通过，请重新学习相关内容'}
+                            </p>
+                            <p className="text-sm text-gray-400 mt-1">
+                              {learningState.projectProgress[learningState.currentProject!]?.testScore >= 80 
+                                ? '你已经掌握了本项目的核心知识点，可以进入下一个项目。' 
+                                : '建议返回学习阶段，重新复习相关知识点后再进行测试。'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </main>
+    </div>
+  );
+}
