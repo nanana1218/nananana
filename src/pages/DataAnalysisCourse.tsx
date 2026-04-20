@@ -1346,6 +1346,7 @@ export default function DataAnalysisCourse() {
   const [testAnswers, setTestAnswers] = useState<Record<number, number | number[]>>({});
   const [showResults, setShowResults] = useState(false);
   const [showReferenceAnswer, setShowReferenceAnswer] = useState(false);
+  const [userCode, setUserCode] = useState<string>('');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -1357,6 +1358,7 @@ export default function DataAnalysisCourse() {
   }, []);
 
   const selectProject = (projectId: number) => {
+    const project = projects.find(p => p.id === projectId);
     setLearningState(prev => ({
       ...prev,
       currentProject: projectId,
@@ -1365,6 +1367,7 @@ export default function DataAnalysisCourse() {
     setTestAnswers({});
     setShowResults(false);
     setShowReferenceAnswer(false);
+    setUserCode(project?.codeExample || '');
   };
 
   const goToPhase = (phase: 'learn' | 'practice' | 'test') => {
@@ -1769,9 +1772,16 @@ export default function DataAnalysisCourse() {
                             )}
                           </div>
                           <div className="flex-1 bg-gray-900 p-4 overflow-auto">
-                            <pre className="text-gray-300 text-sm font-mono">
-                              {showReferenceAnswer ? currentProject.referenceAnswer : currentProject.codeExample}
-                            </pre>
+                            {showReferenceAnswer ? (
+                              <pre className="text-gray-300 text-sm font-mono">{currentProject.referenceAnswer}</pre>
+                            ) : (
+                              <textarea
+                                value={userCode}
+                                onChange={(e) => setUserCode(e.target.value)}
+                                className="w-full h-full bg-transparent text-gray-300 text-sm font-mono resize-none outline-none"
+                                spellCheck={false}
+                              />
+                            )}
                           </div>
                         </div>
 
