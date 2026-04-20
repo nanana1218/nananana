@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
+import DataAnalysisPlatform from "@/pages/DataAnalysisPlatform";
 import DataAnalysisCourse from "@/pages/DataAnalysisCourse";
 import PythonCourse from "@/pages/PythonCourse";
 import FinancialAnalysisCourse from "@/pages/FinancialAnalysisCourse";
@@ -12,7 +13,8 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/data-analysis" element={<DataAnalysisCourse />} />
+        <Route path="/data-analysis" element={<DataAnalysisPlatform />} />
+        <Route path="/data-analysis-course" element={<DataAnalysisCourse />} />
         <Route path="/python" element={<PythonCourse />} />
         <Route path="/financial-analysis" element={<FinancialAnalysisCourse />} />
         <Route path="/data-collection" element={<DataCollectionCourse />} />

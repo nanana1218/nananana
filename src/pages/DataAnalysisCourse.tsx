@@ -60,11 +60,11 @@ const projects: Project[] = [
       '数据标准化并保存处理后的数据'
     ],
     taskHints: [
-      '第一步：导入必要的库，然后使用 df = pd.read_csv("user_behavior.csv") 读取数据',
+      '第一步：导入 pandas、numpy 和 StandardScaler，然后使用 df = pd.read_csv("user_behavior.csv") 读取数据',
       '第二步：使用 df.fillna() 方法填充缺失值，数值型字段用中位数填充，类别型字段用"未知"填充',
       '第三步：使用 3σ原则（mean ± 3*std）识别并处理异常值，用中位数替换异常值',
       '第四步：使用 pd.qcut() 对消费金额进行分桶，使用 pd.cut() 对浏览时长进行离散化',
-      '第五步：使用 StandardScaler 对数值型特征进行标准化，保存处理后的数据'
+      '第五步：使用 StandardScaler 对数值型特征进行标准化，使用 df.to_csv() 保存处理后的数据'
     ],
     pitfalls: [
       '用均值填充含异常值的字段（导致数据失真）',
@@ -187,8 +187,8 @@ print("✅ 数据预处理完成！")`,
       '得出核心结论'
     ],
     taskHints: [
-      '第一步：导入必要的库，使用 df = pd.read_csv("processed_data.csv") 读取数据',
-      '第二步：新增营收字段，使用 df[列名列表].describe() 进行描述统计',
+      '第一步：导入必要的库，读取预处理后的数据并新增"营收"字段',
+      '第二步：使用 df[列名列表].describe() 进行描述统计，分析数据分布特征',
       '第三步：使用 df.corr(method="pearson") 计算皮尔逊相关系数',
       '第四步：使用 seaborn 的 heatmap() 绘制相关性热力图，添加注释和标题',
       '第五步：分析相关系数大于0.7的强相关指标，识别多重共线性'
@@ -308,7 +308,7 @@ print(strong_corr.stack())`,
       '给出捆绑销售建议'
     ],
     taskHints: [
-      '第一步：导入必要的库，使用 pd.read_csv("cart_data.csv") 读取购物车数据',
+      '第一步：导入必要的库，读取购物车数据',
       '第二步：使用 groupby() 和 unstack() 将数据转换成one-hot编码格式',
       '第三步：使用 apriori() 函数挖掘频繁项集，设置合适的 min_support 参数',
       '第四步：使用 association_rules() 函数生成关联规则，设置合适的 min_threshold',
@@ -585,7 +585,7 @@ print("分群2：流失用户 → 推送唤醒优惠券")`,
       '制定具体的运营策略'
     ],
     taskHints: [
-      '第一步：导入必要的库，使用 pd.read_csv("user_rfm.csv") 读取RFM数据',
+      '第一步：导入必要的库，读取RFM数据',
       '第二步：使用 pd.qcut() 对R、F、M三个指标进行分位数分箱',
       '第三步：注意R指标需要反向打分：最近消费天数越少分数越高',
       '第四步：计算RFM总分，定义分层函数并应用到数据中',
@@ -1700,8 +1700,9 @@ export default function DataAnalysisCourse() {
     setShowReferenceAnswer(false);
     setExecutionResult('');
     setErrorMessage('');
-    // 所有项目默认显示代码框架，让用户在框架基础上填写具体代码
-    setUserCode(project?.codeExample || '');
+    // 只有数据预处理高阶班（id=1）默认显示代码框架，其余项目默认空白，形成学习阶梯
+    setUserCode(project?.id === 1 ? project.codeExample : '');
+
 
   };
 
