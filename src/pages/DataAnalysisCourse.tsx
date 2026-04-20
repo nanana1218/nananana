@@ -3239,28 +3239,47 @@ export default function DataAnalysisCourse() {
                         </button>
                       </div>
                     ) : (
-                      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
-                        <h2 className="text-xl font-semibold mb-4">测试结果</h2>
-                        <div className="flex items-center gap-4">
-                          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
-                            <span className="text-3xl font-bold text-white">
-                              {learningState.projectProgress[learningState.currentProject!]?.testScore || 0}
-                            </span>
-                          </div>
-                          <div>
-                            <p className="text-gray-300">
-                              {learningState.projectProgress[learningState.currentProject!]?.testScore >= 80 
-                                ? '🎉 测试通过！' 
-                                : '⚠️ 测试未通过，请重新学习相关内容'}
-                            </p>
-                            <p className="text-sm text-gray-400 mt-1">
-                              {learningState.projectProgress[learningState.currentProject!]?.testScore >= 80 
-                                ? '你已经掌握了本项目的核心知识点，可以进入下一个项目。' 
-                                : '建议返回学习阶段，重新复习相关知识点后再进行测试。'}
-                            </p>
+                      <>
+                        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
+                          <h2 className="text-xl font-semibold mb-4">测试结果</h2>
+                          <div className="flex items-center gap-4">
+                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+                              <span className="text-3xl font-bold text-white">
+                                {learningState.projectProgress[learningState.currentProject!]?.testScore || 0}
+                              </span>
+                            </div>
+                            <div>
+                              <p className="text-gray-300">
+                                {learningState.projectProgress[learningState.currentProject!]?.testScore >= 80 
+                                  ? '🎉 测试通过！' 
+                                  : '⚠️ 测试未通过，请重新学习相关内容'}
+                              </p>
+                              <p className="text-sm text-gray-400 mt-1">
+                                {learningState.projectProgress[learningState.currentProject!]?.testScore >= 80 
+                                  ? '你已经掌握了本项目的核心知识点，可以进入下一个项目。' 
+                                  : '建议返回学习阶段，重新复习相关知识点后再进行测试。'}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                        <div className="flex justify-end gap-3">
+                          <button
+                            onClick={() => {
+                              setTestAnswers({});
+                              setShowResults(false);
+                              // 重新生成随机题目
+                              const project = getCurrentProject();
+                              if (project) {
+                                const shuffled = [...project.questions].sort(() => Math.random() - 0.5);
+                                setRandomQuestions(shuffled);
+                              }
+                            }}
+                            className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium transition-all"
+                          >
+                            重新测试
+                          </button>
+                        </div>
+                      </>
                     )}
                   </motion.div>
                 )}
