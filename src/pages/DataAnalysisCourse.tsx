@@ -8,9 +8,11 @@ interface Project {
   coreKnowledge: string[];
   businessScenario: string;
   tasks: string[];
+  taskHints: string[];
   pitfalls: string[];
   deliverables: string[];
   codeExample: string;
+  referenceAnswer: string;
   questions: Question[];
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   duration: string;
@@ -56,6 +58,13 @@ const projects: Project[] = [
       '特征处理：消费金额分桶、浏览时长离散化、类别编码',
       '数据标准化并保存处理后的数据'
     ],
+    taskHints: [
+      '使用 df = pd.read_csv("user_behavior.csv") 读取数据',
+      '使用 df.fillna() 方法填充缺失值，中位数填充数值型字段',
+      '使用 3σ原则：mean ± 3*std 识别异常值',
+      '使用 pd.qcut() 进行分桶，pd.cut() 进行离散化',
+      '使用 StandardScaler 进行数据标准化'
+    ],
     pitfalls: [
       '用均值填充含异常值的字段（导致数据失真）',
       '对所有类别字段都做OneHotEncoder（高基数字段导致维度爆炸）',
@@ -71,6 +80,28 @@ const projects: Project[] = [
     icon: '🧹',
     color: 'from-blue-500 to-cyan-400',
     codeExample: `import pandas as pd
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+
+# 1. 读取数据
+df = pd.read_csv("user_behavior.csv")
+
+# 2. 缺失值处理
+# TODO: 填充缺失值
+
+# 3. 异常值处理
+# TODO: 使用3σ原则处理异常值
+
+# 4. 特征处理
+# TODO: 进行特征分桶和离散化
+
+# 5. 数据标准化
+# TODO: 标准化数据
+
+# 6. 保存数据
+# TODO: 保存处理后的数据
+`,
+    referenceAnswer: `import pandas as pd
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 import numpy as np
 
@@ -1314,6 +1345,7 @@ export default function DataAnalysisCourse() {
   
   const [testAnswers, setTestAnswers] = useState<Record<number, number | number[]>>({});
   const [showResults, setShowResults] = useState(false);
+  const [showReferenceAnswer, setShowReferenceAnswer] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -1332,6 +1364,7 @@ export default function DataAnalysisCourse() {
     }));
     setTestAnswers({});
     setShowResults(false);
+    setShowReferenceAnswer(false);
   };
 
   const goToPhase = (phase: 'learn' | 'practice' | 'test') => {
@@ -1355,6 +1388,13 @@ export default function DataAnalysisCourse() {
         }
       }
     }));
+
+    // 自动跳转到下一个阶段
+    if (currentPhase === 'learn') {
+      goToPhase('practice');
+    } else if (currentPhase === 'practice') {
+      goToPhase('test');
+    }
   };
 
   const selectAnswer = (questionId: number, answer: number | number[]) => {
@@ -1665,96 +1705,93 @@ export default function DataAnalysisCourse() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
-                      <h2 className="text-xl font-semibold mb-4">实操代码</h2>
-                      <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-                        <pre className="text-gray-300 text-sm">{currentProject.codeExample}</pre>
+                    <div className="flex flex-col h-[80vh]">
+                      {/* 顶部操作栏 */}
+                      <div className="bg-gray-800/80 backdrop-blur-sm border-b border-gray-700 p-3 flex items-center justify-between">
+                        <button
+                          onClick={resetToProjectList}
+                          className="flex items-center gap-2 px-3 py-1.5 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition-all text-sm"
+                        >
+                          ← 返回项目列表
+                        </button>
+                        <div className="flex gap-2">
+                          <button className="px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded-lg text-white text-sm font-medium transition-all flex items-center gap-1">
+                            <span>▶</span>
+                            运行代码
+                          </button>
+                          <button className="px-4 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-300 text-sm font-medium transition-all">
+                            重置代码
+                          </button>
+                          <button 
+                            onClick={() => setShowReferenceAnswer(!showReferenceAnswer)}
+                            className="px-4 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-300 text-sm font-medium transition-all"
+                          >
+                            {showReferenceAnswer ? '隐藏参考答案' : '显示参考答案'}
+                          </button>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <label className="flex items-center gap-1 text-sm text-gray-400">
+                            <input type="checkbox" className="w-4 h-4 text-blue-500" />
+                            自动保存
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* 主内容区 */}
+                      <div className="flex flex-1 overflow-hidden">
+                        {/* 左侧任务列表 */}
+                        <div className="w-64 bg-gray-800/60 backdrop-blur-sm border-r border-gray-700 p-4 overflow-y-auto">
+                          <h3 className="text-lg font-semibold mb-4 text-gray-200">{currentProject.title}</h3>
+                          <div className="text-sm text-gray-400 mb-2">{currentProject.duration}</div>
+                          <ul className="space-y-3">
+                            {currentProject.tasks.map((task, i) => (
+                              <li key={i} className="bg-gray-700/30 rounded-lg p-3 hover:bg-gray-700/50 transition-all">
+                                <div className="flex items-start gap-2">
+                                  <span className="text-blue-400 font-medium">{i + 1}.</span>
+                                  <div>
+                                    <p className="text-gray-300 text-sm">{task}</p>
+                                    {currentProject.taskHints[i] && (
+                                      <p className="text-xs text-gray-400 mt-1">{currentProject.taskHints[i]}</p>
+                                    )}
+                                  </div>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* 中间代码编辑区 */}
+                        <div className="flex-1 flex flex-col">
+                          <div className="bg-gray-900/80 border-b border-gray-700 px-4 py-2 flex items-center justify-between">
+                            <span className="text-sm text-gray-400">main.py</span>
+                            {showReferenceAnswer && (
+                              <span className="text-xs text-yellow-400 bg-yellow-900/30 px-2 py-1 rounded">参考答案</span>
+                            )}
+                          </div>
+                          <div className="flex-1 bg-gray-900 p-4 overflow-auto">
+                            <pre className="text-gray-300 text-sm font-mono">
+                              {showReferenceAnswer ? currentProject.referenceAnswer : currentProject.codeExample}
+                            </pre>
+                          </div>
+                        </div>
+
+                        {/* 右侧执行结果区 */}
+                        <div className="w-96 bg-gray-800/60 backdrop-blur-sm border-l border-gray-700 flex flex-col">
+                          <div className="bg-gray-700/30 border-b border-gray-700 px-4 py-2 flex items-center">
+                            <span className="text-sm font-medium text-gray-300">执行结果</span>
+                          </div>
+                          <div className="flex-1 bg-gray-900 p-4 overflow-auto">
+                            <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                              <div className="text-4xl mb-4">▶</div>
+                              <p className="text-center">点击"运行代码"按钮来执行</p>
+                              <p className="text-center text-xs mt-2">代码将在终端中运行</p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
-                      <h2 className="text-xl font-semibold mb-4">数据集说明</h2>
-                      <p className="text-gray-300 mb-4">
-                        本项目使用 <code className="bg-gray-700 px-2 py-1 rounded">create_datas.py</code> 生成的数据集，包含真实的业务场景数据。
-                      </p>
-                      <div className="bg-gray-700/30 rounded-lg p-4">
-                        <h3 className="text-sm font-medium text-gray-400 mb-2">数据集文件</h3>
-                        <ul className="space-y-2">
-                          {currentProject.id === 1 && (
-                            <li className="flex items-center gap-2">
-                              <span className="text-blue-400">📄</span>
-                              <span className="text-gray-300">user_behavior.csv</span>
-                            </li>
-                          )}
-                          {currentProject.id === 2 && (
-                            <li className="flex items-center gap-2">
-                              <span className="text-blue-400">📄</span>
-                              <span className="text-gray-300">processed_data.csv</span>
-                            </li>
-                          )}
-                          {currentProject.id === 3 && (
-                            <li className="flex items-center gap-2">
-                              <span className="text-blue-400">📄</span>
-                              <span className="text-gray-300">cart_data.csv</span>
-                            </li>
-                          )}
-                          {currentProject.id === 4 && (
-                            <li className="flex items-center gap-2">
-                              <span className="text-blue-400">📄</span>
-                              <span className="text-gray-300">processed_data.csv</span>
-                            </li>
-                          )}
-                          {currentProject.id === 5 && (
-                            <li className="flex items-center gap-2">
-                              <span className="text-blue-400">📄</span>
-                              <span className="text-gray-300">user_rfm.csv</span>
-                            </li>
-                          )}
-                          {currentProject.id === 6 && (
-                            <li className="flex items-center gap-2">
-                              <span className="text-blue-400">📄</span>
-                              <span className="text-gray-300">sales_data.csv</span>
-                            </li>
-                          )}
-                          {currentProject.id === 7 && (
-                            <li className="flex items-center gap-2">
-                              <span className="text-blue-400">📄</span>
-                              <span className="text-gray-300">sales_data.csv</span>
-                            </li>
-                          )}
-                          {currentProject.id === 8 && (
-                            <li className="flex items-center gap-2">
-                              <span className="text-blue-400">📄</span>
-                              <span className="text-gray-300">time_series_sales.csv</span>
-                            </li>
-                          )}
-                          {currentProject.id === 9 && (
-                            <li className="flex items-center gap-2">
-                              <span className="text-blue-400">📄</span>
-                              <span className="text-gray-300">order_data.csv</span>
-                            </li>
-                          )}
-                          {currentProject.id === 10 && (
-                            <>
-                              <li className="flex items-center gap-2">
-                                <span className="text-blue-400">📄</span>
-                                <span className="text-gray-300">processed_data.csv</span>
-                              </li>
-                              <li className="flex items-center gap-2">
-                                <span className="text-blue-400">📄</span>
-                                <span className="text-gray-300">sales_data.csv</span>
-                              </li>
-                              <li className="flex items-center gap-2">
-                                <span className="text-blue-400">📄</span>
-                                <span className="text-gray-300">time_series_sales.csv</span>
-                              </li>
-                            </>
-                          )}
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-end">
+                    <div className="flex justify-end mt-6">
                       <button
                         onClick={markPhaseComplete}
                         className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all"
