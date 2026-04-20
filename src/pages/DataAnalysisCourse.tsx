@@ -1700,8 +1700,9 @@ export default function DataAnalysisCourse() {
     setShowReferenceAnswer(false);
     setExecutionResult('');
     setErrorMessage('');
-    // 只有数据预处理高阶班（id=1）默认显示代码框架，其余项目默认空白
-    setUserCode(project?.id === 1 ? project.codeExample : '');
+    // 所有项目默认显示代码框架，让用户在框架基础上填写具体代码
+    setUserCode(project?.codeExample || '');
+
   };
 
   const runCode = () => {
@@ -1717,24 +1718,218 @@ export default function DataAnalysisCourse() {
     
     // 模拟代码执行
     setTimeout(() => {
-      // 检查常见错误
-      if (userCode.includes('import pandas as pd') && !userCode.includes('pd.read_csv')) {
-        setErrorMessage('错误：缺少读取数据的代码，请添加 pd.read_csv() 语句');
-        return;
-      }
+      const currentProject = getCurrentProject();
+      if (!currentProject) return;
       
-      if (userCode.includes('df = pd.read_csv') && !userCode.includes('fillna')) {
-        setErrorMessage('错误：缺少缺失值处理的代码，请添加 fillna() 语句');
-        return;
+      // 根据不同项目进行特定的错误检测
+      switch (currentProject.id) {
+        case 1: // 数据预处理高阶班
+          if (!userCode.includes('import pandas as pd')) {
+            setErrorMessage('错误：缺少导入 pandas 库的代码');
+            return;
+          }
+          if (!userCode.includes('pd.read_csv')) {
+            setErrorMessage('错误：缺少读取数据的代码，请添加 pd.read_csv() 语句');
+            return;
+          }
+          if (!userCode.includes('fillna')) {
+            setErrorMessage('错误：缺少缺失值处理的代码，请添加 fillna() 语句');
+            return;
+          }
+          if (!userCode.includes('StandardScaler')) {
+            setErrorMessage('错误：缺少数据标准化的代码，请添加 StandardScaler 相关代码');
+            return;
+          }
+          if (!userCode.includes('to_csv')) {
+            setErrorMessage('错误：缺少保存数据的代码，请添加 to_csv() 语句');
+            return;
+          }
+          setExecutionResult('执行成功！\n\n✅ 数据预处理完成\n✅ 缺失值已处理\n✅ 异常值已检测\n✅ 特征已处理\n✅ 数据已标准化\n✅ 结果已保存');
+          break;
+          
+        case 2: // 多维统计+深度相关性分析
+          if (!userCode.includes('import pandas as pd')) {
+            setErrorMessage('错误：缺少导入 pandas 库的代码');
+            return;
+          }
+          if (!userCode.includes('pd.read_csv')) {
+            setErrorMessage('错误：缺少读取数据的代码，请添加 pd.read_csv() 语句');
+            return;
+          }
+          if (!userCode.includes('describe')) {
+            setErrorMessage('错误：缺少描述统计的代码，请添加 describe() 方法');
+            return;
+          }
+          if (!userCode.includes('corr')) {
+            setErrorMessage('错误：缺少相关性分析的代码，请添加 corr() 方法');
+            return;
+          }
+          if (!userCode.includes('heatmap')) {
+            setErrorMessage('错误：缺少绘制相关性热力图的代码');
+            return;
+          }
+          setExecutionResult('执行成功！\n\n✅ 描述统计完成\n✅ 相关性分析完成\n✅ 热力图绘制完成\n✅ 强相关指标分析完成');
+          break;
+          
+        case 3: // 购物车关联规则挖掘
+          if (!userCode.includes('import pandas as pd')) {
+            setErrorMessage('错误：缺少导入 pandas 库的代码');
+            return;
+          }
+          if (!userCode.includes('apriori')) {
+            setErrorMessage('错误：缺少 Apriori 算法的代码');
+            return;
+          }
+          if (!userCode.includes('association_rules')) {
+            setErrorMessage('错误：缺少生成关联规则的代码');
+            return;
+          }
+          if (!userCode.includes('lift')) {
+            setErrorMessage('错误：缺少筛选提升度的代码');
+            return;
+          }
+          setExecutionResult('执行成功！\n\n✅ 频繁项集挖掘完成\n✅ 关联规则生成完成\n✅ 有效规则筛选完成\n✅ 捆绑销售建议生成完成');
+          break;
+          
+        case 4: // KMeans聚类分析实战
+          if (!userCode.includes('import pandas as pd')) {
+            setErrorMessage('错误：缺少导入 pandas 库的代码');
+            return;
+          }
+          if (!userCode.includes('StandardScaler')) {
+            setErrorMessage('错误：缺少数据标准化的代码');
+            return;
+          }
+          if (!userCode.includes('KMeans')) {
+            setErrorMessage('错误：缺少 KMeans 聚类的代码');
+            return;
+          }
+          if (!userCode.includes('PCA')) {
+            setErrorMessage('错误：缺少 PCA 降维的代码');
+            return;
+          }
+          setExecutionResult('执行成功！\n\n✅ 数据标准化完成\n✅ KMeans聚类完成\n✅ 最佳k值确定\n✅ 聚类结果可视化完成\n✅ 分群特征分析完成');
+          break;
+          
+        case 5: // RFM模型用户分层
+          if (!userCode.includes('import pandas as pd')) {
+            setErrorMessage('错误：缺少导入 pandas 库的代码');
+            return;
+          }
+          if (!userCode.includes('pd.read_csv')) {
+            setErrorMessage('错误：缺少读取数据的代码');
+            return;
+          }
+          if (!userCode.includes('qcut')) {
+            setErrorMessage('错误：缺少分位数分箱的代码');
+            return;
+          }
+          if (!userCode.includes('groupby')) {
+            setErrorMessage('错误：缺少分组统计的代码');
+            return;
+          }
+          setExecutionResult('执行成功！\n\n✅ RFM指标计算完成\n✅ 用户分层完成\n✅ 统计分析完成\n✅ 可视化完成\n✅ 运营策略生成完成');
+          break;
+          
+        case 6: // 一元+多元线性回归
+          if (!userCode.includes('import pandas as pd')) {
+            setErrorMessage('错误：缺少导入 pandas 库的代码');
+            return;
+          }
+          if (!userCode.includes('LinearRegression')) {
+            setErrorMessage('错误：缺少线性回归模型的代码');
+            return;
+          }
+          if (!userCode.includes('r2_score')) {
+            setErrorMessage('错误：缺少模型评估的代码');
+            return;
+          }
+          if (!userCode.includes('variance_inflation_factor')) {
+            setErrorMessage('错误：缺少多重共线性检测的代码');
+            return;
+          }
+          setExecutionResult('执行成功！\n\n✅ 一元线性回归完成\n✅ 多元线性回归完成\n✅ 模型评估完成\n✅ 多重共线性检测完成\n✅ 预测应用完成');
+          break;
+          
+        case 7: // 随机森林回归+特征重要性
+          if (!userCode.includes('import pandas as pd')) {
+            setErrorMessage('错误：缺少导入 pandas 库的代码');
+            return;
+          }
+          if (!userCode.includes('RandomForestRegressor')) {
+            setErrorMessage('错误：缺少随机森林回归的代码');
+            return;
+          }
+          if (!userCode.includes('train_test_split')) {
+            setErrorMessage('错误：缺少数据拆分的代码');
+            return;
+          }
+          if (!userCode.includes('feature_importances_')) {
+            setErrorMessage('错误：缺少特征重要性分析的代码');
+            return;
+          }
+          setExecutionResult('执行成功！\n\n✅ 数据拆分完成\n✅ 随机森林训练完成\n✅ 参数调优完成\n✅ 特征重要性分析完成\n✅ 模型评估完成');
+          break;
+          
+        case 8: // 时间序列完整分析
+          if (!userCode.includes('import pandas as pd')) {
+            setErrorMessage('错误：缺少导入 pandas 库的代码');
+            return;
+          }
+          if (!userCode.includes('to_datetime')) {
+            setErrorMessage('错误：缺少日期格式转换的代码');
+            return;
+          }
+          if (!userCode.includes('resample')) {
+            setErrorMessage('错误：缺少数据重采样的代码');
+            return;
+          }
+          if (!userCode.includes('ARIMA')) {
+            setErrorMessage('错误：缺少 ARIMA 模型的代码');
+            return;
+          }
+          setExecutionResult('执行成功！\n\n✅ 日期格式转换完成\n✅ 数据重采样完成\n✅ 趋势分析完成\n✅ 周期识别完成\n✅ 时序预测完成');
+          break;
+          
+        case 9: // 综合异常检测
+          if (!userCode.includes('import pandas as pd')) {
+            setErrorMessage('错误：缺少导入 pandas 库的代码');
+            return;
+          }
+          if (!userCode.includes('IsolationForest')) {
+            setErrorMessage('错误：缺少孤立森林异常检测的代码');
+            return;
+          }
+          if (!userCode.includes('StandardScaler')) {
+            setErrorMessage('错误：缺少数据标准化的代码');
+            return;
+          }
+          setExecutionResult('执行成功！\n\n✅ 统计异常检测完成\n✅ 孤立森林异常检测完成\n✅ 异常合并完成\n✅ 异常类型分析完成\n✅ 业务处理建议生成完成');
+          break;
+          
+        case 10: // 全流程综合大项目
+          if (!userCode.includes('import pandas as pd')) {
+            setErrorMessage('错误：缺少导入 pandas 库的代码');
+            return;
+          }
+          if (!userCode.includes('read_csv')) {
+            setErrorMessage('错误：缺少读取数据的代码');
+            return;
+          }
+          if (!userCode.includes('groupby')) {
+            setErrorMessage('错误：缺少分组统计的代码');
+            return;
+          }
+          if (!userCode.includes('RandomForestRegressor')) {
+            setErrorMessage('错误：缺少随机森林分析的代码');
+            return;
+          }
+          setExecutionResult('执行成功！\n\n✅ 数据整合完成\n✅ 核心指标计算完成\n✅ RFM用户分层完成\n✅ 销量影响因素分析完成\n✅ 时间序列趋势分析完成\n✅ 业务策略建议生成完成\n✅ 可视化报告生成完成');
+          break;
+          
+        default:
+          setExecutionResult('执行成功！');
       }
-      
-      if (userCode.includes('fillna') && !userCode.includes('StandardScaler')) {
-        setErrorMessage('错误：缺少数据标准化的代码，请添加 StandardScaler 相关代码');
-        return;
-      }
-      
-      // 模拟执行成功
-      setExecutionResult('执行成功！\n\n✅ 数据预处理完成\n✅ 缺失值已处理\n✅ 异常值已检测\n✅ 特征已处理\n✅ 数据已标准化\n✅ 结果已保存');
     }, 1000);
   };
 
