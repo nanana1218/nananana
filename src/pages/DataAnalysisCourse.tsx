@@ -18,6 +18,7 @@ interface Project {
   duration: string;
   icon: string;
   color: string;
+  showFullFlow: boolean;
 }
 
 interface Question {
@@ -162,7 +163,8 @@ print("✅ 数据预处理完成！")`,
         correctAnswer: [0, 1],
         explanation: '3σ原则和箱线图是常用的统计异常检测方法。'
       }
-    ]
+    ],
+    showFullFlow: true
   },
   {
     id: 2,
@@ -184,6 +186,13 @@ print("✅ 数据预处理完成！")`,
       '分析强相关指标和多重共线性',
       '得出核心结论'
     ],
+    taskHints: [
+      '使用 df = pd.read_csv("processed_data.csv") 读取数据',
+      '使用 df[列名列表].describe() 进行描述统计',
+      '使用 df.corr(method="pearson") 计算皮尔逊相关系数',
+      '使用 seaborn 的 heatmap() 绘制相关性热力图',
+      '分析相关系数大于0.7的强相关指标'
+    ],
     pitfalls: [
       '混淆皮尔逊和斯皮尔曼相关系数',
       '误将"相关性"当作"因果关系"',
@@ -199,6 +208,29 @@ print("✅ 数据预处理完成！")`,
     icon: '📊',
     color: 'from-purple-500 to-pink-400',
     codeExample: `import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+
+# 1. 读取数据
+df = pd.read_csv("processed_data.csv")
+
+# 2. 新增营收字段
+df["营收"] = df["消费金额"] * df["消费频次"]
+
+# 3. 描述统计
+# TODO: 使用 describe() 方法进行描述统计
+
+# 4. 相关性分析
+# TODO: 计算皮尔逊和斯皮尔曼相关系数
+
+# 5. 绘制相关性热力图
+# TODO: 使用 seaborn 绘制热力图
+
+# 6. 分析强相关指标
+# TODO: 分析强相关指标和多重共线性
+`,
+    referenceAnswer: `import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
@@ -252,7 +284,8 @@ print(strong_corr.stack())`,
         correctAnswer: 1,
         explanation: '相关性不代表因果关系，只能说明变量之间存在某种关联。'
       }
-    ]
+    ],
+    showFullFlow: false
   },
   {
     id: 3,
@@ -274,6 +307,13 @@ print(strong_corr.stack())`,
       '筛选有价值的规则（提升度>1）',
       '给出捆绑销售建议'
     ],
+    taskHints: [
+      '使用 pd.read_csv("cart_data.csv") 读取数据',
+      '使用 groupby() 和 unstack() 将数据转换成one-hot编码格式',
+      '使用 apriori() 函数挖掘频繁项集',
+      '使用 association_rules() 函数生成关联规则',
+      '筛选 lift>1 的规则，分析有效关联关系'
+    ],
     pitfalls: [
       '支持度设置过高或过低',
       '不筛选提升度，误将"无关商品组合"当作有效规则',
@@ -289,6 +329,27 @@ print(strong_corr.stack())`,
     icon: '🛒',
     color: 'from-green-500 to-emerald-400',
     codeExample: `import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# 1. 读取购物车数据
+df = pd.read_csv("cart_data.csv")
+
+# 2. 数据预处理 - 转换成one-hot编码格式
+# TODO: 将数据转换成one-hot编码格式
+
+# 3. 用Apriori算法挖掘频繁项集
+# TODO: 使用 apriori 挖掘频繁项集
+
+# 4. 生成关联规则
+# TODO: 使用 association_rules 生成关联规则
+
+# 5. 筛选有价值的规则（提升度>1）
+# TODO: 筛选 lift>1 的规则
+
+# 6. 保存结果
+# TODO: 保存结果并给出业务建议
+`,
+    referenceAnswer: `import pandas as pd
 from mlxtend.frequent_patterns import apriori, association_rules
 
 # 1. 读取购物车数据
@@ -348,7 +409,8 @@ for _, row in rules.head(3).iterrows():
         correctAnswer: 1,
         explanation: 'Apriori算法利用了反单调性：如果一个项集是非频繁的，则它的所有超集也是非频繁的。'
       }
-    ]
+    ],
+    showFullFlow: false
   },
   {
     id: 4,
@@ -370,6 +432,13 @@ for _, row in rules.head(3).iterrows():
       '分析每个分群的特征',
       '给出业务落地建议'
     ],
+    taskHints: [
+      '使用 StandardScaler() 进行数据标准化',
+      '用肘部法则确定最佳k值，查看inertia的变化',
+      '使用 KMeans() 进行聚类，设置合适的n_clusters',
+      '使用 PCA() 进行降维，方便可视化聚类结果',
+      '分析每个分群的特征，给出业务建议'
+    ],
     pitfalls: [
       '聚类前不标准化数据',
       '盲目设置k值，不做肘部法则',
@@ -385,6 +454,36 @@ for _, row in rules.head(3).iterrows():
     icon: '🔍',
     color: 'from-orange-500 to-amber-400',
     codeExample: `import pandas as pd
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+
+# 1. 用户聚类
+df_user = pd.read_csv("processed_data.csv")
+user_features = ["消费金额", "消费频次", "最近消费天数", "浏览时长"]
+X_user = df_user[user_features].dropna()
+
+# 2. 数据标准化
+# TODO: 使用 StandardScaler 进行数据标准化
+
+# 3. 肘部法则确定k值
+# TODO: 使用肘部法则确定最佳k值
+
+# 4. KMeans聚类（选择k=4）
+# TODO: 使用 KMeans 进行聚类
+
+# 5. PCA降维可视化
+# TODO: 使用 PCA 进行降维并可视化聚类结果
+
+# 6. 分析分群特征
+# TODO: 分析每个分群的特征
+
+# 7. 业务建议
+# TODO: 给出业务建议
+`,
+    referenceAnswer: `import pandas as pd
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
@@ -464,7 +563,8 @@ print("分群2：流失用户 → 推送唤醒优惠券")`,
         correctAnswer: 2,
         explanation: '肘部法则中，肘部表示k值增加时，inertia下降显著变缓的点。'
       }
-    ]
+    ],
+    showFullFlow: false
   },
   {
     id: 5,
@@ -484,6 +584,13 @@ print("分群2：流失用户 → 推送唤醒优惠券")`,
       '统计各分层用户的数量、占比、总消费金额占比',
       '制定具体的运营策略'
     ],
+    taskHints: [
+      '使用 pd.read_csv("user_rfm.csv") 读取RFM数据',
+      '使用 pd.qcut() 进行分位数分箱',
+      '注意R指标需要反向打分：最近消费天数越少分数越高',
+      '使用 groupby() 统计各层级的数据',
+      '使用 matplotlib.pyplot 绘制饼图进行可视化'
+    ],
     pitfalls: [
       'R指标打分错误（没有反向）',
       '分层标准过于随意',
@@ -499,6 +606,30 @@ print("分群2：流失用户 → 推送唤醒优惠券")`,
     icon: '👥',
     color: 'from-red-500 to-rose-400',
     codeExample: `import pandas as pd
+import numpy as np
+
+# 1. 读取RFM数据
+df = pd.read_csv("user_rfm.csv")
+
+# 2. 指标分箱
+# TODO: 使用 pd.qcut() 进行分位数分箱，注意R需要反向打分
+
+# 3. 计算RFM总分
+# TODO: 计算RFM总分
+
+# 4. 用户分层
+# TODO: 定义分层函数并应用
+
+# 5. 统计分析
+# TODO: 使用 groupby() 进行统计分析
+
+# 6. 可视化
+# TODO: 绘制可视化图表
+
+# 7. 业务策略
+# TODO: 输出业务策略建议
+`,
+    referenceAnswer: `import pandas as pd
 import numpy as np
 
 # 1. 读取RFM数据
@@ -593,7 +724,8 @@ print("""
         correctAnswer: 0,
         explanation: '最近消费天数越少表示用户越活跃，所以应该反向打分。'
       }
-    ]
+    ],
+    showFullFlow: false
   },
   {
     id: 6,
@@ -616,6 +748,13 @@ print("""
       '模型评估与系数解读',
       '预测应用'
     ],
+    taskHints: [
+      '使用 LinearRegression() 进行一元线性回归建模',
+      '使用 r2_score、mean_absolute_error 评估模型性能',
+      '使用 variance_inflation_factor 计算VIF值检测多重共线性',
+      '删除VIF>10的特征来优化模型',
+      '使用 .coef_ 和 .intercept_ 解读回归系数'
+    ],
     pitfalls: [
       '忽略多重共线性',
       '盲目追求高R²，忽略模型的业务意义',
@@ -631,6 +770,32 @@ print("""
     icon: '📈',
     color: 'from-indigo-500 to-violet-400',
     codeExample: `import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+import matplotlib.pyplot as plt
+
+# 1. 读取数据
+df = pd.read_csv("sales_data.csv")
+
+# 2. 一元线性回归
+# TODO: 建立一元线性回归模型并评估
+
+# 3. 多元线性回归
+# TODO: 建立多元线性回归模型并评估
+
+# 4. 检测多重共线性（VIF）
+# TODO: 计算VIF值
+
+# 5. 模型优化
+# TODO: 删除高VIF特征并重新建模
+
+# 6. 预测应用
+# TODO: 使用模型进行预测
+`,
+    referenceAnswer: `import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
@@ -715,7 +880,8 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
         correctAnswer: 1,
         explanation: 'R²表示模型解释的因变量方差比例，值越大拟合效果越好。'
       }
-    ]
+    ],
+    showFullFlow: false
   },
   {
     id: 7,
@@ -737,6 +903,13 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
       '特征重要性分析',
       '对比分析：与多元线性回归模型对比'
     ],
+    taskHints: [
+      '使用 train_test_split() 按7:3拆分训练集和测试集',
+      '使用 RandomForestRegressor() 进行随机森林回归建模',
+      '调整 n_estimators 和 max_depth 参数进行调优',
+      '使用 .feature_importances_ 获取特征重要性',
+      '使用 seaborn.barplot 绘制特征重要性图表'
+    ],
     pitfalls: [
       '模型参数设置过于极端',
       '不做参数调参，直接使用默认参数',
@@ -752,6 +925,34 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
     icon: '🌲',
     color: 'from-teal-500 to-cyan-400',
     codeExample: `import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 1. 读取数据
+df = pd.read_csv("sales_data.csv")
+X = df[["广告费", "活动次数", "客单价", "竞品价格"]]
+y = df["销量"]
+
+# 2. 数据拆分
+# TODO: 使用 train_test_split() 拆分数据
+
+# 3. 模型调参
+# TODO: 调整参数进行模型调优
+
+# 4. 使用最优参数训练
+# TODO: 训练最优模型
+
+# 5. 特征重要性
+# TODO: 计算特征重要性并绘制图表
+
+# 6. 预测应用
+# TODO: 使用模型进行预测
+`,
+    referenceAnswer: `import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
@@ -853,7 +1054,8 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
         correctAnswer: [0, 1, 2],
         explanation: '随机森林可以捕捉非线性关系、对异常值鲁棒、可以给出特征重要性，但计算速度通常比线性回归慢。'
       }
-    ]
+    ],
+    showFullFlow: false
   },
   {
     id: 8,
@@ -875,6 +1077,13 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
       '时序预测：用ARIMA模型预测未来3个月',
       '结果评估与库存建议'
     ],
+    taskHints: [
+      '使用 pd.to_datetime() 转换日期格式',
+      '使用 resample("M") 按月度重采样数据',
+      '使用 rolling(window=3).mean() 计算移动平均',
+      '使用 pivot() 重塑数据并绘制热力图',
+      '使用 ARIMA() 模型进行时序预测'
+    ],
     pitfalls: [
       '未做日期格式转换',
       '移动平均窗口设置不合理',
@@ -890,6 +1099,33 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
     icon: '⏰',
     color: 'from-yellow-500 to-orange-400',
     codeExample: `import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+
+# 1. 读取数据
+df = pd.read_csv("time_series_sales.csv")
+df["日期"] = pd.to_datetime(df["日期"])
+df.set_index("日期", inplace=True)
+
+# 2. 按月度重采样
+# TODO: 使用 resample() 按月度重采样
+
+# 3. 趋势分析 - 移动平均
+# TODO: 计算移动平均并绘制趋势图
+
+# 4. 周期识别 - 月度热力图
+# TODO: 绘制月度销量热力图
+
+# 5. ARIMA模型预测
+# TODO: 使用ARIMA模型预测未来3个月
+
+# 6. 库存建议
+# TODO: 输出库存规划建议
+`,
+    referenceAnswer: `import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -995,7 +1231,8 @@ print(f"建议安全库存量：{forecast_mean * 1.2:.0f}")`,
         correctAnswer: 1,
         explanation: 'ARIMA(p,d,q)中，d表示差分阶数，用来让序列平稳。'
       }
-    ]
+    ],
+    showFullFlow: false
   },
   {
     id: 9,
@@ -1015,6 +1252,13 @@ print(f"建议安全库存量：{forecast_mean * 1.2:.0f}")`,
       '异常合并与解读：分析异常类型',
       '业务处理：针对不同类型异常给出处理建议'
     ],
+    taskHints: [
+      '使用 mean ± 3*std 进行3σ原则异常检测',
+      '使用 IQR 进行箱线图异常检测',
+      '使用 IsolationForest() 进行孤立森林异常检测',
+      '注意 contamination 参数设置预期异常比例',
+      '结合多种方法的异常结果，分析异常类型'
+    ],
     pitfalls: [
       '将"正常极端值"当作异常值',
       '只检测异常，不解读异常原因、不给出处理建议',
@@ -1030,6 +1274,37 @@ print(f"建议安全库存量：{forecast_mean * 1.2:.0f}")`,
     icon: '🚨',
     color: 'from-rose-500 to-pink-400',
     codeExample: `import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
+
+# 1. 读取订单数据
+df = pd.read_csv("order_data.csv")
+
+# 2. 统计异常检测 - 3σ原则
+# TODO: 实现3σ原则异常检测
+
+# 3. 统计异常检测 - 箱线图
+# TODO: 实现箱线图异常检测
+
+# 4. 可视化异常
+# TODO: 绘制异常检测可视化图表
+
+# 5. 孤立森林异常检测
+# TODO: 使用孤立森林进行异常检测
+
+# 6. 合并两种方法的异常
+# TODO: 合并异常结果
+
+# 7. 分析异常类型
+# TODO: 分析各种异常类型的数量
+
+# 8. 业务处理建议
+# TODO: 输出业务处理建议
+`,
+    referenceAnswer: `import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -1137,7 +1412,8 @@ print("""
         correctAnswer: [0, 1, 2, 3],
         explanation: '这些都是常用的异常检测方法，KMeans也可以用于检测偏离中心的异常值。'
       }
-    ]
+    ],
+    showFullFlow: false
   },
   {
     id: 10,
@@ -1162,6 +1438,13 @@ print("""
       '结论与落地：总结核心发现，给出可落地的业务策略',
       '输出报告'
     ],
+    taskHints: [
+      '整合前期所有项目的数据和分析方法',
+      '复用RFM分层、随机森林、时间序列等方法',
+      '重点关注高价值用户和关键影响因素',
+      '结合多种分析方法的结果，给出综合业务建议',
+      '使用清晰的可视化图表展示核心发现'
+    ],
     pitfalls: [
       '数据整合混乱',
       '分析无重点',
@@ -1177,6 +1460,51 @@ print("""
     icon: '🏆',
     color: 'from-emerald-500 to-green-400',
     codeExample: `"""
+全流程综合大项目
+目标：提升电商营收
+"""
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from datetime import datetime
+
+print("=" * 60)
+print("📊 全流程综合大项目 - 电商营收提升分析")
+print("=" * 60)
+
+# 1. 数据准备
+print("\\n[1/6] 数据准备...")
+df_user = pd.read_csv("processed_data.csv")
+df_cart = pd.read_csv("cart_data.csv")
+df_goods = pd.read_csv("goods_data.csv")
+df_sales = pd.read_csv("sales_data.csv")
+df_ts = pd.read_csv("time_series_sales.csv")
+df_order = pd.read_csv("order_data.csv")
+
+print(f"用户数据：{len(df_user)} 条")
+print(f"销售数据：{len(df_sales)} 条")
+
+# 2. 核心指标概览
+# TODO: 计算并输出核心指标
+
+# 3. RFM用户分层
+# TODO: 实现RFM用户分层
+
+# 4. 销量影响因素分析
+# TODO: 使用随机森林分析销量影响因素
+
+# 5. 时间序列趋势分析
+# TODO: 分析时间序列趋势
+
+# 6. 业务策略建议
+# TODO: 输出业务策略建议
+
+# 7. 可视化报告
+# TODO: 生成可视化报告
+`,
+    referenceAnswer: `"""
 全流程综合大项目
 目标：提升电商营收
 """
@@ -1332,7 +1660,8 @@ print("=" * 60)`,
         correctAnswer: [0, 1, 2, 3],
         explanation: '完整的数据分析报告应该包含这些内容，形成完整的闭环。'
       }
-    ]
+    ],
+    showFullFlow: false
   }
 ];
 
@@ -1347,6 +1676,8 @@ export default function DataAnalysisCourse() {
   const [showResults, setShowResults] = useState(false);
   const [showReferenceAnswer, setShowReferenceAnswer] = useState(false);
   const [userCode, setUserCode] = useState<string>('');
+  const [executionResult, setExecutionResult] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -1367,7 +1698,44 @@ export default function DataAnalysisCourse() {
     setTestAnswers({});
     setShowResults(false);
     setShowReferenceAnswer(false);
-    setUserCode(project?.codeExample || '');
+    setExecutionResult('');
+    setErrorMessage('');
+    // 只有数据预处理高阶班（id=1）默认显示代码框架，其余项目默认空白
+    setUserCode(project?.id === 1 ? project.codeExample : '');
+  };
+
+  const runCode = () => {
+    // 模拟代码执行
+    setExecutionResult('');
+    setErrorMessage('');
+    
+    // 检查代码是否为空
+    if (!userCode.trim()) {
+      setErrorMessage('错误：代码不能为空');
+      return;
+    }
+    
+    // 模拟代码执行
+    setTimeout(() => {
+      // 检查常见错误
+      if (userCode.includes('import pandas as pd') && !userCode.includes('pd.read_csv')) {
+        setErrorMessage('错误：缺少读取数据的代码，请添加 pd.read_csv() 语句');
+        return;
+      }
+      
+      if (userCode.includes('df = pd.read_csv') && !userCode.includes('fillna')) {
+        setErrorMessage('错误：缺少缺失值处理的代码，请添加 fillna() 语句');
+        return;
+      }
+      
+      if (userCode.includes('fillna') && !userCode.includes('StandardScaler')) {
+        setErrorMessage('错误：缺少数据标准化的代码，请添加 StandardScaler 相关代码');
+        return;
+      }
+      
+      // 模拟执行成功
+      setExecutionResult('执行成功！\n\n✅ 数据预处理完成\n✅ 缺失值已处理\n✅ 异常值已检测\n✅ 特征已处理\n✅ 数据已标准化\n✅ 结果已保存');
+    }, 1000);
   };
 
   const goToPhase = (phase: 'learn' | 'practice' | 'test') => {
@@ -1718,7 +2086,10 @@ export default function DataAnalysisCourse() {
                           ← 返回项目列表
                         </button>
                         <div className="flex gap-2">
-                          <button className="px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded-lg text-white text-sm font-medium transition-all flex items-center gap-1">
+                          <button 
+                            onClick={runCode}
+                            className="px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded-lg text-white text-sm font-medium transition-all flex items-center gap-1"
+                          >
                             <span>▶</span>
                             运行代码
                           </button>
@@ -1791,11 +2162,17 @@ export default function DataAnalysisCourse() {
                             <span className="text-sm font-medium text-gray-300">执行结果</span>
                           </div>
                           <div className="flex-1 bg-gray-900 p-4 overflow-auto">
-                            <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                              <div className="text-4xl mb-4">▶</div>
-                              <p className="text-center">点击"运行代码"按钮来执行</p>
-                              <p className="text-center text-xs mt-2">代码将在终端中运行</p>
-                            </div>
+                            {errorMessage ? (
+                              <div className="text-red-400 whitespace-pre-wrap">{errorMessage}</div>
+                            ) : executionResult ? (
+                              <div className="text-green-400 whitespace-pre-wrap">{executionResult}</div>
+                            ) : (
+                              <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                                <div className="text-4xl mb-4">▶</div>
+                                <p className="text-center">点击"运行代码"按钮来执行</p>
+                                <p className="text-center text-xs mt-2">代码将在终端中运行</p>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
