@@ -162,6 +162,62 @@ print("✅ 数据预处理完成！")`,
         options: ['3σ原则', '箱线图', '随机森林', 'PCA'],
         correctAnswer: [0, 1],
         explanation: '3σ原则和箱线图是常用的统计异常检测方法。'
+      },
+      {
+        id: 4,
+        type: 'single',
+        question: '数据标准化的目的是什么？',
+        options: ['使数据分布更集中', '消除量纲影响', '增加数据波动性', '降低数据维度'],
+        correctAnswer: 1,
+        explanation: '数据标准化可以消除不同特征之间的量纲影响，使所有特征具有相同的尺度。'
+      },
+      {
+        id: 5,
+        type: 'judgment',
+        question: '对于类别型特征，LabelEncoder和OneHotEncoder可以互换使用。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: 'LabelEncoder将类别映射为整数，而OneHotEncoder将类别转换为独热编码，两者用途不同，不能互换使用。'
+      },
+      {
+        id: 6,
+        type: 'single',
+        question: '以下哪种方法适合对连续型变量进行离散化？',
+        options: ['LabelEncoder', 'OneHotEncoder', 'pd.cut', 'StandardScaler'],
+        correctAnswer: 2,
+        explanation: 'pd.cut可以将连续型变量按照指定的区间进行离散化。'
+      },
+      {
+        id: 7,
+        type: 'multiple',
+        question: '数据预处理的主要步骤包括哪些？',
+        options: ['数据清洗', '特征工程', '模型训练', '数据标准化'],
+        correctAnswer: [0, 1, 3],
+        explanation: '数据预处理主要包括数据清洗、特征工程和数据标准化，模型训练不属于预处理步骤。'
+      },
+      {
+        id: 8,
+        type: 'single',
+        question: '3σ原则中，异常值的定义是？',
+        options: ['超出均值±1σ的数据', '超出均值±2σ的数据', '超出均值±3σ的数据', '超出均值±4σ的数据'],
+        correctAnswer: 2,
+        explanation: '3σ原则定义超出均值±3σ的数据为异常值。'
+      },
+      {
+        id: 9,
+        type: 'judgment',
+        question: '对于缺失值较多的特征，应该直接删除该特征。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: '是否删除缺失值较多的特征需要根据具体情况判断，有时保留该特征并采用合适的填充方法可能更好。'
+      },
+      {
+        id: 10,
+        type: 'single',
+        question: 'StandardScaler的作用是什么？',
+        options: ['将数据缩放到0-1之间', '将数据标准化为均值为0，方差为1', '将数据排序', '将数据离散化'],
+        correctAnswer: 1,
+        explanation: 'StandardScaler可以将数据标准化为均值为0，方差为1的分布。'
       }
     ],
     showFullFlow: true
@@ -283,6 +339,70 @@ print(strong_corr.stack())`,
         options: ['正确', '错误'],
         correctAnswer: 1,
         explanation: '相关性不代表因果关系，只能说明变量之间存在某种关联。'
+      },
+      {
+        id: 3,
+        type: 'single',
+        question: '斯皮尔曼相关系数适用于什么类型的数据？',
+        options: ['正态分布数据', '有序分类数据', '二分类数据', '所有类型数据'],
+        correctAnswer: 1,
+        explanation: '斯皮尔曼相关系数适用于有序分类数据或非线性关系的衡量。'
+      },
+      {
+        id: 4,
+        type: 'multiple',
+        question: '相关性热力图的作用包括哪些？',
+        options: ['直观展示变量间相关程度', '识别多重共线性', '发现数据异常', '预测未来趋势'],
+        correctAnswer: [0, 1],
+        explanation: '相关性热力图可以直观展示变量间相关程度，帮助识别多重共线性。'
+      },
+      {
+        id: 5,
+        type: 'single',
+        question: '相关系数的取值范围是？',
+        options: ['0到1', '-1到1', '0到100', '-100到100'],
+        correctAnswer: 1,
+        explanation: '相关系数的取值范围是-1到1，其中-1表示完全负相关，1表示完全正相关，0表示无相关。'
+      },
+      {
+        id: 6,
+        type: 'judgment',
+        question: '相关系数的绝对值越大，说明两个变量之间的关系越强。',
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: '相关系数的绝对值越大，说明两个变量之间的线性关系越强。'
+      },
+      {
+        id: 7,
+        type: 'single',
+        question: '描述统计中，四分位数的作用是什么？',
+        options: ['衡量数据的集中趋势', '衡量数据的离散程度', '衡量数据的分布形状', '衡量数据的异常值'],
+        correctAnswer: 1,
+        explanation: '四分位数可以衡量数据的离散程度，特别是通过四分位距（IQR）来识别异常值。'
+      },
+      {
+        id: 8,
+        type: 'multiple',
+        question: '描述统计中常用的集中趋势指标包括哪些？',
+        options: ['均值', '中位数', '众数', '标准差'],
+        correctAnswer: [0, 1, 2],
+        explanation: '均值、中位数和众数都是常用的集中趋势指标，标准差是离散程度指标。'
+      },
+      {
+        id: 9,
+        type: 'single',
+        question: '当数据中存在异常值时，哪个指标更能代表数据的集中趋势？',
+        options: ['均值', '中位数', '众数', '标准差'],
+        correctAnswer: 1,
+        explanation: '中位数受异常值影响较小，更能代表数据的集中趋势。'
+      },
+      {
+        id: 10,
+        type: 'judgment',
+        question: '描述统计只能用于数据的初步分析，不能用于深入的统计推断。',
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: '描述统计是数据的初步分析工具，为后续的统计推断提供基础，但本身不涉及推断。'
       }
     ],
     showFullFlow: false
@@ -408,6 +528,70 @@ for _, row in rules.head(3).iterrows():
         options: ['如果一个项集是频繁的，则它的所有子集也是频繁的', '如果一个项集是非频繁的，则它的所有超集也是非频繁的', '两者都是', '两者都不是'],
         correctAnswer: 1,
         explanation: 'Apriori算法利用了反单调性：如果一个项集是非频繁的，则它的所有超集也是非频繁的。'
+      },
+      {
+        id: 3,
+        type: 'single',
+        question: '支持度（support）的计算公式是什么？',
+        options: ['包含项集A的交易数 / 总交易数', '包含项集A和B的交易数 / 包含项集A的交易数', '提升度 = 置信度 / 支持度', '以上都不是'],
+        correctAnswer: 0,
+        explanation: '支持度是包含项集A的交易数除以总交易数。'
+      },
+      {
+        id: 4,
+        type: 'single',
+        question: '置信度（confidence）的计算公式是什么？',
+        options: ['包含项集A的交易数 / 总交易数', '包含项集A和B的交易数 / 包含项集A的交易数', '提升度 = 置信度 / 支持度', '以上都不是'],
+        correctAnswer: 1,
+        explanation: '置信度是包含项集A和B的交易数除以包含项集A的交易数。'
+      },
+      {
+        id: 5,
+        type: 'multiple',
+        question: '关联规则挖掘的应用场景包括哪些？',
+        options: ['购物篮分析', '推荐系统', '库存管理', '客户细分'],
+        correctAnswer: [0, 1, 2],
+        explanation: '关联规则挖掘可用于购物篮分析、推荐系统和库存管理等场景。'
+      },
+      {
+        id: 6,
+        type: 'judgment',
+        question: '支持度设置过高会导致挖掘出的规则数量减少。',
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: '支持度设置过高会筛选掉很多可能有价值的规则，导致规则数量减少。'
+      },
+      {
+        id: 7,
+        type: 'single',
+        question: 'Apriori算法的时间复杂度主要取决于什么？',
+        options: ['数据量大小', '最大项集长度', '最小支持度', '以上都是'],
+        correctAnswer: 3,
+        explanation: 'Apriori算法的时间复杂度受数据量大小、最大项集长度和最小支持度等因素影响。'
+      },
+      {
+        id: 8,
+        type: 'multiple',
+        question: '评估关联规则质量的指标包括哪些？',
+        options: ['支持度', '置信度', '提升度', '准确率'],
+        correctAnswer: [0, 1, 2],
+        explanation: '支持度、置信度和提升度是评估关联规则质量的常用指标。'
+      },
+      {
+        id: 9,
+        type: 'single',
+        question: '在购物篮分析中，以下哪个规则更有价值？',
+        options: ['啤酒 → 尿布（lift=1.2）', '面包 → 牛奶（lift=1.5）', '可乐 → 薯片（lift=0.9）', '以上都一样'],
+        correctAnswer: 1,
+        explanation: '提升度越高，规则的价值越大，面包→牛奶的提升度最高。'
+      },
+      {
+        id: 10,
+        type: 'judgment',
+        question: '关联规则挖掘只能用于购物篮分析，不能用于其他领域。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: '关联规则挖掘可以应用于多个领域，如医疗、金融、推荐系统等。'
       }
     ],
     showFullFlow: false
@@ -562,6 +746,70 @@ print("分群2：流失用户 → 推送唤醒优惠券")`,
         options: ['k值越大越好', 'k值越小越好', 'k值增加时，inertia下降变慢的点', 'k值等于样本数'],
         correctAnswer: 2,
         explanation: '肘部法则中，肘部表示k值增加时，inertia下降显著变缓的点。'
+      },
+      {
+        id: 3,
+        type: 'single',
+        question: 'KMeans算法的时间复杂度是多少？',
+        options: ['O(n)', 'O(nk)', 'O(nk^2)', 'O(n^2)'],
+        correctAnswer: 1,
+        explanation: 'KMeans算法的时间复杂度是O(nk)，其中n是样本数，k是聚类数。'
+      },
+      {
+        id: 4,
+        type: 'multiple',
+        question: 'KMeans算法的缺点包括哪些？',
+        options: ['对初始聚类中心敏感', '只能处理球形聚类', '需要预先指定k值', '计算速度慢'],
+        correctAnswer: [0, 1, 2],
+        explanation: 'KMeans算法对初始聚类中心敏感，只能处理球形聚类，需要预先指定k值。'
+      },
+      {
+        id: 5,
+        type: 'single',
+        question: 'PCA降维的主要目的是什么？',
+        options: ['减少计算时间', '可视化高维数据', '提高模型精度', '以上都是'],
+        correctAnswer: 3,
+        explanation: 'PCA降维可以减少计算时间，可视化高维数据，提高模型精度。'
+      },
+      {
+        id: 6,
+        type: 'judgment',
+        question: 'KMeans算法可以处理任意形状的聚类。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: 'KMeans算法主要适用于球形聚类，对于非球形聚类效果不佳。'
+      },
+      {
+        id: 7,
+        type: 'single',
+        question: '聚类分析属于哪种类型的学习？',
+        options: ['监督学习', '无监督学习', '半监督学习', '强化学习'],
+        correctAnswer: 1,
+        explanation: '聚类分析是无监督学习的一种，不需要标签数据。'
+      },
+      {
+        id: 8,
+        type: 'multiple',
+        question: '常用的聚类算法包括哪些？',
+        options: ['KMeans', '层次聚类', 'DBSCAN', '随机森林'],
+        correctAnswer: [0, 1, 2],
+        explanation: 'KMeans、层次聚类和DBSCAN都是常用的聚类算法，随机森林是分类/回归算法。'
+      },
+      {
+        id: 9,
+        type: 'single',
+        question: '在KMeans算法中，inertia表示什么？',
+        options: ['聚类中心的数量', '样本到最近聚类中心的距离总和', '聚类的质量', '以上都不是'],
+        correctAnswer: 1,
+        explanation: 'inertia是样本到最近聚类中心的距离总和，用于评估聚类效果。'
+      },
+      {
+        id: 10,
+        type: 'judgment',
+        question: '聚类结果的好坏取决于聚类算法的选择，与特征选择无关。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: '特征选择对聚类结果有很大影响，选择合适的特征是聚类成功的关键。'
       }
     ],
     showFullFlow: false
@@ -723,6 +971,70 @@ print("""
         options: ['正确', '错误'],
         correctAnswer: 0,
         explanation: '最近消费天数越少表示用户越活跃，所以应该反向打分。'
+      },
+      {
+        id: 3,
+        type: 'single',
+        question: 'RFM模型中，F指标表示什么？',
+        options: ['消费金额', '消费频次', '最近消费天数', '用户注册时间'],
+        correctAnswer: 1,
+        explanation: 'F=Frequency（消费频次），表示用户在一定时间内的购买次数。'
+      },
+      {
+        id: 4,
+        type: 'single',
+        question: 'RFM模型中，M指标表示什么？',
+        options: ['消费金额', '消费频次', '最近消费天数', '用户注册时间'],
+        correctAnswer: 0,
+        explanation: 'M=Monetary（消费金额），表示用户在一定时间内的总消费金额。'
+      },
+      {
+        id: 5,
+        type: 'multiple',
+        question: 'RFM模型的应用场景包括哪些？',
+        options: ['用户分层', '精准营销', '客户流失预测', '产品推荐'],
+        correctAnswer: [0, 1, 2],
+        explanation: 'RFM模型可用于用户分层、精准营销和客户流失预测等场景。'
+      },
+      {
+        id: 6,
+        type: 'judgment',
+        question: 'RFM模型只适用于电商行业，不适用于其他行业。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: 'RFM模型可以适用于多个行业，只要有交易数据即可。'
+      },
+      {
+        id: 7,
+        type: 'single',
+        question: '在RFM模型中，如何计算R分？',
+        options: ['直接使用最近消费天数', '最近消费天数反向打分', '最近消费天数取对数', '以上都不是'],
+        correctAnswer: 1,
+        explanation: 'R分通常采用最近消费天数的反向打分，天数越少分数越高。'
+      },
+      {
+        id: 8,
+        type: 'multiple',
+        question: 'RFM模型的优势包括哪些？',
+        options: ['简单易用', '数据要求低', '结果直观', '可解释性强'],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: 'RFM模型具有简单易用、数据要求低、结果直观、可解释性强等优势。'
+      },
+      {
+        id: 9,
+        type: 'single',
+        question: 'RFM模型中，通常将每个指标分为几个等级？',
+        options: ['3个', '4个', '5个', '6个'],
+        correctAnswer: 2,
+        explanation: 'RFM模型通常将每个指标分为5个等级，便于进行用户分层。'
+      },
+      {
+        id: 10,
+        type: 'judgment',
+        question: 'RFM模型可以单独使用，也可以与其他模型结合使用。',
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: 'RFM模型可以单独使用，也可以与其他模型结合使用，提高分析效果。'
       }
     ],
     showFullFlow: false
@@ -879,6 +1191,70 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
         options: ['模型的绝对误差', '模型解释的方差比例', '特征的重要性', '预测值的平均数'],
         correctAnswer: 1,
         explanation: 'R²表示模型解释的因变量方差比例，值越大拟合效果越好。'
+      },
+      {
+        id: 3,
+        type: 'single',
+        question: '多元线性回归模型的假设包括哪些？',
+        options: ['线性关系', '误差正态分布', '误差独立', '以上都是'],
+        correctAnswer: 3,
+        explanation: '多元线性回归模型假设包括线性关系、误差正态分布、误差独立等。'
+      },
+      {
+        id: 4,
+        type: 'multiple',
+        question: '线性回归模型的评估指标包括哪些？',
+        options: ['R²', 'MAE', 'MSE', '准确率'],
+        correctAnswer: [0, 1, 2],
+        explanation: 'R²、MAE和MSE都是线性回归模型的评估指标，准确率是分类模型的指标。'
+      },
+      {
+        id: 5,
+        type: 'single',
+        question: '一元线性回归和多元线性回归的主要区别是什么？',
+        options: ['自变量数量', '因变量数量', '模型复杂度', '以上都是'],
+        correctAnswer: 0,
+        explanation: '一元线性回归只有一个自变量，多元线性回归有多个自变量。'
+      },
+      {
+        id: 6,
+        type: 'judgment',
+        question: 'R²值越大，模型的预测能力一定越强。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: 'R²值越大表示模型对训练数据的拟合越好，但不一定表示预测能力强，可能存在过拟合。'
+      },
+      {
+        id: 7,
+        type: 'single',
+        question: '如何处理多重共线性问题？',
+        options: ['删除高VIF的特征', '使用岭回归', '主成分分析', '以上都是'],
+        correctAnswer: 3,
+        explanation: '处理多重共线性的方法包括删除高VIF的特征、使用岭回归、主成分分析等。'
+      },
+      {
+        id: 8,
+        type: 'multiple',
+        question: '线性回归模型的应用场景包括哪些？',
+        options: ['销量预测', '房价预测', '股票价格预测', '图像识别'],
+        correctAnswer: [0, 1, 2],
+        explanation: '线性回归可用于销量预测、房价预测、股票价格预测等场景，图像识别通常使用深度学习模型。'
+      },
+      {
+        id: 9,
+        type: 'single',
+        question: 'MAE和MSE的主要区别是什么？',
+        options: ['MAE对异常值更敏感', 'MSE对异常值更敏感', 'MAE计算更简单', 'MSE计算更简单'],
+        correctAnswer: 1,
+        explanation: 'MSE对异常值更敏感，因为它是误差的平方和。'
+      },
+      {
+        id: 10,
+        type: 'judgment',
+        question: '线性回归模型只能处理线性关系，不能处理非线性关系。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: '通过特征工程（如多项式特征），线性回归模型也可以处理非线性关系。'
       }
     ],
     showFullFlow: false
@@ -1053,6 +1429,70 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
         options: ['可以捕捉非线性关系', '对异常值更鲁棒', '可以给出特征重要性', '计算速度更快'],
         correctAnswer: [0, 1, 2],
         explanation: '随机森林可以捕捉非线性关系、对异常值鲁棒、可以给出特征重要性，但计算速度通常比线性回归慢。'
+      },
+      {
+        id: 3,
+        type: 'single',
+        question: '随机森林中的max_depth参数表示什么？',
+        options: ['决策树的最大深度', '决策树的最小深度', '决策树的平均深度', '以上都不是'],
+        correctAnswer: 0,
+        explanation: 'max_depth参数表示决策树的最大深度，用于控制模型复杂度。'
+      },
+      {
+        id: 4,
+        type: 'multiple',
+        question: '随机森林的优点包括哪些？',
+        options: ['准确率高', '抗过拟合', '可以处理高维数据', '训练速度快'],
+        correctAnswer: [0, 1, 2],
+        explanation: '随机森林具有准确率高、抗过拟合、可以处理高维数据等优点，但训练速度相对较慢。'
+      },
+      {
+        id: 5,
+        type: 'single',
+        question: '随机森林是如何进行预测的？',
+        options: ['取所有决策树的平均值', '取所有决策树的投票结果', '取第一个决策树的结果', '取最后一个决策树的结果'],
+        correctAnswer: 1,
+        explanation: '随机森林通过集成多个决策树的投票结果来进行预测。'
+      },
+      {
+        id: 6,
+        type: 'judgment',
+        question: '随机森林的n_estimators参数越大越好。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: 'n_estimators参数越大，模型的性能通常会提高，但计算成本也会增加，存在边际效益递减。'
+      },
+      {
+        id: 7,
+        type: 'single',
+        question: '随机森林中的特征重要性是如何计算的？',
+        options: ['基于特征的方差', '基于特征的信息增益', '基于特征的出现次数', '以上都不是'],
+        correctAnswer: 1,
+        explanation: '随机森林中的特征重要性通常基于特征的信息增益或基尼系数的减少来计算。'
+      },
+      {
+        id: 8,
+        type: 'multiple',
+        question: '随机森林的应用场景包括哪些？',
+        options: ['分类问题', '回归问题', '特征选择', '异常检测'],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '随机森林可用于分类、回归、特征选择和异常检测等多个场景。'
+      },
+      {
+        id: 9,
+        type: 'single',
+        question: '随机森林中的随机性体现在哪些方面？',
+        options: ['随机选择样本', '随机选择特征', '以上都是', '以上都不是'],
+        correctAnswer: 2,
+        explanation: '随机森林的随机性体现在随机选择样本（bootstrap采样）和随机选择特征两个方面。'
+      },
+      {
+        id: 10,
+        type: 'judgment',
+        question: '随机森林不需要特征标准化。',
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: '随机森林对特征的尺度不敏感，通常不需要特征标准化。'
       }
     ],
     showFullFlow: false
@@ -1230,6 +1670,70 @@ print(f"建议安全库存量：{forecast_mean * 1.2:.0f}")`,
         options: ['自回归阶数', '差分阶数', '移动平均阶数', '预测步数'],
         correctAnswer: 1,
         explanation: 'ARIMA(p,d,q)中，d表示差分阶数，用来让序列平稳。'
+      },
+      {
+        id: 3,
+        type: 'single',
+        question: 'ARIMA模型中的p参数表示什么？',
+        options: ['自回归阶数', '差分阶数', '移动平均阶数', '预测步数'],
+        correctAnswer: 0,
+        explanation: 'ARIMA(p,d,q)中，p表示自回归阶数。'
+      },
+      {
+        id: 4,
+        type: 'single',
+        question: 'ARIMA模型中的q参数表示什么？',
+        options: ['自回归阶数', '差分阶数', '移动平均阶数', '预测步数'],
+        correctAnswer: 2,
+        explanation: 'ARIMA(p,d,q)中，q表示移动平均阶数。'
+      },
+      {
+        id: 5,
+        type: 'multiple',
+        question: '时间序列分析的主要步骤包括哪些？',
+        options: ['数据预处理', '平稳性检验', '模型选择', '模型评估'],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '时间序列分析的主要步骤包括数据预处理、平稳性检验、模型选择和模型评估。'
+      },
+      {
+        id: 6,
+        type: 'judgment',
+        question: '时间序列数据必须是平稳的才能进行预测。',
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: '对于非平稳的时间序列，可以通过差分等方法使其平稳后再进行预测。'
+      },
+      {
+        id: 7,
+        type: 'single',
+        question: '移动平均的主要作用是什么？',
+        options: ['消除噪声', '预测未来', '识别趋势', '以上都是'],
+        correctAnswer: 0,
+        explanation: '移动平均的主要作用是消除噪声，平滑时间序列数据。'
+      },
+      {
+        id: 8,
+        type: 'multiple',
+        question: '时间序列的组成部分包括哪些？',
+        options: ['趋势', '季节', '循环', '随机噪声'],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '时间序列的组成部分包括趋势、季节、循环和随机噪声。'
+      },
+      {
+        id: 9,
+        type: 'single',
+        question: '如何检验时间序列的平稳性？',
+        options: ['ADF检验', 't检验', 'F检验', '卡方检验'],
+        correctAnswer: 0,
+        explanation: 'ADF（Augmented Dickey-Fuller）检验是常用的时间序列平稳性检验方法。'
+      },
+      {
+        id: 10,
+        type: 'judgment',
+        question: '时间序列预测的准确性随着预测步数的增加而降低。',
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: '时间序列预测的准确性通常随着预测步数的增加而降低，因为不确定性会累积。'
       }
     ],
     showFullFlow: false
@@ -1411,6 +1915,70 @@ print("""
         options: ['3σ原则', '箱线图', '孤立森林', 'KMeans聚类'],
         correctAnswer: [0, 1, 2, 3],
         explanation: '这些都是常用的异常检测方法，KMeans也可以用于检测偏离中心的异常值。'
+      },
+      {
+        id: 3,
+        type: 'single',
+        question: '3σ原则中，异常值的定义是？',
+        options: ['超出均值±1σ的数据', '超出均值±2σ的数据', '超出均值±3σ的数据', '超出均值±4σ的数据'],
+        correctAnswer: 2,
+        explanation: '3σ原则定义超出均值±3σ的数据为异常值。'
+      },
+      {
+        id: 4,
+        type: 'single',
+        question: '箱线图中，异常值的定义是？',
+        options: ['超出Q1-1.5*IQR或Q3+1.5*IQR的数据', '超出Q1-2*IQR或Q3+2*IQR的数据', '超出均值±2σ的数据', '超出均值±3σ的数据'],
+        correctAnswer: 0,
+        explanation: '箱线图中，异常值定义为超出Q1-1.5*IQR或Q3+1.5*IQR的数据。'
+      },
+      {
+        id: 5,
+        type: 'multiple',
+        question: '异常检测的应用场景包括哪些？',
+        options: ['信用卡欺诈检测', '网络入侵检测', '设备故障预测', '客户流失预测'],
+        correctAnswer: [0, 1, 2],
+        explanation: '异常检测可用于信用卡欺诈检测、网络入侵检测和设备故障预测等场景。'
+      },
+      {
+        id: 6,
+        type: 'judgment',
+        question: '孤立森林算法特别适合处理高维数据的异常检测。',
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: '孤立森林算法是一种基于树的异常检测方法，特别适合处理高维数据。'
+      },
+      {
+        id: 7,
+        type: 'single',
+        question: '孤立森林算法的时间复杂度是多少？',
+        options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(n³)'],
+        correctAnswer: 1,
+        explanation: '孤立森林算法的时间复杂度是O(n log n)，其中n是样本数。'
+      },
+      {
+        id: 8,
+        type: 'multiple',
+        question: '异常检测的挑战包括哪些？',
+        options: ['异常定义不明确', '异常样本稀少', '数据分布随时间变化', '特征选择困难'],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '异常检测的挑战包括异常定义不明确、异常样本稀少、数据分布随时间变化和特征选择困难等。'
+      },
+      {
+        id: 9,
+        type: 'single',
+        question: '在异常检测中，什么是假阳性？',
+        options: ['将正常样本误判为异常', '将异常样本误判为正常', '正确检测出异常', '正确识别出正常样本'],
+        correctAnswer: 0,
+        explanation: '假阳性是指将正常样本误判为异常。'
+      },
+      {
+        id: 10,
+        type: 'judgment',
+        question: '异常检测只能用于无监督场景，不能用于有监督场景。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: '异常检测可以用于无监督场景，也可以用于有监督场景，如使用标记的异常样本进行模型训练。'
       }
     ],
     showFullFlow: false
@@ -1659,6 +2227,70 @@ print("=" * 60)`,
         options: ['项目背景与目标', '分析过程与方法', '核心发现', '业务策略建议'],
         correctAnswer: [0, 1, 2, 3],
         explanation: '完整的数据分析报告应该包含这些内容，形成完整的闭环。'
+      },
+      {
+        id: 3,
+        type: 'single',
+        question: '数据分析项目的完整流程包括哪些步骤？',
+        options: ['数据获取→数据清洗→数据分析→结果可视化→报告输出', '直接建模→结果分析→报告输出', '数据清洗→数据分析→报告输出', '以上都不是'],
+        correctAnswer: 0,
+        explanation: '数据分析项目的完整流程包括数据获取、数据清洗、数据分析、结果可视化和报告输出。'
+      },
+      {
+        id: 4,
+        type: 'multiple',
+        question: '数据分析中常用的工具包括哪些？',
+        options: ['Python', 'R', 'Excel', 'Tableau'],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: 'Python、R、Excel和Tableau都是数据分析中常用的工具。'
+      },
+      {
+        id: 5,
+        type: 'single',
+        question: '在数据分析中，什么是特征工程？',
+        options: ['数据清洗的过程', '特征选择和转换的过程', '模型训练的过程', '结果可视化的过程'],
+        correctAnswer: 1,
+        explanation: '特征工程是指特征选择和转换的过程，目的是提高模型的性能。'
+      },
+      {
+        id: 6,
+        type: 'judgment',
+        question: '数据分析的结果必须通过可视化来呈现。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: '虽然可视化可以帮助理解数据，但数据分析的结果不一定必须通过可视化来呈现，也可以通过表格、文字等形式呈现。'
+      },
+      {
+        id: 7,
+        type: 'single',
+        question: '在数据分析中，什么是假设检验？',
+        options: ['对数据进行清洗的过程', '对数据进行可视化的过程', '对数据进行统计推断的过程', '对数据进行建模的过程'],
+        correctAnswer: 2,
+        explanation: '假设检验是对数据进行统计推断的过程，用于验证某个假设是否成立。'
+      },
+      {
+        id: 8,
+        type: 'multiple',
+        question: '数据分析的应用领域包括哪些？',
+        options: ['市场营销', '金融', '医疗', '制造业'],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '数据分析可以应用于市场营销、金融、医疗、制造业等多个领域。'
+      },
+      {
+        id: 9,
+        type: 'single',
+        question: '在数据分析中，什么是A/B测试？',
+        options: ['一种数据清洗方法', '一种统计假设检验方法', '一种模型评估方法', '一种数据可视化方法'],
+        correctAnswer: 1,
+        explanation: 'A/B测试是一种统计假设检验方法，用于比较两种不同方案的效果。'
+      },
+      {
+        id: 10,
+        type: 'judgment',
+        question: '数据分析的最终目的是为了支持业务决策。',
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: '数据分析的最终目的是为了支持业务决策，提供数据驱动的洞察。'
       }
     ],
     showFullFlow: false
@@ -2342,32 +2974,48 @@ export default function DataAnalysisCourse() {
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <motion.div 
-                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all"
+                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all cursor-pointer"
                           whileHover={{ y: -2 }}
+                          onClick={() => alert('正在跳转到相关文档...')}
                         >
                           <span className="text-yellow-400">📖</span>
-                          <span className="text-gray-300">相关文档</span>
+                          <div>
+                            <span className="text-gray-300">相关文档</span>
+                            <p className="text-xs text-gray-400 mt-1">深入了解本项目的理论知识和实现细节</p>
+                          </div>
                         </motion.div>
                         <motion.div 
-                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all"
+                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all cursor-pointer"
                           whileHover={{ y: -2 }}
+                          onClick={() => alert('正在跳转到视频教程...')}
                         >
                           <span className="text-yellow-400">🎥</span>
-                          <span className="text-gray-300">视频教程</span>
+                          <div>
+                            <span className="text-gray-300">视频教程</span>
+                            <p className="text-xs text-gray-400 mt-1">观看详细的视频讲解和操作演示</p>
+                          </div>
                         </motion.div>
                         <motion.div 
-                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all"
+                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all cursor-pointer"
                           whileHover={{ y: -2 }}
+                          onClick={() => alert('正在跳转到代码示例...')}
                         >
                           <span className="text-yellow-400">💻</span>
-                          <span className="text-gray-300">代码示例</span>
+                          <div>
+                            <span className="text-gray-300">代码示例</span>
+                            <p className="text-xs text-gray-400 mt-1">查看完整的代码实现和注释</p>
+                          </div>
                         </motion.div>
                         <motion.div 
-                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all"
+                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all cursor-pointer"
                           whileHover={{ y: -2 }}
+                          onClick={() => alert('正在跳转到社区支持...')}
                         >
                           <span className="text-yellow-400">🤝</span>
-                          <span className="text-gray-300">社区支持</span>
+                          <div>
+                            <span className="text-gray-300">社区支持</span>
+                            <p className="text-xs text-gray-400 mt-1">加入社区讨论，获取更多帮助</p>
+                          </div>
                         </motion.div>
                       </div>
                     </motion.div>
