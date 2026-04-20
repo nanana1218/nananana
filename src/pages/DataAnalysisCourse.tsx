@@ -1,1497 +1,1509 @@
 import { useState, useEffect } from 'react';
-import LearningProgress from '../components/LearningProgress';
-import LearningResource from '../components/LearningResource';
-import ExerciseComponent from '../components/ExerciseComponent';
-import ChapterContent from '../components/ChapterContent';
-import ChapterExercise from '../components/ChapterExercise';
+import { motion, AnimatePresence } from 'framer-motion';
 
-interface Section {
-  id: string;
-  title: string;
-  description: string;
-  topics: string[];
-  resources?: string[];
-}
-
-interface ProgressItem {
-  id: string;
-  title: string;
-  completed: boolean;
-  subItems?: {
-    id: string;
-    title: string;
-    completed: boolean;
-  }[];
-}
-
-interface Resource {
+interface Project {
   id: number;
   title: string;
-  type: 'article' | 'video' | 'document' | 'code';
   description: string;
-  link: string;
-  duration?: string;
+  coreKnowledge: string[];
+  businessScenario: string;
+  tasks: string[];
+  pitfalls: string[];
+  deliverables: string[];
+  codeExample: string;
+  questions: Question[];
   difficulty: 'beginner' | 'intermediate' | 'advanced';
+  duration: string;
+  icon: string;
+  color: string;
 }
 
 interface Question {
   id: number;
+  type: 'single' | 'multiple' | 'judgment';
   question: string;
   options: string[];
-  correctAnswer: number;
-  explanation?: string;
+  correctAnswer: number | number[];
+  explanation: string;
 }
 
-export default function DataAnalysisCourse() {
-  const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeChapter, setActiveChapter] = useState<string | null>(null);
-  const [activeChapterMode, setActiveChapterMode] = useState<'content' | 'exercise' | null>(null);
-  const [activeTab, setActiveTab] = useState<'progress' | 'resources' | 'exercises'>('progress');
+interface LearningState {
+  currentProject: number | null;
+  currentPhase: 'learn' | 'practice' | 'test' | null;
+  projectProgress: Record<number, {
+    learnCompleted: boolean;
+    practiceCompleted: boolean;
+    testScore: number | null;
+  }>;
+}
 
-  // 学习进度数据
-  const progressItems: ProgressItem[] = [
-    {
-      id: 'chapter1',
-      title: '第一章：数据分析基础',
-      completed: false,
-      subItems: [
-        { id: 'chapter1-1', title: '数据分析的定义与重要性', completed: false },
-        { id: 'chapter1-2', title: '数据分析的基本流程', completed: false },
-        { id: 'chapter1-3', title: '数据类型与数据结构', completed: false },
-        { id: 'chapter1-4', title: '数据分析的常用方法分类', completed: false }
-      ]
-    },
-    {
-      id: 'chapter2',
-      title: '第二章：数据可视化技术',
-      completed: false,
-      subItems: [
-        { id: 'chapter2-1', title: '数据可视化的基本原理', completed: false },
-        { id: 'chapter2-2', title: 'Matplotlib库的使用', completed: false },
-        { id: 'chapter2-3', title: 'Seaborn库的高级可视化', completed: false },
-        { id: 'chapter2-4', title: '交互式数据可视化工具', completed: false },
-        { id: 'chapter2-5', title: '数据可视化最佳实践', completed: false }
-      ]
-    },
-    {
-      id: 'chapter3',
-      title: '第三章：统计分析方法',
-      completed: false,
-      subItems: [
-        { id: 'chapter3-1', title: '描述性统计分析', completed: false },
-        { id: 'chapter3-2', title: '假设检验', completed: false },
-        { id: 'chapter3-3', title: '方差分析', completed: false },
-        { id: 'chapter3-4', title: '相关分析与回归分析', completed: false },
-        { id: 'chapter3-5', title: '时间序列分析', completed: false }
-      ]
-    },
-    {
-      id: 'chapter4',
-      title: '第四章：机器学习基础',
-      completed: false,
-      subItems: [
-        { id: 'chapter4-1', title: '机器学习概述', completed: false },
-        { id: 'chapter4-2', title: '监督学习与无监督学习', completed: false },
-        { id: 'chapter4-3', title: '线性回归与逻辑回归', completed: false },
-        { id: 'chapter4-4', title: '决策树与随机森林', completed: false },
-        { id: 'chapter4-5', title: '聚类分析', completed: false }
-      ]
-    },
-    {
-      id: 'chapter5',
-      title: '第五章：商务数据分析应用',
-      completed: false,
-      subItems: [
-        { id: 'chapter5-1', title: '市场数据分析', completed: false },
-        { id: 'chapter5-2', title: '客户行为分析', completed: false },
-        { id: 'chapter5-3', title: '销售数据分析', completed: false },
-        { id: 'chapter5-4', title: '供应链数据分析', completed: false },
-        { id: 'chapter5-5', title: '财务数据分析', completed: false }
-      ]
-    },
-    {
-      id: 'chapter6',
-      title: '第六章：数据分析项目实战',
-      completed: false,
-      subItems: [
-        { id: 'chapter6-1', title: '项目选题与规划', completed: false },
-        { id: 'chapter6-2', title: '数据获取与清洗', completed: false },
-        { id: 'chapter6-3', title: '数据分析与建模', completed: false },
-        { id: 'chapter6-4', title: '结果可视化与报告', completed: false },
-        { id: 'chapter6-5', title: '项目展示与评估', completed: false }
-      ]
-    }
-  ];
+const projects: Project[] = [
+  {
+    id: 1,
+    title: '数据预处理高阶版',
+    description: '铺垫所有算法前置能力，掌握数据清洗、特征工程的核心技能',
+    coreKnowledge: [
+      '缺失值/重复值/异常值高阶处理',
+      '特征分桶、离散化',
+      '类别编码（LabelEncoder/OneHotEncoder）',
+      '数据标准化/归一化'
+    ],
+    businessScenario: '电商用户行为数据预处理，为后续聚类、回归、关联规则等算法做准备',
+    tasks: [
+      '读取模拟数据（user_behavior.csv）',
+      '缺失值处理：消费金额/频次用中位数填充，性别/地区用"未知"填充',
+      '异常值处理：用箱线图+3σ原则识别异常值',
+      '特征处理：消费金额分桶、浏览时长离散化、类别编码',
+      '数据标准化并保存处理后的数据'
+    ],
+    pitfalls: [
+      '用均值填充含异常值的字段（导致数据失真）',
+      '对所有类别字段都做OneHotEncoder（高基数字段导致维度爆炸）',
+      '忘记标准化数据（后续聚类、回归模型会受量纲影响）'
+    ],
+    deliverables: [
+      '预处理代码文件',
+      '处理前后的数据对比表',
+      '预处理总结'
+    ],
+    difficulty: 'beginner',
+    duration: '2小时',
+    icon: '🧹',
+    color: 'from-blue-500 to-cyan-400',
+    codeExample: `import pandas as pd
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+import numpy as np
 
-  // 章节内容数据
-  const chapterContents = {
-    'chapter1': {
-      title: '第一章：数据分析基础',
-      sections: [
-        {
-          id: 'section1-1',
-          title: '数据分析的定义与重要性',
-          content: '数据分析是指使用适当的统计分析方法对收集到的数据进行处理、分析和解释，以发现数据中的模式、趋势和关系，为决策提供依据。\n\n数据分析的重要性：\n1. 帮助企业做出数据驱动的决策\n2. 发现业务中的问题和机会\n3. 优化业务流程和提高效率\n4. 预测未来趋势和市场变化',
-          codeExamples: [],
-          resources: [
-            '《数据分析基础》教材',
-            '数据分析流程图表',
-            '案例分析：电商平台用户行为分析'
-          ]
-        },
-        {
-          id: 'section1-2',
-          title: '数据分析的基本流程',
-          content: '数据分析的基本流程包括：\n\n1. 问题定义：明确分析的目标和问题\n2. 数据收集：获取相关的数据\n3. 数据清洗：处理缺失值、异常值等\n4. 数据探索：了解数据的基本特征\n5. 数据分析：使用适当的方法分析数据\n6. 结果可视化：通过图表展示分析结果\n7. 结论与建议：基于分析结果提出结论和建议',
-          codeExamples: [],
-          resources: [
-            '数据分析流程图解',
-            '数据清洗最佳实践指南',
-            '案例：某企业数据分析项目流程'
-          ]
-        },
-        {
-          id: 'section1-3',
-          title: '数据类型与数据结构',
-          content: '数据类型包括：\n\n1. 数值型数据：整数、浮点数等\n2. 分类型数据：类别、标签等\n3. 时间序列数据：按时间顺序排列的数据\n4. 文本数据：文字、文档等\n\n数据结构包括：\n1. 表格数据：行和列组成的数据\n2. 层次数据：树状结构的数据\n3. 网络数据：节点和边组成的数据',
-          codeExamples: [],
-          resources: [
-            '数据类型与结构详解',
-            'Python数据结构教程',
-            '数据类型转换练习'
-          ]
-        },
-        {
-          id: 'section1-4',
-          title: '数据分析的常用方法分类',
-          content: '数据分析方法可分为：\n\n1. 描述性分析：描述数据的基本特征\n2. 诊断性分析：分析数据发生的原因\n3. 预测性分析：预测未来的趋势\n4. 规范性分析：提供最优决策建议',
-          codeExamples: [],
-          resources: [
-            '数据分析方法分类表',
-            '各分析方法适用场景',
-            '分析方法选择指南'
-          ]
-        }
-      ]
-    },
-    'chapter2': {
-      title: '第二章：数据可视化技术',
-      sections: [
-        {
-          id: 'section2-1',
-          title: '数据可视化的基本原理',
-          content: '数据可视化是通过图表、图形等方式将数据以视觉形式展示出来，帮助人们更直观地理解数据。\n\n数据可视化的基本原则：\n1. 准确性：正确反映数据的真实情况\n2. 清晰性：易于理解和解读\n3. 美观性：视觉效果良好\n4. 有效性：能够有效传达信息',
-          codeExamples: [],
-          resources: [
-            '数据可视化原理教程',
-            '视觉设计基础',
-            '数据可视化案例集'
-          ]
-        },
-        {
-          id: 'section2-2',
-          title: 'Matplotlib库的使用',
-          content: 'Matplotlib是Python中最常用的数据可视化库，可用于创建各种类型的图表。\n\n基本使用步骤：\n1. 导入Matplotlib库\n2. 创建图表和子图\n3. 绘制数据\n4. 设置图表属性\n5. 显示或保存图表',
-          codeExamples: ['import matplotlib.pyplot as plt', 'plt.figure(figsize=(10, 6))', 'plt.plot(x, y)', 'plt.title("标题")', 'plt.xlabel("X轴")', 'plt.ylabel("Y轴")', 'plt.show()'],
-          resources: [
-            'Matplotlib官方文档',
-            'Matplotlib基础教程',
-            '常见图表绘制示例'
-          ]
-        },
-        {
-          id: 'section2-3',
-          title: 'Seaborn库的高级可视化',
-          content: 'Seaborn是基于Matplotlib的高级数据可视化库，提供了更美观的默认样式和更高级的图表类型。\n\n常用图表类型：\n1. 散点图：展示两个变量之间的关系\n2. 直方图：展示数据的分布\n3. 箱线图：展示数据的分布和异常值\n4. 热力图：展示变量之间的相关性',
-          codeExamples: ['import seaborn as sns', 'sns.scatterplot(x="x", y="y", data=data)', 'sns.histplot(data["value"])'],
-          resources: [
-            'Seaborn官方教程',
-            'Seaborn图表类型详解',
-            'Seaborn实战案例'
-          ]
-        },
-        {
-          id: 'section2-4',
-          title: '交互式数据可视化工具',
-          content: '交互式数据可视化工具允许用户与图表进行交互，如缩放、悬停查看详情等。\n\n常用工具：\n1. Plotly：创建交互式图表\n2. Dash：创建交互式数据应用\n3. Bokeh：创建交互式Web可视化',
-          codeExamples: [],
-          resources: [
-            'Plotly入门教程',
-            'Dash应用开发指南',
-            '交互式可视化案例'
-          ]
-        },
-        {
-          id: 'section2-5',
-          title: '数据可视化最佳实践',
-          content: '数据可视化的最佳实践：\n\n1. 选择合适的图表类型\n2. 保持简洁明了\n3. 使用适当的颜色和标签\n4. 提供必要的上下文信息\n5. 避免图表欺诈',
-          codeExamples: [],
-          resources: [
-            '数据可视化最佳实践指南',
-            '图表类型选择参考',
-            '数据可视化设计原则'
-          ]
-        }
-      ]
-    },
-    'chapter3': {
-      title: '第三章：统计分析方法',
-      sections: [
-        {
-          id: 'section3-1',
-          title: '描述性统计分析',
-          content: '描述性统计分析用于描述数据的基本特征，包括：\n\n1. 集中趋势：均值、中位数、众数\n2. 离散程度：方差、标准差、范围\n3. 分布形状：偏度、峰度\n4. 分位数：四分位数、百分位数',
-          codeExamples: ['import numpy as np', 'np.mean(data)', 'np.median(data)', 'np.std(data)'],
-          resources: [
-            '《统计学原理》教材',
-            '描述性统计分析指南',
-            '统计量计算练习'
-          ]
-        },
-        {
-          id: 'section3-2',
-          title: '假设检验',
-          content: '假设检验用于判断样本数据是否支持某个假设。\n\n常见的假设检验：\n1. t检验：比较两个样本的均值\n2. 卡方检验：比较分类变量的分布\n3. F检验：比较多个样本的方差',
-          codeExamples: ['from scipy import stats', 'stats.ttest_ind(sample1, sample2)'],
-          resources: [
-            '假设检验原理详解',
-            't检验、卡方检验、F检验应用场景',
-            '假设检验案例分析'
-          ]
-        },
-        {
-          id: 'section3-3',
-          title: '方差分析',
-          content: '方差分析用于比较多个组之间的均值差异。\n\n类型：\n1. 单因素方差分析：一个自变量\n2. 双因素方差分析：两个自变量\n3. 多因素方差分析：多个自变量',
-          codeExamples: ['from scipy import stats', 'f_stat, p_value = stats.f_oneway(group1, group2, group3)'],
-          resources: [
-            '方差分析教程',
-            '方差分析假设条件',
-            '方差分析案例练习'
-          ]
-        },
-        {
-          id: 'section3-4',
-          title: '相关分析与回归分析',
-          content: '相关分析用于衡量变量之间的线性关系强度，回归分析用于建立变量之间的预测模型。\n\n类型：\n1. 简单线性回归：一个自变量\n2. 多元线性回归：多个自变量\n3. 非线性回归：非线性关系',
-          codeExamples: ['import numpy as np', 'from sklearn.linear_model import LinearRegression', 'X = np.array([[1], [2], [3]])', 'y = np.array([2, 4, 6])', 'model = LinearRegression()', 'model.fit(X, y)'],
-          resources: [
-            '相关分析与回归分析教程',
-            '回归模型评估指标',
-            '回归分析案例实战'
-          ]
-        },
-        {
-          id: 'section3-5',
-          title: '时间序列分析',
-          content: '时间序列分析用于分析和预测时间相关的数据。\n\n方法：\n1. 移动平均：平滑时间序列\n2. 指数平滑：对近期数据赋予更高权重\n3. ARIMA模型：自回归综合移动平均模型',
-          codeExamples: [],
-          resources: [
-            '时间序列分析基础',
-            'ARIMA模型详解',
-            '时间序列预测案例'
-          ]
-        }
-      ]
-    },
-    'chapter4': {
-      title: '第四章：机器学习基础',
-      sections: [
-        {
-          id: 'section4-1',
-          title: '机器学习概述',
-          content: '机器学习是人工智能的一个分支，通过算法让计算机从数据中学习规律，而不需要明确的编程指令。\n\n机器学习的应用：\n1. 图像识别\n2. 语音识别\n3. 自然语言处理\n4. 推荐系统\n5. 预测分析',
-          codeExamples: [],
-          resources: [
-            '机器学习入门教程',
-            '机器学习应用案例集',
-            '机器学习算法分类表'
-          ]
-        },
-        {
-          id: 'section4-2',
-          title: '监督学习与无监督学习',
-          content: '监督学习：使用标记数据进行训练，目标是预测未知数据的标签。\n\n无监督学习：使用未标记数据进行训练，目标是发现数据中的模式和结构。\n\n半监督学习：结合标记和未标记数据进行训练。',
-          codeExamples: [],
-          resources: [
-            '监督学习与无监督学习对比',
-            '半监督学习方法介绍',
-            '学习方法选择指南'
-          ]
-        },
-        {
-          id: 'section4-3',
-          title: '线性回归与逻辑回归',
-          content: '线性回归：用于预测连续值的监督学习算法。\n\n逻辑回归：用于预测分类标签的监督学习算法，输出是概率值。',
-          codeExamples: ['from sklearn.linear_model import LinearRegression, LogisticRegression', 'model = LinearRegression()', 'model.fit(X_train, y_train)'],
-          resources: [
-            '线性回归原理与实践',
-            '逻辑回归详解',
-            '回归模型调优指南'
-          ]
-        },
-        {
-          id: 'section4-4',
-          title: '决策树与随机森林',
-          content: '决策树：通过树状结构进行决策的监督学习算法。\n\n随机森林：由多个决策树组成的集成学习算法，通过投票机制提高预测准确性。',
-          codeExamples: ['from sklearn.tree import DecisionTreeClassifier', 'from sklearn.ensemble import RandomForestClassifier', 'model = RandomForestClassifier(n_estimators=100)'],
-          resources: [
-            '决策树算法原理',
-            '随机森林参数调优',
-            '树模型可视化工具'
-          ]
-        },
-        {
-          id: 'section4-5',
-          title: '聚类分析',
-          content: '聚类分析是一种无监督学习方法，用于将相似的数据点分组。\n\n常见的聚类算法：\n1. K-means：基于距离的聚类\n2. 层次聚类：基于层次结构的聚类\n3. DBSCAN：基于密度的聚类',
-          codeExamples: ['from sklearn.cluster import KMeans', 'model = KMeans(n_clusters=3)', 'model.fit(X)'],
-          resources: [
-            '聚类算法原理',
-            'K-means聚类实践',
-            '聚类结果评估方法'
-          ]
-        }
-      ]
-    },
-    'chapter5': {
-      title: '第五章：商务数据分析应用',
-      sections: [
-        {
-          id: 'section5-1',
-          title: '市场数据分析',
-          content: '市场数据分析用于了解市场趋势、竞争对手和消费者行为。\n\n分析内容：\n1. 市场规模和增长趋势\n2. 竞争对手分析\n3. 消费者行为分析\n4. 市场份额分析',
-          codeExamples: [],
-          resources: [
-            '市场数据分析指南',
-            '竞争对手分析框架',
-            '市场分析案例集'
-          ]
-        },
-        {
-          id: 'section5-2',
-          title: '客户行为分析',
-          content: '客户行为分析用于了解客户的购买习惯、偏好和价值。\n\n分析内容：\n1. 客户细分\n2. 购买行为分析\n3. 客户生命周期价值\n4. 客户流失预测',
-          codeExamples: [],
-          resources: [
-            '客户行为分析方法',
-            'RFM模型应用',
-            '客户流失预测模型'
-          ]
-        },
-        {
-          id: 'section5-3',
-          title: '销售数据分析',
-          content: '销售数据分析用于优化销售策略和提高销售业绩。\n\n分析内容：\n1. 销售趋势分析\n2. 产品销售分析\n3. 区域销售分析\n4. 销售渠道分析',
-          codeExamples: [],
-          resources: [
-            '销售数据分析模板',
-            '销售趋势预测方法',
-            '销售分析案例'
-          ]
-        },
-        {
-          id: 'section5-4',
-          title: '供应链数据分析',
-          content: '供应链数据分析用于优化供应链流程和降低成本。\n\n分析内容：\n1. 库存分析\n2. 物流成本分析\n3. 供应商绩效分析\n4. 需求预测',
-          codeExamples: [],
-          resources: [
-            '供应链数据分析指南',
-            '库存优化模型',
-            '供应商评估体系'
-          ]
-        },
-        {
-          id: 'section5-5',
-          title: '财务数据分析',
-          content: '财务数据分析用于评估企业的财务状况和业绩。\n\n分析内容：\n1. 财务比率分析\n2. 成本分析\n3. 盈利能力分析\n4. 现金流分析',
-          codeExamples: [],
-          resources: [
-            '财务分析指标体系',
-            '成本分析方法',
-            '财务报表分析案例'
-          ]
-        }
-      ]
-    },
-    'chapter6': {
-      title: '第六章：数据分析项目实战',
-      sections: [
-        {
-          id: 'section6-1',
-          title: '项目选题与规划',
-          content: '项目选题应结合实际业务需求，具有明确的目标和可行性。\n\n规划内容：\n1. 确定项目目标和范围\n2. 制定项目计划和时间表\n3. 确定数据需求和来源\n4. 评估项目风险',
-          codeExamples: [],
-          resources: [
-            '项目选题指南',
-            '项目计划模板',
-            '项目风险管理方法'
-          ]
-        },
-        {
-          id: 'section6-2',
-          title: '数据获取与清洗',
-          content: '数据获取：从各种来源收集数据，如数据库、API、文件等。\n\n数据清洗：处理数据中的缺失值、异常值、重复值等问题。',
-          codeExamples: ['import pandas as pd', 'df = pd.read_csv("data.csv")', 'df = df.dropna()', 'df = df.drop_duplicates()'],
-          resources: [
-            '数据获取方法汇总',
-            '数据清洗工具推荐',
-            '数据质量评估标准'
-          ]
-        },
-        {
-          id: 'section6-3',
-          title: '数据分析与建模',
-          content: '根据项目目标选择合适的分析方法和模型。\n\n步骤：\n1. 数据探索和可视化\n2. 特征工程\n3. 模型选择和训练\n4. 模型评估和优化',
-          codeExamples: [],
-          resources: [
-            '数据分析方法选择指南',
-            '特征工程技巧',
-            '模型评估指标详解'
-          ]
-        },
-        {
-          id: 'section6-4',
-          title: '结果可视化与报告',
-          content: '将分析结果以清晰、直观的方式展示，并撰写详细的分析报告。\n\n报告内容：\n1. 项目背景和目标\n2. 数据来源和处理方法\n3. 分析过程和结果\n4. 结论和建议',
-          codeExamples: [],
-          resources: [
-            '数据分析报告模板',
-            '数据可视化最佳实践',
-            '报告撰写技巧'
-          ]
-        },
-        {
-          id: 'section6-5',
-          title: '项目展示与评估',
-          content: '项目展示：向相关人员展示分析结果和建议。\n\n项目评估：评估项目的成功度和影响力。',
-          codeExamples: [],
-          resources: [
-            '项目展示技巧',
-            '项目评估标准',
-            '成功项目案例分析'
-          ]
-        }
-      ]
-    }
-  };
+# 1. 读取数据
+df = pd.read_csv("user_behavior.csv")
 
-  // 400题题库（包含单选、多选和判断题）
-  const chapterQuestions = {
-    'chapter1': [
-      // 单选题
-      ...Array.from({ length: 200 }, (_, i) => ({
-        id: i + 1,
-        type: 'single' as const,
-        question: `数据分析基础问题 ${i + 1}：数据分析的主要目的是什么？`,
-        options: [
-          '收集数据',
-          '处理数据',
-          '从数据中提取有价值的信息',
-          '存储数据'
-        ],
-        correctAnswer: 2,
-        explanation: '数据分析的主要目的是从数据中提取有价值的信息，为决策提供依据。'
-      })),
-      // 多选题
-      ...Array.from({ length: 120 }, (_, i) => ({
-        id: i + 201,
-        type: 'multiple' as const,
-        question: `数据分析基础问题 ${i + 201}：下列哪些属于数据分析的基本流程？`,
-        options: [
-          '问题定义',
-          '数据收集',
-          '数据清洗',
-          '数据删除'
-        ],
-        correctAnswer: [0, 1, 2],
-        explanation: '数据分析的基本流程包括问题定义、数据收集、数据清洗、数据探索、数据分析、结果可视化、结论与建议。'
-      })),
-      // 判断题
-      ...Array.from({ length: 80 }, (_, i) => ({
-        id: i + 321,
-        type: 'judgment' as const,
-        question: `数据分析基础问题 ${i + 321}：描述性分析是数据分析的最高层次。`,
-        options: ['正确', '错误'],
+# 2. 缺失值处理
+df["消费金额"] = df["消费金额"].fillna(df["消费金额"].median())
+df["消费频次"] = df["消费频次"].fillna(df["消费频次"].median())
+df["性别"] = df["性别"].fillna("未知")
+df["地区"] = df["地区"].fillna("未知")
+df = df.dropna(subset=["注册时间"])
+
+# 3. 异常值处理（3σ原则）
+for col in ["消费金额", "浏览时长"]:
+    mean = df[col].mean()
+    std = df[col].std()
+    lower = mean - 3 * std
+    upper = mean + 3 * std
+    median = df[col].median()
+    df.loc[(df[col] < lower) | (df[col] > upper), col] = median
+
+# 4. 特征处理
+df["消费金额分桶"] = pd.qcut(df["消费金额"], 3, labels=["低", "中", "高"])
+df["浏览时长离散化"] = pd.cut(df["浏览时长"], [0, 5, 15, 100], labels=["短", "中", "长"])
+
+# 5. 数据标准化
+scaler = StandardScaler()
+df[["消费金额_标准化", "消费频次_标准化", "最近消费天数_标准化"]] = scaler.fit_transform(
+    df[["消费金额", "消费频次", "最近消费天数"]]
+)
+
+# 6. 保存数据
+df.to_csv("processed_data.csv", index=False)
+print("✅ 数据预处理完成！")`,
+    questions: [
+      {
+        id: 1,
+        type: 'single',
+        question: '在处理含有异常值的数据时，应该用什么方法填充缺失值？',
+        options: ['均值', '中位数', '众数', '随机数'],
         correctAnswer: 1,
-        explanation: '数据分析的层次从低到高依次是：描述性分析、诊断性分析、预测性分析、规范性分析。'
-      }))
-    ],
-    'chapter2': [
-      // 单选题
-      ...Array.from({ length: 200 }, (_, i) => ({
-        id: i + 401,
-        type: 'single' as const,
-        question: `数据可视化问题 ${i + 1}：下列哪个库是Python中最常用的数据可视化库？`,
-        options: [
-          'NumPy',
-          'Pandas',
-          'Matplotlib',
-          'Scikit-learn'
-        ],
-        correctAnswer: 2,
-        explanation: 'Matplotlib是Python中最常用的数据可视化库。'
-      })),
-      // 多选题
-      ...Array.from({ length: 120 }, (_, i) => ({
-        id: i + 601,
-        type: 'multiple' as const,
-        question: `数据可视化问题 ${i + 201}：下列哪些是常用的数据可视化图表类型？`,
-        options: [
-          '散点图',
-          '直方图',
-          '箱线图',
-          '热力图'
-        ],
-        correctAnswer: [0, 1, 2, 3],
-        explanation: '散点图、直方图、箱线图和热力图都是常用的数据可视化图表类型。'
-      })),
-      // 判断题
-      ...Array.from({ length: 80 }, (_, i) => ({
-        id: i + 721,
-        type: 'judgment' as const,
-        question: `数据可视化问题 ${i + 321}：数据可视化的主要目的是使数据看起来更美观。`,
-        options: ['正确', '错误'],
+        explanation: '中位数受异常值影响较小，更适合填充含异常值的数据。'
+      },
+      {
+        id: 2,
+        type: 'single',
+        question: 'OneHotEncoder最适合处理什么类型的类别字段？',
+        options: ['高基数字段', '低基数字段', '所有类别字段', '数值字段'],
         correctAnswer: 1,
-        explanation: '数据可视化的主要目的是帮助人们更直观地理解数据，发现数据中的模式和趋势。'
-      }))
-    ],
-    'chapter3': [
-      // 单选题
-      ...Array.from({ length: 200 }, (_, i) => ({
-        id: i + 801,
-        type: 'single' as const,
-        question: `统计分析问题 ${i + 1}：下列哪个指标用于衡量数据的集中趋势？`,
-        options: [
-          '方差',
-          '标准差',
-          '均值',
-          '范围'
-        ],
-        correctAnswer: 2,
-        explanation: '均值是衡量数据集中趋势的指标，方差、标准差和范围是衡量数据离散程度的指标。'
-      })),
-      // 多选题
-      ...Array.from({ length: 120 }, (_, i) => ({
-        id: i + 1001,
-        type: 'multiple' as const,
-        question: `统计分析问题 ${i + 201}：下列哪些属于假设检验的类型？`,
-        options: [
-          't检验',
-          '卡方检验',
-          'F检验',
-          'Z检验'
-        ],
-        correctAnswer: [0, 1, 2, 3],
-        explanation: 't检验、卡方检验、F检验和Z检验都是常见的假设检验类型。'
-      })),
-      // 判断题
-      ...Array.from({ length: 80 }, (_, i) => ({
-        id: i + 1121,
-        type: 'judgment' as const,
-        question: `统计分析问题 ${i + 321}：相关分析可以确定变量之间的因果关系。`,
-        options: ['正确', '错误'],
-        correctAnswer: 1,
-        explanation: '相关分析只能衡量变量之间的线性关系强度，不能确定因果关系。'
-      }))
-    ],
-    'chapter4': [
-      // 单选题
-      ...Array.from({ length: 200 }, (_, i) => ({
-        id: i + 1201,
-        type: 'single' as const,
-        question: `机器学习问题 ${i + 1}：下列哪种学习方式使用标记数据进行训练？`,
-        options: [
-          '监督学习',
-          '无监督学习',
-          '半监督学习',
-          '强化学习'
-        ],
-        correctAnswer: 0,
-        explanation: '监督学习使用标记数据进行训练，目标是预测未知数据的标签。'
-      })),
-      // 多选题
-      ...Array.from({ length: 120 }, (_, i) => ({
-        id: i + 1401,
-        type: 'multiple' as const,
-        question: `机器学习问题 ${i + 201}：下列哪些属于监督学习算法？`,
-        options: [
-          '线性回归',
-          '逻辑回归',
-          'K-means聚类',
-          '决策树'
-        ],
-        correctAnswer: [0, 1, 3],
-        explanation: '线性回归、逻辑回归和决策树属于监督学习算法，K-means聚类属于无监督学习算法。'
-      })),
-      // 判断题
-      ...Array.from({ length: 80 }, (_, i) => ({
-        id: i + 1521,
-        type: 'judgment' as const,
-        question: `机器学习问题 ${i + 321}：随机森林是由多个决策树组成的集成学习算法。`,
-        options: ['正确', '错误'],
-        correctAnswer: 0,
-        explanation: '随机森林是由多个决策树组成的集成学习算法，通过投票机制提高预测准确性。'
-      }))
-    ],
-    'chapter5': [
-      // 单选题
-      ...Array.from({ length: 200 }, (_, i) => ({
-        id: i + 1601,
-        type: 'single' as const,
-        question: `商务数据分析问题 ${i + 1}：下列哪种分析用于了解客户的购买习惯和偏好？`,
-        options: [
-          '市场数据分析',
-          '客户行为分析',
-          '销售数据分析',
-          '供应链数据分析'
-        ],
-        correctAnswer: 1,
-        explanation: '客户行为分析用于了解客户的购买习惯、偏好和价值。'
-      })),
-      // 多选题
-      ...Array.from({ length: 120 }, (_, i) => ({
-        id: i + 1801,
-        type: 'multiple' as const,
-        question: `商务数据分析问题 ${i + 201}：下列哪些属于财务数据分析的内容？`,
-        options: [
-          '财务比率分析',
-          '成本分析',
-          '盈利能力分析',
-          '客户流失预测'
-        ],
-        correctAnswer: [0, 1, 2],
-        explanation: '财务比率分析、成本分析和盈利能力分析属于财务数据分析的内容，客户流失预测属于客户行为分析的内容。'
-      })),
-      // 判断题
-      ...Array.from({ length: 80 }, (_, i) => ({
-        id: i + 1921,
-        type: 'judgment' as const,
-        question: `商务数据分析问题 ${i + 321}：销售数据分析可以帮助企业优化销售策略和提高销售业绩。`,
-        options: ['正确', '错误'],
-        correctAnswer: 0,
-        explanation: '销售数据分析用于优化销售策略和提高销售业绩，包括销售趋势分析、产品销售分析、区域销售分析和销售渠道分析。'
-      }))
-    ],
-    'chapter6': [
-      // 单选题
-      ...Array.from({ length: 200 }, (_, i) => ({
-        id: i + 2001,
-        type: 'single' as const,
-        question: `数据分析项目实战问题 ${i + 1}：数据分析项目的第一步是什么？`,
-        options: [
-          '数据收集',
-          '问题定义',
-          '数据清洗',
-          '数据分析'
-        ],
-        correctAnswer: 1,
-        explanation: '数据分析项目的第一步是问题定义，明确分析的目标和问题。'
-      })),
-      // 多选题
-      ...Array.from({ length: 120 }, (_, i) => ({
-        id: i + 2201,
-        type: 'multiple' as const,
-        question: `数据分析项目实战问题 ${i + 201}：下列哪些属于数据清洗的内容？`,
-        options: [
-          '处理缺失值',
-          '处理异常值',
-          '处理重复值',
-          '数据可视化'
-        ],
-        correctAnswer: [0, 1, 2],
-        explanation: '数据清洗的内容包括处理缺失值、异常值和重复值，数据可视化属于数据分析的内容。'
-      })),
-      // 判断题
-      ...Array.from({ length: 80 }, (_, i) => ({
-        id: i + 2321,
-        type: 'judgment' as const,
-        question: `数据分析项目实战问题 ${i + 321}：数据分析报告只需要包含分析结果，不需要包含分析过程。`,
-        options: ['正确', '错误'],
-        correctAnswer: 1,
-        explanation: '数据分析报告应该包含项目背景和目标、数据来源和处理方法、分析过程和结果、结论和建议等内容。'
-      }))
+        explanation: 'OneHotEncoder适合低基数字段，高基数字段会导致维度爆炸。'
+      },
+      {
+        id: 3,
+        type: 'multiple',
+        question: '常见的异常值检测方法有哪些？',
+        options: ['3σ原则', '箱线图', '随机森林', 'PCA'],
+        correctAnswer: [0, 1],
+        explanation: '3σ原则和箱线图是常用的统计异常检测方法。'
+      }
     ]
-  };
+  },
+  {
+    id: 2,
+    title: '多维统计+深度相关性分析',
+    description: '掌握描述统计和相关性分析，找到影响业务的关键因子',
+    coreKnowledge: [
+      '描述统计（均值/中位数/分位数）',
+      '皮尔逊相关系数',
+      '斯皮尔曼相关系数',
+      '相关性热力图',
+      '多因子关联研判'
+    ],
+    businessScenario: '电商营收影响因子分析，找到"哪些指标影响营收"，为后续运营决策提供支撑',
+    tasks: [
+      '读取预处理后的数据，新增"营收"字段',
+      '做描述统计，分析数据分布特征',
+      '计算皮尔逊和斯皮尔曼相关系数',
+      '绘制相关性热力图',
+      '分析强相关指标和多重共线性',
+      '得出核心结论'
+    ],
+    pitfalls: [
+      '混淆皮尔逊和斯皮尔曼相关系数',
+      '误将"相关性"当作"因果关系"',
+      '热力图不调整颜色、不标注相关系数'
+    ],
+    deliverables: [
+      '相关性分析代码文件',
+      '描述统计表+相关性热力图',
+      '关联分析结论'
+    ],
+    difficulty: 'beginner',
+    duration: '2小时',
+    icon: '📊',
+    color: 'from-purple-500 to-pink-400',
+    codeExample: `import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
 
-  // 学习资源数据
-  const learningResources: Resource[] = [
-    {
-      id: 1,
-      title: 'Python数据分析入门',
-      type: 'document',
-      description: 'Python数据分析的基础教程，涵盖NumPy、Pandas等库的使用',
-      link: 'https://pandas.pydata.org/docs/getting_started/intro_tutorials/',
-      difficulty: 'beginner'
-    },
-    {
-      id: 2,
-      title: '数据可视化实战',
-      type: 'video',
-      description: '使用Matplotlib和Seaborn创建专业的数据可视化图表',
-      link: 'https://www.bilibili.com/video/BV17Y4y157yf/',
-      duration: '8小时',
-      difficulty: 'intermediate'
-    },
-    {
-      id: 3,
-      title: '统计学基础',
-      type: 'document',
-      description: '数据分析所需的统计学基础知识',
-      link: 'https://www.statlearning.com/',
-      difficulty: 'beginner'
-    },
-    {
-      id: 4,
-      title: '机器学习实战',
-      type: 'document',
-      description: '使用Scikit-learn进行机器学习的实践指南',
-      link: 'https://scikit-learn.org/stable/tutorial/index.html',
-      difficulty: 'intermediate'
-    },
-    {
-      id: 5,
-      title: '商务数据分析案例',
-      type: 'article',
-      description: '真实的商务数据分析案例分析',
-      link: 'https://www.kaggle.com/datasets',
-      difficulty: 'intermediate'
-    },
-    {
-      id: 6,
-      title: 'Pandas高级教程',
-      type: 'code',
-      description: 'Pandas库的高级使用技巧和最佳实践',
-      link: 'https://pandas.pydata.org/docs/user_guide/advanced.html',
-      difficulty: 'advanced'
-    },
-    {
-      id: 7,
-      title: '数据科学实战',
-      type: 'video',
-      description: '从数据获取到模型部署的完整数据科学流程',
-      link: 'https://www.coursera.org/specializations/jhu-data-science',
-      duration: '10小时',
-      difficulty: 'advanced'
-    },
-    {
-      id: 8,
-      title: '时间序列分析',
-      type: 'article',
-      description: '使用Python进行时间序列分析的方法和技巧',
-      link: 'https://www.statsmodels.org/stable/tsa.html',
-      difficulty: 'advanced'
-    }
-  ];
+# 1. 读取数据
+df = pd.read_csv("processed_data.csv")
 
-  // 练习数据
-  const exercises: Question[] = [
-    {
-      id: 1,
-      question: '以下哪个库不是Python中常用的数据分析库？',
-      options: ['NumPy', 'Pandas', 'Matplotlib', 'Flask'],
-      correctAnswer: 3,
-      explanation: 'Flask是一个Web框架，不是数据分析库。NumPy、Pandas和Matplotlib都是常用的数据分析库。'
-    },
-    {
-      id: 2,
-      question: '数据可视化的主要目的是什么？',
-      options: ['使数据更复杂', '帮助理解数据', '占用更多存储空间', '增加数据量'],
-      correctAnswer: 1,
-      explanation: '数据可视化的主要目的是帮助人们更直观地理解数据，发现数据中的模式和趋势。'
-    },
-    {
-      id: 3,
-      question: '以下哪种分析方法属于监督学习？',
-      options: ['K-means聚类', '主成分分析', '线性回归', '层次聚类'],
-      correctAnswer: 2,
-      explanation: '线性回归是一种监督学习算法，用于预测连续值。K-means聚类、主成分分析和层次聚类都属于无监督学习。'
-    },
-    {
-      id: 4,
-      question: 'Pandas中用于读取CSV文件的函数是？',
-      options: ['read_csv()', 'load_csv()', 'import_csv()', 'fetch_csv()'],
-      correctAnswer: 0,
-      explanation: 'Pandas中使用read_csv()函数来读取CSV文件。'
-    },
-    {
-      id: 5,
-      question: '以下哪个图表类型最适合展示数据的分布情况？',
-      options: ['折线图', '散点图', '柱状图', '直方图'],
-      correctAnswer: 3,
-      explanation: '直方图最适合展示数据的分布情况，它将数据分成多个 bins 并显示每个 bin 中的数据频率。'
-    }
-  ];
+# 2. 新增营收字段
+df["营收"] = df["消费金额"] * df["消费频次"]
+
+# 3. 描述统计
+desc_stats = df[["营收", "消费金额", "消费频次", "浏览时长"]].describe()
+print("描述统计：")
+print(desc_stats)
+
+# 4. 相关性分析
+numeric_cols = ["营收", "消费金额", "消费频次", "最近消费天数", "浏览时长"]
+pearson_corr = df[numeric_cols].corr(method="pearson")
+spearman_corr = df[numeric_cols].corr(method="spearman")
+
+print("\\n皮尔逊相关系数：")
+print(pearson_corr)
+
+# 5. 绘制相关性热力图
+plt.figure(figsize=(10, 8))
+sns.heatmap(pearson_corr, annot=True, cmap="coolwarm", center=0, 
+            fmt=".2f", square=True, linewidths=1)
+plt.title("相关性热力图（皮尔逊）", fontsize=14)
+plt.tight_layout()
+plt.savefig("correlation_heatmap.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+# 6. 分析强相关指标
+strong_corr = pearson_corr[(pearson_corr.abs() >= 0.7) & (pearson_corr.abs() < 1)]
+print("\\n强相关指标（|r|≥0.7）：")
+print(strong_corr.stack())`,
+    questions: [
+      {
+        id: 1,
+        type: 'single',
+        question: '皮尔逊相关系数适用于什么类型的关系？',
+        options: ['非线性关系', '线性关系', '分类关系', '时间序列关系'],
+        correctAnswer: 1,
+        explanation: '皮尔逊相关系数适用于衡量变量之间的线性关系强度。'
+      },
+      {
+        id: 2,
+        type: 'judgment',
+        question: '两个变量高度相关意味着它们之间存在因果关系。',
+        options: ['正确', '错误'],
+        correctAnswer: 1,
+        explanation: '相关性不代表因果关系，只能说明变量之间存在某种关联。'
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: '购物车关联规则挖掘',
+    description: '用Apriori算法挖掘商品组合，为捆绑销售提供数据支撑',
+    coreKnowledge: [
+      'Apriori算法',
+      '频繁项集',
+      '关联规则（支持度、置信度、提升度）',
+      '商品组合分析',
+      '捆绑销售挖掘'
+    ],
+    businessScenario: '电商购物车分析，挖掘"哪些商品经常一起被加入购物车"，为捆绑销售、商品陈列提供策略支撑',
+    tasks: [
+      '读取购物车数据',
+      '数据预处理，转换成one-hot编码格式',
+      '用Apriori算法挖掘频繁项集',
+      '生成关联规则，计算支持度、置信度、提升度',
+      '筛选有价值的规则（提升度>1）',
+      '给出捆绑销售建议'
+    ],
+    pitfalls: [
+      '支持度设置过高或过低',
+      '不筛选提升度，误将"无关商品组合"当作有效规则',
+      '商品名称有重复，影响关联结果'
+    ],
+    deliverables: [
+      '关联规则挖掘代码文件',
+      'Top10关联规则表',
+      '捆绑销售策略建议'
+    ],
+    difficulty: 'intermediate',
+    duration: '2.5小时',
+    icon: '🛒',
+    color: 'from-green-500 to-emerald-400',
+    codeExample: `import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# 1. 读取购物车数据
+df = pd.read_csv("cart_data.csv")
+
+# 2. 数据预处理 - 转换成one-hot编码格式
+basket = df.groupby(["订单ID", "商品名称"])["商品名称"].count().unstack().reset_index().fillna(0).set_index("订单ID")
+basket = (basket > 0).astype(int)
+
+# 3. 用Apriori算法挖掘频繁项集
+frequent_itemsets = apriori(
+    basket,
+    min_support=0.05,
+    use_colnames=True,
+    max_len=3
+)
+
+print(f"找到 {len(frequent_itemsets)} 个频繁项集")
+print(frequent_itemsets.sort_values("support", ascending=False).head(10))
+
+# 4. 生成关联规则
+rules = association_rules(
+    frequent_itemsets,
+    metric="confidence",
+    min_threshold=0.7
+)
+
+# 5. 筛选有价值的规则（提升度>1）
+rules = rules[rules["lift"] > 1]
+rules = rules.sort_values(["lift", "confidence"], ascending=[False, False])
+
+print(f"\\n找到 {len(rules)} 条有效规则")
+print("\\nTop10关联规则：")
+print(rules[["antecedents", "consequents", "support", "confidence", "lift"]].head(10))
+
+# 6. 保存结果
+rules.to_csv("association_rules.csv", index=False)
+
+print("\\n💡 业务建议示例：")
+for _, row in rules.head(3).iterrows():
+    print(f"组合：{list(row['antecedents'])} → {list(row['consequents'])}")
+    print(f"  建议：将这些商品捆绑销售，设置专属优惠！")`,
+    questions: [
+      {
+        id: 1,
+        type: 'single',
+        question: '提升度（lift）大于1表示什么？',
+        options: ['商品组合无关', '商品组合有协同效应', '商品组合负相关', '数据有问题'],
+        correctAnswer: 1,
+        explanation: '提升度>1表示商品组合有协同效应，一起购买的概率高于随机概率。'
+      },
+      {
+        id: 2,
+        type: 'single',
+        question: 'Apriori算法的核心思想是什么？',
+        options: ['如果一个项集是频繁的，则它的所有子集也是频繁的', '如果一个项集是非频繁的，则它的所有超集也是非频繁的', '两者都是', '两者都不是'],
+        correctAnswer: 1,
+        explanation: 'Apriori算法利用了反单调性：如果一个项集是非频繁的，则它的所有超集也是非频繁的。'
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: 'KMeans聚类分析实战',
+    description: '用户+商品双场景聚类，实现精准运营',
+    coreKnowledge: [
+      'KMeans聚类算法',
+      '数据标准化',
+      '肘部法则（确定k值）',
+      '聚类可视化',
+      '聚类结果解读',
+      '业务落地'
+    ],
+    businessScenario: '电商用户分群+商品分群，实现"精准运营+商品优化"，对高价值用户推送专属福利，对爆款商品加大库存',
+    tasks: [
+      '用户聚类：选择特征、标准化数据、用肘部法则确定k值、KMeans聚类',
+      '商品聚类：同样流程',
+      '用PCA降维，可视化聚类结果',
+      '分析每个分群的特征',
+      '给出业务落地建议'
+    ],
+    pitfalls: [
+      '聚类前不标准化数据',
+      '盲目设置k值，不做肘部法则',
+      '只做聚类，不解读分群特征、不落地业务建议'
+    ],
+    deliverables: [
+      '聚类分析代码文件',
+      '肘部法则图、聚类可视化图',
+      '分群特征解读+业务建议'
+    ],
+    difficulty: 'intermediate',
+    duration: '3小时',
+    icon: '🔍',
+    color: 'from-orange-500 to-amber-400',
+    codeExample: `import pandas as pd
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+
+# 1. 用户聚类
+df_user = pd.read_csv("processed_data.csv")
+user_features = ["消费金额", "消费频次", "最近消费天数", "浏览时长"]
+X_user = df_user[user_features].dropna()
+
+# 2. 数据标准化
+scaler = StandardScaler()
+X_user_scaled = scaler.fit_transform(X_user)
+
+# 3. 肘部法则确定k值
+inertias = []
+k_range = range(2, 10)
+for k in k_range:
+    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
+    kmeans.fit(X_user_scaled)
+    inertias.append(kmeans.inertia_)
+
+plt.figure(figsize=(10, 5))
+plt.plot(k_range, inertias, "bo-")
+plt.xlabel("Number of clusters (k)")
+plt.ylabel("Inertia")
+plt.title("肘部法则图")
+plt.grid(True, alpha=0.3)
+plt.savefig("elbow_method.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+# 4. KMeans聚类（选择k=4）
+k_best = 4
+kmeans_user = KMeans(n_clusters=k_best, random_state=42, n_init=10)
+df_user["用户分群"] = kmeans_user.fit_predict(X_user_scaled)
+
+# 5. PCA降维可视化
+pca = PCA(n_components=2)
+X_user_pca = pca.fit_transform(X_user_scaled)
+
+plt.figure(figsize=(10, 8))
+scatter = plt.scatter(X_user_pca[:, 0], X_user_pca[:, 1], 
+                     c=df_user["用户分群"], cmap="viridis", alpha=0.6, s=50)
+plt.colorbar(scatter, label="用户分群")
+plt.xlabel("PCA维度1")
+plt.ylabel("PCA维度2")
+plt.title("用户聚类结果可视化")
+plt.legend(*scatter.legend_elements(), title="分群")
+plt.savefig("user_clusters.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+# 6. 分析分群特征
+cluster_analysis = df_user.groupby("用户分群")[user_features].mean()
+print("用户分群特征分析：")
+print(cluster_analysis)
+
+# 7. 业务建议
+print("\\n🎯 业务建议：")
+print("分群0：高消费、高频次用户 → 推送专属福利、VIP服务")
+print("分群1：新用户 → 引导首次购买、新人礼包")
+print("分群2：流失用户 → 推送唤醒优惠券")`,
+    questions: [
+      {
+        id: 1,
+        type: 'single',
+        question: 'KMeans聚类前为什么要标准化数据？',
+        options: ['不需要', '让不同量纲的特征有相同的权重', '提高计算速度', '增加聚类数量'],
+        correctAnswer: 1,
+        explanation: '不同量纲的特征会导致聚类偏差，标准化后所有特征有相同的权重。'
+      },
+      {
+        id: 2,
+        type: 'single',
+        question: '肘部法则图中，肘部表示什么？',
+        options: ['k值越大越好', 'k值越小越好', 'k值增加时，inertia下降变慢的点', 'k值等于样本数'],
+        correctAnswer: 2,
+        explanation: '肘部法则中，肘部表示k值增加时，inertia下降显著变缓的点。'
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: 'RFM模型用户分层',
+    description: '企业通用运营模型，区分高价值、潜力、流失用户',
+    coreKnowledge: [
+      'RFM模型（Recency/Frequency/Monetary）',
+      '分位数分箱',
+      '用户分层逻辑',
+      '业务策略落地'
+    ],
+    businessScenario: '电商用户生命周期管理，区分高价值、潜力、流失用户，制定差异化运营策略，提升用户留存和营收',
+    tasks: [
+      '读取数据，提取RFM三个核心指标',
+      '指标分箱：用分位数将R、F、M各分为5个等级',
+      '计算RFM总分，并进行用户分层',
+      '统计各分层用户的数量、占比、总消费金额占比',
+      '制定具体的运营策略'
+    ],
+    pitfalls: [
+      'R指标打分错误（没有反向）',
+      '分层标准过于随意',
+      '运营策略同质化'
+    ],
+    deliverables: [
+      'RFM分层代码文件',
+      '各分层用户统计表格',
+      '分层运营策略方案'
+    ],
+    difficulty: 'intermediate',
+    duration: '2.5小时',
+    icon: '👥',
+    color: 'from-red-500 to-rose-400',
+    codeExample: `import pandas as pd
+import numpy as np
+
+# 1. 读取RFM数据
+df = pd.read_csv("user_rfm.csv")
+
+# 2. 指标分箱
+df["R分"] = pd.qcut(df["最近消费天数"], 5, labels=[5, 4, 3, 2, 1])  # R反向打分：越小越好
+df["F分"] = pd.qcut(df["消费频次"], 5, labels=[1, 2, 3, 4, 5])   # F正向打分：越大越好
+df["M分"] = pd.qcut(df["消费金额"], 5, labels=[1, 2, 3, 4, 5])   # M正向打分：越大越好
+
+df[["R分", "F分", "M分"]] = df[["R分", "F分", "M分"]].astype(int)
+
+# 3. 计算RFM总分
+df["RFM总分"] = df["R分"] + df["F分"] + df["M分"]
+
+# 4. 用户分层
+def rfm_level(score):
+    if score >= 13:
+        return "高价值用户"
+    elif score >= 10:
+        return "潜力用户"
+    elif score >= 7:
+        return "一般用户"
+    else:
+        return "流失用户"
+
+df["用户层级"] = df["RFM总分"].apply(rfm_level)
+
+# 5. 统计分析
+rfm_stats = df.groupby("用户层级").agg({
+    "用户ID": "count",
+    "消费金额": ["sum", "mean"],
+    "消费频次": "mean",
+    "最近消费天数": "mean"
+}).round(2)
+
+rfm_stats.columns = ["用户数量", "总消费金额", "平均消费金额", "平均消费频次", "平均最近消费天数"]
+rfm_stats["用户占比"] = (rfm_stats["用户数量"] / rfm_stats["用户数量"].sum() * 100).round(1)
+rfm_stats["金额占比"] = (rfm_stats["总消费金额"] / rfm_stats["总消费金额"].sum() * 100).round(1)
+
+print("RFM分层统计：")
+print(rfm_stats)
+
+# 6. 可视化
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+rfm_stats["用户占比"].plot(kind="pie", ax=axes[0], autopct="%1.1f%%", title="用户分布")
+rfm_stats["金额占比"].plot(kind="pie", ax=axes[1], autopct="%1.1f%%", title="消费金额分布")
+plt.tight_layout()
+plt.savefig("rfm_analysis.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+# 7. 业务策略
+print("\\n📋 分层运营策略：")
+print("""
+高价值用户：
+  - 专属客服
+  - 积分翻倍
+  - 新品优先体验
+  - 生日礼包
+
+潜力用户：
+  - 引导提升消费频次
+  - 满减优惠券
+  - 推荐高毛利商品
+
+一般用户：
+  - 常规促销活动
+  - 节日优惠券
+
+流失用户：
+  - 大额唤醒优惠券
+  - 个性化召回
+  - 询问流失原因
+""")`,
+    questions: [
+      {
+        id: 1,
+        type: 'single',
+        question: 'RFM模型中，R指标表示什么？',
+        options: ['消费金额', '消费频次', '最近消费天数', '用户注册时间'],
+        correctAnswer: 2,
+        explanation: 'R=Recency（最近消费天数）、F=Frequency（消费频次）、M=Monetary（消费金额）。'
+      },
+      {
+        id: 2,
+        type: 'judgment',
+        question: 'RFM模型中，R指标应该反向打分：最近消费天数越少，分数越高。',
+        options: ['正确', '错误'],
+        correctAnswer: 0,
+        explanation: '最近消费天数越少表示用户越活跃，所以应该反向打分。'
+      }
+    ]
+  },
+  {
+    id: 6,
+    title: '一元+多元线性回归',
+    description: '销量影响因子量化，理解各因素对销量的贡献',
+    coreKnowledge: [
+      '一元线性回归',
+      '多元线性回归',
+      '模型训练与评估（R²、MAE、MSE）',
+      '回归系数解读',
+      '多重共线性处理'
+    ],
+    businessScenario: '电商销量预测与影响因子分析，量化"广告费、活动次数、客单价"等指标对销量的影响，为广告投放、活动策划提供数据支撑',
+    tasks: [
+      '读取销量数据',
+      '一元线性回归：以"广告费"为特征预测销量',
+      '多元线性回归：用多个特征预测销量',
+      '检测多重共线性（用VIF值）',
+      '模型优化：删除共线性强的特征',
+      '模型评估与系数解读',
+      '预测应用'
+    ],
+    pitfalls: [
+      '忽略多重共线性',
+      '盲目追求高R²，忽略模型的业务意义',
+      '未评估模型误差'
+    ],
+    deliverables: [
+      '回归分析代码文件',
+      '模型评估指标表、回归系数表',
+      '影响因子解读+预测示例'
+    ],
+    difficulty: 'intermediate',
+    duration: '3小时',
+    icon: '📈',
+    color: 'from-indigo-500 to-violet-400',
+    codeExample: `import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+import matplotlib.pyplot as plt
+
+# 1. 读取数据
+df = pd.read_csv("sales_data.csv")
+
+# 2. 一元线性回归
+X_simple = df[["广告费"]]
+y = df["销量"]
+
+model_simple = LinearRegression()
+model_simple.fit(X_simple, y)
+y_pred_simple = model_simple.predict(X_simple)
+
+print("一元线性回归结果：")
+print(f"回归方程：销量 = {model_simple.coef_[0]:.3f} × 广告费 + {model_simple.intercept_:.3f}")
+print(f"R² = {r2_score(y, y_pred_simple):.3f}")
+
+# 3. 多元线性回归
+X_multi = df[["广告费", "活动次数", "客单价", "竞品价格"]]
+y = df["销量"]
+
+model_multi = LinearRegression()
+model_multi.fit(X_multi, y)
+y_pred_multi = model_multi.predict(X_multi)
+
+print("\\n多元线性回归结果：")
+print("回归系数：")
+for feature, coef in zip(X_multi.columns, model_multi.coef_):
+    print(f"  {feature}: {coef:.3f}")
+print(f"截距: {model_multi.intercept_:.3f}")
+print(f"R² = {r2_score(y, y_pred_multi):.3f}")
+print(f"MAE = {mean_absolute_error(y, y_pred_multi):.3f}")
+print(f"MSE = {mean_squared_error(y, y_pred_multi):.3f}")
+
+# 4. 检测多重共线性（VIF）
+vif_data = pd.DataFrame()
+vif_data["特征"] = X_multi.columns
+vif_data["VIF"] = [variance_inflation_factor(X_multi.values, i) for i in range(X_multi.shape[1])]
+print("\\nVIF值（多重共线性）：")
+print(vif_data)
+
+# 5. 模型优化：删除VIF>10的特征
+high_vif_features = vif_data[vif_data["VIF"] > 10]["特征"].tolist()
+if high_vif_features:
+    X_optimized = X_multi.drop(high_vif_features, axis=1)
+    model_optimized = LinearRegression()
+    model_optimized.fit(X_optimized, y)
+    y_pred_optimized = model_optimized.predict(X_optimized)
+    print(f"\\n优化后模型（删除{high_vif_features}）：")
+    print(f"R² = {r2_score(y, y_pred_optimized):.3f}")
+
+# 6. 预测应用
+sample_input = pd.DataFrame({
+    "广告费": [1000],
+    "活动次数": [3],
+    "客单价": [80],
+    "竞品价格": [90]
+})
+predicted_sales = model_multi.predict(sample_input)
+print(f"\\n预测示例：")
+print(f"广告费=1000, 活动次数=3, 客单价=80, 竞品价格=90")
+print(f"预测销量 = {predicted_sales[0]:.0f}")`,
+    questions: [
+      {
+        id: 1,
+        type: 'single',
+        question: 'VIF（方差膨胀因子）大于多少表示存在严重多重共线性？',
+        options: ['1', '5', '10', '100'],
+        correctAnswer: 2,
+        explanation: '一般认为VIF>10表示存在严重多重共线性问题。'
+      },
+      {
+        id: 2,
+        type: 'single',
+        question: 'R²值表示什么？',
+        options: ['模型的绝对误差', '模型解释的方差比例', '特征的重要性', '预测值的平均数'],
+        correctAnswer: 1,
+        explanation: 'R²表示模型解释的因变量方差比例，值越大拟合效果越好。'
+      }
+    ]
+  },
+  {
+    id: 7,
+    title: '随机森林回归+特征重要性',
+    description: '非线性预测，找到影响销量的核心因素',
+    coreKnowledge: [
+      '随机森林回归',
+      '特征重要性',
+      '模型调参（n_estimators、max_depth）',
+      '模型评估',
+      '非线性关系挖掘'
+    ],
+    businessScenario: '电商销量精准预测，解决"线性回归无法捕捉非线性关系"的问题，同时筛选核心影响特征',
+    tasks: [
+      '沿用销量数据',
+      '数据拆分：按7:3拆分为训练集和测试集',
+      '随机森林回归训练',
+      '模型调参：调整n_estimators、max_depth',
+      '特征重要性分析',
+      '对比分析：与多元线性回归模型对比'
+    ],
+    pitfalls: [
+      '模型参数设置过于极端',
+      '不做参数调参，直接使用默认参数',
+      '误将"特征重要性高"当作"因果关系"'
+    ],
+    deliverables: [
+      '随机森林代码文件',
+      '不同参数模型效果对比表、特征重要性排序图',
+      '模型对比分析报告'
+    ],
+    difficulty: 'advanced',
+    duration: '3小时',
+    icon: '🌲',
+    color: 'from-teal-500 to-cyan-400',
+    codeExample: `import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 1. 读取数据
+df = pd.read_csv("sales_data.csv")
+X = df[["广告费", "活动次数", "客单价", "竞品价格"]]
+y = df["销量"]
+
+# 2. 数据拆分
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 3. 模型调参
+param_grid = {
+    "n_estimators": [50, 100, 200],
+    "max_depth": [3, 5, 7]
+}
+
+results = []
+for n_estimators in param_grid["n_estimators"]:
+    for max_depth in param_grid["max_depth"]:
+        model = RandomForestRegressor(
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            random_state=42,
+            n_jobs=-1
+        )
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        results.append({
+            "n_estimators": n_estimators,
+            "max_depth": max_depth,
+            "R2": r2_score(y_test, y_pred),
+            "MAE": mean_absolute_error(y_test, y_pred)
+        })
+
+results_df = pd.DataFrame(results)
+print("参数调优结果：")
+print(results_df.sort_values("R2", ascending=False))
+
+# 4. 使用最优参数训练（n_estimators=100, max_depth=5）
+best_model = RandomForestRegressor(
+    n_estimators=100,
+    max_depth=5,
+    random_state=42,
+    n_jobs=-1
+)
+best_model.fit(X_train, y_train)
+y_pred = best_model.predict(X_test)
+
+print("\\n最优模型评估：")
+print(f"训练集 R² = {r2_score(y_train, best_model.predict(X_train)):.3f}")
+print(f"测试集 R² = {r2_score(y_test, y_pred):.3f}")
+print(f"MAE = {mean_absolute_error(y_test, y_pred):.3f}")
+
+# 5. 特征重要性
+feature_importance = pd.DataFrame({
+    "特征": X.columns,
+    "重要性": best_model.feature_importances_
+}).sort_values("重要性", ascending=False)
+
+print("\\n特征重要性排序：")
+print(feature_importance)
+
+plt.figure(figsize=(10, 6))
+sns.barplot(data=feature_importance, x="重要性", y="特征", hue="特征", legend=False, palette="viridis")
+plt.title("随机森林特征重要性")
+plt.tight_layout()
+plt.savefig("feature_importance.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+# 6. 预测应用
+sample_input = pd.DataFrame({
+    "广告费": [1000],
+    "活动次数": [3],
+    "客单价": [80],
+    "竞品价格": [90]
+})
+predicted_sales = best_model.predict(sample_input)
+print(f"\\n预测示例：")
+print(f"预测销量 = {predicted_sales[0]:.0f}")`,
+    questions: [
+      {
+        id: 1,
+        type: 'single',
+        question: '随机森林的n_estimators参数表示什么？',
+        options: ['最大深度', '决策树数量', '特征数量', '样本数量'],
+        correctAnswer: 1,
+        explanation: 'n_estimators表示随机森林中决策树的数量。'
+      },
+      {
+        id: 2,
+        type: 'multiple',
+        question: '随机森林相比线性回归的优势有哪些？',
+        options: ['可以捕捉非线性关系', '对异常值更鲁棒', '可以给出特征重要性', '计算速度更快'],
+        correctAnswer: [0, 1, 2],
+        explanation: '随机森林可以捕捉非线性关系、对异常值鲁棒、可以给出特征重要性，但计算速度通常比线性回归慢。'
+      }
+    ]
+  },
+  {
+    id: 8,
+    title: '时间序列完整分析',
+    description: '趋势+周期+预测，为库存规划提供数据支撑',
+    coreKnowledge: [
+      '时间序列预处理（日期格式转换、重采样）',
+      '移动平均',
+      '趋势分析',
+      '周期识别',
+      '简易时序预测（ARIMA）'
+    ],
+    businessScenario: '电商月度销量时间序列分析，识别销量的趋势（上升/下降）、周期（月度/季度），预测未来3个月的销量，为库存规划提供支撑',
+    tasks: [
+      '读取时间序列数据',
+      '预处理：日期格式转换、按月度重采样',
+      '趋势分析：计算移动平均，绘制折线图',
+      '周期识别：绘制月度销量热力图',
+      '时序预测：用ARIMA模型预测未来3个月',
+      '结果评估与库存建议'
+    ],
+    pitfalls: [
+      '未做日期格式转换',
+      '移动平均窗口设置不合理',
+      '盲目使用ARIMA模型，不分析数据的平稳性'
+    ],
+    deliverables: [
+      '时序分析代码文件',
+      '趋势图、周期热力图、预测结果图',
+      '预测评估+库存建议'
+    ],
+    difficulty: 'advanced',
+    duration: '3小时',
+    icon: '⏰',
+    color: 'from-yellow-500 to-orange-400',
+    codeExample: `import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+
+# 1. 读取数据
+df = pd.read_csv("time_series_sales.csv")
+df["日期"] = pd.to_datetime(df["日期"])
+df.set_index("日期", inplace=True)
+
+# 2. 按月度重采样
+df_monthly = df.resample("M").sum()
+
+# 3. 趋势分析 - 移动平均
+df_monthly["3月移动平均"] = df_monthly["销量"].rolling(window=3).mean()
+df_monthly["6月移动平均"] = df_monthly["销量"].rolling(window=6).mean()
+
+plt.figure(figsize=(12, 6))
+plt.plot(df_monthly["销量"], label="原始销量", alpha=0.5)
+plt.plot(df_monthly["3月移动平均"], label="3月移动平均", linewidth=2)
+plt.plot(df_monthly["6月移动平均"], label="6月移动平均", linewidth=2)
+plt.title("销量趋势图")
+plt.xlabel("日期")
+plt.ylabel("销量")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig("trend_analysis.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+# 4. 周期识别 - 月度热力图
+df_monthly["年份"] = df_monthly.index.year
+df_monthly["月份"] = df_monthly.index.month
+monthly_pivot = df_monthly.pivot(index="年份", columns="月份", values="销量")
+
+plt.figure(figsize=(12, 6))
+sns.heatmap(monthly_pivot, annot=True, fmt=".0f", cmap="YlOrRd", 
+            linewidths=0.5, cbar_kws={"label": "销量"})
+plt.title("月度销量热力图")
+plt.tight_layout()
+plt.savefig("seasonal_heatmap.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+# 5. ARIMA模型预测
+# 使用自动选择的参数(p=1,d=1,q=1)
+model = ARIMA(df_monthly["销量"], order=(1, 1, 1))
+results = model.fit()
+print(results.summary())
+
+# 预测未来3个月
+forecast_steps = 3
+forecast = results.get_forecast(steps=forecast_steps)
+forecast_df = forecast.summary_frame()
+
+print("\\n未来3个月预测结果：")
+print(forecast_df)
+
+# 可视化预测结果
+plt.figure(figsize=(12, 6))
+plt.plot(df_monthly["销量"], label="历史销量", linewidth=2)
+plt.plot(forecast_df["mean"], label="预测值", color="red", linewidth=2, marker="o")
+plt.fill_between(
+    forecast_df.index,
+    forecast_df["mean_ci_lower"],
+    forecast_df["mean_ci_upper"],
+    color="red",
+    alpha=0.2,
+    label="置信区间"
+)
+plt.title("销量预测（ARIMA）")
+plt.xlabel("日期")
+plt.ylabel("销量")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig("forecast.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+# 6. 库存建议
+avg_sales = df_monthly["销量"].tail(6).mean()
+forecast_mean = forecast_df["mean"].mean()
+print("\\n📦 库存规划建议：")
+print(f"过去6个月月均销量：{avg_sales:.0f}")
+print(f"预测月均销量：{forecast_mean:.0f}")
+print(f"建议安全库存量：{forecast_mean * 1.2:.0f}")`,
+    questions: [
+      {
+        id: 1,
+        type: 'single',
+        question: '时间序列重采样时，"M"表示什么频率？',
+        options: ['每日', '每周', '每月', '每季度'],
+        correctAnswer: 2,
+        explanation: '"M"表示月度（Monthly）频率。'
+      },
+      {
+        id: 2,
+        type: 'single',
+        question: 'ARIMA模型中的d参数表示什么？',
+        options: ['自回归阶数', '差分阶数', '移动平均阶数', '预测步数'],
+        correctAnswer: 1,
+        explanation: 'ARIMA(p,d,q)中，d表示差分阶数，用来让序列平稳。'
+      }
+    ]
+  },
+  {
+    id: 9,
+    title: '综合异常检测',
+    description: '统计+模型结合，识别异常订单和风险用户',
+    coreKnowledge: [
+      '统计异常检测（3σ原则、箱线图）',
+      '模型异常检测（孤立森林）',
+      '异常值解读',
+      '业务异常定位'
+    ],
+    businessScenario: '电商订单异常检测，识别"异常订单"（如刷单、恶意下单、系统误录）、"异常用户"（如高频下单但不付款），降低业务风险',
+    tasks: [
+      '读取订单数据',
+      '统计异常检测：用3σ原则和箱线图识别异常值',
+      '模型异常检测：用孤立森林算法识别异常订单',
+      '异常合并与解读：分析异常类型',
+      '业务处理：针对不同类型异常给出处理建议'
+    ],
+    pitfalls: [
+      '将"正常极端值"当作异常值',
+      '只检测异常，不解读异常原因、不给出处理建议',
+      '孤立森林参数设置不合理'
+    ],
+    deliverables: [
+      '异常检测代码文件',
+      '异常订单统计表格、异常可视化图',
+      '异常解读+处理建议'
+    ],
+    difficulty: 'advanced',
+    duration: '2.5小时',
+    icon: '🚨',
+    color: 'from-rose-500 to-pink-400',
+    codeExample: `import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
+
+# 1. 读取订单数据
+df = pd.read_csv("order_data.csv")
+
+# 2. 统计异常检测 - 3σ原则
+def detect_3sigma_outliers(data, column):
+    mean = data[column].mean()
+    std = data[column].std()
+    lower = mean - 3 * std
+    upper = mean + 3 * std
+    outliers = data[(data[column] < lower) | (data[column] > upper)]
+    return outliers
+
+order_amount_outliers_3sigma = detect_3sigma_outliers(df, "订单金额")
+print(f"3σ原则检测到 {len(order_amount_outliers_3sigma)} 个订单金额异常")
+
+# 3. 统计异常检测 - 箱线图
+def detect_boxplot_outliers(data, column):
+    Q1 = data[column].quantile(0.25)
+    Q3 = data[column].quantile(0.75)
+    IQR = Q3 - Q1
+    lower = Q1 - 1.5 * IQR
+    upper = Q3 + 1.5 * IQR
+    outliers = data[(data[column] < lower) | (data[column] > upper)]
+    return outliers
+
+order_amount_outliers_boxplot = detect_boxplot_outliers(df, "订单金额")
+print(f"箱线图检测到 {len(order_amount_outliers_boxplot)} 个订单金额异常")
+
+# 4. 可视化异常
+plt.figure(figsize=(14, 5))
+plt.subplot(1, 2, 1)
+sns.boxplot(data=df, y="订单金额")
+plt.title("订单金额箱线图")
+plt.subplot(1, 2, 2)
+sns.histplot(df["订单金额"], bins=50)
+plt.axvline(df["订单金额"].mean() - 3 * df["订单金额"].std(), color="red", linestyle="--")
+plt.axvline(df["订单金额"].mean() + 3 * df["订单金额"].std(), color="red", linestyle="--")
+plt.title("订单金额分布 + 3σ范围")
+plt.tight_layout()
+plt.savefig("anomaly_detection_stats.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+# 5. 孤立森林异常检测
+features = ["订单金额", "下单频次", "支付时长"]
+X = df[features].dropna()
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+iso_forest = IsolationForest(contamination=0.05, random_state=42, n_estimators=100)
+df["孤立森林异常"] = iso_forest.fit_predict(X_scaled)
+df["孤立森林异常"] = df["孤立森林异常"].map({1: 0, -1: 1})  # -1表示异常，转换为1
+
+print(f"\\n孤立森林检测到 {df['孤立森林异常'].sum()} 个异常订单")
+
+# 6. 合并两种方法的异常
+df["统计异常"] = 0
+df.loc[order_amount_outliers_3sigma.index, "统计异常"] = 1
+df.loc[order_amount_outliers_boxplot.index, "统计异常"] = 1
+
+df["综合异常"] = ((df["统计异常"] == 1) | (df["孤立森林异常"] == 1)).astype(int)
+print(f"综合检测到 {df['综合异常'].sum()} 个异常订单")
+
+# 7. 分析异常类型
+anomaly_df = df[df["综合异常"] == 1].copy()
+print("\\n异常订单分析：")
+print(f"高金额订单：{(anomaly_df['订单金额'] > 10000).sum()} 个")
+print(f"高频下单用户：{(anomaly_df['下单频次'] > 20).sum()} 个")
+print(f"未支付订单：{(anomaly_df['支付状态'] != '已支付').sum()} 个")
+
+# 8. 业务处理建议
+print("\\n🛡️  业务处理建议：")
+print("""
+高金额异常订单：
+  - 标记为需人工审核
+  - 联系用户确认订单
+
+高频小额订单：
+  - 限制下单频次
+  - 检查是否为刷单
+
+未支付高金额订单：
+  - 提示支付风险
+  - 观察是否为恶意下单
+""")`,
+    questions: [
+      {
+        id: 1,
+        type: 'single',
+        question: '孤立森林算法中的contamination参数表示什么？',
+        options: ['树的数量', '预期的异常比例', '最大深度', '特征数量'],
+        correctAnswer: 1,
+        explanation: 'contamination参数表示数据集中预期的异常样本比例。'
+      },
+      {
+        id: 2,
+        type: 'multiple',
+        question: '常见的异常检测方法有哪些？',
+        options: ['3σ原则', '箱线图', '孤立森林', 'KMeans聚类'],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '这些都是常用的异常检测方法，KMeans也可以用于检测偏离中心的异常值。'
+      }
+    ]
+  },
+  {
+    id: 10,
+    title: '全流程综合大项目',
+    description: '完整分析师交付闭环，解决真实业务问题',
+    coreKnowledge: [
+      '整合所有前期知识点',
+      '数据获取与清洗',
+      '关联规则挖掘',
+      'KMeans用户聚类+RFM分层',
+      '随机森林回归',
+      '时间序列分析',
+      '可视化呈现',
+      '业务策略输出'
+    ],
+    businessScenario: '电商综合数据分析，解决"如何提升营收"的核心业务问题，输出完整的分析报告，可直接用于业务决策',
+    tasks: [
+      '数据准备：整合所有数据集',
+      '数据预处理',
+      '核心分析：关联规则、用户聚类、RFM分层、销量预测、时序分析',
+      '可视化呈现：绘制至少5张核心图表',
+      '结论与落地：总结核心发现，给出可落地的业务策略',
+      '输出报告'
+    ],
+    pitfalls: [
+      '数据整合混乱',
+      '分析无重点',
+      '报告逻辑混乱，无数据支撑结论'
+    ],
+    deliverables: [
+      '全流程代码文件',
+      '所有核心可视化图表',
+      '完整数据分析报告'
+    ],
+    difficulty: 'advanced',
+    duration: '5小时',
+    icon: '🏆',
+    color: 'from-emerald-500 to-green-400',
+    codeExample: `"""
+全流程综合大项目
+目标：提升电商营收
+"""
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from datetime import datetime
+
+print("=" * 60)
+print("📊 全流程综合大项目 - 电商营收提升分析")
+print("=" * 60)
+
+# 1. 数据准备
+print("\\n[1/6] 数据准备...")
+df_user = pd.read_csv("processed_data.csv")
+df_cart = pd.read_csv("cart_data.csv")
+df_goods = pd.read_csv("goods_data.csv")
+df_sales = pd.read_csv("sales_data.csv")
+df_ts = pd.read_csv("time_series_sales.csv")
+df_order = pd.read_csv("order_data.csv")
+
+print(f"用户数据：{len(df_user)} 条")
+print(f"销售数据：{len(df_sales)} 条")
+
+# 2. 核心指标概览
+print("\\n[2/6] 核心指标概览...")
+total_revenue = (df_user["消费金额"] * df_user["消费频次"]).sum()
+avg_order_value = df_user["消费金额"].mean()
+total_orders = len(df_order[df_order["支付状态"] == "已支付"])
+
+print(f"总营收：{total_revenue:,.0f} 元")
+print(f"客单价：{avg_order_value:.0f} 元")
+print(f"订单数：{total_orders} 个")
+
+# 3. RFM用户分层（复用项目5）
+print("\\n[3/6] RFM用户分层...")
+df_user["R分"] = pd.qcut(df_user["最近消费天数"], 5, labels=[5, 4, 3, 2, 1])
+df_user["F分"] = pd.qcut(df_user["消费频次"], 5, labels=[1, 2, 3, 4, 5])
+df_user["M分"] = pd.qcut(df_user["消费金额"], 5, labels=[1, 2, 3, 4, 5])
+df_user[["R分", "F分", "M分"]] = df_user[["R分", "F分", "M分"]].astype(int)
+df_user["RFM总分"] = df_user["R分"] + df_user["F分"] + df_user["M分"]
+
+def rfm_level(score):
+    if score >= 13: return "高价值用户"
+    elif score >= 10: return "潜力用户"
+    elif score >= 7: return "一般用户"
+    else: return "流失用户"
+
+df_user["用户层级"] = df_user["RFM总分"].apply(rfm_level)
+
+rfm_summary = df_user.groupby("用户层级").agg({
+    "消费金额": ["sum", "mean"],
+    "用户ID": "count"
+}).round(0)
+rfm_summary.columns = ["总消费", "平均消费", "用户数"]
+rfm_summary["消费占比"] = (rfm_summary["总消费"] / rfm_summary["总消费"].sum() * 100).round(1)
+rfm_summary["用户占比"] = (rfm_summary["用户数"] / rfm_summary["用户数"].sum() * 100).round(1)
+print(rfm_summary)
+
+# 4. 销量影响因素分析（复用项目6/7）
+print("\\n[4/6] 销量影响因素分析...")
+from sklearn.ensemble import RandomForestRegressor
+X = df_sales[["广告费", "活动次数", "客单价", "竞品价格"]]
+y = df_sales["销量"]
+rf_model = RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42)
+rf_model.fit(X, y)
+feature_importance = pd.DataFrame({"特征": X.columns, "重要性": rf_model.feature_importances_}).sort_values("重要性", ascending=False)
+print("特征重要性：")
+print(feature_importance)
+
+# 5. 时间序列趋势分析（复用项目8）
+print("\\n[5/6] 时间序列趋势分析...")
+df_ts["日期"] = pd.to_datetime(df_ts["日期"])
+df_ts.set_index("日期", inplace=True)
+monthly_sales = df_ts.resample("M").sum()
+avg_growth = monthly_sales["销量"].pct_change().mean() * 100
+print(f"月度销量平均增长率：{avg_growth:.1f}%")
+
+# 6. 业务策略建议
+print("\\n[6/6] 业务策略建议...")
+print("\\n" + "=" * 60)
+print("📋 核心发现与策略建议")
+print("=" * 60)
+
+high_value_revenue = rfm_summary.loc["高价值用户", "总消费"]
+high_value_ratio = rfm_summary.loc["高价值用户", "消费占比"]
+print(f"""
+🎯 核心发现：
+1. 高价值用户占 {rfm_summary.loc['高价值用户', '用户占比']}%，贡献了 {high_value_ratio}% 的营收
+2. {feature_importance.iloc[0, 0]} 是影响销量的最重要因素
+3. 月度销量平均增长 {avg_growth:.1f}%
+
+💡 业务策略建议：
+1. 高价值用户运营：
+   - 专属VIP服务
+   - 积分翻倍
+   - 优先体验新品
+
+2. 营销优化：
+   - 加大 {feature_importance.iloc[0, 0]} 投入
+   - 针对高价值用户精准推送
+
+3. 流失用户召回：
+   - 唤醒优惠券
+   - 个性化召回
+
+4. 库存优化：
+   - 基于时间序列预测调整库存
+""")
+
+# 7. 可视化报告
+print("\\n📊 生成可视化报告...")
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+# RFM分层消费占比
+rfm_summary["消费占比"].plot(kind="pie", ax=axes[0,0], autopct="%1.1f%%", title="各层级消费占比")
+
+# 特征重要性
+sns.barplot(data=feature_importance, x="重要性", y="特征", hue="特征", ax=axes[0,1], palette="viridis", legend=False)
+axes[0,1].set_title("销量影响因素重要性")
+
+# 月度销量趋势
+monthly_sales["销量"].plot(ax=axes[1,0], title="月度销量趋势", linewidth=2)
+axes[1,0].grid(True, alpha=0.3)
+
+# 用户层级分布
+sns.countplot(data=df_user, y="用户层级", hue="用户层级", ax=axes[1,1], palette="viridis", legend=False)
+axes[1,1].set_title("用户层级分布")
+
+plt.tight_layout()
+plt.savefig("final_report.png", dpi=300, bbox_inches="tight")
+print("✅ 报告生成完成！")
+
+print("\\n" + "=" * 60)
+print("🎊 全流程综合大项目完成！")
+print("=" * 60)`,
+    questions: [
+      {
+        id: 1,
+        type: 'single',
+        question: '一个完整的数据分析项目通常第一步应该做什么？',
+        options: ['直接建模', '数据清洗', '问题定义与目标明确', '可视化'],
+        correctAnswer: 2,
+        explanation: '数据分析项目第一步应该是问题定义与目标明确，确保分析方向正确。'
+      },
+      {
+        id: 2,
+        type: 'multiple',
+        question: '好的数据分析报告应该包含哪些内容？',
+        options: ['项目背景与目标', '分析过程与方法', '核心发现', '业务策略建议'],
+        correctAnswer: [0, 1, 2, 3],
+        explanation: '完整的数据分析报告应该包含这些内容，形成完整的闭环。'
+      }
+    ]
+  }
+];
+
+export default function DataAnalysisCourse() {
+  const [learningState, setLearningState] = useState<LearningState>({
+    currentProject: null,
+    currentPhase: null,
+    projectProgress: {}
+  });
+  
+  const [testAnswers, setTestAnswers] = useState<Record<number, number | number[]>>({});
+  const [showResults, setShowResults] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
-
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const sections: Section[] = [
-    {
-      id: 'intro',
-      title: '课程介绍',
-      description: '本课程是商务数据分析与应用专业的核心课程，旨在培养学生掌握数据分析的基本方法和工具，能够运用数据分析技术解决实际商务问题。',
-      topics: [
-        '课程定位与目标',
-        '课程内容与结构',
-        '学习方法与要求',
-        '考核方式与标准'
-      ]
-    },
-    {
-      id: 'chapter1',
-      title: '第一章：数据分析基础',
-      description: '回顾数据分析的基本概念和流程，为后续学习打下基础。',
-      topics: [
-        '数据分析的定义与重要性',
-        '数据分析的基本流程',
-        '数据类型与数据结构',
-        '数据分析的常用方法分类'
-      ],
-      resources: [
-        '《数据分析基础》教材',
-        '数据分析流程图表',
-        '案例分析：电商平台用户行为分析'
-      ]
-    },
-    {
-      id: 'chapter2',
-      title: '第二章：数据可视化技术',
-      description: '学习数据可视化的基本原理和常用工具，掌握如何通过图表直观展示数据。',
-      topics: [
-        '数据可视化的基本原理',
-        'Matplotlib库的使用',
-        'Seaborn库的高级可视化',
-        '交互式数据可视化工具',
-        '数据可视化最佳实践'
-      ],
-      resources: [
-        'Matplotlib官方文档',
-        'Seaborn教程',
-        '数据可视化案例集'
-      ]
-    },
-    {
-      id: 'chapter3',
-      title: '第三章：统计分析方法',
-      description: '学习基本的统计分析方法，掌握数据描述和推断统计的应用。',
-      topics: [
-        '描述性统计分析',
-        '假设检验',
-        '方差分析',
-        '相关分析与回归分析',
-        '时间序列分析'
-      ],
-      resources: [
-        '《统计学原理》教材',
-        'SciPy统计模块文档',
-        '统计分析案例练习'
-      ]
-    },
-    {
-      id: 'chapter4',
-      title: '第四章：机器学习基础',
-      description: '介绍机器学习的基本概念和常用算法，培养学生的机器学习思维。',
-      topics: [
-        '机器学习概述',
-        '监督学习与无监督学习',
-        '线性回归与逻辑回归',
-        '决策树与随机森林',
-        '聚类分析'
-      ],
-      resources: [
-        'Scikit-learn官方文档',
-        '机器学习实战教程',
-        '分类算法案例分析'
-      ]
-    },
-    {
-      id: 'chapter5',
-      title: '第五章：商务数据分析应用',
-      description: '将数据分析技术应用于实际商务场景，解决真实的商务问题。',
-      topics: [
-        '市场数据分析',
-        '客户行为分析',
-        '销售数据分析',
-        '供应链数据分析',
-        '财务数据分析'
-      ],
-      resources: [
-        '商务数据分析案例集',
-        '行业数据分析报告',
-        '真实商务数据集'
-      ]
-    },
-    {
-      id: 'chapter6',
-      title: '第六章：数据分析项目实战',
-      description: '通过实际项目，综合运用所学知识，完成完整的数据分析任务。',
-      topics: [
-        '项目选题与规划',
-        '数据获取与清洗',
-        '数据分析与建模',
-        '结果可视化与报告',
-        '项目展示与评估'
-      ],
-      resources: [
-        '项目模板与规范',
-        '数据可视化工具指南',
-        '项目评估标准'
-      ]
-    }
-  ];
-
-  const toggleSection = (sectionId: string) => {
-    setActiveSection(activeSection === sectionId ? null : sectionId);
+  const selectProject = (projectId: number) => {
+    setLearningState(prev => ({
+      ...prev,
+      currentProject: projectId,
+      currentPhase: 'learn'
+    }));
+    setTestAnswers({});
+    setShowResults(false);
   };
 
-  const scrollToLearningSection = () => {
-    const learningSection = document.querySelector('[data-learning-section="true"]');
-    if (learningSection) {
-      learningSection.scrollIntoView({ behavior: 'smooth' });
-    }
+  const goToPhase = (phase: 'learn' | 'practice' | 'test') => {
+    setLearningState(prev => ({
+      ...prev,
+      currentPhase: phase
+    }));
   };
+
+  const markPhaseComplete = () => {
+    const { currentProject, currentPhase } = learningState;
+    if (!currentProject || !currentPhase) return;
+    
+    setLearningState(prev => ({
+      ...prev,
+      projectProgress: {
+        ...prev.projectProgress,
+        [currentProject]: {
+          ...prev.projectProgress[currentProject],
+          [`${currentPhase}Completed`]: true
+        }
+      }
+    }));
+  };
+
+  const selectAnswer = (questionId: number, answer: number | number[]) => {
+    setTestAnswers(prev => ({
+      ...prev,
+      [questionId]: answer
+    }));
+  };
+
+  const submitTest = () => {
+    if (!learningState.currentProject) return;
+    const project = projects.find(p => p.id === learningState.currentProject);
+    if (!project) return;
+
+    let correctCount = 0;
+    project.questions.forEach(q => {
+      const userAnswer = testAnswers[q.id];
+      if (userAnswer !== undefined) {
+        if (q.type === 'multiple' && Array.isArray(q.correctAnswer) && Array.isArray(userAnswer)) {
+          if (userAnswer.length === q.correctAnswer.length && 
+              userAnswer.every(a => q.correctAnswer.includes(a))) {
+            correctCount++;
+          }
+        } else if (userAnswer === q.correctAnswer) {
+          correctCount++;
+        }
+      }
+    });
+
+    const score = Math.round((correctCount / project.questions.length) * 100);
+    
+    setLearningState(prev => ({
+      ...prev,
+      projectProgress: {
+        ...prev.projectProgress,
+        [prev.currentProject!]: {
+          ...prev.projectProgress[prev.currentProject!],
+          testCompleted: true,
+          testScore: score
+        }
+      }
+    }));
+    
+    setShowResults(true);
+  };
+
+  const resetToProjectList = () => {
+    setLearningState(prev => ({
+      ...prev,
+      currentProject: null,
+      currentPhase: null
+    }));
+    setTestAnswers({});
+    setShowResults(false);
+  };
+
+  const getCurrentProject = () => {
+    if (!learningState.currentProject) return null;
+    return projects.find(p => p.id === learningState.currentProject) || null;
+  };
+
+  const currentProject = getCurrentProject();
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 relative overflow-hidden">
       {/* 背景效果 */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.2),transparent_70%)]"></div>
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSI+PHBhdGggZD0iTTAgMCBMIDUwIDAgTCA1MCA1MCBMIDAgNTAiIGZpbGw9IiMzYjgyZjYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjxwYXRoIGQ9Ik01MCAwIEwgMTAwIDAgTCAxMDAgNTAgTCA1MCA1MCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PHBhdGggZD0iTTAgNTAiIGQ9Ik01MCA1MCBMIDAgNTAgTCAwIDEwMCBMIDUwIDEwMCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PHBhdGggZD0iTTUwIDUwIEwgMTAwIDUwIEwgMTAwIDEwMCBMIDUwIDEwMCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9nPjwvc3ZnPg==')]"></div>
-      
-      {/* 鼠标跟随效果 */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1),transparent_70%)]"></div>
       <div 
-        className="absolute w-[600px] h-[600px] rounded-full bg-blue-600 filter blur-[200px] opacity-10 pointer-events-none"
+        className="absolute w-[500px] h-[500px] rounded-full bg-blue-500 filter blur-[150px] opacity-10 pointer-events-none"
         style={{
-          left: `${mousePosition.x - 300}px`,
-          top: `${mousePosition.y - 300}px`,
-          transition: 'left 0.1s ease, top 0.1s ease'
+          left: `${mousePosition.x - 250}px`,
+          top: `${mousePosition.y - 250}px`,
+          transition: 'left 0.2s ease, top 0.2s ease'
         }}
       ></div>
 
       {/* 页面头部 */}
-      <header className="relative py-16 px-4 overflow-hidden">
-        <div className="max-w-6xl mx-auto text-center relative z-10">
-          <div className="inline-block mb-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30">
-              <span className="text-4xl">📊</span>
+      <header className="relative py-12 px-4 border-b border-gray-700/50">
+        <div className="max-w-6xl mx-auto">
+          {!currentProject ? (
+            <div className="text-center">
+              <div className="inline-block mb-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30">
+                  <span className="text-3xl">📊</span>
+                </div>
+              </div>
+              <h1 className="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-400">
+                Python数据分析全栈实战
+              </h1>
+              <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+                十个独立项目，从入门到精通，边练边学，形成完整的学习闭环
+              </p>
+              <div className="mt-6 flex flex-wrap justify-center gap-3">
+                {['学习 → 实操 → 测试', '闭环学习', '可运行代码', '真实数据集'].map((tag, i) => (
+                  <span key={i} className="px-4 py-1.5 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/30 text-sm text-blue-300">
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
-          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-400">
-            数据分析技术
-          </h1>
-          <p className="text-xl text-cyan-300 mb-6">
-            商务数据分析与应用专业核心课程
-          </p>
-          <p className="text-gray-400 max-w-3xl mx-auto">
-            本课程旨在培养学生掌握数据分析的基本方法和工具，能够运用数据分析技术解决实际商务问题，
-            为后续的专业学习和职业发展打下坚实基础。
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <div className="px-5 py-2 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/50 text-sm text-blue-300">
-              高职大二
+          ) : (
+            <div className="flex items-center justify-between">
+              <button
+                onClick={resetToProjectList}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all"
+              >
+                <span>←</span>
+                <span>返回项目列表</span>
+              </button>
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{currentProject.icon}</span>
+                <div>
+                  <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                    {currentProject.title}
+                  </h1>
+                  <p className="text-sm text-gray-400">项目 {currentProject.id} / 10 · {currentProject.duration}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className={`w-3 h-3 rounded-full ${currentProject.difficulty === 'beginner' ? 'bg-green-500' : currentProject.difficulty === 'intermediate' ? 'bg-yellow-500' : 'bg-red-500'}`}></span>
+                <span className="text-sm text-gray-400">
+                  {currentProject.difficulty === 'beginner' ? '入门' : currentProject.difficulty === 'intermediate' ? '进阶' : '高级'}
+                </span>
+              </div>
             </div>
-            <div className="px-5 py-2 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/50 text-sm text-blue-300">
-              先修课程：Python基础
-            </div>
-            <div className="px-5 py-2 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/50 text-sm text-blue-300">
-              先修课程：数据采集与预处理
-            </div>
-            <div className="px-5 py-2 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/50 text-sm text-blue-300">
-              先修课程：商务数据分析基础
-            </div>
-          </div>
+          )}
         </div>
       </header>
 
-      {/* 课程大纲 */}
-      <section className="py-16 px-4 relative z-10">
+      {/* 主内容区 */}
+      <main className="relative py-8 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-              课程大纲
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              课程内容按照由浅入深的顺序编排，涵盖数据分析的核心技术和应用
-            </p>
-          </div>
-          
-          <div className="space-y-6">
-            {sections.map((section) => (
-              <div 
-                key={section.id} 
-                className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 overflow-hidden transition-all duration-300 hover:border-blue-500/50"
+          <AnimatePresence mode="wait">
+            {!currentProject ? (
+              /* 项目列表视图 */
+              <motion.div
+                key="project-list"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
               >
-                <div 
-                  className="p-6 cursor-pointer flex justify-between items-center"
-                  onClick={() => toggleSection(section.id)}
-                >
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-100 mb-2">{section.title}</h3>
-                    <p className="text-gray-400">{section.description}</p>
-                  </div>
-                  <span className={`text-blue-400 font-medium transition-transform duration-300 ${activeSection === section.id ? 'transform rotate-180' : ''}`}>
-                    ▼
-                  </span>
-                </div>
-                {activeSection === section.id && (
-                  <div className="px-6 pb-6">
-                    <div className="border-t border-gray-700 pt-4">
-                      <h4 className="font-medium text-gray-200 mb-3">学习内容</h4>
-                      <ul className="space-y-2 mb-6">
-                        {section.topics.map((topic, index) => (
-                          <li key={index} className="flex items-start">
-                            <span className="text-blue-400 mr-3 mt-1">•</span>
-                            <span className="text-gray-300">{topic}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      {section.resources && (
-                        <div className="mb-6">
-                          <h4 className="font-medium text-gray-200 mb-3">学习资源</h4>
-                          <ul className="space-y-2">
-                            {section.resources.map((resource, index) => (
-                              <li key={index} className="flex items-start">
-                                <span className="text-cyan-400 mr-3 mt-1">📚</span>
-                                <span className="text-gray-300">{resource}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {section.id !== 'intro' && (
-                        <div className="mt-4">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveChapter(section.id);
-                              setActiveChapterMode('content');
-                              setTimeout(scrollToLearningSection, 100);
-                            }}
-                            className="inline-block px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
-                          >
-                            开始学习本章
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 学习目标 */}
-      <section className="py-16 px-4 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-              学习目标
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              通过本课程的学习，学生将达到以下目标
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 hover:border-blue-500/50 transition-all duration-300">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-blue-400 text-xl">🎯</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-100 mb-3">知识目标</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-blue-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">掌握数据分析的基本概念和流程</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">理解数据可视化的原理和方法</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">熟悉统计分析和机器学习的基本方法</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">了解商务数据分析的应用场景和方法</span>
-                </li>
-              </ul>
-            </div>
-            
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 hover:border-blue-500/50 transition-all duration-300">
-              <div className="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-cyan-400 text-xl">💪</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-100 mb-3">能力目标</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-cyan-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">能够使用Python进行数据可视化</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-cyan-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">能够运用统计方法分析数据</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-cyan-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">能够使用机器学习算法解决分类问题</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-cyan-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">能够完成完整的数据分析项目</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 评估方式 */}
-      <section className="py-16 px-4 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-              评估方式
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              课程成绩由以下部分组成
-            </p>
-          </div>
-          
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-8">
-            <div className="space-y-6">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div className="mb-4 md:mb-0">
-                  <h3 className="text-lg font-semibold text-gray-100">课堂参与</h3>
-                  <p className="text-gray-400">包括课堂讨论、作业完成情况等</p>
-                </div>
-                <div className="w-full md:w-1/2">
-                  <div className="flex items-center">
-                    <div className="w-24 text-right mr-4 text-gray-300">10%</div>
-                    <div className="flex-1 bg-gray-700 rounded-full h-4">
-                      <div className="bg-blue-500 h-4 rounded-full" style={{ width: '10%' }}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div className="mb-4 md:mb-0">
-                  <h3 className="text-lg font-semibold text-gray-100">实验练习</h3>
-                  <p className="text-gray-400">包括数据可视化、统计分析等实验</p>
-                </div>
-                <div className="w-full md:w-1/2">
-                  <div className="flex items-center">
-                    <div className="w-24 text-right mr-4 text-gray-300">30%</div>
-                    <div className="flex-1 bg-gray-700 rounded-full h-4">
-                      <div className="bg-cyan-500 h-4 rounded-full" style={{ width: '30%' }}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div className="mb-4 md:mb-0">
-                  <h3 className="text-lg font-semibold text-gray-100">期中考试</h3>
-                  <p className="text-gray-400">理论知识和实践能力考核</p>
-                </div>
-                <div className="w-full md:w-1/2">
-                  <div className="flex items-center">
-                    <div className="w-24 text-right mr-4 text-gray-300">20%</div>
-                    <div className="flex-1 bg-gray-700 rounded-full h-4">
-                      <div className="bg-blue-500 h-4 rounded-full" style={{ width: '20%' }}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div className="mb-4 md:mb-0">
-                  <h3 className="text-lg font-semibold text-gray-100">期末项目</h3>
-                  <p className="text-gray-400">完整的数据分析项目设计与实现</p>
-                </div>
-                <div className="w-full md:w-1/2">
-                  <div className="flex items-center">
-                    <div className="w-24 text-right mr-4 text-gray-300">40%</div>
-                    <div className="flex-1 bg-gray-700 rounded-full h-4">
-                      <div className="bg-cyan-500 h-4 rounded-full" style={{ width: '40%' }}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 学习中心 */}
-      <section className="py-16 px-4 relative z-10" data-learning-section="true">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
-              学习中心
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              查看学习进度、获取学习资源和进行练习测试
-            </p>
-          </div>
-          
-          {/* 标签页导航 */}
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-1 mb-8 flex justify-center">
-            <button
-              onClick={() => setActiveTab('progress')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'progress' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'text-gray-400 hover:text-gray-300'}`}
-            >
-              学习进度
-            </button>
-            <button
-              onClick={() => setActiveTab('resources')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'resources' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'text-gray-400 hover:text-gray-300'}`}
-            >
-              学习资源
-            </button>
-            <button
-              onClick={() => setActiveTab('exercises')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'exercises' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'text-gray-400 hover:text-gray-300'}`}
-            >
-              练习测试
-            </button>
-          </div>
-          
-          {/* 标签页内容 */}
-          {activeTab === 'progress' && (
-            <div>
-              {!activeChapter && (
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-                  <h3 className="text-2xl font-semibold text-gray-100 mb-6">数据分析技术课程学习进度</h3>
-                  {/* 总体进度条 */}
-                  <div className="mb-8">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-300">总体进度</span>
-                      <span className="text-blue-400 font-medium">
-                        {progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)}
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-4">
-                      <div 
-                        className="bg-gradient-to-r from-blue-500 to-cyan-400 h-4 rounded-full transition-all duration-500"
-                        style={{ 
-                          width: `${(progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0) / progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)) * 100}%` 
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                  <div className="space-y-4">
-                    {progressItems.map((item) => (
-                      <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
-                        <div className="flex items-center justify-between cursor-pointer" onClick={() => {
-                          setActiveChapter(item.id);
-                          setActiveChapterMode('content');
-                        }}>
-                          <div className="flex items-center">
-                            <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
-                              item.completed
-                                ? 'border-blue-500 bg-blue-500 text-white'
-                                : 'border-gray-600'
-                            }`}>
-                              {item.completed ? '✓' : ''}
-                            </div>
-                            <h4 className={`font-medium ${item.completed ? 'text-blue-400' : 'text-gray-300'}`}>
-                              {item.title}
-                            </h4>
-                          </div>
-                          <span className="text-gray-400 text-sm">
-                            {item.subItems?.filter(sub => sub.completed).length}/{item.subItems?.length}
-                          </span>
-                        </div>
-                        {item.subItems && (
-                          <div className="mt-3 ml-9 space-y-2">
-                            {item.subItems.map(subItem => (
-                              <div key={subItem.id} className="flex items-center">
-                                <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-2 ${
-                                  subItem.completed
-                                    ? 'border-blue-500 bg-blue-500 text-white'
-                                    : 'border-gray-600'
-                                }`}>
-                                  {subItem.completed ? '✓' : ''}
-                                </div>
-                                <span className={`text-sm ${subItem.completed ? 'text-blue-400' : 'text-gray-400'}`}>
-                                  {subItem.title}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {activeChapter && activeChapterMode === 'content' && (
-                <div>
-                  <div className="flex items-center mb-4">
-                    <button
-                      onClick={() => setActiveChapter(null)}
-                      className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
-                    >
-                      <span className="mr-2">←</span> 返回课程进度
-                    </button>
-                  </div>
-                  <ChapterContent
-                    chapterId={activeChapter}
-                    chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
-                    sections={chapterContents[activeChapter as keyof typeof chapterContents]?.sections || []}
-                    onComplete={() => {
-                      setActiveChapterMode('exercise');
-                    }}
-                  />
-                </div>
-              )}
-              {activeChapter && activeChapterMode === 'exercise' && (
-                <div>
-                  <div className="flex items-center mb-4">
-                    <button
-                      onClick={() => setActiveChapterMode('content')}
-                      className="flex items-center text-blue-400 hover:text-blue-300 mb-4 mr-4"
-                    >
-                      <span className="mr-2">←</span> 返回章节内容
-                    </button>
-                    <button
-                      onClick={() => setActiveChapter(null)}
-                      className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
-                    >
-                      <span className="mr-2">←</span> 返回课程进度
-                    </button>
-                  </div>
-                  <ChapterExercise
-                    chapterId={activeChapter}
-                    chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
-                    questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
-                    questionCount={30}
-                    onComplete={(score, total) => {
-                      console.log(`练习完成，得分：${score}/${total}`);
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-          )}
-          
-          {activeTab === 'resources' && (
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-              <h3 className="text-2xl font-semibold text-gray-100 mb-6">学习资源</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {learningResources.map((resource) => (
-                  <div key={resource.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
-                    <div className="flex items-start">
-                      <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mr-4">
-                        <span className="text-blue-400 text-xl">
-                          {resource.type === 'article' && '📄'}
-                          {resource.type === 'video' && '🎥'}
-                          {resource.type === 'document' && '📑'}
-                          {resource.type === 'code' && '💻'}
-                        </span>
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-medium text-gray-100 mb-2">{resource.title}</h4>
-                        <p className="text-gray-400 text-sm mb-3">{resource.description}</p>
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          <span className="px-2 py-1 bg-gray-700 rounded-full text-xs text-gray-300">
-                            {resource.difficulty === 'beginner' && '初级'}
-                            {resource.difficulty === 'intermediate' && '中级'}
-                            {resource.difficulty === 'advanced' && '高级'}
-                          </span>
-                          {resource.duration && (
-                            <span className="px-2 py-1 bg-gray-700 rounded-full text-xs text-gray-300">
-                              {resource.duration}
-                            </span>
-                          )}
-                        </div>
-                        <a
-                          href={resource.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm"
-                        >
-                          查看资源
-                          <span className="ml-2">→</span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          
-          {activeTab === 'exercises' && !activeChapter && (
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-              <h3 className="text-2xl font-semibold text-gray-100 mb-6">章节练习测试</h3>
-              <p className="text-gray-400 mb-8">选择章节进行测试，每次测试包含30道题目（单选、多选、判断）</p>
-              <div className="space-y-4">
-                {progressItems.map((item) => (
-                  <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
-                    <div className="flex items-center justify-between cursor-pointer" onClick={() => {
-                      setActiveChapter(item.id);
-                      setActiveChapterMode('exercise');
-                    }}>
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 bg-blue-900/50 rounded-lg flex items-center justify-center mr-4">
-                          <span className="text-blue-400 text-xl">📝</span>
-                        </div>
-                        <h4 className="font-medium text-gray-300">
-                          {item.title}
-                        </h4>
-                      </div>
-                      <span className="text-gray-400 text-sm">
-                        400题题库
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {activeTab === 'exercises' && activeChapter && activeChapterMode === 'exercise' && (
-            <div>
-              <div className="flex items-center mb-4">
-                <button
-                  onClick={() => setActiveChapter(null)}
-                  className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
-                >
-                  <span className="mr-2">←</span> 返回章节列表
-                </button>
-              </div>
-              <ChapterExercise
-                chapterId={activeChapter}
-                chapterTitle={chapterContents[activeChapter as keyof typeof chapterContents]?.title || ''}
-                questions={chapterQuestions[activeChapter as keyof typeof chapterQuestions] || []}
-                questionCount={30}
-                onComplete={(score, total) => {
-                  console.log(`练习完成，得分：${score}/${total}`);
-                }}
-              />
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* 页脚 */}
-      <footer className="bg-gray-900/80 backdrop-blur-sm border-t border-gray-800 py-8 px-4 relative z-10">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="mb-2 text-gray-300">数据分析技术课程学习页面</p>
-          <p className="text-gray-500 text-sm">© 2026 广东科学技术职业学院</p>
-        </div>
-      </footer>
-    </div>
-  );
-}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {projects.map((project) => {
+                    const progress = learningState.projectProgress[project.id];
+                    const isCompleted = progress?.learnCompleted && progress?.practiceCompleted && progress?.testScore !== null;
+                    
+                    return (
+                      <motion.div
+                        key={project.id}
+                        whileHover={{ scale: 1.02, y: -4 }}
+                        className={`bg-gray-800/50 backdrop-blur-sm rounded-xl border ${isCompleted ? 'border-green-500/50' : 'border-gray-700'} overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow
