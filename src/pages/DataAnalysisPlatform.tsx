@@ -82,7 +82,7 @@ const platformStats: PlatformStat[] = [
 export default function DataAnalysisPlatform() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setMousePosition({ x: e.clientX, y: e.clientY });
   };
 
