@@ -19,6 +19,15 @@ interface Project {
   icon: string;
   color: string;
   showFullFlow: boolean;
+  learningResources: {
+    docs: string[];
+    videos: string[];
+    examples: string[];
+  };
+  communitySupport: {
+    forum: string;
+    discussion: string[];
+  };
 }
 
 interface Question {
@@ -220,6 +229,31 @@ print("✅ 数据预处理完成！")`,
         explanation: 'StandardScaler可以将数据标准化为均值为0，方差为1的分布。'
       }
     ],
+    learningResources: {
+      docs: [
+        'pandas官方文档：数据清洗与处理',
+        'scikit-learn官方文档：特征预处理',
+        '统计学习方法：数据预处理章节'
+      ],
+      videos: [
+        '数据预处理实战教程：缺失值处理',
+        '特征工程详解：分桶与编码',
+        '数据标准化方法对比与应用'
+      ],
+      examples: [
+        '真实电商数据集预处理示例',
+        '金融数据清洗实战',
+        '医疗数据预处理案例'
+      ]
+    },
+    communitySupport: {
+      forum: '数据分析社区 - 数据预处理板块',
+      discussion: [
+        '如何处理高维度稀疏特征？',
+        '缺失值填充方法的选择策略',
+        '特征工程最佳实践分享'
+      ]
+    },
     showFullFlow: true
   },
   {
@@ -405,6 +439,31 @@ print(strong_corr.stack())`,
         explanation: '描述统计是数据的初步分析工具，为后续的统计推断提供基础，但本身不涉及推断。'
       }
     ],
+    learningResources: {
+      docs: [
+        'pandas官方文档：描述统计',
+        'seaborn官方文档：热力图',
+        '统计学习方法：相关性分析章节'
+      ],
+      videos: [
+        '相关性分析实战教程',
+        '热力图绘制技巧',
+        '统计指标解读与应用'
+      ],
+      examples: [
+        '电商营收影响因子分析示例',
+        '金融数据相关性分析',
+        '医疗数据关联分析'
+      ]
+    },
+    communitySupport: {
+      forum: '数据分析社区 - 统计分析板块',
+      discussion: [
+        '如何选择合适的相关性分析方法？',
+        '热力图美化技巧',
+        '相关性分析的常见误区'
+      ]
+    },
     showFullFlow: false
   },
   {
@@ -594,6 +653,31 @@ for _, row in rules.head(3).iterrows():
         explanation: '关联规则挖掘可以应用于多个领域，如医疗、金融、推荐系统等。'
       }
     ],
+    learningResources: {
+      docs: [
+        'mlxtend官方文档：Apriori算法',
+        '数据挖掘导论：关联规则章节',
+        '电商推荐系统：关联规则应用'
+      ],
+      videos: [
+        '关联规则挖掘实战教程',
+        'Apriori算法原理详解',
+        '购物篮分析案例分析'
+      ],
+      examples: [
+        '电商购物车关联规则示例',
+        '超市商品组合分析',
+        '线上零售关联推荐'
+      ]
+    },
+    communitySupport: {
+      forum: '数据分析社区 - 关联规则板块',
+      discussion: [
+        '如何优化Apriori算法性能？',
+        '提升度和置信度的权衡',
+        '关联规则在推荐系统中的应用'
+      ]
+    },
     showFullFlow: false
   },
   {
@@ -812,6 +896,31 @@ print("分群2：流失用户 → 推送唤醒优惠券")`,
         explanation: '特征选择对聚类结果有很大影响，选择合适的特征是聚类成功的关键。'
       }
     ],
+    learningResources: {
+      docs: [
+        'scikit-learn官方文档：KMeans算法',
+        '机器学习实战：聚类分析章节',
+        '数据可视化：PCA降维应用'
+      ],
+      videos: [
+        'KMeans聚类算法详解',
+        '肘部法则确定k值实战',
+        '聚类结果可视化技巧'
+      ],
+      examples: [
+        '用户分群案例分析',
+        '商品聚类实战',
+        '客户细分应用'
+      ]
+    },
+    communitySupport: {
+      forum: '数据分析社区 - 聚类分析板块',
+      discussion: [
+        '如何选择合适的聚类算法？',
+        'k值确定的最佳实践',
+        '聚类结果的业务解读'
+      ]
+    },
     showFullFlow: false
   },
   {
@@ -1037,6 +1146,31 @@ print("""
         explanation: 'RFM模型可以单独使用，也可以与其他模型结合使用，提高分析效果。'
       }
     ],
+    learningResources: {
+      docs: [
+        'RFM模型官方文档',
+        '客户生命周期管理：RFM应用',
+        '用户分层最佳实践'
+      ],
+      videos: [
+        'RFM模型详解与应用',
+        '用户分层实战教程',
+        '客户价值评估方法'
+      ],
+      examples: [
+        '电商用户RFM分析案例',
+        '金融客户分层应用',
+        '零售行业RFM实践'
+      ]
+    },
+    communitySupport: {
+      forum: '数据分析社区 - RFM模型板块',
+      discussion: [
+        'RFM模型的最佳分箱方法',
+        '如何结合其他模型优化RFM',
+        'RFM在不同行业的应用差异'
+      ]
+    },
     showFullFlow: false
   },
   {
@@ -1257,6 +1391,31 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
         explanation: '通过特征工程（如多项式特征），线性回归模型也可以处理非线性关系。'
       }
     ],
+    learningResources: {
+      docs: [
+        'scikit-learn官方文档：线性回归',
+        '统计学习方法：回归分析章节',
+        '多重共线性处理指南'
+      ],
+      videos: [
+        '线性回归模型详解',
+        '多重共线性检测与处理',
+        '回归系数解读实战'
+      ],
+      examples: [
+        '销量预测案例分析',
+        '房价预测应用',
+        '金融回归分析'
+      ]
+    },
+    communitySupport: {
+      forum: '数据分析社区 - 回归分析板块',
+      discussion: [
+        '如何处理线性回归中的异常值？',
+        '特征选择的最佳实践',
+        '线性回归与其他模型的对比'
+      ]
+    },
     showFullFlow: false
   },
   {
@@ -1495,6 +1654,31 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
         explanation: '随机森林对特征的尺度不敏感，通常不需要特征标准化。'
       }
     ],
+    learningResources: {
+      docs: [
+        'scikit-learn官方文档：随机森林',
+        '机器学习实战：集成学习章节',
+        '特征重要性分析指南'
+      ],
+      videos: [
+        '随机森林算法详解',
+        '模型调参实战教程',
+        '特征重要性解读'
+      ],
+      examples: [
+        '销量预测随机森林案例',
+        '金融预测应用',
+        '医疗数据回归分析'
+      ]
+    },
+    communitySupport: {
+      forum: '数据分析社区 - 集成学习板块',
+      discussion: [
+        '随机森林参数调优技巧',
+        '特征重要性的正确解读',
+        '随机森林与梯度提升树的对比'
+      ]
+    },
     showFullFlow: false
   },
   {
@@ -1736,6 +1920,31 @@ print(f"建议安全库存量：{forecast_mean * 1.2:.0f}")`,
         explanation: '时间序列预测的准确性通常随着预测步数的增加而降低，因为不确定性会累积。'
       }
     ],
+    learningResources: {
+      docs: [
+        'statsmodels官方文档：ARIMA模型',
+        '时间序列分析：预测与控制',
+        'pandas时间序列处理指南'
+      ],
+      videos: [
+        '时间序列分析实战教程',
+        'ARIMA模型参数选择',
+        '时间序列可视化技巧'
+      ],
+      examples: [
+        '销量预测案例分析',
+        '库存规划应用',
+        '经济指标预测'
+      ]
+    },
+    communitySupport: {
+      forum: '数据分析社区 - 时间序列板块',
+      discussion: [
+        '如何选择合适的时间序列模型？',
+        'ARIMA与Prophet的对比',
+        '时间序列异常检测方法'
+      ]
+    },
     showFullFlow: false
   },
   {
@@ -1981,6 +2190,31 @@ print("""
         explanation: '异常检测可以用于无监督场景，也可以用于有监督场景，如使用标记的异常样本进行模型训练。'
       }
     ],
+    learningResources: {
+      docs: [
+        'scikit-learn官方文档：异常检测',
+        '异常检测：原理与应用',
+        '孤立森林算法详解'
+      ],
+      videos: [
+        '异常检测实战教程',
+        '孤立森林算法原理',
+        '异常检测可视化技巧'
+      ],
+      examples: [
+        '电商订单异常检测案例',
+        '信用卡欺诈检测',
+        '网络入侵检测'
+      ]
+    },
+    communitySupport: {
+      forum: '数据分析社区 - 异常检测板块',
+      discussion: [
+        '如何平衡假阳性和假阴性？',
+        '异常检测在不同行业的应用',
+        '统计方法与机器学习方法的对比'
+      ]
+    },
     showFullFlow: false
   },
   {
@@ -2293,6 +2527,31 @@ print("=" * 60)`,
         explanation: '数据分析的最终目的是为了支持业务决策，提供数据驱动的洞察。'
       }
     ],
+    learningResources: {
+      docs: [
+        '数据分析实战指南',
+        '业务分析：从数据到决策',
+        '数据可视化最佳实践'
+      ],
+      videos: [
+        '数据分析全流程实战',
+        '业务报告撰写技巧',
+        '数据驱动决策案例分析'
+      ],
+      examples: [
+        '电商营收提升案例',
+        '金融数据分析实战',
+        '医疗数据综合分析'
+      ]
+    },
+    communitySupport: {
+      forum: '数据分析社区 - 综合项目板块',
+      discussion: [
+        '如何构建完整的数据分析报告？',
+        '业务问题定义的最佳实践',
+        '数据分析师的职业发展路径'
+      ]
+    },
     showFullFlow: false
   }
 ];
@@ -2312,6 +2571,8 @@ export default function DataAnalysisCourse() {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [randomQuestions, setRandomQuestions] = useState<Question[]>([]);
+  const [practiceScore, setPracticeScore] = useState<number>(0);
+  const [completedTasks, setCompletedTasks] = useState<number[]>([]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -2343,6 +2604,8 @@ export default function DataAnalysisCourse() {
     // 模拟代码执行
     setExecutionResult('');
     setErrorMessage('');
+    setPracticeScore(0);
+    setCompletedTasks([]);
     
     // 检查代码是否为空
     if (!userCode.trim()) {
@@ -2355,30 +2618,37 @@ export default function DataAnalysisCourse() {
       const currentProject = getCurrentProject();
       if (!currentProject) return;
       
-      // 根据不同项目进行特定的错误检测
+      let score = 0;
+      const completed = [];
+      
+      // 根据不同项目进行特定的错误检测和评分
       switch (currentProject.id) {
         case 1: // 数据预处理高阶班
           if (!userCode.includes('import pandas as pd')) {
             setErrorMessage('错误：缺少导入 pandas 库的代码');
             return;
           }
-          if (!userCode.includes('pd.read_csv')) {
-            setErrorMessage('错误：缺少读取数据的代码，请添加 pd.read_csv() 语句');
-            return;
+          if (userCode.includes('pd.read_csv')) {
+            score += 20;
+            completed.push(0);
           }
-          if (!userCode.includes('fillna')) {
-            setErrorMessage('错误：缺少缺失值处理的代码，请添加 fillna() 语句');
-            return;
+          if (userCode.includes('fillna')) {
+            score += 20;
+            completed.push(1);
           }
-          if (!userCode.includes('StandardScaler')) {
-            setErrorMessage('错误：缺少数据标准化的代码，请添加 StandardScaler 相关代码');
-            return;
+          if (userCode.includes('StandardScaler')) {
+            score += 20;
+            completed.push(2);
           }
-          if (!userCode.includes('to_csv')) {
-            setErrorMessage('错误：缺少保存数据的代码，请添加 to_csv() 语句');
-            return;
+          if (userCode.includes('to_csv')) {
+            score += 20;
+            completed.push(3);
           }
-          setExecutionResult('执行成功！\n\n✅ 数据预处理完成\n✅ 缺失值已处理\n✅ 异常值已检测\n✅ 特征已处理\n✅ 数据已标准化\n✅ 结果已保存');
+          if (userCode.includes('qcut') || userCode.includes('cut')) {
+            score += 20;
+            completed.push(4);
+          }
+          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 数据读取完成\n' : ''}${completed.includes(1) ? '✅ 缺失值处理完成\n' : ''}${completed.includes(2) ? '✅ 数据标准化完成\n' : ''}${completed.includes(3) ? '✅ 数据保存完成\n' : ''}${completed.includes(4) ? '✅ 特征处理完成\n' : ''}`);
           break;
           
         case 2: // 多维统计+深度相关性分析
@@ -2386,23 +2656,27 @@ export default function DataAnalysisCourse() {
             setErrorMessage('错误：缺少导入 pandas 库的代码');
             return;
           }
-          if (!userCode.includes('pd.read_csv')) {
-            setErrorMessage('错误：缺少读取数据的代码，请添加 pd.read_csv() 语句');
-            return;
+          if (userCode.includes('pd.read_csv')) {
+            score += 20;
+            completed.push(0);
           }
-          if (!userCode.includes('describe')) {
-            setErrorMessage('错误：缺少描述统计的代码，请添加 describe() 方法');
-            return;
+          if (userCode.includes('describe')) {
+            score += 20;
+            completed.push(1);
           }
-          if (!userCode.includes('corr')) {
-            setErrorMessage('错误：缺少相关性分析的代码，请添加 corr() 方法');
-            return;
+          if (userCode.includes('corr')) {
+            score += 20;
+            completed.push(2);
           }
-          if (!userCode.includes('heatmap')) {
-            setErrorMessage('错误：缺少绘制相关性热力图的代码');
-            return;
+          if (userCode.includes('heatmap')) {
+            score += 20;
+            completed.push(3);
           }
-          setExecutionResult('执行成功！\n\n✅ 描述统计完成\n✅ 相关性分析完成\n✅ 热力图绘制完成\n✅ 强相关指标分析完成');
+          if (userCode.includes('abs() >= 0.7')) {
+            score += 20;
+            completed.push(4);
+          }
+          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 数据读取完成\n' : ''}${completed.includes(1) ? '✅ 描述统计完成\n' : ''}${completed.includes(2) ? '✅ 相关性分析完成\n' : ''}${completed.includes(3) ? '✅ 热力图绘制完成\n' : ''}${completed.includes(4) ? '✅ 强相关指标分析完成\n' : ''}`);
           break;
           
         case 3: // 购物车关联规则挖掘
@@ -2410,19 +2684,23 @@ export default function DataAnalysisCourse() {
             setErrorMessage('错误：缺少导入 pandas 库的代码');
             return;
           }
-          if (!userCode.includes('apriori')) {
-            setErrorMessage('错误：缺少 Apriori 算法的代码');
-            return;
+          if (userCode.includes('apriori')) {
+            score += 25;
+            completed.push(0);
           }
-          if (!userCode.includes('association_rules')) {
-            setErrorMessage('错误：缺少生成关联规则的代码');
-            return;
+          if (userCode.includes('association_rules')) {
+            score += 25;
+            completed.push(1);
           }
-          if (!userCode.includes('lift')) {
-            setErrorMessage('错误：缺少筛选提升度的代码');
-            return;
+          if (userCode.includes('lift')) {
+            score += 25;
+            completed.push(2);
           }
-          setExecutionResult('执行成功！\n\n✅ 频繁项集挖掘完成\n✅ 关联规则生成完成\n✅ 有效规则筛选完成\n✅ 捆绑销售建议生成完成');
+          if (userCode.includes('to_csv')) {
+            score += 25;
+            completed.push(3);
+          }
+          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 频繁项集挖掘完成\n' : ''}${completed.includes(1) ? '✅ 关联规则生成完成\n' : ''}${completed.includes(2) ? '✅ 有效规则筛选完成\n' : ''}${completed.includes(3) ? '✅ 结果保存完成\n' : ''}`);
           break;
           
         case 4: // KMeans聚类分析实战
@@ -2430,19 +2708,23 @@ export default function DataAnalysisCourse() {
             setErrorMessage('错误：缺少导入 pandas 库的代码');
             return;
           }
-          if (!userCode.includes('StandardScaler')) {
-            setErrorMessage('错误：缺少数据标准化的代码');
-            return;
+          if (userCode.includes('StandardScaler')) {
+            score += 25;
+            completed.push(0);
           }
-          if (!userCode.includes('KMeans')) {
-            setErrorMessage('错误：缺少 KMeans 聚类的代码');
-            return;
+          if (userCode.includes('KMeans')) {
+            score += 25;
+            completed.push(1);
           }
-          if (!userCode.includes('PCA')) {
-            setErrorMessage('错误：缺少 PCA 降维的代码');
-            return;
+          if (userCode.includes('PCA')) {
+            score += 25;
+            completed.push(2);
           }
-          setExecutionResult('执行成功！\n\n✅ 数据标准化完成\n✅ KMeans聚类完成\n✅ 最佳k值确定\n✅ 聚类结果可视化完成\n✅ 分群特征分析完成');
+          if (userCode.includes('groupby')) {
+            score += 25;
+            completed.push(3);
+          }
+          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 数据标准化完成\n' : ''}${completed.includes(1) ? '✅ KMeans聚类完成\n' : ''}${completed.includes(2) ? '✅ PCA降维完成\n' : ''}${completed.includes(3) ? '✅ 分群特征分析完成\n' : ''}`);
           break;
           
         case 5: // RFM模型用户分层
@@ -2450,19 +2732,23 @@ export default function DataAnalysisCourse() {
             setErrorMessage('错误：缺少导入 pandas 库的代码');
             return;
           }
-          if (!userCode.includes('pd.read_csv')) {
-            setErrorMessage('错误：缺少读取数据的代码');
-            return;
+          if (userCode.includes('pd.read_csv')) {
+            score += 25;
+            completed.push(0);
           }
-          if (!userCode.includes('qcut')) {
-            setErrorMessage('错误：缺少分位数分箱的代码');
-            return;
+          if (userCode.includes('qcut')) {
+            score += 25;
+            completed.push(1);
           }
-          if (!userCode.includes('groupby')) {
-            setErrorMessage('错误：缺少分组统计的代码');
-            return;
+          if (userCode.includes('groupby')) {
+            score += 25;
+            completed.push(2);
           }
-          setExecutionResult('执行成功！\n\n✅ RFM指标计算完成\n✅ 用户分层完成\n✅ 统计分析完成\n✅ 可视化完成\n✅ 运营策略生成完成');
+          if (userCode.includes('apply')) {
+            score += 25;
+            completed.push(3);
+          }
+          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 数据读取完成\n' : ''}${completed.includes(1) ? '✅ 指标分箱完成\n' : ''}${completed.includes(2) ? '✅ 统计分析完成\n' : ''}${completed.includes(3) ? '✅ 用户分层完成\n' : ''}`);
           break;
           
         case 6: // 一元+多元线性回归
@@ -2470,19 +2756,23 @@ export default function DataAnalysisCourse() {
             setErrorMessage('错误：缺少导入 pandas 库的代码');
             return;
           }
-          if (!userCode.includes('LinearRegression')) {
-            setErrorMessage('错误：缺少线性回归模型的代码');
-            return;
+          if (userCode.includes('LinearRegression')) {
+            score += 25;
+            completed.push(0);
           }
-          if (!userCode.includes('r2_score')) {
-            setErrorMessage('错误：缺少模型评估的代码');
-            return;
+          if (userCode.includes('r2_score')) {
+            score += 25;
+            completed.push(1);
           }
-          if (!userCode.includes('variance_inflation_factor')) {
-            setErrorMessage('错误：缺少多重共线性检测的代码');
-            return;
+          if (userCode.includes('variance_inflation_factor')) {
+            score += 25;
+            completed.push(2);
           }
-          setExecutionResult('执行成功！\n\n✅ 一元线性回归完成\n✅ 多元线性回归完成\n✅ 模型评估完成\n✅ 多重共线性检测完成\n✅ 预测应用完成');
+          if (userCode.includes('predict')) {
+            score += 25;
+            completed.push(3);
+          }
+          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 模型训练完成\n' : ''}${completed.includes(1) ? '✅ 模型评估完成\n' : ''}${completed.includes(2) ? '✅ 多重共线性检测完成\n' : ''}${completed.includes(3) ? '✅ 预测应用完成\n' : ''}`);
           break;
           
         case 7: // 随机森林回归+特征重要性
@@ -2490,19 +2780,23 @@ export default function DataAnalysisCourse() {
             setErrorMessage('错误：缺少导入 pandas 库的代码');
             return;
           }
-          if (!userCode.includes('RandomForestRegressor')) {
-            setErrorMessage('错误：缺少随机森林回归的代码');
-            return;
+          if (userCode.includes('RandomForestRegressor')) {
+            score += 25;
+            completed.push(0);
           }
-          if (!userCode.includes('train_test_split')) {
-            setErrorMessage('错误：缺少数据拆分的代码');
-            return;
+          if (userCode.includes('train_test_split')) {
+            score += 25;
+            completed.push(1);
           }
-          if (!userCode.includes('feature_importances_')) {
-            setErrorMessage('错误：缺少特征重要性分析的代码');
-            return;
+          if (userCode.includes('feature_importances_')) {
+            score += 25;
+            completed.push(2);
           }
-          setExecutionResult('执行成功！\n\n✅ 数据拆分完成\n✅ 随机森林训练完成\n✅ 参数调优完成\n✅ 特征重要性分析完成\n✅ 模型评估完成');
+          if (userCode.includes('r2_score')) {
+            score += 25;
+            completed.push(3);
+          }
+          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 随机森林训练完成\n' : ''}${completed.includes(1) ? '✅ 数据拆分完成\n' : ''}${completed.includes(2) ? '✅ 特征重要性分析完成\n' : ''}${completed.includes(3) ? '✅ 模型评估完成\n' : ''}`);
           break;
           
         case 8: // 时间序列完整分析
@@ -2510,19 +2804,23 @@ export default function DataAnalysisCourse() {
             setErrorMessage('错误：缺少导入 pandas 库的代码');
             return;
           }
-          if (!userCode.includes('to_datetime')) {
-            setErrorMessage('错误：缺少日期格式转换的代码');
-            return;
+          if (userCode.includes('to_datetime')) {
+            score += 25;
+            completed.push(0);
           }
-          if (!userCode.includes('resample')) {
-            setErrorMessage('错误：缺少数据重采样的代码');
-            return;
+          if (userCode.includes('resample')) {
+            score += 25;
+            completed.push(1);
           }
-          if (!userCode.includes('ARIMA')) {
-            setErrorMessage('错误：缺少 ARIMA 模型的代码');
-            return;
+          if (userCode.includes('ARIMA')) {
+            score += 25;
+            completed.push(2);
           }
-          setExecutionResult('执行成功！\n\n✅ 日期格式转换完成\n✅ 数据重采样完成\n✅ 趋势分析完成\n✅ 周期识别完成\n✅ 时序预测完成');
+          if (userCode.includes('get_forecast')) {
+            score += 25;
+            completed.push(3);
+          }
+          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 日期格式转换完成\n' : ''}${completed.includes(1) ? '✅ 数据重采样完成\n' : ''}${completed.includes(2) ? '✅ ARIMA模型训练完成\n' : ''}${completed.includes(3) ? '✅ 时序预测完成\n' : ''}`);
           break;
           
         case 9: // 综合异常检测
@@ -2530,15 +2828,19 @@ export default function DataAnalysisCourse() {
             setErrorMessage('错误：缺少导入 pandas 库的代码');
             return;
           }
-          if (!userCode.includes('IsolationForest')) {
-            setErrorMessage('错误：缺少孤立森林异常检测的代码');
-            return;
+          if (userCode.includes('IsolationForest')) {
+            score += 33;
+            completed.push(0);
           }
-          if (!userCode.includes('StandardScaler')) {
-            setErrorMessage('错误：缺少数据标准化的代码');
-            return;
+          if (userCode.includes('StandardScaler')) {
+            score += 33;
+            completed.push(1);
           }
-          setExecutionResult('执行成功！\n\n✅ 统计异常检测完成\n✅ 孤立森林异常检测完成\n✅ 异常合并完成\n✅ 异常类型分析完成\n✅ 业务处理建议生成完成');
+          if (userCode.includes('3 * std')) {
+            score += 34;
+            completed.push(2);
+          }
+          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 孤立森林异常检测完成\n' : ''}${completed.includes(1) ? '✅ 数据标准化完成\n' : ''}${completed.includes(2) ? '✅ 统计异常检测完成\n' : ''}`);
           break;
           
         case 10: // 全流程综合大项目
@@ -2546,24 +2848,35 @@ export default function DataAnalysisCourse() {
             setErrorMessage('错误：缺少导入 pandas 库的代码');
             return;
           }
-          if (!userCode.includes('read_csv')) {
-            setErrorMessage('错误：缺少读取数据的代码');
-            return;
+          if (userCode.includes('read_csv')) {
+            score += 20;
+            completed.push(0);
           }
-          if (!userCode.includes('groupby')) {
-            setErrorMessage('错误：缺少分组统计的代码');
-            return;
+          if (userCode.includes('groupby')) {
+            score += 20;
+            completed.push(1);
           }
-          if (!userCode.includes('RandomForestRegressor')) {
-            setErrorMessage('错误：缺少随机森林分析的代码');
-            return;
+          if (userCode.includes('RandomForestRegressor')) {
+            score += 20;
+            completed.push(2);
           }
-          setExecutionResult('执行成功！\n\n✅ 数据整合完成\n✅ 核心指标计算完成\n✅ RFM用户分层完成\n✅ 销量影响因素分析完成\n✅ 时间序列趋势分析完成\n✅ 业务策略建议生成完成\n✅ 可视化报告生成完成');
+          if (userCode.includes('resample')) {
+            score += 20;
+            completed.push(3);
+          }
+          if (userCode.includes('qcut')) {
+            score += 20;
+            completed.push(4);
+          }
+          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 数据整合完成\n' : ''}${completed.includes(1) ? '✅ 核心指标计算完成\n' : ''}${completed.includes(2) ? '✅ 销量影响因素分析完成\n' : ''}${completed.includes(3) ? '✅ 时间序列趋势分析完成\n' : ''}${completed.includes(4) ? '✅ RFM用户分层完成\n' : ''}`);
           break;
           
         default:
           setExecutionResult('执行成功！');
       }
+      
+      setPracticeScore(score);
+      setCompletedTasks(completed);
     }, 1000);
   };
 
@@ -2982,51 +3295,89 @@ export default function DataAnalysisCourse() {
                         <span className="text-yellow-400 text-xl">📚</span>
                         <h2 className="text-xl font-semibold text-gray-100">学习资源</h2>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <motion.div 
-                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all cursor-pointer"
-                          whileHover={{ y: -2 }}
-                          onClick={() => alert('正在跳转到相关文档...')}
-                        >
+                      
+                      {/* 文档资源 */}
+                      <div className="mb-4">
+                        <h3 className="text-md font-medium text-gray-200 mb-3 flex items-center gap-2">
                           <span className="text-yellow-400">📖</span>
-                          <div>
-                            <span className="text-gray-300">相关文档</span>
-                            <p className="text-xs text-gray-400 mt-1">深入了解本项目的理论知识和实现细节</p>
-                          </div>
-                        </motion.div>
-                        <motion.div 
-                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all cursor-pointer"
-                          whileHover={{ y: -2 }}
-                          onClick={() => alert('正在跳转到视频教程...')}
-                        >
+                          相关文档
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {currentProject.learningResources.docs.map((doc, i) => (
+                            <motion.div 
+                              key={i}
+                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer"
+                              whileHover={{ y: -2 }}
+                              onClick={() => alert(`正在跳转到：${doc}`)}
+                            >
+                              <span className="text-gray-300 text-sm">{doc}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* 视频教程 */}
+                      <div className="mb-4">
+                        <h3 className="text-md font-medium text-gray-200 mb-3 flex items-center gap-2">
                           <span className="text-yellow-400">🎥</span>
-                          <div>
-                            <span className="text-gray-300">视频教程</span>
-                            <p className="text-xs text-gray-400 mt-1">观看详细的视频讲解和操作演示</p>
-                          </div>
-                        </motion.div>
-                        <motion.div 
-                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all cursor-pointer"
-                          whileHover={{ y: -2 }}
-                          onClick={() => alert('正在跳转到代码示例...')}
-                        >
+                          视频教程
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {currentProject.learningResources.videos.map((video, i) => (
+                            <motion.div 
+                              key={i}
+                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer"
+                              whileHover={{ y: -2 }}
+                              onClick={() => alert(`正在跳转到视频教程：${video}`)}
+                            >
+                              <span className="text-gray-300 text-sm">{video}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* 代码示例 */}
+                      <div className="mb-4">
+                        <h3 className="text-md font-medium text-gray-200 mb-3 flex items-center gap-2">
                           <span className="text-yellow-400">💻</span>
-                          <div>
-                            <span className="text-gray-300">代码示例</span>
-                            <p className="text-xs text-gray-400 mt-1">查看完整的代码实现和注释</p>
-                          </div>
-                        </motion.div>
-                        <motion.div 
-                          className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all cursor-pointer"
-                          whileHover={{ y: -2 }}
-                          onClick={() => alert('正在跳转到社区支持...')}
-                        >
+                          代码示例
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {currentProject.learningResources.examples.map((example, i) => (
+                            <motion.div 
+                              key={i}
+                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer"
+                              whileHover={{ y: -2 }}
+                              onClick={() => alert(`正在跳转到代码示例：${example}`)}
+                            >
+                              <span className="text-gray-300 text-sm">{example}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* 社区支持 */}
+                      <div>
+                        <h3 className="text-md font-medium text-gray-200 mb-3 flex items-center gap-2">
                           <span className="text-yellow-400">🤝</span>
-                          <div>
-                            <span className="text-gray-300">社区支持</span>
-                            <p className="text-xs text-gray-400 mt-1">加入社区讨论，获取更多帮助</p>
-                          </div>
-                        </motion.div>
+                          社区支持
+                        </h3>
+                        <div className="bg-gray-700/30 rounded-lg p-3 mb-3 hover:bg-gray-700/40 transition-all cursor-pointer"
+                             onClick={() => alert(`正在跳转到社区论坛：${currentProject.communitySupport.forum}`)}>
+                          <span className="text-gray-300">{currentProject.communitySupport.forum}</span>
+                        </div>
+                        <div className="space-y-2">
+                          {currentProject.communitySupport.discussion.map((topic, i) => (
+                            <motion.div 
+                              key={i}
+                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer"
+                              whileHover={{ y: -2 }}
+                              onClick={() => alert(`正在跳转到讨论：${topic}`)}
+                            >
+                              <span className="text-gray-300 text-sm">• {topic}</span>
+                            </motion.div>
+                          ))}
+                        </div>
                       </div>
                     </motion.div>
 
