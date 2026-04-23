@@ -3304,14 +3304,22 @@ export default function DataAnalysisCourse() {
                         </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {currentProject.learningResources.docs.map((doc, i) => (
-                            <motion.div 
+                            <motion.a 
                               key={i}
-                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer"
+                              href={`#${encodeURIComponent(doc)}`}
+                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer block"
                               whileHover={{ y: -2 }}
-                              onClick={() => alert(`正在跳转到：${doc}`)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                // 这里可以实现跳转到具体的学习资源页面
+                                alert(`正在跳转到：${doc}`);
+                              }}
                             >
-                              <span className="text-gray-300 text-sm">{doc}</span>
-                            </motion.div>
+                              <span className="text-blue-300 text-sm flex items-center gap-2">
+                                <span>→</span>
+                                {doc}
+                              </span>
+                            </motion.a>
                           ))}
                         </div>
                       </div>
@@ -3324,14 +3332,22 @@ export default function DataAnalysisCourse() {
                         </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {currentProject.learningResources.videos.map((video, i) => (
-                            <motion.div 
+                            <motion.a 
                               key={i}
-                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer"
+                              href={`#${encodeURIComponent(video)}`}
+                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer block"
                               whileHover={{ y: -2 }}
-                              onClick={() => alert(`正在跳转到视频教程：${video}`)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                // 这里可以实现跳转到具体的视频教程
+                                alert(`正在跳转到视频教程：${video}`);
+                              }}
                             >
-                              <span className="text-gray-300 text-sm">{video}</span>
-                            </motion.div>
+                              <span className="text-blue-300 text-sm flex items-center gap-2">
+                                <span>→</span>
+                                {video}
+                              </span>
+                            </motion.a>
                           ))}
                         </div>
                       </div>
@@ -3344,14 +3360,22 @@ export default function DataAnalysisCourse() {
                         </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {currentProject.learningResources.examples.map((example, i) => (
-                            <motion.div 
+                            <motion.a 
                               key={i}
-                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer"
+                              href={`#${encodeURIComponent(example)}`}
+                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer block"
                               whileHover={{ y: -2 }}
-                              onClick={() => alert(`正在跳转到代码示例：${example}`)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                // 这里可以实现跳转到具体的代码示例
+                                alert(`正在跳转到代码示例：${example}`);
+                              }}
                             >
-                              <span className="text-gray-300 text-sm">{example}</span>
-                            </motion.div>
+                              <span className="text-blue-300 text-sm flex items-center gap-2">
+                                <span>→</span>
+                                {example}
+                              </span>
+                            </motion.a>
                           ))}
                         </div>
                       </div>
@@ -3362,20 +3386,38 @@ export default function DataAnalysisCourse() {
                           <span className="text-yellow-400">🤝</span>
                           社区支持
                         </h3>
-                        <div className="bg-gray-700/30 rounded-lg p-3 mb-3 hover:bg-gray-700/40 transition-all cursor-pointer"
-                             onClick={() => alert(`正在跳转到社区论坛：${currentProject.communitySupport.forum}`)}>
-                          <span className="text-gray-300">{currentProject.communitySupport.forum}</span>
-                        </div>
+                        <motion.a 
+                          href={`#${encodeURIComponent(currentProject.communitySupport.forum)}`}
+                          className="bg-gray-700/30 rounded-lg p-3 mb-3 hover:bg-gray-700/40 transition-all cursor-pointer block"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            // 这里可以实现跳转到社区论坛
+                            alert(`正在跳转到社区论坛：${currentProject.communitySupport.forum}`);
+                          }}
+                        >
+                          <span className="text-blue-300 flex items-center gap-2">
+                            <span>→</span>
+                            {currentProject.communitySupport.forum}
+                          </span>
+                        </motion.a>
                         <div className="space-y-2">
                           {currentProject.communitySupport.discussion.map((topic, i) => (
-                            <motion.div 
+                            <motion.a 
                               key={i}
-                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer"
+                              href={`#${encodeURIComponent(topic)}`}
+                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer block"
                               whileHover={{ y: -2 }}
-                              onClick={() => alert(`正在跳转到讨论：${topic}`)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                // 这里可以实现跳转到具体的讨论
+                                alert(`正在跳转到讨论：${topic}`);
+                              }}
                             >
-                              <span className="text-gray-300 text-sm">• {topic}</span>
-                            </motion.div>
+                              <span className="text-blue-300 text-sm flex items-center gap-2">
+                                <span>→</span>
+                                {topic}
+                              </span>
+                            </motion.a>
                           ))}
                         </div>
                       </div>
@@ -3526,6 +3568,15 @@ export default function DataAnalysisCourse() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
+                    <div className="flex justify-between items-center mb-6">
+                      <button
+                        onClick={resetToProjectList}
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all"
+                      >
+                        <span>←</span>
+                        <span>返回项目列表</span>
+                      </button>
+                    </div>
                     <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
                       <h2 className="text-xl font-semibold mb-4">测试题目</h2>
                       <div className="space-y-6">
@@ -3614,6 +3665,12 @@ export default function DataAnalysisCourse() {
                           </div>
                         </div>
                         <div className="flex justify-end gap-3">
+                          <button
+                            onClick={resetToProjectList}
+                            className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium transition-all"
+                          >
+                            返回项目列表
+                          </button>
                           <button
                             onClick={() => {
                               setTestAnswers({});

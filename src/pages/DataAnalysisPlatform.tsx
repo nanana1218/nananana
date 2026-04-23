@@ -88,13 +88,13 @@ export default function DataAnalysisPlatform() {
 
   return (
     <div 
-      className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 relative overflow-hidden"
+      className="min-h-screen bg-white text-gray-900 relative overflow-hidden"
       onMouseMove={handleMouseMove}
     >
       {/* 背景效果 */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1),transparent_70%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.05),transparent_70%)]"></div>
       <div 
-        className="absolute w-[500px] h-[500px] rounded-full bg-blue-500 filter blur-[150px] opacity-10 pointer-events-none"
+        className="absolute w-[500px] h-[500px] rounded-full bg-blue-500 filter blur-[150px] opacity-5 pointer-events-none"
         style={{
           left: `${mousePosition.x - 250}px`,
           top: `${mousePosition.y - 250}px`,
@@ -103,14 +103,14 @@ export default function DataAnalysisPlatform() {
       ></div>
 
       {/* 页面头部 */}
-      <header className="relative py-12 px-4 border-b border-gray-700/50">
+      <header className="relative py-12 px-4 border-b border-gray-200">
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
             <motion.h1 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500"
+              className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500"
             >
               数据分析在线教育平台
             </motion.h1>
@@ -118,7 +118,7 @@ export default function DataAnalysisPlatform() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto"
+              className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto"
             >
               专为商务数据分析与应用专业学生设计的在线学习系统
             </motion.p>
@@ -130,13 +130,13 @@ export default function DataAnalysisPlatform() {
             >
               <a 
                 href="/data-analysis-course"
-                className="px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all"
+                className="px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all text-white"
               >
                 开始学习
               </a>
               <a 
                 href="#features"
-                className="px-8 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium transition-all"
+                className="px-8 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-all text-gray-800"
               >
                 了解更多
               </a>
@@ -155,11 +155,11 @@ export default function DataAnalysisPlatform() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 * stat.id }}
-                className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 text-center"
+                className="bg-white rounded-xl border border-gray-200 p-6 text-center shadow-sm"
               >
                 <div className={`text-3xl mb-2 ${stat.color}`}>{stat.icon}</div>
                 <div className="text-3xl font-bold mb-2">{stat.value}</div>
-                <div className="text-gray-400">{stat.label}</div>
+                <div className="text-gray-500">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -167,7 +167,7 @@ export default function DataAnalysisPlatform() {
       </section>
 
       {/* 平台特色 */}
-      <section id="features" className="py-16 px-4 bg-gray-800/30">
+      <section id="features" className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <motion.h2 
             initial={{ opacity: 0 }}
@@ -185,13 +185,13 @@ export default function DataAnalysisPlatform() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 * feature.id }}
-                className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 hover:border-blue-500/50 transition-all"
+                className="bg-white rounded-xl border border-gray-200 p-6 hover:border-blue-500/50 transition-all shadow-sm"
               >
                 <div className={`text-3xl mb-4 bg-gradient-to-r ${feature.color} bg-clip-text text-transparent`}>
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-gray-400">{feature.description}</p>
+                <p className="text-gray-600">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -224,16 +224,16 @@ export default function DataAnalysisPlatform() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 * index }}
-                className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 hover:border-blue-500/50 transition-all cursor-pointer"
+                className="bg-white rounded-xl border border-gray-200 p-6 hover:border-blue-500/50 transition-all cursor-pointer shadow-sm"
               >
                 <div className={`text-4xl mb-4 bg-gradient-to-r ${project.color} bg-clip-text text-transparent`}>
                   {project.icon}
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                <p className="text-gray-400 mb-4">实战项目，提升数据分析能力</p>
+                <p className="text-gray-600 mb-4">实战项目，提升数据分析能力</p>
                 <a 
                   href="/data-analysis-course"
-                  className="inline-block px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium transition-all"
+                  className="inline-block px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-all text-gray-800"
                 >
                   查看详情
                 </a>
@@ -244,7 +244,7 @@ export default function DataAnalysisPlatform() {
       </section>
 
       {/* 行动号召 */}
-      <section className="py-20 px-4 bg-gradient-to-r from-blue-900/30 to-purple-900/30">
+      <section className="py-20 px-4 bg-white">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2 
             initial={{ opacity: 0 }}
@@ -259,7 +259,7 @@ export default function DataAnalysisPlatform() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-gray-300 mb-8 max-w-2xl mx-auto"
+            className="text-gray-600 mb-8 max-w-2xl mx-auto"
           >
             通过10个实战项目，掌握数据分析的核心技能，从数据预处理到机器学习，全面提升你的数据分析能力
           </motion.p>
@@ -269,7 +269,7 @@ export default function DataAnalysisPlatform() {
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
             href="/data-analysis-course"
-            className="inline-block px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all"
+            className="inline-block px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all text-white"
           >
             开始学习
           </motion.a>
@@ -277,8 +277,8 @@ export default function DataAnalysisPlatform() {
       </section>
 
       {/* 页脚 */}
-      <footer className="py-8 px-4 border-t border-gray-700/50">
-        <div className="max-w-6xl mx-auto text-center text-gray-400 text-sm">
+      <footer className="py-8 px-4 border-t border-gray-200">
+        <div className="max-w-6xl mx-auto text-center text-gray-600 text-sm">
           <p>© 2026 数据分析在线教育平台 | 专为商务数据分析与应用专业设计</p>
         </div>
       </footer>
