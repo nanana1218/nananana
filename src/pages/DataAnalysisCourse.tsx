@@ -3059,6 +3059,15 @@ export default function DataAnalysisCourse() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
+                <div className="flex justify-start mb-8">
+                  <a 
+                    href="/data-analysis"
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all"
+                  >
+                    <span>←</span>
+                    <span>返回平台</span>
+                  </a>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {projects.map((project) => {
                     const progress = learningState.projectProgress[project.id];
@@ -3150,15 +3159,6 @@ export default function DataAnalysisCourse() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="flex justify-between items-center mb-6">
-                      <button
-                        onClick={resetToProjectList}
-                        className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all"
-                      >
-                        <span>←</span>
-                        <span>返回项目列表</span>
-                      </button>
-                    </div>
                     {/* 项目概览卡片 */}
                     <motion.div 
                       className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6 overflow-hidden relative"
