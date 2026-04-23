@@ -3150,6 +3150,15 @@ export default function DataAnalysisCourse() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
+                    <div className="flex justify-between items-center mb-6">
+                      <button
+                        onClick={resetToProjectList}
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all"
+                      >
+                        <span>←</span>
+                        <span>返回项目列表</span>
+                      </button>
+                    </div>
                     {/* 项目概览卡片 */}
                     <motion.div 
                       className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6 overflow-hidden relative"
