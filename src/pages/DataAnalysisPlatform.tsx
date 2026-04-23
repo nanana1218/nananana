@@ -233,19 +233,13 @@ export default function DataAnalysisPlatform() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 * index }}
-                className="bg-white rounded-xl border border-gray-200 p-6 hover:border-blue-500/50 transition-all cursor-pointer shadow-sm"
+                className="bg-white rounded-xl border border-gray-200 p-6 hover:border-blue-500/50 transition-all shadow-sm"
               >
                 <div className={`text-4xl mb-4 bg-gradient-to-r ${project.color} bg-clip-text text-transparent`}>
                   {project.icon}
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                 <p className="text-gray-600 mb-4">实战项目，提升数据分析能力</p>
-                <a 
-                  href="/data-analysis-course"
-                  className="inline-block px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-all text-gray-800"
-                >
-                  查看详情
-                </a>
               </motion.div>
             ))}
           </div>
