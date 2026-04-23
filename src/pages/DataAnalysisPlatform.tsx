@@ -105,6 +105,15 @@ export default function DataAnalysisPlatform() {
       {/* 页面头部 */}
       <header className="relative py-12 px-4 border-b border-gray-200">
         <div className="max-w-6xl mx-auto">
+          <div className="flex justify-start mb-8">
+            <a 
+              href="/"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-all text-gray-800"
+            >
+              <span>←</span>
+              <span>返回主页</span>
+            </a>
+          </div>
           <div className="text-center">
             <motion.h1 
               initial={{ opacity: 0, y: -20 }}
