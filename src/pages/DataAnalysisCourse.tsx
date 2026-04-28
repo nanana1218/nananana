@@ -2981,11 +2981,11 @@ export default function DataAnalysisCourse() {
   const currentProject = getCurrentProject();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 relative overflow-hidden">
+    <div className="min-h-screen bg-white text-gray-900 relative overflow-hidden">
       {/* 背景效果 */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1),transparent_70%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.05),transparent_70%)]"></div>
       <div 
-        className="absolute w-[500px] h-[500px] rounded-full bg-blue-500 filter blur-[150px] opacity-10 pointer-events-none"
+        className="absolute w-[500px] h-[500px] rounded-full bg-blue-500 filter blur-[150px] opacity-5 pointer-events-none"
         style={{
           left: `${mousePosition.x - 250}px`,
           top: `${mousePosition.y - 250}px`,
@@ -2994,7 +2994,7 @@ export default function DataAnalysisCourse() {
       ></div>
 
       {/* 页面头部 */}
-      <header className="relative py-12 px-4 border-b border-gray-700/50">
+      <header className="relative py-12 px-4 border-b border-gray-200">
         <div className="max-w-6xl mx-auto">
           {!currentProject ? (
             <div className="text-center">
@@ -3003,15 +3003,15 @@ export default function DataAnalysisCourse() {
                   <span className="text-3xl">📊</span>
                 </div>
               </div>
-              <h1 className="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-400">
+              <h1 className="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
                 Python数据分析全栈实战
               </h1>
-              <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 十个独立项目，从入门到精通，边练边学，形成完整的学习闭环
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 {['学习 → 实操 → 测试', '闭环学习', '可运行代码', '真实数据集'].map((tag, i) => (
-                  <span key={i} className="px-4 py-1.5 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/30 text-sm text-blue-300">
+                  <span key={i} className="px-4 py-1.5 bg-gray-100 rounded-full border border-gray-200 text-sm text-gray-600">
                     {tag}
                   </span>
                 ))}
@@ -3021,7 +3021,7 @@ export default function DataAnalysisCourse() {
             <div className="flex items-center justify-between">
               <button
                 onClick={resetToProjectList}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg border border-gray-200 hover:border-blue-500/50 transition-all"
               >
                 <span>←</span>
                 <span>返回项目列表</span>
@@ -3029,15 +3029,15 @@ export default function DataAnalysisCourse() {
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{currentProject.icon}</span>
                 <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
                     {currentProject.title}
                   </h1>
-                  <p className="text-sm text-gray-400">项目 {currentProject.id} / 10 · {currentProject.duration}</p>
+                  <p className="text-sm text-gray-500">项目 {currentProject.id} / 10 · {currentProject.duration}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <span className={`w-3 h-3 rounded-full ${currentProject.difficulty === 'beginner' ? 'bg-green-500' : currentProject.difficulty === 'intermediate' ? 'bg-yellow-500' : 'bg-red-500'}`}></span>
-                <span className="text-sm text-gray-400">
+                <span className="text-sm text-gray-500">
                   {currentProject.difficulty === 'beginner' ? '入门' : currentProject.difficulty === 'intermediate' ? '进阶' : '高级'}
                 </span>
               </div>
@@ -3062,7 +3062,7 @@ export default function DataAnalysisCourse() {
                 <div className="flex justify-start mb-8">
                   <a 
                     href="/data-analysis"
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all"
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg border border-gray-200 hover:border-blue-500/50 transition-all"
                   >
                     <span>←</span>
                     <span>返回平台</span>
@@ -3077,36 +3077,36 @@ export default function DataAnalysisCourse() {
                       <motion.div
                         key={project.id}
                         whileHover={{ scale: 1.02, y: -4 }}
-                        className={`bg-gray-800/50 backdrop-blur-sm rounded-xl border ${isCompleted ? 'border-green-500/50' : 'border-gray-700'} overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20`}
+                        className={`bg-white rounded-xl border ${isCompleted ? 'border-green-500/50' : 'border-gray-200'} overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10`}
                         onClick={() => selectProject(project.id)}
                       >
                         <div className={`h-2 bg-gradient-to-r ${project.color}`}></div>
                         <div className="p-6">
                           <div className="flex items-start justify-between mb-4">
                             <span className="text-3xl">{project.icon}</span>
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.difficulty === 'beginner' ? 'bg-green-500/20 text-green-400' : project.difficulty === 'intermediate' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'}`}>
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.difficulty === 'beginner' ? 'bg-green-100 text-green-600' : project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}`}>
                               {project.difficulty === 'beginner' ? '入门' : project.difficulty === 'intermediate' ? '进阶' : '高级'}
                             </span>
                           </div>
                           <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                          <p className="text-gray-400 text-sm mb-4">{project.description}</p>
+                          <p className="text-gray-500 text-sm mb-4">{project.description}</p>
                           <div className="flex items-center justify-between mb-4">
-                            <span className="text-sm text-gray-400">{project.duration}</span>
+                            <span className="text-sm text-gray-500">{project.duration}</span>
                             {isCompleted && (
-                              <span className="flex items-center text-sm text-green-400">
+                              <span className="flex items-center text-sm text-green-600">
                                 ✅ 已完成
                               </span>
                             )}
                           </div>
                           <div className="flex gap-2 mb-4">
                             {project.coreKnowledge.slice(0, 3).map((knowledge, i) => (
-                              <span key={i} className="px-2 py-1 bg-gray-700/50 rounded-full text-xs text-gray-300">
+                              <span key={i} className="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-600">
                                 {knowledge.split('（')[0]}
                               </span>
                             ))}
                           </div>
                           <button
-                            className="w-full py-2 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg text-sm font-medium transition-all"
+                            className="w-full py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-all"
                             onClick={(e) => {
                               e.stopPropagation();
                               selectProject(project.id);
@@ -3130,22 +3130,22 @@ export default function DataAnalysisCourse() {
                 transition={{ duration: 0.3 }}
               >
                 {/* 阶段导航 */}
-                <div className="flex gap-4 mb-8 border-b border-gray-700/50 pb-4">
+                <div className="flex gap-4 mb-8 border-b border-gray-200 pb-4">
                   <button
                     onClick={() => goToPhase('learn')}
-                    className={`flex-1 py-3 px-4 rounded-t-lg transition-all ${learningState.currentPhase === 'learn' ? 'bg-gray-700/50 border-b-2 border-blue-500 text-blue-400' : 'bg-gray-800/50 hover:bg-gray-700/30'}`}
+                    className={`flex-1 py-3 px-4 rounded-t-lg transition-all ${learningState.currentPhase === 'learn' ? 'bg-gray-100 border-b-2 border-blue-500 text-blue-600' : 'bg-gray-50 hover:bg-gray-100'}`}
                   >
                     📚 学习
                   </button>
                   <button
                     onClick={() => goToPhase('practice')}
-                    className={`flex-1 py-3 px-4 rounded-t-lg transition-all ${learningState.currentPhase === 'practice' ? 'bg-gray-700/50 border-b-2 border-blue-500 text-blue-400' : 'bg-gray-800/50 hover:bg-gray-700/30'}`}
+                    className={`flex-1 py-3 px-4 rounded-t-lg transition-all ${learningState.currentPhase === 'practice' ? 'bg-gray-100 border-b-2 border-blue-500 text-blue-600' : 'bg-gray-50 hover:bg-gray-100'}`}
                   >
                     💻 实操
                   </button>
                   <button
                     onClick={() => goToPhase('test')}
-                    className={`flex-1 py-3 px-4 rounded-t-lg transition-all ${learningState.currentPhase === 'test' ? 'bg-gray-700/50 border-b-2 border-blue-500 text-blue-400' : 'bg-gray-800/50 hover:bg-gray-700/30'}`}
+                    className={`flex-1 py-3 px-4 rounded-t-lg transition-all ${learningState.currentPhase === 'test' ? 'bg-gray-100 border-b-2 border-blue-500 text-blue-600' : 'bg-gray-50 hover:bg-gray-100'}`}
                   >
                     📝 测试
                   </button>
@@ -3161,7 +3161,7 @@ export default function DataAnalysisCourse() {
                   >
                     {/* 项目概览卡片 */}
                     <motion.div 
-                      className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6 overflow-hidden relative"
+                      className="bg-white rounded-xl border border-gray-200 p-6 mb-6 overflow-hidden relative"
                       whileHover={{ scale: 1.01 }}
                       transition={{ duration: 0.3 }}
                     >
@@ -3173,33 +3173,33 @@ export default function DataAnalysisCourse() {
                             <span className="text-2xl">{currentProject.icon}</span>
                           </div>
                           <div>
-                            <h2 className="text-2xl font-semibold text-gray-100">项目概览</h2>
-                            <p className="text-sm text-gray-400">{currentProject.duration} · {currentProject.difficulty === 'beginner' ? '入门' : currentProject.difficulty === 'intermediate' ? '进阶' : '高级'}</p>
+                            <h2 className="text-2xl font-semibold text-gray-900">项目概览</h2>
+                            <p className="text-sm text-gray-500">{currentProject.duration} · {currentProject.difficulty === 'beginner' ? '入门' : currentProject.difficulty === 'intermediate' ? '进阶' : '高级'}</p>
                           </div>
                         </div>
-                        <p className="text-gray-300 mb-6 leading-relaxed">{currentProject.description}</p>
+                        <p className="text-gray-600 mb-6 leading-relaxed">{currentProject.description}</p>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                           {/* 业务场景 */}
-                          <div className="bg-gray-700/30 rounded-lg p-4 hover:bg-gray-700/40 transition-all">
+                          <div className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-all">
                             <div className="flex items-center gap-2 mb-3">
-                              <span className="text-blue-400 text-xl">📋</span>
-                              <h3 className="text-md font-medium text-gray-200">业务场景</h3>
+                              <span className="text-blue-500 text-xl">📋</span>
+                              <h3 className="text-md font-medium text-gray-700">业务场景</h3>
                             </div>
-                            <p className="text-gray-300 text-sm leading-relaxed">{currentProject.businessScenario}</p>
+                            <p className="text-gray-600 text-sm leading-relaxed">{currentProject.businessScenario}</p>
                           </div>
                           
                           {/* 核心知识点 */}
-                          <div className="bg-gray-700/30 rounded-lg p-4 hover:bg-gray-700/40 transition-all">
+                          <div className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-all">
                             <div className="flex items-center gap-2 mb-3">
-                              <span className="text-blue-400 text-xl">💡</span>
-                              <h3 className="text-md font-medium text-gray-200">核心知识点</h3>
+                              <span className="text-blue-500 text-xl">💡</span>
+                              <h3 className="text-md font-medium text-gray-700">核心知识点</h3>
                             </div>
                             <ul className="space-y-2">
                               {currentProject.coreKnowledge.map((knowledge, i) => (
                                 <li key={i} className="flex items-start gap-2">
-                                  <span className="text-blue-400 mt-1">•</span>
-                                  <span className="text-gray-300 text-sm">{knowledge}</span>
+                                  <span className="text-blue-500 mt-1">•</span>
+                                  <span className="text-gray-600 text-sm">{knowledge}</span>
                                 </li>
                               ))}
                             </ul>
@@ -3210,19 +3210,19 @@ export default function DataAnalysisCourse() {
 
                     {/* 学习任务卡片 */}
                     <motion.div 
-                      className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6"
+                      className="bg-white rounded-xl border border-gray-200 p-6 mb-6"
                       whileHover={{ scale: 1.01 }}
                       transition={{ duration: 0.3 }}
                     >
                       <div className="flex items-center gap-2 mb-4">
-                        <span className="text-blue-400 text-xl">🎯</span>
-                        <h2 className="text-xl font-semibold text-gray-100">学习任务</h2>
+                        <span className="text-blue-500 text-xl">🎯</span>
+                        <h2 className="text-xl font-semibold text-gray-900">学习任务</h2>
                       </div>
                       <div className="space-y-4">
                         {currentProject.tasks.map((task, i) => (
                           <motion.div 
                             key={i} 
-                            className="bg-gray-700/30 rounded-lg p-4 hover:bg-gray-700/40 transition-all"
+                            className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-all"
                             whileHover={{ x: 5 }}
                           >
                             <div className="flex items-start gap-3">
@@ -3230,11 +3230,11 @@ export default function DataAnalysisCourse() {
                                 <span className="text-sm font-medium text-white">{i + 1}</span>
                               </div>
                               <div>
-                                <p className="text-gray-300 mb-2">{task}</p>
+                                <p className="text-gray-700 mb-2">{task}</p>
                                 {currentProject.taskHints[i] && (
-                                  <div className="bg-gray-600/30 rounded p-3 text-sm">
-                                    <p className="text-blue-300 font-medium mb-1">💡 提示</p>
-                                    <p className="text-gray-300 text-xs leading-relaxed">{currentProject.taskHints[i]}</p>
+                                  <div className="bg-blue-50 rounded p-3 text-sm border border-blue-100">
+                                    <p className="text-blue-600 font-medium mb-1">💡 提示</p>
+                                    <p className="text-gray-600 text-xs leading-relaxed">{currentProject.taskHints[i]}</p>
                                   </div>
                                 )}
                               </div>
@@ -3246,24 +3246,24 @@ export default function DataAnalysisCourse() {
 
                     {/* 常见陷阱卡片 */}
                     <motion.div 
-                      className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6"
+                      className="bg-white rounded-xl border border-gray-200 p-6 mb-6"
                       whileHover={{ scale: 1.01 }}
                       transition={{ duration: 0.3 }}
                     >
                       <div className="flex items-center gap-2 mb-4">
-                        <span className="text-red-400 text-xl">⚠️</span>
-                        <h2 className="text-xl font-semibold text-gray-100">常见陷阱</h2>
+                        <span className="text-red-500 text-xl">⚠️</span>
+                        <h2 className="text-xl font-semibold text-gray-900">常见陷阱</h2>
                       </div>
                       <div className="space-y-3">
                         {currentProject.pitfalls.map((pitfall, i) => (
                           <motion.div 
                             key={i} 
-                            className="bg-gray-700/30 rounded-lg p-4 hover:bg-gray-700/40 transition-all"
+                            className="bg-red-50 rounded-lg p-4 hover:bg-red-100 transition-all border border-red-100"
                             whileHover={{ x: 5 }}
                           >
                             <div className="flex items-start gap-3">
-                              <span className="text-red-400 mt-1">•</span>
-                              <span className="text-gray-300">{pitfall}</span>
+                              <span className="text-red-500 mt-1">•</span>
+                              <span className="text-gray-700">{pitfall}</span>
                             </div>
                           </motion.div>
                         ))}
@@ -3272,23 +3272,23 @@ export default function DataAnalysisCourse() {
 
                     {/* 交付物卡片 */}
                     <motion.div 
-                      className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6"
+                      className="bg-white rounded-xl border border-gray-200 p-6 mb-6"
                       whileHover={{ scale: 1.01 }}
                       transition={{ duration: 0.3 }}
                     >
                       <div className="flex items-center gap-2 mb-4">
-                        <span className="text-green-400 text-xl">📦</span>
-                        <h2 className="text-xl font-semibold text-gray-100">交付物</h2>
+                        <span className="text-green-500 text-xl">📦</span>
+                        <h2 className="text-xl font-semibold text-gray-900">交付物</h2>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {currentProject.deliverables.map((deliverable, i) => (
                           <motion.div 
                             key={i} 
-                            className="bg-gray-700/30 rounded-lg p-3 flex items-center gap-2 hover:bg-gray-700/40 transition-all"
+                            className="bg-green-50 rounded-lg p-3 flex items-center gap-2 hover:bg-green-100 transition-all border border-green-100"
                             whileHover={{ y: -2 }}
                           >
-                            <span className="text-green-400">✅</span>
-                            <span className="text-gray-300">{deliverable}</span>
+                            <span className="text-green-600">✅</span>
+                            <span className="text-gray-700">{deliverable}</span>
                           </motion.div>
                         ))}
                       </div>
@@ -3296,19 +3296,19 @@ export default function DataAnalysisCourse() {
 
                     {/* 学习资源卡片 */}
                     <motion.div 
-                      className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6"
+                      className="bg-white rounded-xl border border-gray-200 p-6 mb-6"
                       whileHover={{ scale: 1.01 }}
                       transition={{ duration: 0.3 }}
                     >
                       <div className="flex items-center gap-2 mb-4">
-                        <span className="text-yellow-400 text-xl">📚</span>
-                        <h2 className="text-xl font-semibold text-gray-100">学习资源</h2>
+                        <span className="text-yellow-500 text-xl">📚</span>
+                        <h2 className="text-xl font-semibold text-gray-900">学习资源</h2>
                       </div>
                       
                       {/* 文档资源 */}
                       <div className="mb-4">
-                        <h3 className="text-md font-medium text-gray-200 mb-3 flex items-center gap-2">
-                          <span className="text-yellow-400">📖</span>
+                        <h3 className="text-md font-medium text-gray-700 mb-3 flex items-center gap-2">
+                          <span className="text-yellow-500">📖</span>
                           相关文档
                         </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -3316,15 +3316,14 @@ export default function DataAnalysisCourse() {
                             <motion.a 
                               key={i}
                               href={`#${encodeURIComponent(doc)}`}
-                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer block"
+                              className="bg-gray-50 rounded-lg p-2 hover:bg-gray-100 transition-all cursor-pointer block border border-gray-100"
                               whileHover={{ y: -2 }}
                               onClick={(e) => {
                                 e.preventDefault();
-                                // 这里可以实现跳转到具体的学习资源页面
                                 alert(`正在跳转到：${doc}`);
                               }}
                             >
-                              <span className="text-blue-300 text-sm flex items-center gap-2">
+                              <span className="text-blue-600 text-sm flex items-center gap-2">
                                 <span>→</span>
                                 {doc}
                               </span>
@@ -3335,8 +3334,8 @@ export default function DataAnalysisCourse() {
                       
                       {/* 视频教程 */}
                       <div className="mb-4">
-                        <h3 className="text-md font-medium text-gray-200 mb-3 flex items-center gap-2">
-                          <span className="text-yellow-400">🎥</span>
+                        <h3 className="text-md font-medium text-gray-700 mb-3 flex items-center gap-2">
+                          <span className="text-yellow-500">🎥</span>
                           视频教程
                         </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -3344,15 +3343,14 @@ export default function DataAnalysisCourse() {
                             <motion.a 
                               key={i}
                               href={`#${encodeURIComponent(video)}`}
-                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer block"
+                              className="bg-gray-50 rounded-lg p-2 hover:bg-gray-100 transition-all cursor-pointer block border border-gray-100"
                               whileHover={{ y: -2 }}
                               onClick={(e) => {
                                 e.preventDefault();
-                                // 这里可以实现跳转到具体的视频教程
                                 alert(`正在跳转到视频教程：${video}`);
                               }}
                             >
-                              <span className="text-blue-300 text-sm flex items-center gap-2">
+                              <span className="text-blue-600 text-sm flex items-center gap-2">
                                 <span>→</span>
                                 {video}
                               </span>
@@ -3363,8 +3361,8 @@ export default function DataAnalysisCourse() {
                       
                       {/* 代码示例 */}
                       <div className="mb-4">
-                        <h3 className="text-md font-medium text-gray-200 mb-3 flex items-center gap-2">
-                          <span className="text-yellow-400">💻</span>
+                        <h3 className="text-md font-medium text-gray-700 mb-3 flex items-center gap-2">
+                          <span className="text-yellow-500">💻</span>
                           代码示例
                         </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -3372,15 +3370,14 @@ export default function DataAnalysisCourse() {
                             <motion.a 
                               key={i}
                               href={`#${encodeURIComponent(example)}`}
-                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer block"
+                              className="bg-gray-50 rounded-lg p-2 hover:bg-gray-100 transition-all cursor-pointer block border border-gray-100"
                               whileHover={{ y: -2 }}
                               onClick={(e) => {
                                 e.preventDefault();
-                                // 这里可以实现跳转到具体的代码示例
                                 alert(`正在跳转到代码示例：${example}`);
                               }}
                             >
-                              <span className="text-blue-300 text-sm flex items-center gap-2">
+                              <span className="text-blue-600 text-sm flex items-center gap-2">
                                 <span>→</span>
                                 {example}
                               </span>
@@ -3391,20 +3388,19 @@ export default function DataAnalysisCourse() {
                       
                       {/* 社区支持 */}
                       <div>
-                        <h3 className="text-md font-medium text-gray-200 mb-3 flex items-center gap-2">
-                          <span className="text-yellow-400">🤝</span>
+                        <h3 className="text-md font-medium text-gray-700 mb-3 flex items-center gap-2">
+                          <span className="text-yellow-500">🤝</span>
                           社区支持
                         </h3>
                         <motion.a 
                           href={`#${encodeURIComponent(currentProject.communitySupport.forum)}`}
-                          className="bg-gray-700/30 rounded-lg p-3 mb-3 hover:bg-gray-700/40 transition-all cursor-pointer block"
+                          className="bg-gray-50 rounded-lg p-3 mb-3 hover:bg-gray-100 transition-all cursor-pointer block border border-gray-100"
                           onClick={(e) => {
                             e.preventDefault();
-                            // 这里可以实现跳转到社区论坛
                             alert(`正在跳转到社区论坛：${currentProject.communitySupport.forum}`);
                           }}
                         >
-                          <span className="text-blue-300 flex items-center gap-2">
+                          <span className="text-blue-600 flex items-center gap-2">
                             <span>→</span>
                             {currentProject.communitySupport.forum}
                           </span>
@@ -3414,15 +3410,14 @@ export default function DataAnalysisCourse() {
                             <motion.a 
                               key={i}
                               href={`#${encodeURIComponent(topic)}`}
-                              className="bg-gray-700/30 rounded-lg p-2 hover:bg-gray-700/40 transition-all cursor-pointer block"
+                              className="bg-gray-50 rounded-lg p-2 hover:bg-gray-100 transition-all cursor-pointer block border border-gray-100"
                               whileHover={{ y: -2 }}
                               onClick={(e) => {
                                 e.preventDefault();
-                                // 这里可以实现跳转到具体的讨论
                                 alert(`正在跳转到讨论：${topic}`);
                               }}
                             >
-                              <span className="text-blue-300 text-sm flex items-center gap-2">
+                              <span className="text-blue-600 text-sm flex items-center gap-2">
                                 <span>→</span>
                                 {topic}
                               </span>
@@ -3455,10 +3450,10 @@ export default function DataAnalysisCourse() {
                   >
                     <div className="flex flex-col h-[80vh]">
                       {/* 顶部操作栏 */}
-                      <div className="bg-gray-800/80 backdrop-blur-sm border-b border-gray-700 p-3 flex items-center justify-between">
+                      <div className="bg-white border-b border-gray-200 p-3 flex items-center justify-between">
                         <button
                           onClick={resetToProjectList}
-                          className="flex items-center gap-2 px-3 py-1.5 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition-all text-sm"
+                          className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all text-sm"
                         >
                           ← 返回项目列表
                         </button>
@@ -3472,19 +3467,19 @@ export default function DataAnalysisCourse() {
                           </button>
                           <button 
                             onClick={() => setUserCode(currentProject?.id === 1 ? currentProject.codeExample : '')}
-                            className="px-4 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-300 text-sm font-medium transition-all"
+                            className="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 text-sm font-medium transition-all"
                           >
                             重置代码
                           </button>
                           <button 
                             onClick={() => setShowReferenceAnswer(!showReferenceAnswer)}
-                            className="px-4 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-300 text-sm font-medium transition-all"
+                            className="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 text-sm font-medium transition-all"
                           >
                             {showReferenceAnswer ? '隐藏参考答案' : '显示参考答案'}
                           </button>
                         </div>
                         <div className="flex items-center gap-2">
-                          <label className="flex items-center gap-1 text-sm text-gray-400">
+                          <label className="flex items-center gap-1 text-sm text-gray-500">
                             <input type="checkbox" className="w-4 h-4 text-blue-500" />
                             自动保存
                           </label>
@@ -3494,18 +3489,18 @@ export default function DataAnalysisCourse() {
                       {/* 主内容区 */}
                       <div className="flex flex-1 overflow-hidden">
                         {/* 左侧任务列表 */}
-                        <div className="w-64 bg-gray-800/60 backdrop-blur-sm border-r border-gray-700 p-4 overflow-y-auto">
-                          <h3 className="text-lg font-semibold mb-4 text-gray-200">{currentProject.title}</h3>
-                          <div className="text-sm text-gray-400 mb-2">{currentProject.duration}</div>
+                        <div className="w-64 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
+                          <h3 className="text-lg font-semibold mb-4 text-gray-900">{currentProject.title}</h3>
+                          <div className="text-sm text-gray-500 mb-2">{currentProject.duration}</div>
                           <ul className="space-y-3">
                             {currentProject.tasks.map((task, i) => (
-                              <li key={i} className="bg-gray-700/30 rounded-lg p-3 hover:bg-gray-700/50 transition-all">
+                              <li key={i} className="bg-white rounded-lg p-3 hover:bg-gray-50 transition-all border border-gray-100">
                                 <div className="flex items-start gap-2">
-                                  <span className="text-blue-400 font-medium">{i + 1}.</span>
+                                  <span className="text-blue-500 font-medium">{i + 1}.</span>
                                   <div>
-                                    <p className="text-gray-300 text-sm">{task}</p>
+                                    <p className="text-gray-700 text-sm">{task}</p>
                                     {currentProject.taskHints[i] && (
-                                      <p className="text-xs text-gray-400 mt-1">{currentProject.taskHints[i]}</p>
+                                      <p className="text-xs text-gray-500 mt-1">{currentProject.taskHints[i]}</p>
                                     )}
                                   </div>
                                 </div>
@@ -3516,20 +3511,20 @@ export default function DataAnalysisCourse() {
 
                         {/* 中间代码编辑区 */}
                         <div className="flex-1 flex flex-col">
-                          <div className="bg-gray-900/80 border-b border-gray-700 px-4 py-2 flex items-center justify-between">
-                            <span className="text-sm text-gray-400">main.py</span>
+                          <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
+                            <span className="text-sm text-gray-600">main.py</span>
                             {showReferenceAnswer && (
-                              <span className="text-xs text-yellow-400 bg-yellow-900/30 px-2 py-1 rounded">参考答案</span>
+                              <span className="text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">参考答案</span>
                             )}
                           </div>
-                          <div className="flex-1 bg-gray-900 p-4 overflow-auto">
+                          <div className="flex-1 bg-gray-50 p-4 overflow-auto">
                             {showReferenceAnswer ? (
-                              <pre className="text-gray-300 text-sm font-mono">{currentProject.referenceAnswer}</pre>
+                              <pre className="text-gray-700 text-sm font-mono">{currentProject.referenceAnswer}</pre>
                             ) : (
                               <textarea
                                 value={userCode}
                                 onChange={(e) => setUserCode(e.target.value)}
-                                className="w-full h-full bg-transparent text-gray-300 text-sm font-mono resize-none outline-none"
+                                className="w-full h-full bg-transparent text-gray-700 text-sm font-mono resize-none outline-none"
                                 spellCheck={false}
                               />
                             )}
@@ -3537,17 +3532,17 @@ export default function DataAnalysisCourse() {
                         </div>
 
                         {/* 右侧执行结果区 */}
-                        <div className="w-96 bg-gray-800/60 backdrop-blur-sm border-l border-gray-700 flex flex-col">
-                          <div className="bg-gray-700/30 border-b border-gray-700 px-4 py-2 flex items-center">
-                            <span className="text-sm font-medium text-gray-300">执行结果</span>
+                        <div className="w-96 bg-gray-50 border-l border-gray-200 flex flex-col">
+                          <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center">
+                            <span className="text-sm font-medium text-gray-700">执行结果</span>
                           </div>
-                          <div className="flex-1 bg-gray-900 p-4 overflow-auto">
+                          <div className="flex-1 bg-white p-4 overflow-auto">
                             {errorMessage ? (
-                              <div className="text-red-400 whitespace-pre-wrap">{errorMessage}</div>
+                              <div className="text-red-600 whitespace-pre-wrap">{errorMessage}</div>
                             ) : executionResult ? (
-                              <div className="text-green-400 whitespace-pre-wrap">{executionResult}</div>
+                              <div className="text-green-600 whitespace-pre-wrap">{executionResult}</div>
                             ) : (
-                              <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                              <div className="flex flex-col items-center justify-center h-full text-gray-400">
                                 <div className="text-4xl mb-4">▶</div>
                                 <p className="text-center">点击"运行代码"按钮来执行</p>
                                 <p className="text-center text-xs mt-2">代码将在终端中运行</p>
@@ -3561,7 +3556,7 @@ export default function DataAnalysisCourse() {
                     <div className="flex justify-end mt-6">
                       <button
                         onClick={markPhaseComplete}
-                        className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all"
+                        className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all text-white"
                       >
                         完成实操，进入测试
                       </button>
@@ -3580,14 +3575,14 @@ export default function DataAnalysisCourse() {
                     <div className="flex justify-between items-center mb-6">
                       <button
                         onClick={resetToProjectList}
-                        className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all"
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg border border-gray-200 hover:border-blue-500/50 transition-all"
                       >
                         <span>←</span>
                         <span>返回项目列表</span>
                       </button>
                     </div>
-                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
-                      <h2 className="text-xl font-semibold mb-4">测试题目</h2>
+                    <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+                      <h2 className="text-xl font-semibold mb-4 text-gray-900">测试题目</h2>
                       <div className="space-y-6">
                         {(randomQuestions.length > 0 ? randomQuestions : currentProject.questions).map((question, index) => {
                           const userAnswer = testAnswers[question.id];
@@ -3598,8 +3593,8 @@ export default function DataAnalysisCourse() {
                           ) : false;
 
                           return (
-                            <div key={question.id} className={`bg-gray-700/30 rounded-lg p-4 ${showResults ? (isCorrect ? 'border border-green-500/50' : 'border border-red-500/50') : ''}`}>
-                              <p className="text-gray-300 mb-3">{index + 1}. {question.question}</p>
+                            <div key={question.id} className={`bg-gray-50 rounded-lg p-4 ${showResults ? (isCorrect ? 'border border-green-500/50' : 'border border-red-500/50') : 'border border-gray-100'}`}>
+                              <p className="text-gray-700 mb-3">{index + 1}. {question.question}</p>
                               <div className="space-y-2">
                                 {question.options.map((option, i) => (
                                   <label key={i} className="flex items-center gap-3">
@@ -3620,18 +3615,18 @@ export default function DataAnalysisCourse() {
                                       disabled={showResults}
                                       className="w-4 h-4 text-blue-500"
                                     />
-                                    <span className={`text-gray-300 ${showResults ? (question.correctAnswer === i || (Array.isArray(question.correctAnswer) && (question.correctAnswer as number[]).includes(i)) ? 'text-green-400' : '') : ''}`}>
+                                    <span className={`text-gray-700 ${showResults ? (question.correctAnswer === i || (Array.isArray(question.correctAnswer) && (question.correctAnswer as number[]).includes(i)) ? 'text-green-600 font-medium' : '') : ''}`}>
                                       {option}
                                     </span>
                                   </label>
                                 ))}
                               </div>
                               {showResults && (
-                                <div className="mt-3 p-3 bg-gray-800/50 rounded-lg">
-                                  <p className={`text-sm ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
+                                <div className="mt-3 p-3 bg-gray-100 rounded-lg">
+                                  <p className={`text-sm ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
                                     {isCorrect ? '✓ 回答正确' : '✗ 回答错误'}
                                   </p>
-                                  <p className="text-sm text-gray-400 mt-1">{question.explanation}</p>
+                                  <p className="text-sm text-gray-600 mt-1">{question.explanation}</p>
                                 </div>
                               )}
                             </div>
@@ -3644,15 +3639,15 @@ export default function DataAnalysisCourse() {
                       <div className="flex justify-end">
                         <button
                           onClick={submitTest}
-                          className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all"
+                          className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all text-white"
                         >
                           提交答案
                         </button>
                       </div>
                     ) : (
                       <>
-                        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
-                          <h2 className="text-xl font-semibold mb-4">测试结果</h2>
+                        <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+                          <h2 className="text-xl font-semibold mb-4 text-gray-900">测试结果</h2>
                           <div className="flex items-center gap-4">
                             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
                               <span className="text-3xl font-bold text-white">
@@ -3660,12 +3655,12 @@ export default function DataAnalysisCourse() {
                               </span>
                             </div>
                             <div>
-                              <p className="text-gray-300">
+                              <p className="text-gray-700">
                                 {learningState.projectProgress[learningState.currentProject!]?.testScore >= 80 
                                   ? '🎉 测试通过！' 
                                   : '⚠️ 测试未通过，请重新学习相关内容'}
                               </p>
-                              <p className="text-sm text-gray-400 mt-1">
+                              <p className="text-sm text-gray-500 mt-1">
                                 {learningState.projectProgress[learningState.currentProject!]?.testScore >= 80 
                                   ? '你已经掌握了本项目的核心知识点，可以进入下一个项目。' 
                                   : '建议返回学习阶段，重新复习相关知识点后再进行测试。'}
@@ -3676,7 +3671,7 @@ export default function DataAnalysisCourse() {
                         <div className="flex justify-end gap-3">
                           <button
                             onClick={resetToProjectList}
-                            className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium transition-all"
+                            className="px-6 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-all text-gray-700"
                           >
                             返回项目列表
                           </button>
@@ -3691,7 +3686,7 @@ export default function DataAnalysisCourse() {
                                 setRandomQuestions(shuffled);
                               }
                             }}
-                            className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium transition-all"
+                            className="px-6 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-all text-gray-700"
                           >
                             重新测试
                           </button>

@@ -959,14 +959,14 @@ export default function DataCollectionCourse() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 relative overflow-hidden">
+    <div className="min-h-screen bg-white text-gray-900 relative overflow-hidden">
       {/* 背景效果 */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.2),transparent_70%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.05),transparent_70%)]"></div>
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSI+PHBhdGggZD0iTTAgMCBMIDUwIDAgTCA1MCA1MCBMIDAgNTAiIGZpbGw9IiMzYjgyZjYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjxwYXRoIGQ9Ik01MCAwIEwgMTAwIDAgTCAxMDAgNTAgTCA1MCA1MCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PHBhdGggZD0iTTAgNTAiIGQ9Ik01MCA1MCBMIDAgNTAgTCAwIDEwMCBMIDUwIDEwMCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PHBhdGggZD0iTTUwIDUwIEwgMTAwIDUwIEwgMTAwIDEwMCBMIDUwIDEwMCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9nPjwvc3ZnPg==')]"></div>
       
       {/* 鼠标跟随效果 */}
       <div 
-        className="absolute w-[600px] h-[600px] rounded-full bg-blue-600 filter blur-[200px] opacity-10 pointer-events-none"
+        className="absolute w-[600px] h-[600px] rounded-full bg-blue-600 filter blur-[200px] opacity-5 pointer-events-none"
         style={{
           left: `${mousePosition.x - 300}px`,
           top: `${mousePosition.y - 300}px`,
@@ -975,31 +975,31 @@ export default function DataCollectionCourse() {
       ></div>
 
       {/* 页面头部 */}
-      <header className="relative py-16 px-4 overflow-hidden">
+      <header className="relative py-16 px-4 overflow-hidden border-b border-gray-200">
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <div className="inline-block mb-6">
             <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30">
               <span className="text-4xl">📊</span>
             </div>
           </div>
-          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-400">
+          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
             数据采集与处理
           </h1>
-          <p className="text-xl text-cyan-300 mb-6">
+          <p className="text-xl text-gray-600 mb-6">
             商务数据分析与应用专业核心课程
           </p>
-          <p className="text-gray-400 max-w-3xl mx-auto">
+          <p className="text-gray-600 max-w-3xl mx-auto">
             本课程旨在培养学生掌握数据采集与预处理的基本技能，为后续的数据分析学习打下基础，
             使学生能够从各种数据源获取数据并进行有效的预处理。
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <div className="px-5 py-2 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/50 text-sm text-blue-300">
+            <div className="px-5 py-2 bg-gray-100 rounded-full border border-gray-200 text-sm text-gray-600">
               高职大二
             </div>
-            <div className="px-5 py-2 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/50 text-sm text-blue-300">
+            <div className="px-5 py-2 bg-gray-100 rounded-full border border-gray-200 text-sm text-gray-600">
               先修课程：Python基础
             </div>
-            <div className="px-5 py-2 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/50 text-sm text-blue-300">
+            <div className="px-5 py-2 bg-gray-100 rounded-full border border-gray-200 text-sm text-gray-600">
               后续课程：数据分析技术
             </div>
           </div>
@@ -1010,10 +1010,10 @@ export default function DataCollectionCourse() {
       <section className="py-16 px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
               课程大纲
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto">
               课程内容按照数据采集与预处理的流程编排，涵盖从数据获取到数据存储的全过程
             </p>
           </div>
@@ -1022,40 +1022,40 @@ export default function DataCollectionCourse() {
             {sections.map((section) => (
               <div 
                 key={section.id} 
-                className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 overflow-hidden transition-all duration-300 hover:border-blue-500/50"
+                className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-all duration-300 hover:border-blue-500/50"
               >
                 <div 
                   className="p-6 cursor-pointer flex justify-between items-center"
                   onClick={() => toggleSection(section.id)}
                 >
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-100 mb-2">{section.title}</h3>
-                    <p className="text-gray-400">{section.description}</p>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{section.title}</h3>
+                    <p className="text-gray-600">{section.description}</p>
                   </div>
-                  <span className={`text-blue-400 font-medium transition-transform duration-300 ${activeSection === section.id ? 'transform rotate-180' : ''}`}>
+                  <span className={`text-blue-500 font-medium transition-transform duration-300 ${activeSection === section.id ? 'transform rotate-180' : ''}`}>
                     ▼
                   </span>
                 </div>
                 {activeSection === section.id && (
                   <div className="px-6 pb-6">
-                    <div className="border-t border-gray-700 pt-4">
-                      <h4 className="font-medium text-gray-200 mb-3">学习内容</h4>
+                    <div className="border-t border-gray-200 pt-4">
+                      <h4 className="font-medium text-gray-700 mb-3">学习内容</h4>
                       <ul className="space-y-2 mb-6">
                         {section.topics.map((topic, index) => (
                           <li key={index} className="flex items-start">
-                            <span className="text-blue-400 mr-3 mt-1">•</span>
-                            <span className="text-gray-300">{topic}</span>
+                            <span className="text-blue-500 mr-3 mt-1">•</span>
+                            <span className="text-gray-700">{topic}</span>
                           </li>
                         ))}
                       </ul>
                       {section.resources && (
                         <div className="mb-6">
-                          <h4 className="font-medium text-gray-200 mb-3">学习资源</h4>
+                          <h4 className="font-medium text-gray-700 mb-3">学习资源</h4>
                           <ul className="space-y-2">
                             {section.resources.map((resource, index) => (
                               <li key={index} className="flex items-start">
-                                <span className="text-cyan-400 mr-3 mt-1">📚</span>
-                                <span className="text-gray-300">{resource}</span>
+                                <span className="text-cyan-500 mr-3 mt-1">📚</span>
+                                <span className="text-gray-700">{resource}</span>
                               </li>
                             ))}
                           </ul>
@@ -1230,34 +1230,34 @@ export default function DataCollectionCourse() {
       </section>
 
       {/* 学习中心 */}
-      <section className="py-16 px-4 relative z-10" data-learning-section="true">
+      <section className="py-16 px-4 relative z-10 bg-gray-50" data-learning-section="true">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
               学习中心
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto">
               查看学习进度、获取学习资源和进行练习测试
             </p>
           </div>
           
           {/* 标签页导航 */}
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-1 mb-8 flex justify-center">
+          <div className="bg-white rounded-xl border border-gray-200 p-1 mb-8 flex justify-center">
             <button
               onClick={() => setActiveTab('progress')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'progress' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'text-gray-400 hover:text-gray-300'}`}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'progress' ? 'bg-blue-500 text-white' : 'text-gray-600 hover:text-gray-900'}`}
             >
               学习进度
             </button>
             <button
               onClick={() => setActiveTab('resources')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'resources' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'text-gray-400 hover:text-gray-300'}`}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'resources' ? 'bg-blue-500 text-white' : 'text-gray-600 hover:text-gray-900'}`}
             >
               学习资源
             </button>
             <button
               onClick={() => setActiveTab('exercises')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'exercises' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'text-gray-400 hover:text-gray-300'}`}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === 'exercises' ? 'bg-blue-500 text-white' : 'text-gray-600 hover:text-gray-900'}`}
             >
               练习测试
             </button>
@@ -1267,17 +1267,17 @@ export default function DataCollectionCourse() {
           {activeTab === 'progress' && (
             <div>
               {!activeChapter && (
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-                  <h3 className="text-2xl font-semibold text-gray-100 mb-6">数据采集与处理课程学习进度</h3>
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-6">数据采集与处理课程学习进度</h3>
                   {/* 总体进度条 */}
                   <div className="mb-8">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-300">总体进度</span>
-                      <span className="text-blue-400 font-medium">
+                      <span className="text-gray-600">总体进度</span>
+                      <span className="text-blue-500 font-medium">
                         {progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-700 rounded-full h-4">
+                    <div className="w-full bg-gray-200 rounded-full h-4">
                       <div 
                         className="bg-gradient-to-r from-blue-500 to-cyan-400 h-4 rounded-full transition-all duration-500"
                         style={{ 
@@ -1288,7 +1288,7 @@ export default function DataCollectionCourse() {
                   </div>
                   <div className="space-y-4">
                     {progressItems.map((item) => (
-                      <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                      <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
                         <div className="flex items-center justify-between cursor-pointer" onClick={() => {
                           setActiveChapter(item.id);
                           setActiveChapterMode('content');
@@ -1297,15 +1297,15 @@ export default function DataCollectionCourse() {
                             <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
                               item.completed
                                 ? 'border-blue-500 bg-blue-500 text-white'
-                                : 'border-gray-600'
+                                : 'border-gray-300'
                             }`}>
                               {item.completed ? '✓' : ''}
                             </div>
-                            <h4 className={`font-medium ${item.completed ? 'text-blue-400' : 'text-gray-300'}`}>
+                            <h4 className={`font-medium ${item.completed ? 'text-blue-500' : 'text-gray-700'}`}>
                               {item.title}
                             </h4>
                           </div>
-                          <span className="text-gray-400 text-sm">
+                          <span className="text-gray-500 text-sm">
                             {item.subItems?.filter(sub => sub.completed).length}/{item.subItems?.length}
                           </span>
                         </div>
@@ -1316,11 +1316,11 @@ export default function DataCollectionCourse() {
                                 <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-2 ${
                                   subItem.completed
                                     ? 'border-blue-500 bg-blue-500 text-white'
-                                    : 'border-gray-600'
+                                    : 'border-gray-300'
                                 }`}>
                                   {subItem.completed ? '✓' : ''}
                                 </div>
-                                <span className={`text-sm ${subItem.completed ? 'text-blue-400' : 'text-gray-400'}`}>
+                                <span className={`text-sm ${subItem.completed ? 'text-blue-500' : 'text-gray-500'}`}>
                                   {subItem.title}
                                 </span>
                               </div>
@@ -1383,14 +1383,14 @@ export default function DataCollectionCourse() {
           )}
           
           {activeTab === 'resources' && (
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-              <h3 className="text-2xl font-semibold text-gray-100 mb-6">学习资源</h3>
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="text-2xl font-semibold text-gray-900 mb-6">学习资源</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {learningResources.map((resource) => (
-                  <div key={resource.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                  <div key={resource.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
                     <div className="flex items-start">
-                      <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mr-4">
-                        <span className="text-blue-400 text-xl">
+                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                        <span className="text-blue-500 text-xl">
                           {resource.type === 'article' && '📄'}
                           {resource.type === 'video' && '🎥'}
                           {resource.type === 'document' && '📑'}
@@ -1398,16 +1398,16 @@ export default function DataCollectionCourse() {
                         </span>
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-medium text-gray-100 mb-2">{resource.title}</h4>
-                        <p className="text-gray-400 text-sm mb-3">{resource.description}</p>
+                        <h4 className="font-medium text-gray-900 mb-2">{resource.title}</h4>
+                        <p className="text-gray-500 text-sm mb-3">{resource.description}</p>
                         <div className="flex flex-wrap gap-2 mb-3">
-                          <span className="px-2 py-1 bg-gray-700 rounded-full text-xs text-gray-300">
+                          <span className="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-600">
                             {resource.difficulty === 'beginner' && '初级'}
                             {resource.difficulty === 'intermediate' && '中级'}
                             {resource.difficulty === 'advanced' && '高级'}
                           </span>
                           {resource.duration && (
-                            <span className="px-2 py-1 bg-gray-700 rounded-full text-xs text-gray-300">
+                            <span className="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-600">
                               {resource.duration}
                             </span>
                           )}
@@ -1416,7 +1416,7 @@ export default function DataCollectionCourse() {
                           href={resource.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm"
+                          className="inline-flex items-center text-blue-500 hover:text-blue-600 text-sm"
                         >
                           查看资源
                           <span className="ml-2">→</span>
@@ -1430,25 +1430,25 @@ export default function DataCollectionCourse() {
           )}
           
           {activeTab === 'exercises' && !activeChapter && (
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-              <h3 className="text-2xl font-semibold text-gray-100 mb-6">章节练习测试</h3>
-              <p className="text-gray-400 mb-8">选择章节进行测试，每次测试包含30道题目（单选、多选、判断）</p>
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="text-2xl font-semibold text-gray-900 mb-6">章节练习测试</h3>
+              <p className="text-gray-500 mb-8">选择章节进行测试，每次测试包含30道题目（单选、多选、判断）</p>
               <div className="space-y-4">
                 {progressItems.map((item) => (
-                  <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                  <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
                     <div className="flex items-center justify-between cursor-pointer" onClick={() => {
                       setActiveChapter(item.id);
                       setActiveChapterMode('exercise');
                     }}>
                       <div className="flex items-center">
-                        <div className="w-10 h-10 bg-blue-900/50 rounded-lg flex items-center justify-center mr-4">
-                          <span className="text-blue-400 text-xl">📝</span>
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                          <span className="text-blue-500 text-xl">📝</span>
                         </div>
-                        <h4 className="font-medium text-gray-300">
+                        <h4 className="font-medium text-gray-700">
                           {item.title}
                         </h4>
                       </div>
-                      <span className="text-gray-400 text-sm">
+                      <span className="text-gray-500 text-sm">
                         400题题库
                       </span>
                     </div>

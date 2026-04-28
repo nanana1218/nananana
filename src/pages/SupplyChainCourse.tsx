@@ -976,9 +976,9 @@ export default function SupplyChainCourse() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 relative overflow-hidden">
+    <div className="min-h-screen bg-white text-gray-900 relative overflow-hidden">
       {/* 背景效果 */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.2),transparent_70%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.05),transparent_70%)]"></div>
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSI+PHBhdGggZD0iTTAgMCBMIDUwIDAgTCA1MCA1MCBMIDAgNTAiIGZpbGw9IiMzYjgyZjYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjxwYXRoIGQ9Ik01MCAwIEwgMTAwIDAgTCAxMDAgNTAgTCA1MCA1MCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PHBhdGggZD0iTTAgNTAiIGQ9Ik01MCA1MCBMIDAgNTAgTCAwIDEwMCBMIDUwIDEwMCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PHBhdGggZD0iTTUwIDUwIEwgMTAwIDUwIEwgMTAwIDEwMCBMIDUwIDEwMCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9nPjwvc3ZnPg==')]"></div>
       
       {/* 鼠标跟随效果 */}
@@ -1005,18 +1005,18 @@ export default function SupplyChainCourse() {
           <p className="text-xl text-cyan-300 mb-6">
             商务数据分析与应用专业专业课程
           </p>
-          <p className="text-gray-400 max-w-3xl mx-auto">
+          <p className="text-gray-600 max-w-3xl mx-auto">
             本课程旨在培养学生掌握供应链数据分析的基本技能，为企业供应链管理提供数据支持，
             使学生能够运用数据分析技术优化供应链运营。
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <div className="px-5 py-2 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/50 text-sm text-blue-300">
+            <div className="px-5 py-2 bg-white backdrop-blur-sm rounded-full border border-blue-200 text-sm text-blue-600">
               高职大二
             </div>
-            <div className="px-5 py-2 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/50 text-sm text-blue-300">
+            <div className="px-5 py-2 bg-white backdrop-blur-sm rounded-full border border-blue-200 text-sm text-blue-600">
               先修课程：数据分析技术
             </div>
-            <div className="px-5 py-2 bg-gray-800/70 backdrop-blur-sm rounded-full border border-blue-700/50 text-sm text-blue-300">
+            <div className="px-5 py-2 bg-white backdrop-blur-sm rounded-full border border-blue-200 text-sm text-blue-600">
               后续课程：数据库原理与应用
             </div>
           </div>
@@ -1030,7 +1030,7 @@ export default function SupplyChainCourse() {
             <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
               课程大纲
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto">
               课程内容按照供应链管理的流程编排，涵盖从供应链基础到数据分析应用的全过程
             </p>
           </div>
@@ -1039,40 +1039,40 @@ export default function SupplyChainCourse() {
             {sections.map((section) => (
               <div 
                 key={section.id} 
-                className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 overflow-hidden transition-all duration-300 hover:border-blue-500/50"
+                className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-all duration-300 hover:border-blue-400"
               >
                 <div 
                   className="p-6 cursor-pointer flex justify-between items-center"
                   onClick={() => toggleSection(section.id)}
                 >
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-100 mb-2">{section.title}</h3>
-                    <p className="text-gray-400">{section.description}</p>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{section.title}</h3>
+                    <p className="text-gray-600">{section.description}</p>
                   </div>
-                  <span className={`text-blue-400 font-medium transition-transform duration-300 ${activeSection === section.id ? 'transform rotate-180' : ''}`}>
+                  <span className={`text-blue-500 font-medium transition-transform duration-300 ${activeSection === section.id ? 'transform rotate-180' : ''}`}>
                     ▼
                   </span>
                 </div>
                 {activeSection === section.id && (
                   <div className="px-6 pb-6">
-                    <div className="border-t border-gray-700 pt-4">
-                      <h4 className="font-medium text-gray-200 mb-3">学习内容</h4>
+                    <div className="border-t border-gray-200 pt-4">
+                      <h4 className="font-medium text-gray-800 mb-3">学习内容</h4>
                       <ul className="space-y-2 mb-6">
                         {section.topics.map((topic, index) => (
                           <li key={index} className="flex items-start">
-                            <span className="text-blue-400 mr-3 mt-1">•</span>
-                            <span className="text-gray-300">{topic}</span>
+                            <span className="text-blue-500 mr-3 mt-1">•</span>
+                            <span className="text-gray-700">{topic}</span>
                           </li>
                         ))}
                       </ul>
                       {section.resources && (
                         <div className="mb-6">
-                          <h4 className="font-medium text-gray-200 mb-3">学习资源</h4>
+                          <h4 className="font-medium text-gray-800 mb-3">学习资源</h4>
                           <ul className="space-y-2">
                             {section.resources.map((resource, index) => (
                               <li key={index} className="flex items-start">
-                                <span className="text-cyan-400 mr-3 mt-1">📚</span>
-                                <span className="text-gray-300">{resource}</span>
+                                <span className="text-cyan-500 mr-3 mt-1">📚</span>
+                                <span className="text-gray-700">{resource}</span>
                               </li>
                             ))}
                           </ul>
@@ -1109,58 +1109,58 @@ export default function SupplyChainCourse() {
             <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
               学习目标
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto">
               通过本课程的学习，学生将达到以下目标
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 hover:border-blue-500/50 transition-all duration-300">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-blue-400 text-xl">🎯</span>
+            <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-blue-400 transition-all duration-300">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-blue-500 text-xl">🎯</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-100 mb-3">知识目标</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">知识目标</h3>
               <ul className="space-y-2">
                 <li className="flex items-start">
-                  <span className="text-blue-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">掌握供应链管理的基本概念和流程</span>
+                  <span className="text-blue-500 mr-3 mt-1">•</span>
+                  <span className="text-gray-700">掌握供应链管理的基本概念和流程</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-blue-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">理解供应链数据的类型和来源</span>
+                  <span className="text-blue-500 mr-3 mt-1">•</span>
+                  <span className="text-gray-700">理解供应链数据的类型和来源</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-blue-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">熟悉供应链数据分析的方法和技术</span>
+                  <span className="text-blue-500 mr-3 mt-1">•</span>
+                  <span className="text-gray-700">熟悉供应链数据分析的方法和技术</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-blue-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">掌握供应链绩效评估和风险管理的方法</span>
+                  <span className="text-blue-500 mr-3 mt-1">•</span>
+                  <span className="text-gray-700">掌握供应链绩效评估和风险管理的方法</span>
                 </li>
               </ul>
             </div>
             
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 hover:border-blue-500/50 transition-all duration-300">
-              <div className="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-cyan-400 text-xl">💪</span>
+            <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-blue-400 transition-all duration-300">
+              <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-cyan-500 text-xl">💪</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-100 mb-3">能力目标</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">能力目标</h3>
               <ul className="space-y-2">
                 <li className="flex items-start">
-                  <span className="text-cyan-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">能够采集和预处理供应链数据</span>
+                  <span className="text-cyan-500 mr-3 mt-1">•</span>
+                  <span className="text-gray-700">能够采集和预处理供应链数据</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-cyan-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">能够运用数据分析方法分析供应链问题</span>
+                  <span className="text-cyan-500 mr-3 mt-1">•</span>
+                  <span className="text-gray-700">能够运用数据分析方法分析供应链问题</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-cyan-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">能够评估供应链绩效并提出改进建议</span>
+                  <span className="text-cyan-500 mr-3 mt-1">•</span>
+                  <span className="text-gray-700">能够评估供应链绩效并提出改进建议</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-cyan-400 mr-3 mt-1">•</span>
-                  <span className="text-gray-300">能够完成完整的供应链数据分析项目</span>
+                  <span className="text-cyan-500 mr-3 mt-1">•</span>
+                  <span className="text-gray-700">能够完成完整的供应链数据分析项目</span>
                 </li>
               </ul>
             </div>
@@ -1175,22 +1175,22 @@ export default function SupplyChainCourse() {
             <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
               评估方式
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto">
               课程成绩由以下部分组成
             </p>
           </div>
           
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-8">
+          <div className="bg-white rounded-xl border border-gray-200 p-8">
             <div className="space-y-6">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div className="mb-4 md:mb-0">
-                  <h3 className="text-lg font-semibold text-gray-100">课堂参与</h3>
-                  <p className="text-gray-400">包括课堂讨论、作业完成情况等</p>
+                  <h3 className="text-lg font-semibold text-gray-900">课堂参与</h3>
+                  <p className="text-gray-600">包括课堂讨论、作业完成情况等</p>
                 </div>
                 <div className="w-full md:w-1/2">
                   <div className="flex items-center">
-                    <div className="w-24 text-right mr-4 text-gray-300">15%</div>
-                    <div className="flex-1 bg-gray-700 rounded-full h-4">
+                    <div className="w-24 text-right mr-4 text-gray-700">15%</div>
+                    <div className="flex-1 bg-gray-200 rounded-full h-4">
                       <div className="bg-blue-500 h-4 rounded-full" style={{ width: '15%' }}></div>
                     </div>
                   </div>
@@ -1199,13 +1199,13 @@ export default function SupplyChainCourse() {
               
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div className="mb-4 md:mb-0">
-                  <h3 className="text-lg font-semibold text-gray-100">实验练习</h3>
-                  <p className="text-gray-400">包括供应链数据分析练习、案例分析等</p>
+                  <h3 className="text-lg font-semibold text-gray-900">实验练习</h3>
+                  <p className="text-gray-600">包括供应链数据分析练习、案例分析等</p>
                 </div>
                 <div className="w-full md:w-1/2">
                   <div className="flex items-center">
-                    <div className="w-24 text-right mr-4 text-gray-300">35%</div>
-                    <div className="flex-1 bg-gray-700 rounded-full h-4">
+                    <div className="w-24 text-right mr-4 text-gray-700">35%</div>
+                    <div className="flex-1 bg-gray-200 rounded-full h-4">
                       <div className="bg-cyan-500 h-4 rounded-full" style={{ width: '35%' }}></div>
                     </div>
                   </div>
@@ -1214,13 +1214,13 @@ export default function SupplyChainCourse() {
               
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div className="mb-4 md:mb-0">
-                  <h3 className="text-lg font-semibold text-gray-100">期中考试</h3>
-                  <p className="text-gray-400">理论知识和实践能力考核</p>
+                  <h3 className="text-lg font-semibold text-gray-900">期中考试</h3>
+                  <p className="text-gray-600">理论知识和实践能力考核</p>
                 </div>
                 <div className="w-full md:w-1/2">
                   <div className="flex items-center">
-                    <div className="w-24 text-right mr-4 text-gray-300">20%</div>
-                    <div className="flex-1 bg-gray-700 rounded-full h-4">
+                    <div className="w-24 text-right mr-4 text-gray-700">20%</div>
+                    <div className="flex-1 bg-gray-200 rounded-full h-4">
                       <div className="bg-blue-500 h-4 rounded-full" style={{ width: '20%' }}></div>
                     </div>
                   </div>
@@ -1229,13 +1229,13 @@ export default function SupplyChainCourse() {
               
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div className="mb-4 md:mb-0">
-                  <h3 className="text-lg font-semibold text-gray-100">期末项目</h3>
-                  <p className="text-gray-400">综合供应链数据分析项目</p>
+                  <h3 className="text-lg font-semibold text-gray-900">期末项目</h3>
+                  <p className="text-gray-600">综合供应链数据分析项目</p>
                 </div>
                 <div className="w-full md:w-1/2">
                   <div className="flex items-center">
-                    <div className="w-24 text-right mr-4 text-gray-300">30%</div>
-                    <div className="flex-1 bg-gray-700 rounded-full h-4">
+                    <div className="w-24 text-right mr-4 text-gray-700">30%</div>
+                    <div className="flex-1 bg-gray-200 rounded-full h-4">
                       <div className="bg-cyan-500 h-4 rounded-full" style={{ width: '30%' }}></div>
                     </div>
                   </div>
@@ -1253,7 +1253,7 @@ export default function SupplyChainCourse() {
             <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
               学习中心
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto">
               管理学习进度、访问学习资源、进行练习测试
             </p>
           </div>
@@ -1265,7 +1265,7 @@ export default function SupplyChainCourse() {
               className={`px-6 py-3 mx-2 mb-4 rounded-lg font-medium transition-all duration-300 ${
                 activeTab === 'progress'
                   ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white shadow-lg shadow-blue-500/30'
-                  : 'bg-gray-800/70 border border-gray-700 text-gray-300 hover:border-blue-500/50'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-400'
               }`}
             >
               学习进度
@@ -1275,7 +1275,7 @@ export default function SupplyChainCourse() {
               className={`px-6 py-3 mx-2 mb-4 rounded-lg font-medium transition-all duration-300 ${
                 activeTab === 'resources'
                   ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white shadow-lg shadow-blue-500/30'
-                  : 'bg-gray-800/70 border border-gray-700 text-gray-300 hover:border-blue-500/50'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-400'
               }`}
             >
               学习资源
@@ -1285,7 +1285,7 @@ export default function SupplyChainCourse() {
               className={`px-6 py-3 mx-2 mb-4 rounded-lg font-medium transition-all duration-300 ${
                 activeTab === 'exercises'
                   ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white shadow-lg shadow-blue-500/30'
-                  : 'bg-gray-800/70 border border-gray-700 text-gray-300 hover:border-blue-500/50'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-400'
               }`}
             >
               练习测试
@@ -1293,20 +1293,20 @@ export default function SupplyChainCourse() {
           </div>
           
           {/* 标签页内容 */}
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
             {/* 学习进度标签页 */}
             {activeTab === 'progress' && (
               <div>
-                <h3 className="text-2xl font-semibold text-gray-100 mb-6">供应链数据分析课程学习进度</h3>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-6">供应链数据分析课程学习进度</h3>
                 {/* 总体进度条 */}
                 <div className="mb-8">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-300">总体进度</span>
-                    <span className="text-blue-400 font-medium">
+                    <span className="text-gray-700">总体进度</span>
+                    <span className="text-blue-500 font-medium">
                       {progressItems.reduce((total, item) => total + (item.subItems?.filter(sub => sub.completed).length || 0), 0)}/{progressItems.reduce((total, item) => total + (item.subItems?.length || 0), 0)}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-700 rounded-full h-4">
+                  <div className="w-full bg-gray-200 rounded-full h-4">
                     <div 
                       className="bg-gradient-to-r from-blue-500 to-cyan-400 h-4 rounded-full transition-all duration-500"
                       style={{ 
@@ -1317,7 +1317,7 @@ export default function SupplyChainCourse() {
                 </div>
                 <div className="space-y-4">
                   {progressItems.map((item) => (
-                    <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                    <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-400 transition-all duration-300">
                       <div className="flex items-center justify-between cursor-pointer" onClick={() => {
                         setActiveChapter(item.id);
                         setActiveChapterMode('content');
@@ -1326,15 +1326,15 @@ export default function SupplyChainCourse() {
                           <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
                             item.completed
                               ? 'border-blue-500 bg-blue-500 text-white'
-                              : 'border-gray-600'
+                              : 'border-gray-400'
                           }`}>
                             {item.completed ? '✓' : ''}
                           </div>
-                          <h4 className={`font-medium ${item.completed ? 'text-blue-400' : 'text-gray-300'}`}>
+                          <h4 className={`font-medium ${item.completed ? 'text-blue-500' : 'text-gray-700'}`}>
                             {item.title}
                           </h4>
                         </div>
-                        <span className="text-gray-400 text-sm">
+                        <span className="text-gray-500 text-sm">
                           {item.subItems?.filter(sub => sub.completed).length}/{item.subItems?.length}
                         </span>
                       </div>
@@ -1345,11 +1345,11 @@ export default function SupplyChainCourse() {
                               <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-2 ${
                                 subItem.completed
                                   ? 'border-blue-500 bg-blue-500 text-white'
-                                  : 'border-gray-600'
+                                  : 'border-gray-400'
                               }`}>
                                 {subItem.completed ? '✓' : ''}
                               </div>
-                              <span className={`text-sm ${subItem.completed ? 'text-blue-400' : 'text-gray-400'}`}>
+                              <span className={`text-sm ${subItem.completed ? 'text-blue-500' : 'text-gray-500'}`}>
                                 {subItem.title}
                               </span>
                             </div>
@@ -1365,25 +1365,25 @@ export default function SupplyChainCourse() {
             {/* 学习资源标签页 */}
             {activeTab === 'resources' && (
               <div>
-                <h3 className="text-2xl font-semibold text-gray-100 mb-6">学习资源</h3>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-6">学习资源</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {learningResources.map((resource) => (
-                    <div key={resource.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                    <div key={resource.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-400 transition-all duration-300">
                       <div className="flex items-start">
-                        <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-4 bg-blue-500/20">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-4 bg-blue-100">
                           {resource.type === 'article' && '📄'}
                           {resource.type === 'video' && '🎥'}
                           {resource.type === 'document' && '📚'}
                           {resource.type === 'code' && '💻'}
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-100 mb-2">{resource.title}</h4>
-                          <p className="text-gray-400 text-sm mb-3">{resource.description}</p>
+                          <h4 className="font-medium text-gray-900 mb-2">{resource.title}</h4>
+                          <p className="text-gray-600 text-sm mb-3">{resource.description}</p>
                           <div className="flex items-center text-xs text-gray-500">
                             <span className={`px-2 py-1 rounded-full mr-2 ${
-                              resource.difficulty === 'beginner' ? 'bg-green-500/20 text-green-400' :
-                              resource.difficulty === 'intermediate' ? 'bg-yellow-500/20 text-yellow-400' :
-                              'bg-red-500/20 text-red-400'
+                              resource.difficulty === 'beginner' ? 'bg-green-100 text-green-600' :
+                              resource.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-600' :
+                              'bg-red-100 text-red-600'
                             }`}>
                               {resource.difficulty === 'beginner' ? '初级' :
                                resource.difficulty === 'intermediate' ? '中级' :
@@ -1401,25 +1401,25 @@ export default function SupplyChainCourse() {
             
             {/* 练习测试标签页 */}
             {activeTab === 'exercises' && !activeChapter && (
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
-                <h3 className="text-2xl font-semibold text-gray-100 mb-6">章节练习测试</h3>
-                <p className="text-gray-400 mb-8">选择章节进行测试，每次测试包含30道题目（单选、多选、判断）</p>
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-6">章节练习测试</h3>
+                <p className="text-gray-600 mb-8">选择章节进行测试，每次测试包含30道题目（单选、多选、判断）</p>
                 <div className="space-y-4">
                   {progressItems.map((item) => (
-                    <div key={item.id} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500/50 transition-all duration-300">
+                    <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-400 transition-all duration-300">
                       <div className="flex items-center justify-between cursor-pointer" onClick={() => {
                         setActiveChapter(item.id);
                         setActiveChapterMode('exercise');
                       }}>
                         <div className="flex items-center">
-                          <div className="w-10 h-10 bg-blue-900/50 rounded-lg flex items-center justify-center mr-4">
-                            <span className="text-blue-400 text-xl">📝</span>
+                          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                            <span className="text-blue-500 text-xl">📝</span>
                           </div>
-                          <h4 className="font-medium text-gray-300">
+                          <h4 className="font-medium text-gray-700">
                             {item.title}
                           </h4>
                         </div>
-                        <span className="text-gray-400 text-sm">
+                        <span className="text-gray-500 text-sm">
                           400题题库
                         </span>
                       </div>
@@ -1433,7 +1433,7 @@ export default function SupplyChainCourse() {
                 <div className="flex items-center mb-4">
                   <button
                     onClick={() => setActiveChapter(null)}
-                    className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                    className="flex items-center text-blue-500 hover:text-blue-600 mb-4"
                   >
                     <span className="mr-2">←</span> 返回章节列表
                   </button>
@@ -1457,7 +1457,7 @@ export default function SupplyChainCourse() {
               <div className="flex items-center mb-4">
                 <button
                   onClick={() => setActiveChapter(null)}
-                  className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                  className="flex items-center text-blue-500 hover:text-blue-600 mb-4"
                 >
                   <span className="mr-2">←</span> 返回学习中心
                 </button>
@@ -1477,13 +1477,13 @@ export default function SupplyChainCourse() {
               <div className="flex items-center mb-4">
                 <button
                   onClick={() => setActiveChapterMode('content')}
-                  className="flex items-center text-blue-400 hover:text-blue-300 mb-4 mr-4"
+                  className="flex items-center text-blue-500 hover:text-blue-600 mb-4 mr-4"
                 >
                   <span className="mr-2">←</span> 返回章节内容
                 </button>
                 <button
                   onClick={() => setActiveChapter(null)}
-                  className="flex items-center text-blue-400 hover:text-blue-300 mb-4"
+                  className="flex items-center text-blue-500 hover:text-blue-600 mb-4"
                 >
                   <span className="mr-2">←</span> 返回学习中心
                 </button>
@@ -1503,9 +1503,9 @@ export default function SupplyChainCourse() {
       </section>
 
       {/* 页脚 */}
-      <footer className="bg-gray-900/80 backdrop-blur-sm border-t border-gray-800 py-8 px-4 relative z-10">
+      <footer className="bg-white border-t border-gray-200 py-8 px-4 relative z-10">
         <div className="max-w-6xl mx-auto text-center">
-          <p className="mb-2 text-gray-300">供应链数据分析课程学习页面</p>
+          <p className="mb-2 text-gray-700">供应链数据分析课程学习页面</p>
           <p className="text-gray-500 text-sm">© 2026 广东科学技术职业学院</p>
         </div>
       </footer>
