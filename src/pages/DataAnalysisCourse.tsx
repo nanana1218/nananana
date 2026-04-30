@@ -2574,6 +2574,16 @@ export default function DataAnalysisCourse() {
   const [practiceScore, setPracticeScore] = useState<number>(0);
   const [completedTasks, setCompletedTasks] = useState<number[]>([]);
   const [showPracticeEditor, setShowPracticeEditor] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({
+    business: true,
+    knowledge: true,
+    metrics: true,
+    steps: true,
+    pitfalls: true,
+    tips: true,
+    deliverables: true,
+    resources: true
+  });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -3460,77 +3470,291 @@ export default function DataAnalysisCourse() {
                     </div>
 
                     {/* 知识点展示区 */}
-                    <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-                      <h2 className="text-xl font-semibold mb-4 text-gray-900 flex items-center gap-2">
-                        <span>📚</span>
-                        <span>{currentProject.title} - 核心知识点</span>
-                      </h2>
-                      
-                      {/* 业务场景 */}
-                      <div className="mb-6">
-                        <h3 className="text-lg font-medium text-gray-800 mb-3 flex items-center gap-2">
-                          <span className="text-blue-500">📋</span>
-                          业务场景
-                        </h3>
-                        <p className="text-gray-700 bg-gray-50 rounded-lg p-4">{currentProject.businessScenario}</p>
+                    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-6">
+                      {/* 标题栏 */}
+                      <div className="bg-gradient-to-r from-blue-500 to-cyan-400 px-6 py-4">
+                        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                          <span>📚</span>
+                          <span>{currentProject.title} - 全面学习</span>
+                        </h2>
+                        <p className="text-blue-100 text-sm mt-1">在开始编写代码之前，先全面掌握相关知识</p>
                       </div>
 
-                      {/* 核心知识点 */}
-                      <div className="mb-6">
-                        <h3 className="text-lg font-medium text-gray-800 mb-3 flex items-center gap-2">
-                          <span className="text-blue-500">💡</span>
-                          核心知识点
-                        </h3>
-                        <ul className="space-y-2">
-                          {currentProject.coreKnowledge.map((knowledge, i) => (
-                            <li key={i} className="flex items-start gap-2 bg-gray-50 rounded-lg p-3">
-                              <span className="text-blue-500 mt-1">•</span>
-                              <span className="text-gray-700">{knowledge}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      <div className="p-6 space-y-4">
+                        {/* 业务场景 */}
+                        <div className="border border-gray-200 rounded-xl overflow-hidden">
+                          <button
+                            onClick={() => setExpandedSections({...expandedSections, business: !expandedSections.business})}
+                            className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-all"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-blue-500">📋</span>
+                              <span className="font-medium text-gray-800">业务场景</span>
+                            </div>
+                            <span className={`text-gray-500 transition-transform ${expandedSections.business ? 'rotate-180' : ''}`}>▼</span>
+                          </button>
+                          {expandedSections.business && (
+                            <div className="px-4 py-4 bg-white">
+                              <p className="text-gray-700 leading-relaxed">{currentProject.businessScenario}</p>
+                            </div>
+                          )}
+                        </div>
 
-                      {/* 操作步骤 */}
-                      <div className="mb-6">
-                        <h3 className="text-lg font-medium text-gray-800 mb-3 flex items-center gap-2">
-                          <span className="text-blue-500">🎯</span>
-                          操作步骤
-                        </h3>
-                        <div className="space-y-3">
-                          {currentProject.tasks.map((task, i) => (
-                            <div key={i} className="bg-gray-50 rounded-lg p-4 border border-gray-100">
-                              <div className="flex items-start gap-3">
-                                <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${currentProject.color} flex items-center justify-center flex-shrink-0 text-white text-sm font-medium`}>
-                                  {i + 1}
-                                </div>
-                                <div className="flex-1">
-                                  <p className="text-gray-800 font-medium mb-2">{task}</p>
-                                  {currentProject.taskHints[i] && (
-                                    <div className="bg-blue-50 rounded p-3 text-sm border border-blue-100">
-                                      <p className="text-blue-600 font-medium mb-1">💡 提示</p>
-                                      <p className="text-gray-600">{currentProject.taskHints[i]}</p>
-                                    </div>
-                                  )}
-                                </div>
+                        {/* 核心知识点 */}
+                        <div className="border border-gray-200 rounded-xl overflow-hidden">
+                          <button
+                            onClick={() => setExpandedSections({...expandedSections, knowledge: !expandedSections.knowledge})}
+                            className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-all"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-blue-500">💡</span>
+                              <span className="font-medium text-gray-800">核心知识点</span>
+                              <span className="text-xs text-gray-500">({currentProject.coreKnowledge.length}个)</span>
+                            </div>
+                            <span className={`text-gray-500 transition-transform ${expandedSections.knowledge ? 'rotate-180' : ''}`}>▼</span>
+                          </button>
+                          {expandedSections.knowledge && (
+                            <div className="px-4 py-4 bg-white">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {currentProject.coreKnowledge.map((knowledge, i) => (
+                                  <div key={i} className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+                                    <p className="text-gray-800 font-medium text-sm">{knowledge}</p>
+                                  </div>
+                                ))}
                               </div>
                             </div>
-                          ))}
+                          )}
                         </div>
-                      </div>
 
-                      {/* 进入实操按钮 */}
-                      {!showPracticeEditor && (
-                        <div className="flex justify-center">
+                        {/* 核心指标 */}
+                        <div className="border border-gray-200 rounded-xl overflow-hidden">
                           <button
-                            onClick={() => setShowPracticeEditor(true)}
-                            className="px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all text-white text-lg flex items-center gap-2"
+                            onClick={() => setExpandedSections({...expandedSections, metrics: !expandedSections.metrics})}
+                            className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-all"
                           >
-                            <span>💻</span>
-                            <span>开始编写代码</span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-orange-500">📊</span>
+                              <span className="font-medium text-gray-800">核心指标</span>
+                            </div>
+                            <span className={`text-gray-500 transition-transform ${expandedSections.metrics ? 'rotate-180' : ''}`}>▼</span>
                           </button>
+                          {expandedSections.metrics && (
+                            <div className="px-4 py-4 bg-white">
+                              {currentProject.id === 3 ? (
+                                <div className="space-y-4">
+                                  <div className="bg-orange-50 rounded-lg p-4 border border-orange-100">
+                                    <h4 className="text-orange-700 font-medium mb-2">📌 支持度 (Support)</h4>
+                                    <p className="text-gray-700 text-sm">支持度是衡量商品受欢迎程度的指标，计算公式：Support(X→Y) = P(X∪Y) = 同时购买X和Y的交易数 / 总交易数</p>
+                                  </div>
+                                  <div className="bg-purple-50 rounded-lg p-4 border border-purple-100">
+                                    <h4 className="text-purple-700 font-medium mb-2">📌 置信度 (Confidence)</h4>
+                                    <p className="text-gray-700 text-sm">置信度表示购买X后购买Y的概率，计算公式：Confidence(X→Y) = P(Y|X) = Support(X→Y) / Support(X)</p>
+                                  </div>
+                                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                                    <h4 className="text-blue-700 font-medium mb-2">📌 提升度 (Lift)</h4>
+                                    <p className="text-gray-700 text-sm">提升度表示规则的有效性，计算公式：Lift(X→Y) = Confidence(X→Y) / Support(Y)，大于1表示正相关</p>
+                                  </div>
+                                </div>
+                              ) : currentProject.id === 1 ? (
+                                <div className="space-y-4">
+                                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                                    <h4 className="text-blue-700 font-medium mb-2">📌 缺失值处理</h4>
+                                    <p className="text-gray-700 text-sm">缺失值处理方法包括：删除法（缺失率高时）、均值/中位数填充（数值型）、众数填充（类别型）、插值法等</p>
+                                  </div>
+                                  <div className="bg-green-50 rounded-lg p-4 border border-green-100">
+                                    <h4 className="text-green-700 font-medium mb-2">📌 异常值检测</h4>
+                                    <p className="text-gray-700 text-sm">常用方法：3σ原则（适用于正态分布）、箱线图法（IQR）、Z-score、DBSCAN聚类等</p>
+                                  </div>
+                                  <div className="bg-purple-50 rounded-lg p-4 border border-purple-100">
+                                    <h4 className="text-purple-700 font-medium mb-2">📌 数据标准化</h4>
+                                    <p className="text-gray-700 text-sm">常用方法：Z-score标准化（均值为0，标准差为1）、Min-Max归一化（缩放到[0,1]）</p>
+                                  </div>
+                                </div>
+                              ) : (
+                                <p className="text-gray-600 text-sm">本项目的核心指标将在实操过程中逐步介绍...</p>
+                              )}
+                            </div>
+                          )}
                         </div>
-                      )}
+
+                        {/* 操作步骤 */}
+                        <div className="border border-gray-200 rounded-xl overflow-hidden">
+                          <button
+                            onClick={() => setExpandedSections({...expandedSections, steps: !expandedSections.steps})}
+                            className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-all"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-blue-500">🎯</span>
+                              <span className="font-medium text-gray-800">操作步骤</span>
+                              <span className="text-xs text-gray-500">({currentProject.tasks.length}步)</span>
+                            </div>
+                            <span className={`text-gray-500 transition-transform ${expandedSections.steps ? 'rotate-180' : ''}`}>▼</span>
+                          </button>
+                          {expandedSections.steps && (
+                            <div className="px-4 py-4 bg-white">
+                              <div className="space-y-4">
+                                {currentProject.tasks.map((task, i) => (
+                                  <div key={i} className="bg-gradient-to-r from-gray-50 to-white rounded-lg p-4 border border-gray-100">
+                                    <div className="flex items-start gap-4">
+                                      <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${currentProject.color} flex items-center justify-center flex-shrink-0 shadow-md shadow-current/30`}>
+                                        <span className="text-white font-bold">{i + 1}</span>
+                                      </div>
+                                      <div className="flex-1">
+                                        <p className="text-gray-800 font-medium">{task}</p>
+                                        {currentProject.taskHints[i] && (
+                                          <div className="mt-3 bg-blue-50 rounded-lg p-3 border border-blue-100">
+                                            <p className="text-blue-600 text-xs font-medium mb-1">💡 操作提示</p>
+                                            <p className="text-gray-600 text-sm">{currentProject.taskHints[i]}</p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* 常见陷阱 */}
+                        <div className="border border-gray-200 rounded-xl overflow-hidden">
+                          <button
+                            onClick={() => setExpandedSections({...expandedSections, pitfalls: !expandedSections.pitfalls})}
+                            className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-all"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-red-500">⚠️</span>
+                              <span className="font-medium text-gray-800">常见陷阱</span>
+                            </div>
+                            <span className={`text-gray-500 transition-transform ${expandedSections.pitfalls ? 'rotate-180' : ''}`}>▼</span>
+                          </button>
+                          {expandedSections.pitfalls && (
+                            <div className="px-4 py-4 bg-white">
+                              <div className="space-y-3">
+                                {currentProject.pitfalls.map((pitfall, i) => (
+                                  <div key={i} className="bg-red-50 rounded-lg p-3 border border-red-100">
+                                    <p className="text-red-700 text-sm">{pitfall}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* 小贴士 */}
+                        <div className="border border-gray-200 rounded-xl overflow-hidden">
+                          <button
+                            onClick={() => setExpandedSections({...expandedSections, tips: !expandedSections.tips})}
+                            className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-all"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-yellow-500">💬</span>
+                              <span className="font-medium text-gray-800">小贴士</span>
+                            </div>
+                            <span className={`text-gray-500 transition-transform ${expandedSections.tips ? 'rotate-180' : ''}`}>▼</span>
+                          </button>
+                          {expandedSections.tips && (
+                            <div className="px-4 py-4 bg-white">
+                              <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-100">
+                                {currentProject.id === 3 ? (
+                                  <p className="text-gray-700 text-sm">支持度是衡量商品受欢迎程度的重要指标！关联规则挖掘中，我们通常先设置最小支持度阈值来筛选频繁项集。</p>
+                                ) : currentProject.id === 1 ? (
+                                  <p className="text-gray-700 text-sm">数据预处理的质量直接影响后续模型的效果！建议在处理前先探索数据分布，了解数据特征。</p>
+                                ) : (
+                                  <p className="text-gray-700 text-sm">实践是最好的学习方式！建议先理解理论知识，再动手实践。</p>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* 交付物 */}
+                        <div className="border border-gray-200 rounded-xl overflow-hidden">
+                          <button
+                            onClick={() => setExpandedSections({...expandedSections, deliverables: !expandedSections.deliverables})}
+                            className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-all"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-green-500">📦</span>
+                              <span className="font-medium text-gray-800">学习目标</span>
+                            </div>
+                            <span className={`text-gray-500 transition-transform ${expandedSections.deliverables ? 'rotate-180' : ''}`}>▼</span>
+                          </button>
+                          {expandedSections.deliverables && (
+                            <div className="px-4 py-4 bg-white">
+                              <ul className="space-y-2">
+                                {currentProject.deliverables.map((deliverable, i) => (
+                                  <li key={i} className="flex items-center gap-2 text-gray-700">
+                                    <span className="text-green-500">✅</span>
+                                    <span>{deliverable}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* 学习资源 */}
+                        <div className="border border-gray-200 rounded-xl overflow-hidden">
+                          <button
+                            onClick={() => setExpandedSections({...expandedSections, resources: !expandedSections.resources})}
+                            className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-all"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-purple-500">📚</span>
+                              <span className="font-medium text-gray-800">学习资源</span>
+                            </div>
+                            <span className={`text-gray-500 transition-transform ${expandedSections.resources ? 'rotate-180' : ''}`}>▼</span>
+                          </button>
+                          {expandedSections.resources && (
+                            <div className="px-4 py-4 bg-white">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {currentProject.learningResources.docs.map((doc, i) => (
+                                  <a 
+                                    key={i}
+                                    href="#"
+                                    className="flex items-center gap-2 bg-purple-50 rounded-lg p-3 hover:bg-purple-100 transition-all border border-purple-100 cursor-pointer"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      alert(`正在打开：${doc}`);
+                                    }}
+                                  >
+                                    <span className="text-purple-500">📄</span>
+                                    <span className="text-gray-700 text-sm">{doc}</span>
+                                  </a>
+                                ))}
+                                {currentProject.learningResources.videos.map((video, i) => (
+                                  <a 
+                                    key={i}
+                                    href="#"
+                                    className="flex items-center gap-2 bg-red-50 rounded-lg p-3 hover:bg-red-100 transition-all border border-red-100 cursor-pointer"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      alert(`正在打开视频：${video}`);
+                                    }}
+                                  >
+                                    <span className="text-red-500">🎥</span>
+                                    <span className="text-gray-700 text-sm">{video}</span>
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* 进入实操按钮 */}
+                        {!showPracticeEditor && (
+                          <div className="flex justify-center pt-4">
+                            <button
+                              onClick={() => setShowPracticeEditor(true)}
+                              className="px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all text-white text-lg flex items-center gap-2 shadow-lg shadow-blue-500/30"
+                            >
+                              <span>💻</span>
+                              <span>开始编写代码</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     {/* 代码编辑器区域 - 点击后显示 */}
