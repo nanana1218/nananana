@@ -2573,6 +2573,7 @@ export default function DataAnalysisCourse() {
   const [randomQuestions, setRandomQuestions] = useState<Question[]>([]);
   const [practiceScore, setPracticeScore] = useState<number>(0);
   const [completedTasks, setCompletedTasks] = useState<number[]>([]);
+  const [showPracticeEditor, setShowPracticeEditor] = useState(false);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -3448,111 +3449,209 @@ export default function DataAnalysisCourse() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="flex flex-col h-[80vh]">
-                      {/* 顶部操作栏 */}
-                      <div className="bg-white border-b border-gray-200 p-3 flex items-center justify-between">
-                        <button
-                          onClick={resetToProjectList}
-                          className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all text-sm"
-                        >
-                          ← 返回项目列表
-                        </button>
-                        <div className="flex gap-2">
-                          <button 
-                            onClick={runCode}
-                            className="px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded-lg text-white text-sm font-medium transition-all flex items-center gap-1"
-                          >
-                            <span>▶</span>
-                            运行代码
-                          </button>
-                          <button 
-                            onClick={() => setUserCode(currentProject?.id === 1 ? currentProject.codeExample : '')}
-                            className="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 text-sm font-medium transition-all"
-                          >
-                            重置代码
-                          </button>
-                          <button 
-                            onClick={() => setShowReferenceAnswer(!showReferenceAnswer)}
-                            className="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 text-sm font-medium transition-all"
-                          >
-                            {showReferenceAnswer ? '隐藏参考答案' : '显示参考答案'}
-                          </button>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <label className="flex items-center gap-1 text-sm text-gray-500">
-                            <input type="checkbox" className="w-4 h-4 text-blue-500" />
-                            自动保存
-                          </label>
-                        </div>
-                      </div>
-
-                      {/* 主内容区 */}
-                      <div className="flex flex-1 overflow-hidden">
-                        {/* 左侧任务列表 */}
-                        <div className="w-64 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
-                          <h3 className="text-lg font-semibold mb-4 text-gray-900">{currentProject.title}</h3>
-                          <div className="text-sm text-gray-500 mb-2">{currentProject.duration}</div>
-                          <ul className="space-y-3">
-                            {currentProject.tasks.map((task, i) => (
-                              <li key={i} className="bg-white rounded-lg p-3 hover:bg-gray-50 transition-all border border-gray-100">
-                                <div className="flex items-start gap-2">
-                                  <span className="text-blue-500 font-medium">{i + 1}.</span>
-                                  <div>
-                                    <p className="text-gray-700 text-sm">{task}</p>
-                                    {currentProject.taskHints[i] && (
-                                      <p className="text-xs text-gray-500 mt-1">{currentProject.taskHints[i]}</p>
-                                    )}
-                                  </div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        {/* 中间代码编辑区 */}
-                        <div className="flex-1 flex flex-col">
-                          <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
-                            <span className="text-sm text-gray-600">main.py</span>
-                            {showReferenceAnswer && (
-                              <span className="text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">参考答案</span>
-                            )}
-                          </div>
-                          <div className="flex-1 bg-gray-50 p-4 overflow-auto">
-                            {showReferenceAnswer ? (
-                              <pre className="text-gray-700 text-sm font-mono">{currentProject.referenceAnswer}</pre>
-                            ) : (
-                              <textarea
-                                value={userCode}
-                                onChange={(e) => setUserCode(e.target.value)}
-                                className="w-full h-full bg-transparent text-gray-700 text-sm font-mono resize-none outline-none"
-                                spellCheck={false}
-                              />
-                            )}
-                          </div>
-                        </div>
-
-                        {/* 右侧执行结果区 */}
-                        <div className="w-96 bg-gray-50 border-l border-gray-200 flex flex-col">
-                          <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center">
-                            <span className="text-sm font-medium text-gray-700">执行结果</span>
-                          </div>
-                          <div className="flex-1 bg-white p-4 overflow-auto">
-                            {errorMessage ? (
-                              <div className="text-red-600 whitespace-pre-wrap">{errorMessage}</div>
-                            ) : executionResult ? (
-                              <div className="text-green-600 whitespace-pre-wrap">{executionResult}</div>
-                            ) : (
-                              <div className="flex flex-col items-center justify-center h-full text-gray-400">
-                                <div className="text-4xl mb-4">▶</div>
-                                <p className="text-center">点击"运行代码"按钮来执行</p>
-                                <p className="text-center text-xs mt-2">代码将在终端中运行</p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+                    <div className="mb-6">
+                      <button
+                        onClick={resetToProjectList}
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg border border-gray-200 hover:border-blue-500/50 transition-all"
+                      >
+                        <span>←</span>
+                        <span>返回项目列表</span>
+                      </button>
                     </div>
 
+                    {/* 知识点展示区 */}
+                    <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+                      <h2 className="text-xl font-semibold mb-4 text-gray-900 flex items-center gap-2">
+                        <span>📚</span>
+                        <span>{currentProject.title} - 核心知识点</span>
+                      </h2>
+                      
+                      {/* 业务场景 */}
+                      <div className="mb-6">
+                        <h3 className="text-lg font-medium text-gray-800 mb-3 flex items-center gap-2">
+                          <span className="text-blue-500">📋</span>
+                          业务场景
+                        </h3>
+                        <p className="text-gray-700 bg-gray-50 rounded-lg p-4">{currentProject.businessScenario}</p>
+                      </div>
+
+                      {/* 核心知识点 */}
+                      <div className="mb-6">
+                        <h3 className="text-lg font-medium text-gray-800 mb-3 flex items-center gap-2">
+                          <span className="text-blue-500">💡</span>
+                          核心知识点
+                        </h3>
+                        <ul className="space-y-2">
+                          {currentProject.coreKnowledge.map((knowledge, i) => (
+                            <li key={i} className="flex items-start gap-2 bg-gray-50 rounded-lg p-3">
+                              <span className="text-blue-500 mt-1">•</span>
+                              <span className="text-gray-700">{knowledge}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* 操作步骤 */}
+                      <div className="mb-6">
+                        <h3 className="text-lg font-medium text-gray-800 mb-3 flex items-center gap-2">
+                          <span className="text-blue-500">🎯</span>
+                          操作步骤
+                        </h3>
+                        <div className="space-y-3">
+                          {currentProject.tasks.map((task, i) => (
+                            <div key={i} className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                              <div className="flex items-start gap-3">
+                                <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${currentProject.color} flex items-center justify-center flex-shrink-0 text-white text-sm font-medium`}>
+                                  {i + 1}
+                                </div>
+                                <div className="flex-1">
+                                  <p className="text-gray-800 font-medium mb-2">{task}</p>
+                                  {currentProject.taskHints[i] && (
+                                    <div className="bg-blue-50 rounded p-3 text-sm border border-blue-100">
+                                      <p className="text-blue-600 font-medium mb-1">💡 提示</p>
+                                      <p className="text-gray-600">{currentProject.taskHints[i]}</p>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* 进入实操按钮 */}
+                      {!showPracticeEditor && (
+                        <div className="flex justify-center">
+                          <button
+                            onClick={() => setShowPracticeEditor(true)}
+                            className="px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-medium hover:opacity-90 transition-all text-white text-lg flex items-center gap-2"
+                          >
+                            <span>💻</span>
+                            <span>开始编写代码</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 代码编辑器区域 - 点击后显示 */}
+                    {showPracticeEditor && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="bg-white rounded-xl border border-gray-200 overflow-hidden"
+                      >
+                        {/* 顶部操作栏 */}
+                        <div className="bg-gray-100 border-b border-gray-200 p-3 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg font-medium text-gray-700">{currentProject.title}</span>
+                            <span className="text-sm text-gray-500">- 编写代码</span>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => setShowPracticeEditor(false)}
+                              className="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-700 text-sm font-medium transition-all"
+                            >
+                              返回知识点
+                            </button>
+                            <button 
+                              onClick={runCode}
+                              className="px-4 py-1.5 bg-green-500 hover:bg-green-600 rounded-lg text-white text-sm font-medium transition-all flex items-center gap-1"
+                            >
+                              <span>▶</span>
+                              运行代码
+                            </button>
+                            <button 
+                              onClick={() => setUserCode(currentProject?.codeExample || '')}
+                              className="px-4 py-1.5 bg-orange-500 hover:bg-orange-600 rounded-lg text-white text-sm font-medium transition-all"
+                            >
+                              重置代码
+                            </button>
+                            <button 
+                              onClick={() => setShowReferenceAnswer(!showReferenceAnswer)}
+                              className="px-4 py-1.5 bg-purple-500 hover:bg-purple-600 rounded-lg text-white text-sm font-medium transition-all"
+                            >
+                              {showReferenceAnswer ? '隐藏参考答案' : '显示参考答案'}
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* 主内容区 */}
+                        <div className="flex h-[60vh]">
+                          {/* 左侧任务列表 */}
+                          <div className="w-72 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
+                            <h3 className="text-md font-semibold mb-3 text-gray-800">任务清单</h3>
+                            <ul className="space-y-2">
+                              {currentProject.tasks.map((task, i) => (
+                                <li key={i} className="bg-white rounded-lg p-3 border border-gray-100 hover:border-blue-200 transition-all">
+                                  <div className="flex items-start gap-2">
+                                    <span className={`w-6 h-6 rounded-full bg-gradient-to-br ${currentProject.color} flex items-center justify-center flex-shrink-0 text-white text-xs font-medium`}>
+                                      {i + 1}
+                                    </span>
+                                    <span className="text-sm text-gray-700">{task}</span>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* 中间代码编辑区 */}
+                          <div className="flex-1 flex flex-col">
+                            <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm text-gray-600">main.py</span>
+                                <span className="text-xs text-gray-400">Python</span>
+                              </div>
+                              {showReferenceAnswer && (
+                                <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded">参考答案模式</span>
+                              )}
+                            </div>
+                            <div className="flex-1 bg-white p-4 overflow-auto">
+                              {showReferenceAnswer ? (
+                                <pre className="text-gray-700 text-sm font-mono whitespace-pre-wrap">{currentProject.referenceAnswer}</pre>
+                              ) : (
+                                <textarea
+                                  value={userCode}
+                                  onChange={(e) => setUserCode(e.target.value)}
+                                  className="w-full h-full bg-gray-50 text-gray-800 text-sm font-mono resize-none outline-none border border-gray-200 rounded p-4"
+                                  spellCheck={false}
+                                  placeholder="# 在此编写代码..."
+                                />
+                              )}
+                            </div>
+                          </div>
+
+                          {/* 右侧执行结果区 */}
+                          <div className="w-80 bg-gray-50 border-l border-gray-200 flex flex-col">
+                            <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
+                              <span className="text-sm font-medium text-gray-700">执行结果</span>
+                              {executionResult && !errorMessage && (
+                                <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">成功</span>
+                              )}
+                              {errorMessage && (
+                                <span className="text-xs text-red-600 bg-red-100 px-2 py-1 rounded">错误</span>
+                              )}
+                            </div>
+                            <div className="flex-1 bg-white p-4 overflow-auto">
+                              {errorMessage ? (
+                                <div className="text-red-600 whitespace-pre-wrap text-sm">{errorMessage}</div>
+                              ) : executionResult ? (
+                                <div className="text-green-600 whitespace-pre-wrap text-sm">{executionResult}</div>
+                              ) : (
+                                <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                                  <div className="text-4xl mb-4">▶</div>
+                                  <p className="text-center text-sm">点击"运行代码"按钮</p>
+                                  <p className="text-center text-xs mt-1">查看代码执行结果</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {/* 完成实操按钮 */}
                     <div className="flex justify-end mt-6">
                       <button
                         onClick={markPhaseComplete}
