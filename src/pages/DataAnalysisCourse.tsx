@@ -28,6 +28,33 @@ interface Project {
     forum: string;
     discussion: string[];
   };
+  detailedContent?: {
+    overview: string;
+    concepts: Array<{
+      name: string;
+      description: string;
+      keyPoints: string[];
+      examples: string[];
+    }>;
+    formulas: Array<{
+      name: string;
+      formula: string;
+      explanation: string;
+      application: string;
+    }>;
+    caseStudies: Array<{
+      title: string;
+      scenario: string;
+      solution: string;
+      outcome: string;
+    }>;
+    bestPractices: string[];
+    commonMistakes: Array<{
+      mistake: string;
+      consequence: string;
+      solution: string;
+    }>;
+  };
 }
 
 interface Question {
@@ -254,7 +281,164 @@ print("✅ 数据预处理完成！")`,
         '特征工程最佳实践分享'
       ]
     },
-    showFullFlow: true
+    showFullFlow: true,
+    detailedContent: {
+      overview: '数据预处理是数据分析流程中最基础也是最关键的环节，约占整个项目时间的60-80%。本课程将系统讲解数据清洗、特征工程、数据转换等核心技术，帮助你建立完整的数据预处理知识体系。',
+      concepts: [
+        {
+          name: '缺失值处理',
+          description: '缺失值是真实数据中最常见的问题之一。不同类型的缺失需要采用不同的处理策略。',
+          keyPoints: [
+            'MCAR（完全随机缺失）：缺失与任何变量无关，可直接删除',
+            'MAR（随机缺失）：缺失与其他观测变量有关，可用模型预测填充',
+            'MNAR（非随机缺失）：缺失与缺失值本身有关，需要特殊处理',
+            '数值型缺失：中位数填充、均值填充、回归预测填充',
+            '类别型缺失：众数填充、新建"未知"类别、基于其他特征预测'
+          ],
+          examples: [
+            '用户年龄缺失：根据用户行为特征用KNN算法预测填充',
+            '订单金额缺失：用该用户历史订单中位数填充',
+            '商品类别缺失：标记为"未分类"单独分析'
+          ]
+        },
+        {
+          name: '异常值检测与处理',
+          description: '异常值可能代表数据录入错误，也可能是真实的极端情况，需要仔细甄别。',
+          keyPoints: [
+            '统计方法：3σ原则（正态分布）、箱线图法（IQR）、Z-score方法',
+            '机器学习方法：孤立森林、DBSCAN聚类、One-Class SVM',
+            '业务规则方法：基于业务经验设定阈值',
+            '异常值处理：删除、替换、单独分析、分箱处理'
+          ],
+          examples: [
+            '电商订单金额：超过99分位数的订单标记为异常，单独分析是否为刷单',
+            '用户登录频率：一天登录超过50次的用户可能是机器人',
+            '传感器数据：使用孤立森林检测设备异常状态'
+          ]
+        },
+        {
+          name: '特征分桶与离散化',
+          description: '将连续型特征转换为离散型，有助于发现非线性关系，提高模型可解释性。',
+          keyPoints: [
+            '等频分桶（pd.qcut）：每个桶样本数相同，适用于分布不均匀的数据',
+            '等宽分桶（pd.cut）：每个桶区间相同，适用于均匀分布的数据',
+            '基于业务规则分桶：根据业务经验设定分界点',
+            '分桶数量选择：通常3-10个桶，过多会失去意义，过少会丢失信息'
+          ],
+          examples: [
+            '用户消费金额：低(0-100)、中(100-500)、高(500+)三档',
+            '用户活跃度：根据登录频次分为活跃、一般、沉默三类',
+            '年龄段划分：18-25、26-35、36-45、46+ 四个群体'
+          ]
+        },
+        {
+          name: '类别编码',
+          description: '将类别型数据转换为数值型，便于机器学习模型处理。',
+          keyPoints: [
+            'LabelEncoder：将类别映射为整数，适用于有序类别（低、中、高）',
+            'OneHotEncoder：独热编码，适用于无序类别（颜色、品牌）',
+            'TargetEncoder：基于目标变量均值编码，适用于高基数类别',
+            'FrequencyEncoder：基于出现频率编码，适用于高基数类别'
+          ],
+          examples: [
+            '教育程度：小学=0，初中=1，高中=2，本科=3，硕士=4，博士=5',
+            '城市编码：北京=[1,0,0,0]，上海=[0,1,0,0]，广州=[0,0,1,0]',
+            '商品类目：使用目标编码，基于该类目的平均销售额编码'
+          ]
+        },
+        {
+          name: '数据标准化与归一化',
+          description: '消除不同特征之间的量纲影响，使所有特征具有相同的尺度。',
+          keyPoints: [
+            'StandardScaler（Z-score标准化）：均值为0，标准差为1，适用于正态分布',
+            'MinMaxScaler（归一化）：缩放到[0,1]区间，适用于有界数据',
+            'RobustScaler：基于中位数和四分位数，对异常值鲁棒',
+            'Normalizer：将样本缩放到单位范数，适用于文本数据'
+          ],
+          examples: [
+            '用户消费金额：使用StandardScaler，消除量纲影响',
+            '图像像素值：使用MinMaxScaler缩放到[0,1]',
+            '含有异常值的数据：使用RobustScaler避免异常值影响'
+          ]
+        }
+      ],
+      formulas: [
+        {
+          name: '3σ原则（正态分布）',
+          formula: 'μ ± 3σ',
+          explanation: '在正态分布中，约99.7%的数据落在均值±3倍标准差范围内，超出范围的视为异常值',
+          application: '适用于近似正态分布的数据，如用户消费金额、身高体重等'
+        },
+        {
+          name: 'Z-score标准化',
+          formula: 'z = (x - μ) / σ',
+          explanation: '将数据转换为标准正态分布，均值为0，标准差为1',
+          application: '适用于需要消除量纲影响的场景，如聚类、回归分析'
+        },
+        {
+          name: 'Min-Max归一化',
+          formula: 'x_scaled = (x - x_min) / (x_max - x_min)',
+          explanation: '将数据线性缩放到[0,1]区间',
+          application: '适用于有明确边界的数据，如图像像素、百分比等'
+        },
+        {
+          name: '四分位距（IQR）',
+          formula: 'IQR = Q3 - Q1',
+          explanation: '第三四分位数减去第一四分位数，代表中间50%数据的范围',
+          application: '箱线图法检测异常值，异常值定义为小于Q1-1.5IQR或大于Q3+1.5IQR的数据'
+        }
+      ],
+      caseStudies: [
+        {
+          title: '电商用户行为数据预处理',
+          scenario: '某电商平台有100万用户的行为数据，包含用户ID、性别、年龄、消费金额、消费频次、浏览时长、注册时间等字段。数据存在缺失值、异常值、格式不一致等问题。',
+          solution: '1. 缺失值处理：年龄用中位数填充，性别用"未知"填充，删除注册时间缺失的记录\n2. 异常值处理：使用3σ原则处理消费金额和浏览时长的异常值\n3. 特征工程：消费金额分桶（低中高），浏览时长离散化（短中长）\n4. 编码转换：性别使用LabelEncoder，地区使用OneHotEncoder\n5. 数据标准化：对消费金额、消费频次进行StandardScaler标准化',
+          outcome: '数据质量显著提升，后续聚类分析效果提升40%，用户分群更加准确'
+        },
+        {
+          title: '金融风控数据清洗',
+          scenario: '银行信贷审批数据包含客户基本信息、征信记录、贷款历史等。数据存在大量缺失、异常值、重复记录等问题。',
+          solution: '1. 重复值处理：删除重复的客户记录\n2. 缺失值处理：收入用中位数填充，征信记录缺失的单独标记\n3. 异常值处理：使用箱线图法识别异常收入，人工审核后处理\n4. 特征构造：构造收入负债比、历史逾期率等衍生特征\n5. 数据转换：对偏态分布的收入数据取对数转换',
+          outcome: '数据完整性从65%提升到92%，风控模型AUC提升0.08'
+        }
+      ],
+      bestPractices: [
+        '始终先进行数据探索性分析（EDA），了解数据分布和质量',
+        '缺失值处理前先分析缺失机制（MCAR/MAR/MNAR），选择合适策略',
+        '异常值处理前务必结合业务场景，避免误删真实数据',
+        '特征工程时保留原始特征，便于后续对比分析',
+        '数据转换前记录转换参数，确保测试集使用相同转换',
+        '建立数据质量监控体系，持续跟踪数据质量指标',
+        '文档记录所有预处理步骤，保证分析可复现'
+      ],
+      commonMistakes: [
+        {
+          mistake: '用均值填充含有异常值的数值型缺失',
+          consequence: '异常值会拉高均值，导致填充值偏离真实分布',
+          solution: '使用不受异常值影响的中位数填充，或先处理异常值再填充'
+        },
+        {
+          mistake: '对所有类别特征都使用OneHotEncoder',
+          consequence: '高基数字段（如用户ID、商品ID）会导致维度爆炸，内存溢出',
+          solution: '高基数字段使用TargetEncoder或FrequencyEncoder，低基数字段使用OneHotEncoder'
+        },
+        {
+          mistake: '在数据拆分前进行标准化',
+          consequence: '测试集信息泄露到训练集，导致模型评估不准确',
+          solution: '先拆分训练集和测试集，只用训练集计算标准化参数，再应用到测试集'
+        },
+        {
+          mistake: '删除所有含有缺失值的记录',
+          consequence: '数据量大幅减少，可能丢失重要信息，产生偏差',
+          solution: '分析缺失机制，采用填充、插值、模型预测等方法保留数据'
+        },
+        {
+          mistake: '忽视数据类型转换',
+          consequence: '数值型字段被识别为字符串，无法进行数学运算',
+          solution: '读取数据后检查每列数据类型，使用astype()进行必要转换'
+        }
+      ]
+    }
   },
   {
     id: 2,
@@ -2565,6 +2749,8 @@ export default function DataAnalysisCourse() {
   
   const [testAnswers, setTestAnswers] = useState<Record<number, number | number[]>>({});
   const [showResults, setShowResults] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<number>(600); // 10分钟 = 600秒
+  const [timerActive, setTimerActive] = useState<boolean>(false);
   const [showReferenceAnswer, setShowReferenceAnswer] = useState(false);
   const [userCode, setUserCode] = useState<string>('');
   const [executionResult, setExecutionResult] = useState<string>('');
@@ -2575,7 +2761,7 @@ export default function DataAnalysisCourse() {
   const [completedTasks, setCompletedTasks] = useState<number[]>([]);
   const [showPracticeEditor, setShowPracticeEditor] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
-    business: true,
+    overview: true,
     knowledge: true,
     metrics: true,
     steps: true,
@@ -2584,6 +2770,8 @@ export default function DataAnalysisCourse() {
     deliverables: true,
     resources: true
   });
+  
+  const [selectedKnowledge, setSelectedKnowledge] = useState<number | null>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -2592,6 +2780,28 @@ export default function DataAnalysisCourse() {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  // 倒计时逻辑
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (timerActive && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+    } else if (timeLeft === 0 && timerActive) {
+      // 时间到，自动提交
+      setTimerActive(false);
+      submitTest();
+    }
+    return () => clearInterval(interval);
+  }, [timerActive, timeLeft]);
+
+  // 格式化时间显示
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   const selectProject = (projectId: number) => {
     const project = projects.find(p => p.id === projectId);
@@ -2605,6 +2815,9 @@ export default function DataAnalysisCourse() {
     setShowReferenceAnswer(false);
     setExecutionResult('');
     setErrorMessage('');
+    // 重置计时器
+    setTimeLeft(600);
+    setTimerActive(false);
     // 只有数据预处理高阶班（id=1）默认显示代码框架，其余项目默认空白，形成学习阶梯
     setUserCode(project?.id === 1 ? project.codeExample : '');
 
@@ -2899,6 +3112,12 @@ export default function DataAnalysisCourse() {
         const shuffled = [...project.questions].sort(() => Math.random() - 0.5);
         setRandomQuestions(shuffled);
       }
+      // 启动计时器
+      setTimeLeft(600);
+      setTimerActive(true);
+    } else {
+      // 非测试阶段停止计时器
+      setTimerActive(false);
     }
     setLearningState(prev => ({
       ...prev,
@@ -3170,54 +3389,1014 @@ export default function DataAnalysisCourse() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
-                    {/* 项目概览卡片 */}
-                    <motion.div 
-                      className="bg-white rounded-xl border border-gray-200 p-6 mb-6 overflow-hidden relative"
-                      whileHover={{ scale: 1.01 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {/* 背景渐变 */}
-                      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${currentProject.color}`}></div>
-                      <div className="relative z-10">
-                        <div className="flex items-center gap-4 mb-4">
-                          <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${currentProject.color} flex items-center justify-center shadow-lg shadow-current/30`}>
-                            <span className="text-2xl">{currentProject.icon}</span>
-                          </div>
-                          <div>
-                            <h2 className="text-2xl font-semibold text-gray-900">项目概览</h2>
-                            <p className="text-sm text-gray-500">{currentProject.duration} · {currentProject.difficulty === 'beginner' ? '入门' : currentProject.difficulty === 'intermediate' ? '进阶' : '高级'}</p>
-                          </div>
-                        </div>
-                        <p className="text-gray-600 mb-6 leading-relaxed">{currentProject.description}</p>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                          {/* 业务场景 */}
-                          <div className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-all">
-                            <div className="flex items-center gap-2 mb-3">
-                              <span className="text-blue-500 text-xl">📋</span>
-                              <h3 className="text-md font-medium text-gray-700">业务场景</h3>
-                            </div>
-                            <p className="text-gray-600 text-sm leading-relaxed">{currentProject.businessScenario}</p>
-                          </div>
-                          
-                          {/* 核心知识点 */}
-                          <div className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-all">
-                            <div className="flex items-center gap-2 mb-3">
-                              <span className="text-blue-500 text-xl">💡</span>
-                              <h3 className="text-md font-medium text-gray-700">核心知识点</h3>
-                            </div>
-                            <ul className="space-y-2">
-                              {currentProject.coreKnowledge.map((knowledge, i) => (
-                                <li key={i} className="flex items-start gap-2">
-                                  <span className="text-blue-500 mt-1">•</span>
-                                  <span className="text-gray-600 text-sm">{knowledge}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
+                    {/* 标题卡片 */}
+                    <div className={`bg-gradient-to-r ${currentProject.color} rounded-2xl p-6 mb-6 shadow-xl shadow-current/20`}>
+                      <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-2">
+                        <span>{currentProject.icon}</span>
+                        <span>{currentProject.title} - 全面学习</span>
+                      </h2>
+                      <p className="text-white/80 text-sm">掌握本项目的核心知识和技能</p>
+                      <div className="flex gap-3 mt-4">
+                        <span className="px-3 py-1 bg-white/20 rounded-full text-white text-xs">
+                          ⏱️ {currentProject.duration}
+                        </span>
+                        <span className={`px-3 py-1 bg-white/20 rounded-full text-white text-xs`}>
+                          {currentProject.difficulty === 'beginner' ? '🎓 入门' : currentProject.difficulty === 'intermediate' ? '📈 进阶' : '🚀 高级'}
+                        </span>
                       </div>
-                    </motion.div>
+                    </div>
+
+                    {/* 学习模块卡片 - 按层次结构组织 */}
+                    <div className="space-y-3">
+                      {/* 第一部分：核心概念 */}
+                      <motion.div 
+                        className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-xl overflow-hidden shadow-lg shadow-orange-500/30"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <button
+                          onClick={() => setExpandedSections({...expandedSections, overview: !expandedSections.overview})}
+                          className="w-full px-5 py-4 flex items-center justify-between hover:bg-white/10 transition-all"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                              <span className="text-white text-xl">⚙️</span>
+                            </div>
+                            <div className="text-left">
+                              <h3 className="font-semibold text-white">核心概念：{currentProject.title}</h3>
+                              <p className="text-white/70 text-xs">理解本项目的基本概念</p>
+                            </div>
+                          </div>
+                          <motion.span 
+                            className="text-white/70 text-lg"
+                            animate={{ rotate: expandedSections.overview ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                          >▼</motion.span>
+                        </button>
+                        {expandedSections.overview && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="px-5 pb-5 bg-white/10"
+                          >
+                            <div className="bg-white rounded-xl p-4 shadow-md">
+                              {/* 项目概述 */}
+                              <div className="mb-6">
+                                <h4 className="text-lg font-semibold text-gray-800 mb-3">📚 课程概述</h4>
+                                <p className="text-gray-700 leading-relaxed">{currentProject.detailedContent?.overview || currentProject.description}</p>
+                              </div>
+                              
+                              {/* 业务场景和学习目标 */}
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                  <p className="text-blue-600 text-sm font-medium mb-2">📋 业务场景</p>
+                                  <p className="text-gray-600 text-sm">{currentProject.businessScenario}</p>
+                                </div>
+                                <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                                  <p className="text-green-600 text-sm font-medium mb-2">🎯 学习目标</p>
+                                  <ul className="text-gray-600 text-sm space-y-1">
+                                    {currentProject.deliverables.slice(0, 3).map((item, i) => (
+                                      <li key={i}>• {item}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </div>
+                              
+                              {/* 核心概念详解 */}
+                              {currentProject.detailedContent?.concepts && (
+                                <div className="space-y-4">
+                                  <h4 className="text-lg font-semibold text-gray-800">💡 核心概念详解</h4>
+                                  {currentProject.detailedContent.concepts.map((concept, idx) => (
+                                    <div key={idx} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                      <h5 className="font-semibold text-gray-800 mb-2">{concept.name}</h5>
+                                      <p className="text-gray-600 text-sm mb-3">{concept.description}</p>
+                                      
+                                      <div className="mb-3">
+                                        <p className="text-xs font-medium text-blue-600 mb-1">🔑 关键要点：</p>
+                                        <ul className="text-xs text-gray-600 space-y-1 ml-4">
+                                          {concept.keyPoints.map((point, pidx) => (
+                                            <li key={pidx}>• {point}</li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                      
+                                      <div>
+                                        <p className="text-xs font-medium text-green-600 mb-1">💼 实际案例：</p>
+                                        <ul className="text-xs text-gray-600 space-y-1 ml-4">
+                                          {concept.examples.map((example, eidx) => (
+                                            <li key={eidx}>• {example}</li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </motion.div>
+                        )}
+                      </motion.div>
+
+                      {/* 第二部分：核心指标 */}
+                      <motion.div 
+                        className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl overflow-hidden shadow-lg shadow-purple-500/30"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
+                      >
+                        <button
+                          onClick={() => setExpandedSections({...expandedSections, metrics: !expandedSections.metrics})}
+                          className="w-full px-5 py-4 flex items-center justify-between hover:bg-white/10 transition-all"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                              <span className="text-white text-xl">📊</span>
+                            </div>
+                            <div className="text-left">
+                              <h3 className="font-semibold text-white">核心指标</h3>
+                              <p className="text-white/70 text-xs">理解关键评估指标</p>
+                            </div>
+                          </div>
+                          <motion.span 
+                            className="text-white/70 text-lg"
+                            animate={{ rotate: expandedSections.metrics ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                          >▼</motion.span>
+                        </button>
+                        {expandedSections.metrics && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="px-5 pb-5 bg-white/10"
+                          >
+                            <div className="space-y-4">
+                              {currentProject.id === 3 ? (
+                                <>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-orange-500">📌</span>
+                                      <h4 className="text-orange-700 font-semibold">支持度 (Support)</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">衡量商品受欢迎程度的指标</p>
+                                    <div className="bg-orange-50 rounded-lg p-3 border border-orange-200">
+                                      <p className="text-gray-800 font-mono text-sm">Support(X→Y) = P(X∪Y)</p>
+                                      <p className="text-gray-600 text-xs mt-1">同时购买X和Y的交易数 / 总交易数</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：理解支持度的计算方法，能够筛选频繁项集</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-purple-500">📌</span>
+                                      <h4 className="text-purple-700 font-semibold">置信度 (Confidence)</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">表示购买X后购买Y的概率</p>
+                                    <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                                      <p className="text-gray-800 font-mono text-sm">Confidence(X→Y) = P(Y|X)</p>
+                                      <p className="text-gray-600 text-xs mt-1">Support(X→Y) / Support(X)</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：掌握置信度的含义，理解规则的可靠性</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-blue-500">📌</span>
+                                      <h4 className="text-blue-700 font-semibold">提升度 (Lift)</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">表示规则的有效性，大于1表示正相关</p>
+                                    <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                      <p className="text-gray-800 font-mono text-sm">Lift(X→Y) = Confidence(X→Y) / Support(Y)</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：学会使用提升度评估关联规则的实际价值</p>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : currentProject.id === 1 ? (
+                                <>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-blue-500">📌</span>
+                                      <h4 className="text-blue-700 font-semibold">缺失值处理</h4>
+                                    </div>
+                                    <ul className="text-gray-700 text-sm space-y-1 mb-3">
+                                      <li>• 删除法（缺失率高时）</li>
+                                      <li>• 均值/中位数填充（数值型）</li>
+                                      <li>• 众数填充（类别型）</li>
+                                    </ul>
+                                    <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：掌握多种缺失值处理方法，能够根据数据特点选择合适策略</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-green-500">📌</span>
+                                      <h4 className="text-green-700 font-semibold">异常值检测</h4>
+                                    </div>
+                                    <ul className="text-gray-700 text-sm space-y-1 mb-3">
+                                      <li>• 3σ原则（适用于正态分布）</li>
+                                      <li>• 箱线图法（IQR四分位数间距）</li>
+                                      <li>• Z-score标准化检测</li>
+                                    </ul>
+                                    <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：能够识别和处理数据中的异常值，确保分析准确性</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-purple-500">📌</span>
+                                      <h4 className="text-purple-700 font-semibold">数据标准化</h4>
+                                    </div>
+                                    <ul className="text-gray-700 text-sm space-y-1 mb-3">
+                                      <li>• StandardScaler（均值为0，标准差为1）</li>
+                                      <li>• MinMaxScaler（缩放到[0,1]）</li>
+                                      <li>• RobustScaler（基于中位数）</li>
+                                    </ul>
+                                    <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：掌握数据标准化方法，为后续建模做好准备</p>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : currentProject.id === 2 ? (
+                                <>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-blue-500">📌</span>
+                                      <h4 className="text-blue-700 font-semibold">皮尔逊相关系数</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">衡量两个变量之间线性相关程度的指标，取值范围[-1, 1]</p>
+                                    <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                      <p className="text-gray-800 font-mono text-sm">r = cov(X,Y) / (σ_X * σ_Y)</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：理解皮尔逊相关系数的含义，能够判断变量间的线性关系强度</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-purple-500">📌</span>
+                                      <h4 className="text-purple-700 font-semibold">斯皮尔曼相关系数</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">基于秩次的非参数相关分析方法，适用于非线性关系</p>
+                                    <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                                      <p className="text-gray-800 font-mono text-sm">ρ = 1 - 6Σd² / (n(n²-1))</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：掌握斯皮尔曼相关系数的应用场景，处理非正态分布数据</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-green-500">📌</span>
+                                      <h4 className="text-green-700 font-semibold">相关性热力图</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">可视化展示变量间相关关系的矩阵图</p>
+                                    <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+                                      <p className="text-gray-800 text-sm">使用 seaborn.heatmap() 绘制，颜色越深表示相关性越强</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：能够绘制和解读相关性热力图，识别关键关联</p>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : currentProject.id === 4 ? (
+                                <>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-blue-500">📌</span>
+                                      <h4 className="text-blue-700 font-semibold">KMeans聚类算法</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">基于距离的无监督聚类算法，将数据分为K个簇</p>
+                                    <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                      <p className="text-gray-800 text-sm">核心思想：最小化簇内距离，最大化簇间距离</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：理解KMeans算法原理，能够应用于用户分群</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-purple-500">📌</span>
+                                      <h4 className="text-purple-700 font-semibold">肘部法则</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">通过绘制inertia-k曲线确定最佳聚类数量</p>
+                                    <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                                      <p className="text-gray-800 text-sm">inertia = Σ(每个点到其簇中心的距离²)</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：掌握肘部法则，能够确定合适的聚类数量</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-green-500">📌</span>
+                                      <h4 className="text-green-700 font-semibold">PCA降维</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">主成分分析，将高维数据投影到低维空间</p>
+                                    <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+                                      <p className="text-gray-800 text-sm">保留最大方差的方向，实现数据可视化</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：学会使用PCA进行数据降维和可视化</p>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : currentProject.id === 5 ? (
+                                <>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-orange-500">📌</span>
+                                      <h4 className="text-orange-700 font-semibold">RFM模型</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">Recency(最近消费)、Frequency(消费频次)、Monetary(消费金额)</p>
+                                    <div className="bg-orange-50 rounded-lg p-3 border border-orange-200">
+                                      <p className="text-gray-800 text-sm">R: 最近一次消费距离今天的天数</p>
+                                      <p className="text-gray-800 text-sm">F: 统计周期内的消费次数</p>
+                                      <p className="text-gray-800 text-sm">M: 统计周期内的消费总金额</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：理解RFM模型的核心思想，能够计算RFM指标</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-blue-500">📌</span>
+                                      <h4 className="text-blue-700 font-semibold">用户分层</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">根据RFM分数将用户分为不同价值层级</p>
+                                    <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                      <p className="text-gray-800 text-sm">• 重要价值用户：R高+F高+M高</p>
+                                      <p className="text-gray-800 text-sm">• 潜力用户：R高+F低+M中</p>
+                                      <p className="text-gray-800 text-sm">• 流失用户：R低+F低+M低</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：掌握用户分层方法，能够识别高价值用户</p>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : currentProject.id === 6 ? (
+                                <>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-blue-500">📌</span>
+                                      <h4 className="text-blue-700 font-semibold">线性回归模型</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">用线性方程描述自变量和因变量之间的关系</p>
+                                    <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                      <p className="text-gray-800 font-mono text-sm">y = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：理解线性回归原理，能够构建回归模型</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-purple-500">📌</span>
+                                      <h4 className="text-purple-700 font-semibold">R²决定系数</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">衡量模型对数据的拟合程度，取值范围[0,1]</p>
+                                    <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                                      <p className="text-gray-800 font-mono text-sm">R² = 1 - SS_res / SS_tot</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：掌握R²指标，能够评估回归模型性能</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-green-500">📌</span>
+                                      <h4 className="text-green-700 font-semibold">MAE/MSE</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">平均绝对误差和均方误差，衡量预测准确性</p>
+                                    <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+                                      <p className="text-gray-800 font-mono text-sm">MAE = (1/n)Σ|y - ŷ|</p>
+                                      <p className="text-gray-800 font-mono text-sm">MSE = (1/n)Σ(y - ŷ)²</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：理解误差指标，能够选择合适的评估方法</p>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : currentProject.id === 7 ? (
+                                <>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-blue-500">📌</span>
+                                      <h4 className="text-blue-700 font-semibold">随机森林</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">集成学习算法，通过多个决策树提高预测准确性</p>
+                                    <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                      <p className="text-gray-800 text-sm">• Bootstrap采样构建多棵决策树</p>
+                                      <p className="text-gray-800 text-sm">• 每棵树随机选择特征子集</p>
+                                      <p className="text-gray-800 text-sm">• 回归取均值，分类取众数</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：理解随机森林原理，能够构建预测模型</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-purple-500">📌</span>
+                                      <h4 className="text-purple-700 font-semibold">特征重要性</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">衡量每个特征对预测结果的贡献程度</p>
+                                    <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                                      <p className="text-gray-800 text-sm">通过Gini不纯度或信息增益计算</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：学会分析特征重要性，识别关键影响因素</p>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : currentProject.id === 8 ? (
+                                <>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-blue-500">📌</span>
+                                      <h4 className="text-blue-700 font-semibold">时间序列数据</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">按时间顺序排列的数据，包含趋势、季节性和随机性</p>
+                                    <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                      <p className="text-gray-800 text-sm">• 趋势：长期上升或下降</p>
+                                      <p className="text-gray-800 text-sm">• 季节性：周期性变化</p>
+                                      <p className="text-gray-800 text-sm">• 残差：随机波动</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：理解时间序列的组成成分</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-purple-500">📌</span>
+                                      <h4 className="text-purple-700 font-semibold">移动平均</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">平滑时间序列数据，揭示趋势</p>
+                                    <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                                      <p className="text-gray-800 font-mono text-sm">MA(t) = (yₜ₋ₙ₊₁ + ... + yₜ) / n</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：掌握移动平均方法，分析数据趋势</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-green-500">📌</span>
+                                      <h4 className="text-green-700 font-semibold">ARIMA模型</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">自回归综合移动平均模型，用于时间序列预测</p>
+                                    <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+                                      <p className="text-gray-800 text-sm">AR(p): 自回归项, I(d): 差分阶数, MA(q): 移动平均项</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：理解ARIMA模型，能够进行时间序列预测</p>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : currentProject.id === 9 ? (
+                                <>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-red-500">📌</span>
+                                      <h4 className="text-red-700 font-semibold">异常检测</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">识别数据中偏离正常模式的异常点</p>
+                                    <div className="bg-red-50 rounded-lg p-3 border border-red-200">
+                                      <p className="text-gray-800 text-sm">• 统计方法：3σ原则、箱线图</p>
+                                      <p className="text-gray-800 text-sm">• 机器学习：孤立森林、DBSCAN</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：掌握异常检测方法，识别数据异常</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-orange-500">📌</span>
+                                      <h4 className="text-orange-700 font-semibold">孤立森林</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">基于随机森林的异常检测算法</p>
+                                    <div className="bg-orange-50 rounded-lg p-3 border border-orange-200">
+                                      <p className="text-gray-800 text-sm">通过随机划分构建树，异常点更容易被孤立</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：学会使用孤立森林检测异常值</p>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : currentProject.id === 10 ? (
+                                <>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-blue-500">📌</span>
+                                      <h4 className="text-blue-700 font-semibold">数据分析全流程</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">从数据获取到业务策略输出的完整流程</p>
+                                    <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                      <p className="text-gray-800 text-sm">数据获取 → 数据清洗 → 特征工程 → 建模分析 → 结果可视化 → 策略输出</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：掌握完整的数据分析流程</p>
+                                    </div>
+                                  </div>
+                                  <div className="bg-white rounded-xl p-4 shadow-md">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-purple-500">📌</span>
+                                      <h4 className="text-purple-700 font-semibold">业务策略落地</h4>
+                                    </div>
+                                    <p className="text-gray-700 text-sm mb-2">将数据分析结果转化为可执行的业务策略</p>
+                                    <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                                      <p className="text-gray-800 text-sm">• 策略目标明确</p>
+                                      <p className="text-gray-800 text-sm">• 执行路径清晰</p>
+                                      <p className="text-gray-800 text-sm">• 效果可衡量</p>
+                                    </div>
+                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                      <p className="text-green-700 text-xs">💡 学习效果：学会将分析结果转化为业务价值</p>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : currentProject.detailedContent?.formulas ? (
+                                <>
+                                  {currentProject.detailedContent.formulas.map((formula, idx) => (
+                                    <div key={idx} className="bg-white rounded-xl p-4 shadow-md">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-blue-500">📐</span>
+                                        <h4 className="text-blue-700 font-semibold">{formula.name}</h4>
+                                      </div>
+                                      <div className="bg-blue-50 rounded-lg p-3 border border-blue-200 mb-3">
+                                        <p className="text-gray-800 font-mono text-sm">{formula.formula}</p>
+                                      </div>
+                                      <p className="text-gray-700 text-sm mb-2">{formula.explanation}</p>
+                                      <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                        <p className="text-green-700 text-xs">💡 应用场景：{formula.application}</p>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </>
+                              ) : (
+                                <div className="bg-white rounded-xl p-4 shadow-md">
+                                  <p className="text-gray-600 text-sm">本项目的核心指标将在后续学习中逐步介绍...</p>
+                                </div>
+                              )}
+                            </div>
+                          </motion.div>
+                        )}
+                      </motion.div>
+
+                      {/* 第三部分：操作步骤 */}
+                      <motion.div 
+                        className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl overflow-hidden shadow-lg shadow-blue-500/30"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.2 }}
+                      >
+                        <button
+                          onClick={() => setExpandedSections({...expandedSections, steps: !expandedSections.steps})}
+                          className="w-full px-5 py-4 flex items-center justify-between hover:bg-white/10 transition-all"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                              <span className="text-white text-xl">📝</span>
+                            </div>
+                            <div className="text-left">
+                              <h3 className="font-semibold text-white">操作步骤</h3>
+                              <p className="text-white/70 text-xs">分步完成任务 ({currentProject.tasks.length}步)</p>
+                            </div>
+                          </div>
+                          <motion.span 
+                            className="text-white/70 text-lg"
+                            animate={{ rotate: expandedSections.steps ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                          >▼</motion.span>
+                        </button>
+                        {expandedSections.steps && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="px-5 pb-5 bg-white/10"
+                          >
+                            <div className="bg-blue-50 rounded-xl p-4 mb-4 border border-blue-200">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="text-blue-500">📋</span>
+                                <span className="text-blue-700 font-medium">任务说明</span>
+                              </div>
+                              <p className="text-gray-600 text-sm">按照以下步骤完成本项目的实操练习，每一步都配有详细的操作提示和代码示例。</p>
+                            </div>
+                            
+                            <div className="space-y-4">
+                              {currentProject.tasks.map((task, i) => (
+                                <motion.div 
+                                  key={i}
+                                  className="bg-white rounded-xl overflow-hidden shadow-md border border-gray-100"
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: i * 0.1 }}
+                                >
+                                  {/* 步骤头部 */}
+                                  <div className="bg-gradient-to-r from-blue-500 to-cyan-500 px-5 py-4">
+                                    <div className="flex items-center gap-4">
+                                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                                        <span className="text-white font-bold text-xl">{i + 1}</span>
+                                      </div>
+                                      <div>
+                                        <h4 className="text-white font-semibold">{task}</h4>
+                                        <p className="text-white/70 text-xs mt-0.5">
+                                          {i === 0 && '开始第一步，打好基础'}
+                                          {i > 0 && i < currentProject.tasks.length - 1 && `继续第 ${i + 1} 步`}
+                                          {i === currentProject.tasks.length - 1 && '最后一步，完成任务'}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  {/* 步骤详情 */}
+                                  <div className="p-5">
+                                    {/* 操作提示 */}
+                                    {currentProject.taskHints[i] && (
+                                      <div className="mb-4">
+                                        <div className="flex items-center gap-2 mb-2">
+                                          <span className="text-blue-500">💡</span>
+                                          <span className="text-blue-600 text-sm font-medium">操作提示</span>
+                                        </div>
+                                        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                          <p className="text-gray-700 text-sm leading-relaxed">{currentProject.taskHints[i]}</p>
+                                        </div>
+                                      </div>
+                                    )}
+                                    
+                                    {/* 关键代码提示 */}
+                                    <div className="mb-4">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-green-500">📝</span>
+                                        <span className="text-green-600 text-sm font-medium">关键代码</span>
+                                      </div>
+                                      <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                                        <p className="text-gray-700 text-xs font-mono bg-gray-100 rounded p-2">
+                                          {currentProject.id === 1 && i === 0 && 'df = pd.read_csv("user_behavior.csv")'}
+                                          {currentProject.id === 1 && i === 1 && 'df.fillna() / df.dropna()'}
+                                          {currentProject.id === 1 && i === 2 && '使用3σ原则处理异常值'}
+                                          {currentProject.id === 1 && i === 3 && 'pd.qcut() / pd.cut()'}
+                                          {currentProject.id === 1 && i === 4 && 'scaler.fit_transform()'}
+                                          {currentProject.id === 2 && i === 0 && 'df.describe()'}
+                                          {currentProject.id === 2 && i === 1 && 'df.corr(method="pearson")'}
+                                          {currentProject.id === 2 && i === 2 && 'sns.heatmap()'}
+                                          {currentProject.id === 3 && i === 0 && 'from mlxtend.frequent_patterns import apriori'}
+                                          {currentProject.id === 3 && i === 1 && 'apriori(df, min_support=0.05)'}
+                                          {currentProject.id === 4 && i === 0 && 'KMeans(n_clusters=3)'}
+                                          {currentProject.id === 4 && i === 1 && 'inertia = model.inertia_'}
+                                          {currentProject.id === 5 && i === 0 && '计算R/F/M三个指标'}
+                                          {currentProject.id === 5 && i === 1 && 'pd.qcut() 分箱打分'}
+                                          {currentProject.id === 6 && i === 0 && 'LinearRegression()'}
+                                          {currentProject.id === 6 && i === 1 && 'model.score(X, y)'}
+                                          {currentProject.id === 7 && i === 0 && 'RandomForestRegressor()'}
+                                          {currentProject.id === 7 && i === 1 && 'model.feature_importances_'}
+                                          {currentProject.id === 8 && i === 0 && 'pd.to_datetime()'}
+                                          {currentProject.id === 8 && i === 1 && 'df.rolling(window=7).mean()'}
+                                          {currentProject.id === 9 && i === 0 && 'IsolationForest()'}
+                                          {currentProject.id === 9 && i === 1 && 'model.predict(X)'}
+                                          {currentProject.id === 10 && i === 0 && '综合运用所有方法'}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    
+                                    {/* 预期结果 */}
+                                    <div className="mt-4">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-purple-500">🎯</span>
+                                        <span className="text-purple-600 text-sm font-medium">预期结果</span>
+                                      </div>
+                                      <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                                        <p className="text-gray-600 text-xs">
+                                          {i === 0 && '成功完成第一步操作，了解数据基本情况'}
+                                          {i === 1 && '完成第二步操作，数据质量得到提升'}
+                                          {i === 2 && '完成第三步操作，特征工程推进中'}
+                                          {i === 3 && '完成第四步操作，数据准备更加充分'}
+                                          {i === 4 && '完成第五步操作，数据标准化完成'}
+                                          {i >= 5 && '任务完成，达到预期目标'}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </motion.div>
+
+                      {/* 第四部分：常见陷阱 */}
+                      <motion.div 
+                        className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.4 }}
+                      >
+                        <button
+                          onClick={() => setExpandedSections({...expandedSections, pitfalls: !expandedSections.pitfalls})}
+                          className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-rose-500 rounded-lg flex items-center justify-center shadow-md shadow-red-500/30">
+                              <span className="text-white">⚠️</span>
+                            </div>
+                            <div className="text-left">
+                              <h3 className="font-semibold text-gray-800">常见陷阱</h3>
+                              <p className="text-xs text-gray-500">避免常见错误和误区</p>
+                            </div>
+                          </div>
+                          <motion.span 
+                            className="text-gray-400 text-lg"
+                            animate={{ rotate: expandedSections.pitfalls ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                          >▼</motion.span>
+                        </button>
+                        {expandedSections.pitfalls && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="px-5 pb-5"
+                          >
+                            <div className="space-y-4">
+                              {/* 详细错误分析 */}
+                              {currentProject.detailedContent?.commonMistakes ? (
+                                currentProject.detailedContent.commonMistakes.map((mistake, i) => (
+                                  <motion.div 
+                                    key={i}
+                                    className="bg-white rounded-xl p-4 border border-red-200 shadow-sm"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: i * 0.1 }}
+                                  >
+                                    <div className="flex items-start gap-3">
+                                      <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <span className="text-red-600 font-bold">{i + 1}</span>
+                                      </div>
+                                      <div className="flex-1">
+                                        <h5 className="font-semibold text-red-700 mb-2">❌ {mistake.mistake}</h5>
+                                        <div className="bg-red-50 rounded-lg p-3 mb-2">
+                                          <p className="text-xs text-red-600 font-medium mb-1">后果：</p>
+                                          <p className="text-sm text-gray-700">{mistake.consequence}</p>
+                                        </div>
+                                        <div className="bg-green-50 rounded-lg p-3">
+                                          <p className="text-xs text-green-600 font-medium mb-1">✓ 正确做法：</p>
+                                          <p className="text-sm text-gray-700">{mistake.solution}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </motion.div>
+                                ))
+                              ) : (
+                                currentProject.pitfalls.map((pitfall, i) => (
+                                  <motion.div 
+                                    key={i}
+                                    className="bg-gradient-to-r from-red-50 to-rose-50 rounded-xl p-4 border border-red-100"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: i * 0.1 }}
+                                  >
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-red-500 mt-0.5">✗</span>
+                                      <p className="text-red-700">{pitfall}</p>
+                                    </div>
+                                  </motion.div>
+                                ))
+                              )}
+                            </div>
+                          </motion.div>
+                        )}
+                      </motion.div>
+
+                      {/* 小贴士 */}
+                      <motion.div 
+                        className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.5 }}
+                      >
+                        <button
+                          onClick={() => setExpandedSections({...expandedSections, tips: !expandedSections.tips})}
+                          className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-lg flex items-center justify-center shadow-md shadow-yellow-500/30">
+                              <span className="text-white">💬</span>
+                            </div>
+                            <div className="text-left">
+                              <h3 className="font-semibold text-gray-800">小贴士</h3>
+                              <p className="text-xs text-gray-500">实用学习建议</p>
+                            </div>
+                          </div>
+                          <motion.span 
+                            className="text-gray-400 text-lg"
+                            animate={{ rotate: expandedSections.tips ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                          >▼</motion.span>
+                        </button>
+                        {expandedSections.tips && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="px-5 pb-5"
+                          >
+                            {/* 最佳实践 */}
+                            {currentProject.detailedContent?.bestPractices && (
+                              <div className="mb-6">
+                                <h4 className="text-sm font-semibold text-gray-800 mb-3">⭐ 最佳实践</h4>
+                                <div className="space-y-2">
+                                  {currentProject.detailedContent.bestPractices.map((practice, i) => (
+                                    <div key={i} className="flex items-start gap-2 bg-yellow-50 rounded-lg p-3 border border-yellow-200">
+                                      <span className="text-yellow-500 text-sm">✓</span>
+                                      <p className="text-gray-700 text-sm">{practice}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* 案例研究 */}
+                            {currentProject.detailedContent?.caseStudies && (
+                              <div className="space-y-4">
+                                <h4 className="text-sm font-semibold text-gray-800">📊 案例研究</h4>
+                                {currentProject.detailedContent.caseStudies.map((study, i) => (
+                                  <div key={i} className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                                    <h5 className="font-semibold text-blue-700 mb-2">{study.title}</h5>
+                                    <div className="space-y-2">
+                                      <div>
+                                        <p className="text-xs text-gray-500 font-medium">场景：</p>
+                                        <p className="text-sm text-gray-700">{study.scenario}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-gray-500 font-medium">解决方案：</p>
+                                        <p className="text-sm text-gray-700 whitespace-pre-line">{study.solution}</p>
+                                      </div>
+                                      <div className="bg-green-50 rounded-lg p-2">
+                                        <p className="text-xs text-green-600 font-medium">成果：</p>
+                                        <p className="text-sm text-gray-700">{study.outcome}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* 默认提示 */}
+                            {!currentProject.detailedContent?.bestPractices && !currentProject.detailedContent?.caseStudies && (
+                              <div className="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl p-4 border border-yellow-100">
+                                <div className="flex items-start gap-3">
+                                  <span className="text-yellow-500 text-2xl">💡</span>
+                                  <p className="text-gray-700 text-sm">
+                                    {currentProject.id === 3 ? (
+                                      '支持度是衡量商品受欢迎程度的重要指标！关联规则挖掘中，我们通常先设置最小支持度阈值来筛选频繁项集。提升度大于1表示正相关，等于1表示独立，小于1表示负相关。'
+                                    ) : currentProject.id === 1 ? (
+                                      '数据预处理的质量直接影响后续模型的效果！建议在处理前先使用describe()和info()方法探索数据分布，了解数据特征和缺失情况。'
+                                    ) : (
+                                      '实践是最好的学习方式！建议先理解理论知识，再动手实践。遇到问题时，仔细阅读错误信息，逐步排查问题所在。'
+                                    )}
+                                  </p>
+                                </div>
+                              </div>
+                            )}
+                          </motion.div>
+                        )}
+                      </motion.div>
+
+                      {/* 学习目标 */}
+                      <motion.div 
+                        className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.6 }}
+                      >
+                        <button
+                          onClick={() => setExpandedSections({...expandedSections, deliverables: !expandedSections.deliverables})}
+                          className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center shadow-md shadow-green-500/30">
+                              <span className="text-white">🎯</span>
+                            </div>
+                            <div className="text-left">
+                              <h3 className="font-semibold text-gray-800">学习目标</h3>
+                              <p className="text-xs text-gray-500">完成项目后应达到的目标</p>
+                            </div>
+                          </div>
+                          <motion.span 
+                            className="text-gray-400 text-lg"
+                            animate={{ rotate: expandedSections.deliverables ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                          >▼</motion.span>
+                        </button>
+                        {expandedSections.deliverables && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="px-5 pb-5"
+                          >
+                            <div className="space-y-3">
+                              {currentProject.deliverables.map((deliverable, i) => (
+                                <motion.div 
+                                  key={i}
+                                  className="flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-100"
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: i * 0.1 }}
+                                >
+                                  <span className="text-green-500">✅</span>
+                                  <span className="text-gray-700">{deliverable}</span>
+                                </motion.div>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </motion.div>
+
+                      {/* 学习资源 */}
+                      <motion.div 
+                        className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.7 }}
+                      >
+                        <button
+                          onClick={() => setExpandedSections({...expandedSections, resources: !expandedSections.resources})}
+                          className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center shadow-md shadow-indigo-500/30">
+                              <span className="text-white">📚</span>
+                            </div>
+                            <div className="text-left">
+                              <h3 className="font-semibold text-gray-800">学习资源</h3>
+                              <p className="text-xs text-gray-500">扩展学习资料</p>
+                            </div>
+                          </div>
+                          <motion.span 
+                            className="text-gray-400 text-lg"
+                            animate={{ rotate: expandedSections.resources ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                          >▼</motion.span>
+                        </button>
+                        {expandedSections.resources && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="px-5 pb-5"
+                          >
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              {currentProject.learningResources.docs.map((doc, i) => (
+                                <motion.a 
+                                  key={i}
+                                  href="#"
+                                  className="flex items-center gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 border border-indigo-100 hover:shadow-sm hover:border-indigo-300 transition-all cursor-pointer"
+                                  initial={{ opacity: 0, scale: 0.95 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ delay: i * 0.1 }}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    alert(`正在打开：${doc}`);
+                                  }}
+                                >
+                                  <span className="text-indigo-500">📄</span>
+                                  <span className="text-gray-700 text-sm">{doc}</span>
+                                </motion.a>
+                              ))}
+                              {currentProject.learningResources.videos.map((video, i) => (
+                                <motion.a 
+                                  key={i}
+                                  href="#"
+                                  className="flex items-center gap-3 bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-3 border border-red-100 hover:shadow-sm hover:border-red-300 transition-all cursor-pointer"
+                                  initial={{ opacity: 0, scale: 0.95 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ delay: i * 0.1 }}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    alert(`正在打开视频：${video}`);
+                                  }}
+                                >
+                                  <span className="text-red-500">🎥</span>
+                                  <span className="text-gray-700 text-sm">{video}</span>
+                                </motion.a>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </motion.div>
+                    </div>
 
                     {/* 学习任务卡片 */}
                     <motion.div 
@@ -3459,567 +4638,25 @@ export default function DataAnalysisCourse() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="mb-6">
-                      <button
-                        onClick={resetToProjectList}
-                        className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg border border-gray-200 hover:border-blue-500/50 transition-all"
-                      >
-                        <span>←</span>
-                        <span>返回项目列表</span>
-                      </button>
-                    </div>
-
-                    {/* 知识点展示区 */}
-                    <div className="mb-6">
-                      {/* 标题卡片 */}
-                      <div className={`bg-gradient-to-r ${currentProject.color} rounded-2xl p-6 mb-6 shadow-xl shadow-current/20`}>
-                        <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-2">
-                          <span>{currentProject.icon}</span>
-                          <span>{currentProject.title} - 全面学习</span>
-                        </h2>
-                        <p className="text-white/80 text-sm">在开始编写代码之前，先全面掌握相关知识</p>
-                        <div className="flex gap-3 mt-4">
-                          <span className="px-3 py-1 bg-white/20 rounded-full text-white text-xs">
-                            ⏱️ {currentProject.duration}
-                          </span>
-                          <span className={`px-3 py-1 bg-white/20 rounded-full text-white text-xs`}>
-                            {currentProject.difficulty === 'beginner' ? '🎓 入门' : currentProject.difficulty === 'intermediate' ? '📈 进阶' : '🚀 高级'}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* 学习模块卡片 */}
-                      <div className="space-y-4">
-                        {/* 业务场景 */}
-                        <motion.div 
-                          className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <button
-                            onClick={() => setExpandedSections({...expandedSections, business: !expandedSections.business})}
-                            className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md shadow-blue-500/30">
-                                <span className="text-white">📋</span>
-                              </div>
-                              <div className="text-left">
-                                <h3 className="font-semibold text-gray-800">业务场景</h3>
-                                <p className="text-xs text-gray-500">了解项目背景和应用场景</p>
-                              </div>
-                            </div>
-                            <motion.span 
-                              className="text-gray-400 text-lg"
-                              animate={{ rotate: expandedSections.business ? 180 : 0 }}
-                              transition={{ duration: 0.3 }}
-                            >▼</motion.span>
-                          </button>
-                          {expandedSections.business && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="px-5 pb-5"
-                            >
-                              <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-4 border border-blue-100">
-                                <p className="text-gray-700 leading-relaxed">{currentProject.businessScenario}</p>
-                              </div>
-                            </motion.div>
-                          )}
-                        </motion.div>
-
-                        {/* 核心知识点 */}
-                        <motion.div 
-                          className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: 0.1 }}
-                        >
-                          <button
-                            onClick={() => setExpandedSections({...expandedSections, knowledge: !expandedSections.knowledge})}
-                            className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center shadow-md shadow-purple-500/30">
-                                <span className="text-white">💡</span>
-                              </div>
-                              <div className="text-left">
-                                <h3 className="font-semibold text-gray-800">核心知识点</h3>
-                                <p className="text-xs text-gray-500">掌握本项目的关键概念 ({currentProject.coreKnowledge.length}个)</p>
-                              </div>
-                            </div>
-                            <motion.span 
-                              className="text-gray-400 text-lg"
-                              animate={{ rotate: expandedSections.knowledge ? 180 : 0 }}
-                              transition={{ duration: 0.3 }}
-                            >▼</motion.span>
-                          </button>
-                          {expandedSections.knowledge && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="px-5 pb-5"
-                            >
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {currentProject.coreKnowledge.map((knowledge, i) => (
-                                  <motion.div 
-                                    key={i}
-                                    className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100 hover:shadow-sm transition-shadow"
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: i * 0.1 }}
-                                  >
-                                    <p className="text-gray-800 font-medium">{knowledge}</p>
-                                  </motion.div>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </motion.div>
-
-                        {/* 核心指标 */}
-                        <motion.div 
-                          className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: 0.2 }}
-                        >
-                          <button
-                            onClick={() => setExpandedSections({...expandedSections, metrics: !expandedSections.metrics})}
-                            className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center shadow-md shadow-orange-500/30">
-                                <span className="text-white">📊</span>
-                              </div>
-                              <div className="text-left">
-                                <h3 className="font-semibold text-gray-800">核心指标</h3>
-                                <p className="text-xs text-gray-500">理解关键评估指标</p>
-                              </div>
-                            </div>
-                            <motion.span 
-                              className="text-gray-400 text-lg"
-                              animate={{ rotate: expandedSections.metrics ? 180 : 0 }}
-                              transition={{ duration: 0.3 }}
-                            >▼</motion.span>
-                          </button>
-                          {expandedSections.metrics && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="px-5 pb-5"
-                            >
-                              {currentProject.id === 3 ? (
-                                <div className="space-y-4">
-                                  <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-4 border border-orange-100">
-                                    <div className="flex items-center gap-2 mb-2">
-                                      <span className="text-xl">📌</span>
-                                      <h4 className="text-orange-700 font-semibold">支持度 (Support)</h4>
-                                    </div>
-                                    <p className="text-gray-700 text-sm mb-2">衡量商品受欢迎程度的指标</p>
-                                    <div className="bg-white rounded-lg p-3 border border-orange-200">
-                                      <p className="text-gray-800 font-mono text-sm">Support(X→Y) = P(X∪Y)</p>
-                                      <p className="text-gray-600 text-xs mt-1">同时购买X和Y的交易数 / 总交易数</p>
-                                    </div>
-                                  </div>
-                                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
-                                    <div className="flex items-center gap-2 mb-2">
-                                      <span className="text-xl">📌</span>
-                                      <h4 className="text-purple-700 font-semibold">置信度 (Confidence)</h4>
-                                    </div>
-                                    <p className="text-gray-700 text-sm mb-2">表示购买X后购买Y的概率</p>
-                                    <div className="bg-white rounded-lg p-3 border border-purple-200">
-                                      <p className="text-gray-800 font-mono text-sm">Confidence(X→Y) = P(Y|X)</p>
-                                      <p className="text-gray-600 text-xs mt-1">Support(X→Y) / Support(X)</p>
-                                    </div>
-                                  </div>
-                                  <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-4 border border-blue-100">
-                                    <div className="flex items-center gap-2 mb-2">
-                                      <span className="text-xl">📌</span>
-                                      <h4 className="text-blue-700 font-semibold">提升度 (Lift)</h4>
-                                    </div>
-                                    <p className="text-gray-700 text-sm mb-2">表示规则的有效性，大于1表示正相关</p>
-                                    <div className="bg-white rounded-lg p-3 border border-blue-200">
-                                      <p className="text-gray-800 font-mono text-sm">Lift(X→Y) = Confidence(X→Y) / Support(Y)</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              ) : currentProject.id === 1 ? (
-                                <div className="space-y-4">
-                                  <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-4 border border-blue-100">
-                                    <div className="flex items-center gap-2 mb-2">
-                                      <span className="text-xl">📌</span>
-                                      <h4 className="text-blue-700 font-semibold">缺失值处理</h4>
-                                    </div>
-                                    <ul className="text-gray-700 text-sm space-y-1">
-                                      <li>• 删除法（缺失率高时）</li>
-                                      <li>• 均值/中位数填充（数值型）</li>
-                                      <li>• 众数填充（类别型）</li>
-                                      <li>• 插值法、模型预测填充</li>
-                                    </ul>
-                                  </div>
-                                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
-                                    <div className="flex items-center gap-2 mb-2">
-                                      <span className="text-xl">📌</span>
-                                      <h4 className="text-green-700 font-semibold">异常值检测</h4>
-                                    </div>
-                                    <ul className="text-gray-700 text-sm space-y-1">
-                                      <li>• 3σ原则（适用于正态分布）</li>
-                                      <li>• 箱线图法（IQR四分位数间距）</li>
-                                      <li>• Z-score标准化检测</li>
-                                      <li>• DBSCAN聚类检测</li>
-                                    </ul>
-                                  </div>
-                                  <div className="bg-gradient-to-r from-purple-50 to-violet-50 rounded-xl p-4 border border-purple-100">
-                                    <div className="flex items-center gap-2 mb-2">
-                                      <span className="text-xl">📌</span>
-                                      <h4 className="text-purple-700 font-semibold">数据标准化</h4>
-                                    </div>
-                                    <ul className="text-gray-700 text-sm space-y-1">
-                                      <li>• Z-score标准化（均值为0，标准差为1）</li>
-                                      <li>• Min-Max归一化（缩放到[0,1]）</li>
-                                      <li>• MaxAbsScaler（缩放到[-1,1]）</li>
-                                      <li>• RobustScaler（基于中位数和四分位数）</li>
-                                    </ul>
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                                  <p className="text-gray-600 text-sm">本项目的核心指标将在实操过程中逐步介绍...</p>
-                                </div>
-                              )}
-                            </motion.div>
-                          )}
-                        </motion.div>
-
-                        {/* 操作步骤 */}
-                        <motion.div 
-                          className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: 0.3 }}
-                        >
-                          <button
-                            onClick={() => setExpandedSections({...expandedSections, steps: !expandedSections.steps})}
-                            className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className={`w-10 h-10 bg-gradient-to-br ${currentProject.color} rounded-lg flex items-center justify-center shadow-md shadow-current/30`}>
-                                <span className="text-white">🎯</span>
-                              </div>
-                              <div className="text-left">
-                                <h3 className="font-semibold text-gray-800">操作步骤</h3>
-                                <p className="text-xs text-gray-500">分步完成任务 ({currentProject.tasks.length}步)</p>
-                              </div>
-                            </div>
-                            <motion.span 
-                              className="text-gray-400 text-lg"
-                              animate={{ rotate: expandedSections.steps ? 180 : 0 }}
-                              transition={{ duration: 0.3 }}
-                            >▼</motion.span>
-                          </button>
-                          {expandedSections.steps && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="px-5 pb-5"
-                            >
-                              <div className="space-y-4">
-                                {currentProject.tasks.map((task, i) => (
-                                  <motion.div 
-                                    key={i}
-                                    className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-4 border border-gray-100 hover:shadow-sm transition-shadow"
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: i * 0.1 }}
-                                  >
-                                    <div className="flex items-start gap-4">
-                                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${currentProject.color} flex items-center justify-center flex-shrink-0 shadow-lg shadow-current/30`}>
-                                        <span className="text-white font-bold text-lg">{i + 1}</span>
-                                      </div>
-                                      <div className="flex-1">
-                                        <p className="text-gray-800 font-medium mb-2">{task}</p>
-                                        {currentProject.taskHints[i] && (
-                                          <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-3 border border-blue-100">
-                                            <div className="flex items-center gap-2 mb-1">
-                                              <span className="text-blue-500">💡</span>
-                                              <span className="text-blue-600 text-xs font-semibold">操作提示</span>
-                                            </div>
-                                            <p className="text-gray-600 text-sm">{currentProject.taskHints[i]}</p>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </motion.div>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </motion.div>
-
-                        {/* 常见陷阱 */}
-                        <motion.div 
-                          className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: 0.4 }}
-                        >
-                          <button
-                            onClick={() => setExpandedSections({...expandedSections, pitfalls: !expandedSections.pitfalls})}
-                            className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-rose-500 rounded-lg flex items-center justify-center shadow-md shadow-red-500/30">
-                                <span className="text-white">⚠️</span>
-                              </div>
-                              <div className="text-left">
-                                <h3 className="font-semibold text-gray-800">常见陷阱</h3>
-                                <p className="text-xs text-gray-500">避免常见错误和误区</p>
-                              </div>
-                            </div>
-                            <motion.span 
-                              className="text-gray-400 text-lg"
-                              animate={{ rotate: expandedSections.pitfalls ? 180 : 0 }}
-                              transition={{ duration: 0.3 }}
-                            >▼</motion.span>
-                          </button>
-                          {expandedSections.pitfalls && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="px-5 pb-5"
-                            >
-                              <div className="space-y-3">
-                                {currentProject.pitfalls.map((pitfall, i) => (
-                                  <motion.div 
-                                    key={i}
-                                    className="bg-gradient-to-r from-red-50 to-rose-50 rounded-xl p-4 border border-red-100"
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: i * 0.1 }}
-                                  >
-                                    <div className="flex items-start gap-2">
-                                      <span className="text-red-500 mt-0.5">✗</span>
-                                      <p className="text-red-700">{pitfall}</p>
-                                    </div>
-                                  </motion.div>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </motion.div>
-
-                        {/* 小贴士 */}
-                        <motion.div 
-                          className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: 0.5 }}
-                        >
-                          <button
-                            onClick={() => setExpandedSections({...expandedSections, tips: !expandedSections.tips})}
-                            className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-lg flex items-center justify-center shadow-md shadow-yellow-500/30">
-                                <span className="text-white">💬</span>
-                              </div>
-                              <div className="text-left">
-                                <h3 className="font-semibold text-gray-800">小贴士</h3>
-                                <p className="text-xs text-gray-500">实用学习建议</p>
-                              </div>
-                            </div>
-                            <motion.span 
-                              className="text-gray-400 text-lg"
-                              animate={{ rotate: expandedSections.tips ? 180 : 0 }}
-                              transition={{ duration: 0.3 }}
-                            >▼</motion.span>
-                          </button>
-                          {expandedSections.tips && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="px-5 pb-5"
-                            >
-                              <div className="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl p-4 border border-yellow-100">
-                                <div className="flex items-start gap-3">
-                                  <span className="text-yellow-500 text-2xl">💡</span>
-                                  <p className="text-gray-700 text-sm">
-                                    {currentProject.id === 3 ? (
-                                      '支持度是衡量商品受欢迎程度的重要指标！关联规则挖掘中，我们通常先设置最小支持度阈值来筛选频繁项集。提升度大于1表示正相关，等于1表示独立，小于1表示负相关。'
-                                    ) : currentProject.id === 1 ? (
-                                      '数据预处理的质量直接影响后续模型的效果！建议在处理前先使用describe()和info()方法探索数据分布，了解数据特征和缺失情况。'
-                                    ) : (
-                                      '实践是最好的学习方式！建议先理解理论知识，再动手实践。遇到问题时，仔细阅读错误信息，逐步排查问题所在。'
-                                    )}
-                                  </p>
-                                </div>
-                              </div>
-                            </motion.div>
-                          )}
-                        </motion.div>
-
-                        {/* 学习目标 */}
-                        <motion.div 
-                          className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: 0.6 }}
-                        >
-                          <button
-                            onClick={() => setExpandedSections({...expandedSections, deliverables: !expandedSections.deliverables})}
-                            className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center shadow-md shadow-green-500/30">
-                                <span className="text-white">🎯</span>
-                              </div>
-                              <div className="text-left">
-                                <h3 className="font-semibold text-gray-800">学习目标</h3>
-                                <p className="text-xs text-gray-500">完成项目后应达到的目标</p>
-                              </div>
-                            </div>
-                            <motion.span 
-                              className="text-gray-400 text-lg"
-                              animate={{ rotate: expandedSections.deliverables ? 180 : 0 }}
-                              transition={{ duration: 0.3 }}
-                            >▼</motion.span>
-                          </button>
-                          {expandedSections.deliverables && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="px-5 pb-5"
-                            >
-                              <div className="space-y-3">
-                                {currentProject.deliverables.map((deliverable, i) => (
-                                  <motion.div 
-                                    key={i}
-                                    className="flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-100"
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: i * 0.1 }}
-                                  >
-                                    <span className="text-green-500">✅</span>
-                                    <span className="text-gray-700">{deliverable}</span>
-                                  </motion.div>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </motion.div>
-
-                        {/* 学习资源 */}
-                        <motion.div 
-                          className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: 0.7 }}
-                        >
-                          <button
-                            onClick={() => setExpandedSections({...expandedSections, resources: !expandedSections.resources})}
-                            className="w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center shadow-md shadow-indigo-500/30">
-                                <span className="text-white">📚</span>
-                              </div>
-                              <div className="text-left">
-                                <h3 className="font-semibold text-gray-800">学习资源</h3>
-                                <p className="text-xs text-gray-500">扩展学习资料</p>
-                              </div>
-                            </div>
-                            <motion.span 
-                              className="text-gray-400 text-lg"
-                              animate={{ rotate: expandedSections.resources ? 180 : 0 }}
-                              transition={{ duration: 0.3 }}
-                            >▼</motion.span>
-                          </button>
-                          {expandedSections.resources && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="px-5 pb-5"
-                            >
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {currentProject.learningResources.docs.map((doc, i) => (
-                                  <motion.a 
-                                    key={i}
-                                    href="#"
-                                    className="flex items-center gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 border border-indigo-100 hover:shadow-sm hover:border-indigo-300 transition-all cursor-pointer"
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: i * 0.1 }}
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      alert(`正在打开：${doc}`);
-                                    }}
-                                  >
-                                    <span className="text-indigo-500">📄</span>
-                                    <span className="text-gray-700 text-sm">{doc}</span>
-                                  </motion.a>
-                                ))}
-                                {currentProject.learningResources.videos.map((video, i) => (
-                                  <motion.a 
-                                    key={i}
-                                    href="#"
-                                    className="flex items-center gap-3 bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-3 border border-red-100 hover:shadow-sm hover:border-red-300 transition-all cursor-pointer"
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: i * 0.1 }}
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      alert(`正在打开视频：${video}`);
-                                    }}
-                                  >
-                                    <span className="text-red-500">🎥</span>
-                                    <span className="text-gray-700 text-sm">{video}</span>
-                                  </motion.a>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </motion.div>
-
-                        {/* 进入实操按钮 */}
-                        {!showPracticeEditor && (
-                          <motion.div 
-                            className="flex justify-center pt-6"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.8 }}
-                          >
-                            <button
-                              onClick={() => setShowPracticeEditor(true)}
-                              className="px-10 py-4 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 rounded-xl font-semibold hover:opacity-90 transition-all text-white text-lg flex items-center gap-3 shadow-xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-105"
-                            >
-                              <span className="text-xl">💻</span>
-                              <span>开始编写代码</span>
-                            </button>
-                          </motion.div>
-                        )}
+                    {/* 标题卡片 */}
+                    <div className={`bg-gradient-to-r ${currentProject.color} rounded-2xl p-6 mb-6 shadow-xl shadow-current/20`}>
+                      <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-2">
+                        <span>{currentProject.icon}</span>
+                        <span>{currentProject.title} - 实操练习</span>
+                      </h2>
+                      <p className="text-white/80 text-sm">完成代码编写并运行测试</p>
+                      <div className="flex gap-3 mt-4">
+                        <span className="px-3 py-1 bg-white/20 rounded-full text-white text-xs">
+                          ⏱️ {currentProject.duration}
+                        </span>
+                        <span className={`px-3 py-1 bg-white/20 rounded-full text-white text-xs`}>
+                          {currentProject.difficulty === 'beginner' ? '🎓 入门' : currentProject.difficulty === 'intermediate' ? '📈 进阶' : '🚀 高级'}
+                        </span>
                       </div>
                     </div>
 
                     {/* 代码编辑器区域 - 点击后显示 */}
-                    {showPracticeEditor && (
+                    {showPracticeEditor ? (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
@@ -4038,7 +4675,7 @@ export default function DataAnalysisCourse() {
                               onClick={() => setShowPracticeEditor(false)}
                               className="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-700 text-sm font-medium transition-all"
                             >
-                              返回知识点
+                              返回学习
                             </button>
                             <button 
                               onClick={runCode}
@@ -4076,6 +4713,11 @@ export default function DataAnalysisCourse() {
                                     </span>
                                     <span className="text-sm text-gray-700">{task}</span>
                                   </div>
+                                  {currentProject.taskHints[i] && (
+                                    <div className="mt-2 p-2 bg-blue-50 rounded text-xs text-blue-600 border border-blue-100">
+                                      💡 {currentProject.taskHints[i].split('。')[0]}...
+                                    </div>
+                                  )}
                                 </li>
                               ))}
                             </ul>
@@ -4134,6 +4776,26 @@ export default function DataAnalysisCourse() {
                           </div>
                         </div>
                       </motion.div>
+                    ) : (
+                      <motion.div 
+                        className="flex flex-col items-center justify-center py-16"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <div className={`w-24 h-24 bg-gradient-to-br ${currentProject.color} rounded-2xl flex items-center justify-center shadow-xl shadow-current/30 mb-6`}>
+                          <span className="text-4xl">💻</span>
+                        </div>
+                        <h2 className="text-2xl font-semibold text-gray-800 mb-2">准备开始实操</h2>
+                        <p className="text-gray-500 mb-8">在开始编写代码前，请确保已完成学习阶段的所有内容</p>
+                        <button
+                          onClick={() => setShowPracticeEditor(true)}
+                          className="px-10 py-4 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 rounded-xl font-semibold hover:opacity-90 transition-all text-white text-lg flex items-center gap-3 shadow-xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-105"
+                        >
+                          <span className="text-xl">💻</span>
+                          <span>开始编写代码</span>
+                        </button>
+                      </motion.div>
                     )}
 
                     {/* 完成实操按钮 */}
@@ -4164,9 +4826,22 @@ export default function DataAnalysisCourse() {
                         <span>←</span>
                         <span>返回项目列表</span>
                       </button>
+                      {/* 倒计时器 */}
+                      {!showResults && (
+                        <div className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${timeLeft <= 60 ? 'bg-red-50 border-red-200 text-red-600' : 'bg-blue-50 border-blue-200 text-blue-600'}`}>
+                          <span className="text-lg">⏱️</span>
+                          <span className="font-mono font-bold text-lg">{formatTime(timeLeft)}</span>
+                          <span className="text-xs">剩余时间</span>
+                        </div>
+                      )}
                     </div>
                     <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-                      <h2 className="text-xl font-semibold mb-4 text-gray-900">测试题目</h2>
+                      <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-xl font-semibold text-gray-900">测试题目</h2>
+                        {!showResults && (
+                          <span className="text-sm text-gray-500">共 {(randomQuestions.length > 0 ? randomQuestions : currentProject.questions).length} 题</span>
+                        )}
+                      </div>
                       <div className="space-y-6">
                         {(randomQuestions.length > 0 ? randomQuestions : currentProject.questions).map((question, index) => {
                           const userAnswer = testAnswers[question.id];
