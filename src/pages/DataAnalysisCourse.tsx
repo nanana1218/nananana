@@ -2800,7 +2800,6 @@ export default function DataAnalysisCourse() {
         setTimeLeft((prev) => prev - 1);
       }, 1000);
     } else if (timeLeft === 0 && timerActive) {
-      // 时间到，自动提交
       setTimerActive(false);
       submitTest();
     }
@@ -2850,14 +2849,14 @@ export default function DataAnalysisCourse() {
     
     // 模拟代码执行
     setTimeout(() => {
-      const currentProject = getCurrentProject();
-      if (!currentProject) return;
+      const project = getCurrentProject();
+      if (!project) return;
       
       let score = 0;
       const completed = [];
       
       // 根据不同项目进行特定的错误检测和评分
-      switch (currentProject.id) {
+      switch (project.id) {
         case 1: // 数据预处理高阶班
           if (!userCode.includes('import pandas as pd')) {
             setErrorMessage('错误：缺少导入 pandas 库的代码');
@@ -3221,6 +3220,59 @@ export default function DataAnalysisCourse() {
 
   const currentProject = getCurrentProject();
 
+  // 互动功能：筛选和搜索
+  const [filterDifficulty, setFilterDifficulty] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const [animatedProjects, setAnimatedProjects] = useState<number[]>([]);
+
+  // 筛选后的项目列表
+  const filteredProjects = projects.filter(project => {
+    const matchesDifficulty = filterDifficulty === 'all' || project.difficulty === filterDifficulty;
+    const matchesSearch = searchTerm === '' || 
+      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.coreKnowledge.some(k => k.toLowerCase().includes(searchTerm.toLowerCase()));
+    return matchesDifficulty && matchesSearch;
+  });
+
+  // 计算学习统计数据
+  const completedCount = Object.values(learningState.projectProgress).filter(p => p.testScore !== null).length;
+  const totalProjects = projects.length;
+  const completionRate = Math.round((completedCount / totalProjects) * 100);
+
+  // 键盘快捷键
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (currentProject) return;
+      
+      if (e.key >= '1' && e.key <= '9') {
+        const index = parseInt(e.key) - 1;
+        if (index < filteredProjects.length) {
+          selectProject(filteredProjects[index].id);
+        }
+      }
+      
+      if (e.key === 'Escape') {
+        setSearchTerm('');
+        setFilterDifficulty('all');
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [currentProject, filteredProjects]);
+
+  // 入场动画
+  useEffect(() => {
+    if (!currentProject) {
+      const timer = setTimeout(() => {
+        setAnimatedProjects(projects.map(p => p.id));
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [currentProject]);
+
   return (
     <div className="min-h-screen bg-white text-gray-900 relative overflow-hidden">
       {/* 背景效果 */}
@@ -3311,72 +3363,217 @@ export default function DataAnalysisCourse() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                {/* 精选项目标题 */}
-                <div className="mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">精选项目</h2>
-                  <p className="text-gray-500">选择一个项目开始你的学习之旅</p>
-                  <p className="text-sm text-gray-400 mt-1">共 {projects.length} 个项目</p>
+                {/* 学习进度统计面板 */}
+                <div className="mb-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-6 text-white shadow-lg">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div>
+                      <h2 className="text-2xl font-bold mb-1">📊 我的学习进度</h2>
+                      <p className="text-white/80">持续学习，稳步提升数据分析能力</p>
+                    </div>
+                    <div className="flex items-center gap-6">
+                      <div className="text-center">
+                        <div className="text-3xl font-bold">{completedCount}</div>
+                        <div className="text-sm text-white/70">已完成</div>
+                      </div>
+                      <div className="w-px h-12 bg-white/30"></div>
+                      <div className="text-center">
+                        <div className="text-3xl font-bold">{totalProjects - completedCount}</div>
+                        <div className="text-sm text-white/70">待完成</div>
+                      </div>
+                      <div className="w-px h-12 bg-white/30"></div>
+                      <div className="text-center">
+                        <div className="text-3xl font-bold">{completionRate}%</div>
+                        <div className="text-sm text-white/70">完成率</div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* 进度条 */}
+                  <div className="mt-4 bg-white/20 rounded-full h-2 overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${completionRate}%` }}
+                      transition={{ duration: 1, ease: "easeOut" }}
+                      className="bg-white rounded-full h-full"
+                    />
+                  </div>
+                </div>
+
+                {/* 搜索和筛选区域 */}
+                <div className="mb-6 flex flex-col md:flex-row gap-4">
+                  {/* 搜索框 */}
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      placeholder="🔍 搜索项目名称或关键词..."
+                      className="w-full px-4 py-3 pl-12 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all shadow-sm"
+                    />
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
+                      🔍
+                    </span>
+                    {searchTerm && (
+                      <button
+                        onClick={() => setSearchTerm('')}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+
+                  {/* 难度筛选按钮 */}
+                  <div className="flex gap-2 flex-wrap">
+                    {[
+                      { key: 'all', label: '全部', color: 'bg-gray-500' },
+                      { key: 'beginner', label: '入门', color: 'bg-green-500' },
+                      { key: 'intermediate', label: '进阶', color: 'bg-yellow-500' },
+                      { key: 'advanced', label: '高级', color: 'bg-red-500' }
+                    ].map((filter) => (
+                      <button
+                        key={filter.key}
+                        onClick={() => setFilterDifficulty(filter.key as any)}
+                        className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                          filterDifficulty === filter.key
+                            ? `${filter.color} text-white shadow-md`
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        }`}
+                      >
+                        {filter.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 筛选结果信息 */}
+                <div className="mb-4 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">精选项目</h3>
+                    <p className="text-sm text-gray-500">
+                      {filteredProjects.length} 个项目可用
+                      {filterDifficulty !== 'all' && ` · ${filterDifficulty === 'beginner' ? '入门' : filterDifficulty === 'intermediate' ? '进阶' : '高级'}难度`}
+                      {searchTerm && ` · 搜索: "${searchTerm}"`}
+                    </p>
+                  </div>
+                  {(filterDifficulty !== 'all' || searchTerm) && (
+                    <button
+                      onClick={() => {
+                        setFilterDifficulty('all');
+                        setSearchTerm('');
+                      }}
+                      className="text-sm text-blue-500 hover:text-blue-600 font-medium"
+                    >
+                      清除筛选 ✕
+                    </button>
+                  )}
                 </div>
                 
                 {/* 项目列表 - 2列网格布局 */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {projects.map((project) => {
-                    const progress = learningState.projectProgress[project.id];
-                    const isCompleted = progress?.learnCompleted && progress?.practiceCompleted && progress?.testScore !== null;
-                    
-                    return (
-                      <motion.div
-                        key={project.id}
-                        whileHover={{ scale: 1.02, y: -2 }}
-                        className={`bg-white rounded-2xl border ${isCompleted ? 'border-green-500/50' : 'border-gray-200'} overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 cursor-pointer`}
-                        onClick={() => selectProject(project.id)}
-                      >
-                        <div className="p-6">
-                          <div className="flex items-start gap-4">
-                            {/* 左侧图标 */}
-                            <div className={`w-14 h-14 bg-gradient-to-br ${project.color} rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-md`}>
-                              {project.icon}
-                            </div>
-                            
-                            {/* 右侧内容 */}
-                            <div className="flex-1 min-w-0">
-                              {/* 难度和时长 */}
-                              <div className="flex items-center gap-2 mb-2">
-                                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${project.difficulty === 'beginner' ? 'bg-green-100 text-green-600' : project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}`}>
-                                  {project.difficulty === 'beginner' ? '入门' : project.difficulty === 'intermediate' ? '进阶' : '高级'}
-                                </span>
-                                <span className="text-sm text-gray-500">{project.duration}</span>
+                {filteredProjects.length === 0 ? (
+                  <div className="text-center py-16 bg-gray-50 rounded-2xl">
+                    <div className="text-6xl mb-4">🔍</div>
+                    <h3 className="text-xl font-semibold text-gray-800 mb-2">没有找到匹配的项目</h3>
+                    <p className="text-gray-500 mb-4">尝试调整搜索条件或筛选器</p>
+                    <button
+                      onClick={() => {
+                        setFilterDifficulty('all');
+                        setSearchTerm('');
+                      }}
+                      className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    >
+                      显示全部项目
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {filteredProjects.map((project, index) => {
+                      const progress = learningState.projectProgress[project.id];
+                      const isCompleted = progress?.learnCompleted && progress?.practiceCompleted && progress?.testScore !== null;
+                      const isHovered = hoveredProject === project.id;
+                      const isAnimated = animatedProjects.includes(project.id);
+                      
+                      return (
+                        <motion.div
+                          key={project.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: isAnimated ? 1 : 0, y: isAnimated ? 0 : 20 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                          whileHover={{ scale: 1.02, y: -4 }}
+                          onHoverStart={() => setHoveredProject(project.id)}
+                          onHoverEnd={() => setHoveredProject(null)}
+                          className={`bg-white rounded-2xl border ${isCompleted ? 'border-green-500/50' : 'border-gray-200'} overflow-hidden transition-all duration-300 cursor-pointer ${
+                            isHovered ? 'shadow-xl shadow-blue-500/20' : 'shadow-sm hover:shadow-lg'
+                          }`}
+                          onClick={() => selectProject(project.id)}
+                        >
+                          <div className="p-6">
+                            <div className="flex items-start gap-4">
+                              {/* 左侧图标 */}
+                              <div className={`relative w-14 h-14 bg-gradient-to-br ${project.color} rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-md ${
+                                isHovered ? 'scale-110' : ''
+                              } transition-transform duration-300`}>
+                                {project.icon}
+                                {/* 快捷键提示 */}
+                                {index < 9 && (
+                                  <div className={`absolute -top-2 -right-2 w-5 h-5 bg-gray-800 text-white text-xs rounded-full flex items-center justify-center font-bold transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+                                    {index + 1}
+                                  </div>
+                                )}
+                                {/* 完成徽章 */}
+                                {isCompleted && (
+                                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm">
+                                    ✓
+                                  </div>
+                                )}
                               </div>
                               
-                              {/* 标题 */}
-                              <h3 className="text-lg font-semibold text-gray-900 mb-1">{project.title}</h3>
-                              
-                              {/* 描述 */}
-                              <p className="text-gray-500 text-sm mb-3 line-clamp-2">{project.description}</p>
-                              
-                              {/* 数据集和按钮 */}
-                              <div className="flex items-center justify-between">
-                                <span className="text-xs text-gray-400 flex items-center gap-1">
-                                  <span>📁</span>
-                                  <span>{project.dataset}</span>
-                                </span>
-                                <button
-                                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 rounded-lg text-sm font-medium text-white transition-all shadow-sm hover:shadow-md"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    selectProject(project.id);
-                                  }}
-                                >
-                                  开始学习
-                                </button>
+                              {/* 右侧内容 */}
+                              <div className="flex-1 min-w-0">
+                                {/* 难度和时长 */}
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${project.difficulty === 'beginner' ? 'bg-green-100 text-green-600' : project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}`}>
+                                    {project.difficulty === 'beginner' ? '入门' : project.difficulty === 'intermediate' ? '进阶' : '高级'}
+                                  </span>
+                                  <span className="text-sm text-gray-500">{project.duration}</span>
+                                  {isCompleted && (
+                                    <span className="text-xs text-green-600 font-medium">✅ 已完成</span>
+                                  )}
+                                </div>
+                                
+                                {/* 标题 */}
+                                <h3 className="text-lg font-semibold text-gray-900 mb-1">{project.title}</h3>
+                                
+                                {/* 描述 */}
+                                <p className="text-gray-500 text-sm mb-3 line-clamp-2">{project.description}</p>
+                                
+                                {/* 数据集和按钮 */}
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs text-gray-400 flex items-center gap-1">
+                                    <span>📁</span>
+                                    <span>{project.dataset}</span>
+                                  </span>
+                                  <button
+                                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-sm ${
+                                      isCompleted
+                                        ? 'bg-green-500 hover:bg-green-600 text-white'
+                                        : 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white'
+                                    } ${isHovered ? 'scale-105 shadow-md' : ''}`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      selectProject(project.id);
+                                    }}
+                                  >
+                                    {isCompleted ? '重新学习' : '开始学习'}
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-                </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                )}
                 
                 {/* 底部行动号召 */}
                 <div className="mt-12 text-center py-8 px-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border border-gray-200">
