@@ -90,7 +90,7 @@ interface Project {
   businessScenario: string;
   tasks: string[];
   taskHints: string[];
-  taskCode?: string[];
+  taskExamples?: string[];
   pitfalls: string[];
   deliverables: string[];
   codeExample: string;
@@ -185,12 +185,12 @@ const projects: Project[] = [
       '第四步：使用 pd.qcut() 对消费金额进行分桶，使用 pd.cut() 对浏览时长进行离散化',
       '第五步：使用 StandardScaler 对数值型特征进行标准化，使用 df.to_csv() 保存处理后的数据'
     ],
-    taskCode: [
-      'import pandas as pd\nimport numpy as np\ndf = pd.read_csv("user_behavior.csv")\nprint(df.head())',
-      '# 数值型缺失值用中位数填充\ndf["消费金额"] = df["消费金额"].fillna(df["消费金额"].median())\n# 类别型缺失值用"未知"填充\ndf["性别"] = df["性别"].fillna("未知")',
-      '# 3σ原则处理异常值\nmean = df["消费金额"].mean()\nstd = df["消费金额"].std()\nlower = mean - 3 * std\nupper = mean + 3 * std\ndf = df[(df["消费金额"] >= lower) & (df["消费金额"] <= upper)]',
-      '# 特征分桶\ndf["消费等级"] = pd.qcut(df["消费金额"], 3, labels=["低", "中", "高"])\n# 类别编码\nfrom sklearn.preprocessing import LabelEncoder\nle = LabelEncoder()\ndf["性别编码"] = le.fit_transform(df["性别"])',
-      '# 数据标准化\nfrom sklearn.preprocessing import StandardScaler\nscaler = StandardScaler()\ndf[["消费金额_scaled"]] = scaler.fit_transform(df[["消费金额"]])\n# 保存数据\ndf.to_csv("processed.csv", index=False)'
+    taskExamples: [
+      'import pandas as pd\nimport numpy as np\nfrom sklearn.preprocessing import StandardScaler\n\ndf = pd.read_csv("user_behavior.csv")\nprint(df.head())',
+      '# 数值型字段用中位数填充\nnum_cols = ["amount", "frequency"]\ndf[num_cols] = df[num_cols].fillna(df[num_cols].median())\n\n# 类别型字段用"未知"填充\ncat_cols = ["gender", "region"]\ndf[cat_cols] = df[cat_cols].fillna("未知")',
+      '# 使用3σ原则处理异常值\nfor col in num_cols:\n    mean = df[col].mean()\n    std = df[col].std()\n    lower = mean - 3 * std\n    upper = mean + 3 * std\n    df[col] = np.where((df[col] < lower) | (df[col] > upper), df[col].median(), df[col])',
+      '# 消费金额分桶（5个区间）\ndf["amount_bin"] = pd.qcut(df["amount"], 5, labels=["低", "较低", "中", "较高", "高"])\n\n# 浏览时长离散化\ndf["duration_cat"] = pd.cut(df["duration"], bins=[0, 30, 60, 120, 300], labels=["短", "中", "较长", "长"])\n\n# 类别编码\nfrom sklearn.preprocessing import LabelEncoder\nle = LabelEncoder()\ndf["gender_encoded"] = le.fit_transform(df["gender"])',
+      '# 数据标准化\nscaler = StandardScaler()\ndf[num_cols] = scaler.fit_transform(df[num_cols])\n\n# 保存处理后的数据\ndf.to_csv("processed_data.csv", index=False)\nprint("数据处理完成！")'
     ],
     pitfalls: [
       '用均值填充含异常值的字段（导致数据失真）',
@@ -2866,8 +2866,10 @@ export default function DataAnalysisCourse() {
     right: 320
   });
   const [isDragging, setIsDragging] = useState<'left' | 'right' | null>(null);
-  const [showDatasetPreview, setShowDatasetPreview] = useState(true);
-  const [showTaskList, setShowTaskList] = useState(true);
+  const [collapsedSections, setCollapsedSections] = useState({
+    dataset: false,
+    tasks: false
+  });
   const [expandedSections, setExpandedSections] = useState({
     overview: true,
     knowledge: true,
@@ -5348,115 +5350,114 @@ export default function DataAnalysisCourse() {
                             className="bg-gray-50 border-r border-gray-200 flex flex-col overflow-hidden"
                             style={{ width: `${panelSizes.left}px` }}
                           >
-                            {/* 数据集预览 - 可收起 */}
-                            <div className="p-4 border-b border-gray-200 bg-white">
+                            {/* 数据集预览 */}
+                            <div className="border-b border-gray-200 bg-white">
                               <button
-                                onClick={() => setShowDatasetPreview(!showDatasetPreview)}
-                                className="w-full flex items-center justify-between text-md font-semibold mb-3 text-gray-800 hover:text-blue-600 transition-colors"
+                                onClick={() => setCollapsedSections(prev => ({ ...prev, dataset: !prev.dataset }))}
+                                className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                               >
-                                <div className="flex items-center gap-2">
+                                <h3 className="text-md font-semibold text-gray-800 flex items-center gap-2">
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
                                   </svg>
                                   数据集预览
-                                </div>
+                                </h3>
                                 <svg 
-                                  className={`w-4 h-4 transition-transform ${showDatasetPreview ? '' : 'rotate-180'}`} 
+                                  className={`w-5 h-5 text-gray-500 transition-transform ${collapsedSections.dataset ? 'rotate-180' : ''}`} 
                                   fill="none" 
                                   stroke="currentColor" 
                                   viewBox="0 0 24 24"
                                 >
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                                 </svg>
                               </button>
-                              {showDatasetPreview && (
-                              <div className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
-                                <div className="bg-gray-100 px-3 py-2 border-b border-gray-200">
-                                  <span className="text-sm font-medium text-gray-700">{currentProject.dataset}</span>
-                                </div>
-                                <div className="overflow-x-auto">
-                                  <table className="w-full text-xs">
-                                    <thead>
-                                      <tr className="bg-gray-50">
-                                        {getDatasetPreview(currentProject.dataset).columns.map((col, i) => (
-                                          <th key={i} className="px-3 py-2 text-left font-medium text-gray-600 truncate max-w-[80px]">
-                                            {col}
-                                          </th>
-                                        ))}
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {getDatasetPreview(currentProject.dataset).rows.map((row, i) => (
-                                        <tr key={i} className="border-t border-gray-100 hover:bg-blue-50">
-                                          {row.map((cell, j) => (
-                                            <td key={j} className="px-3 py-2 text-gray-700 truncate max-w-[80px]">
-                                              {cell}
-                                            </td>
+                              {!collapsedSections.dataset && (
+                                <div className="px-4 pb-4">
+                                  <div className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
+                                    <div className="bg-gray-100 px-3 py-2 border-b border-gray-200">
+                                      <span className="text-sm font-medium text-gray-700">{currentProject.dataset}</span>
+                                    </div>
+                                    <div className="overflow-x-auto">
+                                      <table className="w-full text-xs">
+                                        <thead>
+                                          <tr className="bg-gray-50">
+                                            {getDatasetPreview(currentProject.dataset).columns.map((col, i) => (
+                                              <th key={i} className="px-3 py-2 text-left font-medium text-gray-600 truncate max-w-[80px]">
+                                                {col}
+                                              </th>
+                                            ))}
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {getDatasetPreview(currentProject.dataset).rows.map((row, i) => (
+                                            <tr key={i} className="border-t border-gray-100 hover:bg-blue-50">
+                                              {row.map((cell, j) => (
+                                                <td key={j} className="px-3 py-2 text-gray-700 truncate max-w-[80px]">
+                                                  {cell}
+                                                </td>
+                                              ))}
+                                            </tr>
                                           ))}
-                                        </tr>
-                                      ))}
-                                    </tbody>
-                                  </table>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <div className="bg-gray-50 px-3 py-2 text-center">
+                                      <span className="text-xs text-gray-500">显示前 5 行数据</span>
+                                    </div>
+                                  </div>
                                 </div>
-                                <div className="bg-gray-50 px-3 py-2 text-center">
-                                  <span className="text-xs text-gray-500">显示前 5 行数据</span>
-                                </div>
-                              </div>
                               )}
                             </div>
                             
-                            {/* 任务清单 - 可收起 */}
-                            <div className="flex-1 p-4 overflow-y-auto">
+                            {/* 任务清单 */}
+                            <div className="flex-1 overflow-y-auto">
                               <button
-                                onClick={() => setShowTaskList(!showTaskList)}
-                                className="w-full flex items-center justify-between text-md font-semibold mb-3 text-gray-800 hover:text-blue-600 transition-colors"
+                                onClick={() => setCollapsedSections(prev => ({ ...prev, tasks: !prev.tasks }))}
+                                className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                               >
-                                <div className="flex items-center gap-2">
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                                  </svg>
-                                  任务清单
-                                </div>
+                                <h3 className="text-md font-semibold text-gray-800">任务清单</h3>
                                 <svg 
-                                  className={`w-4 h-4 transition-transform ${showTaskList ? '' : 'rotate-180'}`} 
+                                  className={`w-5 h-5 text-gray-500 transition-transform ${collapsedSections.tasks ? 'rotate-180' : ''}`} 
                                   fill="none" 
                                   stroke="currentColor" 
                                   viewBox="0 0 24 24"
                                 >
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                                 </svg>
                               </button>
-                              {showTaskList && (
-                              <ul className="space-y-2">
-                                {currentProject.tasks.map((task, i) => (
-                                  <li key={i} className="bg-white rounded-lg p-3 border border-gray-100 hover:border-blue-200 transition-all">
-                                    <div className="flex items-start gap-2">
-                                      <span className={`w-6 h-6 rounded-full bg-gradient-to-br ${currentProject.color} flex items-center justify-center flex-shrink-0 text-white text-xs font-medium`}>
-                                        {i + 1}
-                                      </span>
-                                      <span className="text-sm text-gray-700">{task}</span>
-                                    </div>
-                                    {currentProject.taskHints[i] && (
-                                      <div className="mt-2 p-2 bg-blue-50 rounded text-xs text-blue-600 border border-blue-100">
-                                        💡 {currentProject.taskHints[i].split('。')[0]}...
-                                      </div>
-                                    )}
-                                    {currentProject.taskCode[i] && (
-                                      <div className="mt-2">
-                                        <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
-                                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                                          </svg>
-                                          示例代码
+                              {!collapsedSections.tasks && (
+                                <div className="px-4 pb-4">
+                                  <ul className="space-y-3">
+                                    {currentProject.tasks.map((task, i) => (
+                                      <li key={i} className="bg-white rounded-lg p-3 border border-gray-100 hover:border-blue-200 transition-all">
+                                        <div className="flex items-start gap-2">
+                                          <span className={`w-6 h-6 rounded-full bg-gradient-to-br ${currentProject.color} flex items-center justify-center flex-shrink-0 text-white text-xs font-medium`}>
+                                            {i + 1}
+                                          </span>
+                                          <span className="text-sm text-gray-700">{task}</span>
                                         </div>
-                                        <pre className="bg-gray-800 text-green-400 text-xs p-2 rounded overflow-x-auto text-wrap">
-                                          <code>{currentProject.taskCode[i]}</code>
-                                        </pre>
-                                      </div>
-                                    )}
-                                  </li>
-                                ))}
-                              </ul>
+                                        {currentProject.taskHints[i] && (
+                                          <div className="mt-2 p-2 bg-blue-50 rounded text-xs text-blue-600 border border-blue-100">
+                                            💡 {currentProject.taskHints[i]}
+                                          </div>
+                                        )}
+                                        {currentProject.taskExamples && currentProject.taskExamples[i] && (
+                                          <div className="mt-2">
+                                            <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
+                                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                              </svg>
+                                              示例代码
+                                            </div>
+                                            <pre className="bg-gray-900 text-green-400 text-xs p-2 rounded overflow-x-auto font-mono">
+                                              {currentProject.taskExamples[i]}
+                                            </pre>
+                                          </div>
+                                        )}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
                               )}
                             </div>
                           </div>
