@@ -90,6 +90,7 @@ interface Project {
   businessScenario: string;
   tasks: string[];
   taskHints: string[];
+  taskCode?: string[];
   pitfalls: string[];
   deliverables: string[];
   codeExample: string;
@@ -183,6 +184,13 @@ const projects: Project[] = [
       '第三步：使用 3σ原则（mean ± 3*std）识别并处理异常值，用中位数替换异常值',
       '第四步：使用 pd.qcut() 对消费金额进行分桶，使用 pd.cut() 对浏览时长进行离散化',
       '第五步：使用 StandardScaler 对数值型特征进行标准化，使用 df.to_csv() 保存处理后的数据'
+    ],
+    taskCode: [
+      'import pandas as pd\nimport numpy as np\ndf = pd.read_csv("user_behavior.csv")\nprint(df.head())',
+      '# 数值型缺失值用中位数填充\ndf["消费金额"] = df["消费金额"].fillna(df["消费金额"].median())\n# 类别型缺失值用"未知"填充\ndf["性别"] = df["性别"].fillna("未知")',
+      '# 3σ原则处理异常值\nmean = df["消费金额"].mean()\nstd = df["消费金额"].std()\nlower = mean - 3 * std\nupper = mean + 3 * std\ndf = df[(df["消费金额"] >= lower) & (df["消费金额"] <= upper)]',
+      '# 特征分桶\ndf["消费等级"] = pd.qcut(df["消费金额"], 3, labels=["低", "中", "高"])\n# 类别编码\nfrom sklearn.preprocessing import LabelEncoder\nle = LabelEncoder()\ndf["性别编码"] = le.fit_transform(df["性别"])',
+      '# 数据标准化\nfrom sklearn.preprocessing import StandardScaler\nscaler = StandardScaler()\ndf[["消费金额_scaled"]] = scaler.fit_transform(df[["消费金额"]])\n# 保存数据\ndf.to_csv("processed.csv", index=False)'
     ],
     pitfalls: [
       '用均值填充含异常值的字段（导致数据失真）',
@@ -2858,6 +2866,8 @@ export default function DataAnalysisCourse() {
     right: 320
   });
   const [isDragging, setIsDragging] = useState<'left' | 'right' | null>(null);
+  const [showDatasetPreview, setShowDatasetPreview] = useState(true);
+  const [showTaskList, setShowTaskList] = useState(true);
   const [expandedSections, setExpandedSections] = useState({
     overview: true,
     knowledge: true,
@@ -5338,14 +5348,28 @@ export default function DataAnalysisCourse() {
                             className="bg-gray-50 border-r border-gray-200 flex flex-col overflow-hidden"
                             style={{ width: `${panelSizes.left}px` }}
                           >
-                            {/* 数据集预览 */}
+                            {/* 数据集预览 - 可收起 */}
                             <div className="p-4 border-b border-gray-200 bg-white">
-                              <h3 className="text-md font-semibold mb-3 text-gray-800 flex items-center gap-2">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                              <button
+                                onClick={() => setShowDatasetPreview(!showDatasetPreview)}
+                                className="w-full flex items-center justify-between text-md font-semibold mb-3 text-gray-800 hover:text-blue-600 transition-colors"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                  </svg>
+                                  数据集预览
+                                </div>
+                                <svg 
+                                  className={`w-4 h-4 transition-transform ${showDatasetPreview ? '' : 'rotate-180'}`} 
+                                  fill="none" 
+                                  stroke="currentColor" 
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                 </svg>
-                                数据集预览
-                              </h3>
+                              </button>
+                              {showDatasetPreview && (
                               <div className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
                                 <div className="bg-gray-100 px-3 py-2 border-b border-gray-200">
                                   <span className="text-sm font-medium text-gray-700">{currentProject.dataset}</span>
@@ -5378,11 +5402,31 @@ export default function DataAnalysisCourse() {
                                   <span className="text-xs text-gray-500">显示前 5 行数据</span>
                                 </div>
                               </div>
+                              )}
                             </div>
                             
-                            {/* 任务清单 */}
+                            {/* 任务清单 - 可收起 */}
                             <div className="flex-1 p-4 overflow-y-auto">
-                              <h3 className="text-md font-semibold mb-3 text-gray-800">任务清单</h3>
+                              <button
+                                onClick={() => setShowTaskList(!showTaskList)}
+                                className="w-full flex items-center justify-between text-md font-semibold mb-3 text-gray-800 hover:text-blue-600 transition-colors"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                  </svg>
+                                  任务清单
+                                </div>
+                                <svg 
+                                  className={`w-4 h-4 transition-transform ${showTaskList ? '' : 'rotate-180'}`} 
+                                  fill="none" 
+                                  stroke="currentColor" 
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </button>
+                              {showTaskList && (
                               <ul className="space-y-2">
                                 {currentProject.tasks.map((task, i) => (
                                   <li key={i} className="bg-white rounded-lg p-3 border border-gray-100 hover:border-blue-200 transition-all">
@@ -5397,9 +5441,23 @@ export default function DataAnalysisCourse() {
                                         💡 {currentProject.taskHints[i].split('。')[0]}...
                                       </div>
                                     )}
+                                    {currentProject.taskCode[i] && (
+                                      <div className="mt-2">
+                                        <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
+                                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                          </svg>
+                                          示例代码
+                                        </div>
+                                        <pre className="bg-gray-800 text-green-400 text-xs p-2 rounded overflow-x-auto text-wrap">
+                                          <code>{currentProject.taskCode[i]}</code>
+                                        </pre>
+                                      </div>
+                                    )}
                                   </li>
                                 ))}
                               </ul>
+                              )}
                             </div>
                           </div>
 
