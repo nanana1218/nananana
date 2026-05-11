@@ -3311,16 +3311,15 @@ export default function DataAnalysisCourse() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="flex justify-start mb-8">
-                  <a 
-                    href="/data-analysis"
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg border border-gray-200 hover:border-blue-500/50 transition-all"
-                  >
-                    <span>←</span>
-                    <span>返回平台</span>
-                  </a>
+                {/* 精选项目标题 */}
+                <div className="mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">精选项目</h2>
+                  <p className="text-gray-500">选择一个项目开始你的学习之旅</p>
+                  <p className="text-sm text-gray-400 mt-1">共 {projects.length} 个项目</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                {/* 项目列表 - 2列网格布局 */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {projects.map((project) => {
                     const progress = learningState.projectProgress[project.id];
                     const isCompleted = progress?.learnCompleted && progress?.practiceCompleted && progress?.testScore !== null;
@@ -3328,41 +3327,51 @@ export default function DataAnalysisCourse() {
                     return (
                       <motion.div
                         key={project.id}
-                        whileHover={{ scale: 1.02, y: -4 }}
-                        className={`bg-white rounded-xl border ${isCompleted ? 'border-green-500/50' : 'border-gray-200'} overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10`}
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        className={`bg-white rounded-2xl border ${isCompleted ? 'border-green-500/50' : 'border-gray-200'} overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 cursor-pointer`}
                         onClick={() => selectProject(project.id)}
                       >
-                        <div className={`h-2 bg-gradient-to-r ${project.color}`}></div>
                         <div className="p-6">
-                          <div className="flex items-start justify-between mb-4">
-                            <span className="text-3xl">{project.icon}</span>
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.difficulty === 'beginner' ? 'bg-green-100 text-green-600' : project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}`}>
-                              {project.difficulty === 'beginner' ? '入门' : project.difficulty === 'intermediate' ? '进阶' : '高级'}
-                            </span>
+                          <div className="flex items-start gap-4">
+                            {/* 左侧图标 */}
+                            <div className={`w-14 h-14 bg-gradient-to-br ${project.color} rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-md`}>
+                              {project.icon}
+                            </div>
+                            
+                            {/* 右侧内容 */}
+                            <div className="flex-1 min-w-0">
+                              {/* 难度和时长 */}
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${project.difficulty === 'beginner' ? 'bg-green-100 text-green-600' : project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}`}>
+                                  {project.difficulty === 'beginner' ? '入门' : project.difficulty === 'intermediate' ? '进阶' : '高级'}
+                                </span>
+                                <span className="text-sm text-gray-500">{project.duration}</span>
+                              </div>
+                              
+                              {/* 标题 */}
+                              <h3 className="text-lg font-semibold text-gray-900 mb-1">{project.title}</h3>
+                              
+                              {/* 描述 */}
+                              <p className="text-gray-500 text-sm mb-3 line-clamp-2">{project.description}</p>
+                              
+                              {/* 数据集和按钮 */}
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-gray-400 flex items-center gap-1">
+                                  <span>📁</span>
+                                  <span>{project.dataset}</span>
+                                </span>
+                                <button
+                                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 rounded-lg text-sm font-medium text-white transition-all shadow-sm hover:shadow-md"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    selectProject(project.id);
+                                  }}
+                                >
+                                  开始学习
+                                </button>
+                              </div>
+                            </div>
                           </div>
-                          <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                          <p className="text-gray-500 text-sm mb-4">{project.description}</p>
-                          <div className="flex items-center justify-between mb-4">
-                            <span className="text-sm text-gray-500">{project.duration}</span>
-                            {isCompleted && (
-                              <span className="flex items-center text-sm text-green-600">
-                                ✅ 已完成
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2 mb-4 text-xs text-gray-400">
-                            <span>📁</span>
-                            <span>{project.dataset}</span>
-                          </div>
-                          <button
-                            className="w-full py-2.5 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 rounded-lg text-sm font-medium text-white transition-all shadow-md hover:shadow-lg"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              selectProject(project.id);
-                            }}
-                          >
-                            开始学习
-                          </button>
                         </div>
                       </motion.div>
                     );
