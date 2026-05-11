@@ -1,6 +1,87 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface StatItem {
+  value: string;
+  label: string;
+  desc: string;
+  details: string[];
+}
+
+const StatCard = ({ stat, index }: { stat: StatItem; index: number }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  return (
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.5 + index * 0.1 }}
+      className="relative"
+    >
+      <motion.button
+        onClick={() => setIsExpanded(!isExpanded)}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="text-center group cursor-pointer bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-600/50 p-4 min-w-[120px] hover:border-blue-500/50 transition-all"
+      >
+        <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent mb-1 group-hover:scale-110 transition-transform">
+          {stat.value}
+        </div>
+        <div className="text-white font-medium mb-0.5">{stat.label}</div>
+        <div className="text-blue-300/70 text-sm flex items-center justify-center gap-1">
+          <span>{stat.desc}</span>
+          <svg 
+            className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </motion.button>
+      
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, y: -10 }}
+            animate={{ opacity: 1, height: 'auto', y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[280px] bg-slate-800/95 backdrop-blur-md rounded-xl border border-slate-600 shadow-xl z-50 overflow-hidden"
+          >
+            <div className="p-4">
+              <h4 className="text-white font-semibold mb-3 text-center">{stat.label} - 详情</h4>
+              <ul className="space-y-2">
+                {stat.details.map((detail, i) => (
+                  <motion.li 
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    className="flex items-start gap-2 text-sm text-blue-100"
+                  >
+                    <span className="text-cyan-400 mt-1">▸</span>
+                    <span>{detail}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-slate-700/50 px-4 py-2 flex justify-end">
+              <button
+                onClick={() => setIsExpanded(false)}
+                className="text-xs text-blue-300 hover:text-white transition-colors"
+              >
+                收起
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
+
 interface Project {
   id: number;
   title: string;
@@ -3405,32 +3486,72 @@ export default function DataAnalysisCourse() {
                 <span className="text-cyan-300">零门槛掌握数据分析全栈技能</span>
               </p>
 
-              {/* 数据统计展示 - 增强信任 */}
+              {/* 数据统计展示 - 可点击展开 */}
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="flex flex-wrap justify-center gap-8 md:gap-16 mb-10"
+                className="flex flex-wrap justify-center gap-6 md:gap-12 mb-10"
               >
                 {[
-                  { value: '10+', label: '精选项目', desc: '覆盖核心技能' },
-                  { value: '6h', label: '总学习时长', desc: '高效精炼' },
-                  { value: '100%', label: '浏览器运行', desc: '无需配置环境' },
-                  { value: '∞', label: '反复练习', desc: '强化理解' }
+                  { 
+                    value: '10+', 
+                    label: '精选项目', 
+                    desc: '覆盖核心技能',
+                    details: [
+                      '数据预处理与清洗',
+                      '多维统计与相关性分析',
+                      '购物车关联规则挖掘',
+                      'KMeans聚类分析实战',
+                      'RFM模型用户分层',
+                      '线性回归预测建模',
+                      '随机森林与特征重要性',
+                      '时间序列完整分析',
+                      '综合异常检测',
+                      '全流程综合大项目'
+                    ]
+                  },
+                  { 
+                    value: '6h', 
+                    label: '总学习时长', 
+                    desc: '高效精炼',
+                    details: [
+                      '入门阶段：2小时',
+                      '进阶阶段：2.5小时',
+                      '高级阶段：1.5小时',
+                      '平均每个项目36分钟',
+                      '实操练习不限时',
+                      '测试考核约10分钟/项目'
+                    ]
+                  },
+                  { 
+                    value: '100%', 
+                    label: '浏览器运行', 
+                    desc: '无需配置环境',
+                    details: [
+                      '无需安装Python',
+                      '无需配置开发环境',
+                      '内置代码编辑器',
+                      '实时运行查看结果',
+                      '自动保存学习进度',
+                      '支持离线缓存学习'
+                    ]
+                  },
+                  { 
+                    value: '∞', 
+                    label: '反复练习', 
+                    desc: '强化理解',
+                    details: [
+                      '无限次练习机会',
+                      '参考答案随时查看',
+                      '即时代码运行反馈',
+                      '知识点视频讲解',
+                      '配套练习题库',
+                      '学习进度可视化'
+                    ]
+                  }
                 ].map((stat, i) => (
-                  <motion.div 
-                    key={i}
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5 + i * 0.1 }}
-                    className="text-center group"
-                  >
-                    <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent mb-1 group-hover:scale-110 transition-transform">
-                      {stat.value}
-                    </div>
-                    <div className="text-white font-medium mb-0.5">{stat.label}</div>
-                    <div className="text-blue-300/70 text-sm">{stat.desc}</div>
-                  </motion.div>
+                  <StatCard key={i} stat={stat} index={i} />
                 ))}
               </motion.div>
 
