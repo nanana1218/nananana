@@ -2852,6 +2852,7 @@ export default function DataAnalysisCourse() {
   const [practiceScore, setPracticeScore] = useState<number>(0);
   const [completedTasks, setCompletedTasks] = useState<number[]>([]);
   const [showPracticeEditor, setShowPracticeEditor] = useState(false);
+  const [showSyllabus, setShowSyllabus] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
     overview: true,
     knowledge: true,
@@ -3613,7 +3614,10 @@ export default function DataAnalysisCourse() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </button>
-                <button className="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white rounded-xl font-medium text-lg transition-all">
+                <button 
+                  onClick={() => setShowSyllabus(true)}
+                  className="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white rounded-xl font-medium text-lg transition-all hover:scale-105"
+                >
                   查看课程大纲
                 </button>
               </motion.div>
@@ -5595,6 +5599,154 @@ export default function DataAnalysisCourse() {
           </AnimatePresence>
         </div>
       </main>
+
+      {/* 课程大纲模态框 */}
+      <AnimatePresence>
+        {showSyllabus && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          >
+            {/* 背景遮罩 */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowSyllabus(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            ></motion.div>
+            
+            {/* 模态框内容 */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden"
+            >
+              {/* 头部 */}
+              <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">📚 课程大纲</h2>
+                    <p className="text-white/80 text-sm mt-1">完整的学习路径和项目内容</p>
+                  </div>
+                  <button
+                    onClick={() => setShowSyllabus(false)}
+                    className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all"
+                  >
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              {/* 内容区域 */}
+              <div className="p-6 overflow-y-auto max-h-[60vh]">
+                {/* 课程概述 */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <span className="text-blue-500">🎯</span>
+                    课程概述
+                  </h3>
+                  <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                    <p className="text-gray-700 text-sm">
+                      本课程包含10个精选项目，涵盖数据预处理、统计分析、关联规则、聚类分析、回归预测、时间序列分析等核心技能，帮助你从零开始掌握数据分析全流程。
+                    </p>
+                  </div>
+                </div>
+                
+                {/* 学习路径 */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <span className="text-green-500">📊</span>
+                    学习路径
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      { phase: '第一阶段', title: '数据基础', items: ['数据预处理高阶版', '多维统计+深度相关性分析'], color: 'from-blue-500 to-blue-600' },
+                      { phase: '第二阶段', title: '数据挖掘', items: ['购物车关联规则挖掘', 'KMeans聚类分析实战', 'RFM模型用户分层'], color: 'from-cyan-500 to-cyan-600' },
+                      { phase: '第三阶段', title: '预测建模', items: ['一元+多元线性回归', '随机森林回归+特征重要性', '时间序列完整分析'], color: 'from-purple-500 to-purple-600' },
+                      { phase: '第四阶段', title: '综合实战', items: ['综合异常检测', '全流程综合大项目'], color: 'from-green-500 to-green-600' }
+                    ].map((stage, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="bg-gray-50 rounded-xl p-4 border border-gray-100"
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className={`w-12 h-12 bg-gradient-to-br ${stage.color} rounded-lg flex items-center justify-center text-white font-bold`}>
+                            {i + 1}
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">{stage.phase}</p>
+                            <p className="font-semibold text-gray-800">{stage.title}</p>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2 ml-15">
+                          {stage.items.map((item, j) => (
+                            <span key={j} className="px-3 py-1 bg-white rounded-full text-sm text-gray-700 border border-gray-200">
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* 项目列表 */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <span className="text-purple-500">📁</span>
+                    项目清单 ({projects.length}个)
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {projects.map((project, i) => (
+                      <motion.div
+                        key={project.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className="flex items-center gap-3 bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-all cursor-pointer"
+                        onClick={() => {
+                          setShowSyllabus(false);
+                          selectProject(project.id);
+                        }}
+                      >
+                        <div className={`w-10 h-10 bg-gradient-to-br ${project.color} rounded-lg flex items-center justify-center text-lg`}>
+                          {project.icon}
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-gray-800 text-sm">{project.title}</p>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-xs px-2 py-0.5 rounded ${
+                              project.difficulty === 'beginner' ? 'bg-green-100 text-green-600' :
+                              project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-600' :
+                              'bg-red-100 text-red-600'
+                            }`}>
+                              {project.difficulty === 'beginner' ? '入门' : project.difficulty === 'intermediate' ? '进阶' : '高级'}
+                            </span>
+                            <span className="text-xs text-gray-400">{project.duration}</span>
+                          </div>
+                        </div>
+                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
