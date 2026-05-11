@@ -3220,6 +3220,73 @@ export default function DataAnalysisCourse() {
 
   const currentProject = getCurrentProject();
 
+  // 数据集预览函数
+  const getDatasetPreview = (datasetName: string) => {
+    const datasets: Record<string, { columns: string[]; rows: string[][] }> = {
+      'retail_orders.csv': {
+        columns: ['ORDER_ID', 'CUSTOMER_ID', 'PRODUCT', 'AMOUNT', 'DATE', 'STATUS'],
+        rows: [
+          ['ORD001', 'C001', '笔记本电脑', '5999', '2024-01-15', '已完成'],
+          ['ORD002', 'C002', '无线鼠标', '199', '2024-01-16', '已完成'],
+          ['ORD003', 'C003', '机械键盘', '499', '2024-01-17', '处理中'],
+          ['ORD004', 'C001', '显示器', '1299', '2024-01-18', '已完成'],
+          ['ORD005', 'C004', '耳机', '299', '2024-01-19', '待处理']
+        ]
+      },
+      'market_basket.csv': {
+        columns: ['TRANSACTION_ID', 'PRODUCT_A', 'PRODUCT_B', 'PRODUCT_C', 'QUANTITY'],
+        rows: [
+          ['T001', '牛奶', '面包', '鸡蛋', '2'],
+          ['T002', '咖啡', '糖', '', '1'],
+          ['T003', '牛奶', '饼干', '巧克力', '3'],
+          ['T004', '面包', '果酱', '', '2'],
+          ['T005', '咖啡', '牛奶', '面包', '2']
+        ]
+      },
+      'customer_features.csv': {
+        columns: ['CUSTOMER_ID', 'AGE', 'GENDER', 'MEMBERSHIP', 'SPEND'],
+        rows: [
+          ['C001', '28', '男', '金卡', '12500'],
+          ['C002', '35', '女', '银卡', '8200'],
+          ['C003', '42', '男', '普通', '3500'],
+          ['C004', '25', '女', '钻石', '25000'],
+          ['C005', '31', '男', '金卡', '11800']
+        ]
+      },
+      'ab_test.csv': {
+        columns: ['USER_ID', 'GROUP', 'CLICK', 'CONVERSION', 'REVENUE'],
+        rows: [
+          ['U001', 'A', '1', '1', '299'],
+          ['U002', 'B', '1', '0', '0'],
+          ['U003', 'A', '0', '0', '0'],
+          ['U004', 'B', '1', '1', '499'],
+          ['U005', 'A', '1', '1', '199']
+        ]
+      },
+      'time_series_sales.csv': {
+        columns: ['DATE', 'SALES', 'VISITS', 'CONVERSION_RATE'],
+        rows: [
+          ['2024-01-01', '15000', '250', '3.2'],
+          ['2024-01-02', '18000', '300', '3.5'],
+          ['2024-01-03', '12000', '200', '3.0'],
+          ['2024-01-04', '22000', '350', '3.8'],
+          ['2024-01-05', '16500', '280', '3.3']
+        ]
+      }
+    };
+    
+    return datasets[datasetName] || {
+      columns: ['COLUMN_1', 'COLUMN_2', 'COLUMN_3'],
+      rows: [
+        ['数据预览', '数据预览', '数据预览'],
+        ['数据预览', '数据预览', '数据预览'],
+        ['数据预览', '数据预览', '数据预览'],
+        ['数据预览', '数据预览', '数据预览'],
+        ['数据预览', '数据预览', '数据预览']
+      ]
+    };
+  };
+
   // 互动功能：筛选和搜索
   const [filterDifficulty, setFilterDifficulty] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -5086,26 +5153,71 @@ export default function DataAnalysisCourse() {
 
                         {/* 主内容区 */}
                         <div className="flex h-[60vh]">
-                          {/* 左侧任务列表 */}
-                          <div className="w-72 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
-                            <h3 className="text-md font-semibold mb-3 text-gray-800">任务清单</h3>
-                            <ul className="space-y-2">
-                              {currentProject.tasks.map((task, i) => (
-                                <li key={i} className="bg-white rounded-lg p-3 border border-gray-100 hover:border-blue-200 transition-all">
-                                  <div className="flex items-start gap-2">
-                                    <span className={`w-6 h-6 rounded-full bg-gradient-to-br ${currentProject.color} flex items-center justify-center flex-shrink-0 text-white text-xs font-medium`}>
-                                      {i + 1}
-                                    </span>
-                                    <span className="text-sm text-gray-700">{task}</span>
-                                  </div>
-                                  {currentProject.taskHints[i] && (
-                                    <div className="mt-2 p-2 bg-blue-50 rounded text-xs text-blue-600 border border-blue-100">
-                                      💡 {currentProject.taskHints[i].split('。')[0]}...
+                          {/* 左侧数据集预览和任务列表 */}
+                          <div className="w-80 bg-gray-50 border-r border-gray-200 flex flex-col overflow-hidden">
+                            {/* 数据集预览 */}
+                            <div className="p-4 border-b border-gray-200 bg-white">
+                              <h3 className="text-md font-semibold mb-3 text-gray-800 flex items-center gap-2">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                </svg>
+                                数据集预览
+                              </h3>
+                              <div className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
+                                <div className="bg-gray-100 px-3 py-2 border-b border-gray-200">
+                                  <span className="text-sm font-medium text-gray-700">{currentProject.dataset}</span>
+                                </div>
+                                <div className="overflow-x-auto">
+                                  <table className="w-full text-xs">
+                                    <thead>
+                                      <tr className="bg-gray-50">
+                                        {getDatasetPreview(currentProject.dataset).columns.map((col, i) => (
+                                          <th key={i} className="px-3 py-2 text-left font-medium text-gray-600 truncate max-w-[80px]">
+                                            {col}
+                                          </th>
+                                        ))}
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {getDatasetPreview(currentProject.dataset).rows.map((row, i) => (
+                                        <tr key={i} className="border-t border-gray-100 hover:bg-blue-50">
+                                          {row.map((cell, j) => (
+                                            <td key={j} className="px-3 py-2 text-gray-700 truncate max-w-[80px]">
+                                              {cell}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <div className="bg-gray-50 px-3 py-2 text-center">
+                                  <span className="text-xs text-gray-500">显示前 5 行数据</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {/* 任务清单 */}
+                            <div className="flex-1 p-4 overflow-y-auto">
+                              <h3 className="text-md font-semibold mb-3 text-gray-800">任务清单</h3>
+                              <ul className="space-y-2">
+                                {currentProject.tasks.map((task, i) => (
+                                  <li key={i} className="bg-white rounded-lg p-3 border border-gray-100 hover:border-blue-200 transition-all">
+                                    <div className="flex items-start gap-2">
+                                      <span className={`w-6 h-6 rounded-full bg-gradient-to-br ${currentProject.color} flex items-center justify-center flex-shrink-0 text-white text-xs font-medium`}>
+                                        {i + 1}
+                                      </span>
+                                      <span className="text-sm text-gray-700">{task}</span>
                                     </div>
-                                  )}
-                                </li>
-                              ))}
-                            </ul>
+                                    {currentProject.taskHints[i] && (
+                                      <div className="mt-2 p-2 bg-blue-50 rounded text-xs text-blue-600 border border-blue-100">
+                                        💡 {currentProject.taskHints[i].split('。')[0]}...
+                                      </div>
+                                    )}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
                           </div>
 
                           {/* 中间代码编辑区 */}
