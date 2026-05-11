@@ -91,6 +91,22 @@ export default function DataAnalysisPlatform() {
       className="min-h-screen bg-white text-gray-900 relative overflow-hidden"
       onMouseMove={handleMouseMove}
     >
+      {/* 顶部导航栏 */}
+      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          <a 
+            href="/" 
+            className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span className="font-medium">返回主页</span>
+          </a>
+          <div className="text-sm text-gray-500">广东科学技术职业学院</div>
+        </div>
+      </nav>
+
       {/* 背景效果 */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.05),transparent_70%)]"></div>
       <div 
@@ -103,17 +119,8 @@ export default function DataAnalysisPlatform() {
       ></div>
 
       {/* 页面头部 */}
-      <header className="relative py-12 px-4 border-b border-gray-200">
+      <header className="relative py-12 px-4 border-b border-gray-200 pt-20">
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-start mb-8">
-            <a 
-              href="/"
-              className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-all text-gray-800"
-            >
-              <span>←</span>
-              <span>返回主页</span>
-            </a>
-          </div>
           <div className="text-center">
             <motion.h1 
               initial={{ opacity: 0, y: -20 }}

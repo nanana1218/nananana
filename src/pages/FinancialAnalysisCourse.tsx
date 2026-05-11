@@ -59,6 +59,14 @@ export default function FinancialAnalysisCourse() {
   const [activeChapterMode, setActiveChapterMode] = useState<'content' | 'exercise' | null>(null);
   const [activeTab, setActiveTab] = useState<'progress' | 'resources' | 'exercises'>('progress');
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   const progressItems: ProgressItem[] = [
     {
       id: 'chapter1',
@@ -999,6 +1007,22 @@ export default function FinancialAnalysisCourse() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 relative overflow-hidden">
+      {/* 顶部导航栏 */}
+      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          <a 
+            href="/" 
+            className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span className="font-medium">返回主页</span>
+          </a>
+          <div className="text-sm text-gray-500">广东科学技术职业学院</div>
+        </div>
+      </nav>
+
       {/* 背景效果 */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.05),transparent_70%)]"></div>
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSI+PHBhdGggZD0iTTAgMCBMIDUwIDAgTCA1MCA1MCBMIDAgNTAiIGZpbGw9IiMzYjgyZjYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjxwYXRoIGQ9Ik01MCAwIEwgMTAwIDAgTCAxMDAgNTAgTCA1MCA1MCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PHBhdGggZD0iTTAgNTAiIGQ9Ik01MCA1MCBMIDAgNTAgTCAwIDEwMCBMIDUwIDEwMCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PHBhdGggZD0iTTUwIDUwIEwgMTAwIDUwIEwgMTAwIDEwMCBMIDUwIDEwMCIgZmlsbD0iIzNiODJmNiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9nPjwvc3ZnPg==')]"></div>
@@ -1014,7 +1038,7 @@ export default function FinancialAnalysisCourse() {
       ></div>
 
       {/* 页面头部 */}
-      <header className="relative py-16 px-4 overflow-hidden">
+      <header className="relative py-16 px-4 overflow-hidden pt-24">
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <div className="inline-block mb-6">
             <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center mx-auto shadow-lg shadow-green-500/30">
