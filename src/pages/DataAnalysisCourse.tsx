@@ -3277,78 +3277,232 @@ export default function DataAnalysisCourse() {
     <div className="min-h-screen bg-white text-gray-900 relative overflow-hidden">
       {/* 背景效果 */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.05),transparent_70%)]"></div>
-      <div 
-        className="absolute w-[500px] h-[500px] rounded-full bg-blue-500 filter blur-[150px] opacity-5 pointer-events-none"
-        style={{
-          left: `${mousePosition.x - 250}px`,
-          top: `${mousePosition.y - 250}px`,
-          transition: 'left 0.2s ease, top 0.2s ease'
+      {/* 科技感背景 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900"></div>
+      <div className="absolute inset-0 opacity-20" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '40px 40px'}}></div>
+      <motion.div 
+        className="absolute w-[600px] h-[600px] rounded-full bg-blue-500 filter blur-[200px] opacity-30 pointer-events-none"
+        animate={{
+          x: mousePosition.x - 300,
+          y: mousePosition.y - 300,
         }}
-      ></div>
+        transition={{ type: "spring", stiffness: 50, damping: 20 }}
+      ></motion.div>
+      <motion.div 
+        className="absolute w-[400px] h-[400px] rounded-full bg-cyan-400 filter blur-[150px] opacity-20 pointer-events-none"
+        animate={{
+          x: mousePosition.x - 200,
+          y: mousePosition.y - 200,
+        }}
+        transition={{ type: "spring", stiffness: 30, damping: 25 }}
+      ></motion.div>
 
-      {/* 页面头部 */}
-      <header className="relative py-12 px-4 border-b border-gray-200">
-        <div className="max-w-6xl mx-auto">
-          {!currentProject ? (
-            <div className="text-center">
-              <div className="inline-block mb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30">
-                  <span className="text-3xl">📊</span>
-                </div>
-              </div>
-              <div className="mb-3">
-                <span className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full text-sm font-medium">
-                  实战课程 · 无需安装
-                </span>
-              </div>
-              <h1 className="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-                Pandas 数据分析实战训练营
-              </h1>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                10个精选实战项目，从入门到进阶，完全在浏览器中运行代码 · 让你从零开始掌握数据分析核心技能
-              </p>
-              <div className="mt-6 flex flex-wrap justify-center gap-3">
-                {[
-                  { icon: '📁', text: '真实数据集' },
-                  { icon: '⚡', text: '实时运行代码' },
-                  { icon: '📈', text: '循序渐进' },
-                  { icon: '🏆', text: '徽章认证' }
-                ].map((tag, i) => (
-                  <span key={i} className="px-4 py-2 bg-gradient-to-r from-gray-50 to-gray-100 rounded-full border border-gray-200 text-sm text-gray-700 flex items-center gap-2 shadow-sm">
-                    <span>{tag.icon}</span>
-                    <span>{tag.text}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="flex items-center justify-between">
-              <button
-                onClick={resetToProjectList}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg border border-gray-200 hover:border-blue-500/50 transition-all"
+      {/* Hero区域 - 增强视觉冲击力 */}
+      {!currentProject ? (
+        <section className="relative py-20 px-4">
+          <div className="max-w-7xl mx-auto">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center"
+            >
+              {/* 顶部标签 */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+                className="mb-6"
               >
-                <span>←</span>
-                <span>返回项目列表</span>
-              </button>
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">{currentProject.icon}</span>
-                <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-                    {currentProject.title}
-                  </h1>
-                  <p className="text-sm text-gray-500">项目 {currentProject.id} / 10 · {currentProject.duration}</p>
+                <span className="inline-flex items-center gap-2 px-5 py-2 bg-blue-500/20 backdrop-blur-sm border border-blue-400/30 rounded-full text-blue-300 text-sm font-medium">
+                  <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                  全新升级 · 浏览器端即刻学习
+                </span>
+              </motion.div>
+
+              {/* 主标题 - 大字体有冲击力 */}
+              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
+                <span className="bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent">
+                  Pandas 数据分析
+                </span>
+                <br />
+                <span className="text-4xl md:text-5xl bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                  实战训练营
+                </span>
+              </h1>
+
+              {/* 副标题 - 有力的价值主张 */}
+              <p className="text-xl md:text-2xl text-blue-200 mb-4 max-w-3xl mx-auto leading-relaxed">
+                <span className="text-white font-semibold">10个行业级实战项目</span> · 
+                从数据清洗到机器学习 · 
+                <span className="text-cyan-300">零门槛掌握数据分析全栈技能</span>
+              </p>
+
+              {/* 数据统计展示 - 增强信任 */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="flex flex-wrap justify-center gap-8 md:gap-16 mb-10"
+              >
+                {[
+                  { value: '10+', label: '精选项目', desc: '覆盖核心技能' },
+                  { value: '6h', label: '总学习时长', desc: '高效精炼' },
+                  { value: '100%', label: '浏览器运行', desc: '无需配置环境' },
+                  { value: '∞', label: '反复练习', desc: '强化理解' }
+                ].map((stat, i) => (
+                  <motion.div 
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5 + i * 0.1 }}
+                    className="text-center group"
+                  >
+                    <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent mb-1 group-hover:scale-110 transition-transform">
+                      {stat.value}
+                    </div>
+                    <div className="text-white font-medium mb-0.5">{stat.label}</div>
+                    <div className="text-blue-300/70 text-sm">{stat.desc}</div>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* 核心卖点 - 图标+文字 */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="flex flex-wrap justify-center gap-4 mb-10"
+              >
+                {[
+                  { icon: '📁', text: '真实商业数据集', color: 'from-blue-500/20 to-cyan-500/20 border-blue-400/30' },
+                  { icon: '⚡', text: '实时代码运行', color: 'from-purple-500/20 to-pink-500/20 border-purple-400/30' },
+                  { icon: '🎯', text: '循序渐进路径', color: 'from-green-500/20 to-emerald-500/20 border-green-400/30' },
+                  { icon: '🏆', text: '技能认证证书', color: 'from-orange-500/20 to-amber-500/20 border-orange-400/30' }
+                ].map((feature, i) => (
+                  <motion.div 
+                    key={i}
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    className={`px-5 py-3 bg-gradient-to-r ${feature.color} backdrop-blur-sm rounded-xl border text-white flex items-center gap-2 shadow-lg`}
+                  >
+                    <span className="text-xl">{feature.icon}</span>
+                    <span className="font-medium">{feature.text}</span>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* CTA按钮 */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              >
+                <button 
+                  onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-xl font-semibold text-lg shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 transition-all flex items-center gap-2"
+                >
+                  <span>开始学习之旅</span>
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </button>
+                <button className="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white rounded-xl font-medium text-lg transition-all">
+                  查看课程大纲
+                </button>
+              </motion.div>
+            </motion.div>
+
+            {/* 学习路径预览 - 时间线可视化 */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="mt-20"
+            >
+              <h2 className="text-3xl font-bold text-white text-center mb-12">
+                <span className="bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
+                  系统化学习路径
+                </span>
+              </h2>
+              
+              {/* 流程图/时间线 */}
+              <div className="relative">
+                {/* 连接线 */}
+                <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-green-400 transform -translate-y-1/2 hidden md:block"></div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-4">
+                  {[
+                    { phase: '01', title: '数据预处理', desc: '清洗 · 转换', icon: '🧹', color: 'from-blue-500 to-blue-600' },
+                    { phase: '02', title: '统计分析', desc: '描述 · 相关', icon: '📊', color: 'from-cyan-500 to-cyan-600' },
+                    { phase: '03', title: '关联与聚类', desc: '规则 · 分群', icon: '🔍', color: 'from-teal-500 to-teal-600' },
+                    { phase: '04', title: '预测建模', desc: '回归 · 森林', icon: '📈', color: 'from-purple-500 to-purple-600' },
+                    { phase: '05', title: '综合实战', desc: '整合 · 应用', icon: '🎯', color: 'from-green-500 to-green-600' }
+                  ].map((step, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.9 + i * 0.1 }}
+                      className="relative group"
+                    >
+                      {/* 节点圆点 */}
+                      <div className={`hidden md:flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-gradient-to-br ${step.color} rounded-full border-4 border-slate-900 z-10 group-hover:scale-150 transition-transform`}></div>
+                      
+                      {/* 卡片 */}
+                      <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 hover:bg-slate-800/80 transition-all group-hover:-translate-y-1">
+                        <div className={`w-10 h-10 bg-gradient-to-br ${step.color} rounded-lg flex items-center justify-center text-xl mb-3 shadow-lg`}>
+                          {step.icon}
+                        </div>
+                        <div className="text-blue-300 text-xs font-mono mb-1">Phase {step.phase}</div>
+                        <h3 className="text-white font-semibold mb-1">{step.title}</h3>
+                        <p className="text-slate-400 text-sm">{step.desc}</p>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className={`w-3 h-3 rounded-full ${currentProject.difficulty === 'beginner' ? 'bg-green-500' : currentProject.difficulty === 'intermediate' ? 'bg-yellow-500' : 'bg-red-500'}`}></span>
-                <span className="text-sm text-gray-500">
-                  {currentProject.difficulty === 'beginner' ? '入门' : currentProject.difficulty === 'intermediate' ? '进阶' : '高级'}
-                </span>
+            </motion.div>
+          </div>
+        </section>
+      ) : (
+        /* 项目详情页头部 */
+        <section className="relative py-8 px-4 bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900">
+          <div className="max-w-6xl mx-auto">
+            <button
+              onClick={resetToProjectList}
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white hover:bg-white/20 transition-all mb-6"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>返回项目列表</span>
+            </button>
+            
+            <div className="flex items-center gap-4">
+              <div className={`w-16 h-16 bg-gradient-to-br ${currentProject.color} rounded-xl flex items-center justify-center text-3xl shadow-lg`}>
+                {currentProject.icon}
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-white mb-1">{currentProject.title}</h1>
+                <div className="flex items-center gap-3 text-blue-200">
+                  <span className="text-sm">项目 {currentProject.id} / 10</span>
+                  <span>·</span>
+                  <span>{currentProject.duration}</span>
+                  <span>·</span>
+                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                    currentProject.difficulty === 'beginner' ? 'bg-green-500/20 text-green-300' :
+                    currentProject.difficulty === 'intermediate' ? 'bg-yellow-500/20 text-yellow-300' :
+                    'bg-red-500/20 text-red-300'
+                  }`}>
+                    {currentProject.difficulty === 'beginner' ? '入门' : currentProject.difficulty === 'intermediate' ? '进阶' : '高级'}
+                  </span>
+                </div>
               </div>
             </div>
-          )}
-        </div>
-      </header>
+          </div>
+        </section>
+      )}
 
       {/* 主内容区 */}
       <main className="relative py-8 px-4">
