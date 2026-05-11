@@ -2853,6 +2853,11 @@ export default function DataAnalysisCourse() {
   const [completedTasks, setCompletedTasks] = useState<number[]>([]);
   const [showPracticeEditor, setShowPracticeEditor] = useState(false);
   const [showSyllabus, setShowSyllabus] = useState(false);
+  const [panelSizes, setPanelSizes] = useState({
+    left: 320,
+    right: 320
+  });
+  const [isDragging, setIsDragging] = useState<'left' | 'right' | null>(null);
   const [expandedSections, setExpandedSections] = useState({
     overview: true,
     knowledge: true,
@@ -2869,10 +2874,42 @@ export default function DataAnalysisCourse() {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
+      
+      // 处理面板拖拽
+      if (isDragging) {
+        const container = document.querySelector('.panel-container');
+        if (!container) return;
+        
+        const containerRect = container.getBoundingClientRect();
+        const containerWidth = containerRect.width;
+        
+        if (isDragging === 'left') {
+          const newLeftWidth = e.clientX - containerRect.left;
+          const minWidth = 200;
+          const maxWidth = containerWidth - panelSizes.right - 40;
+          const clampedWidth = Math.max(minWidth, Math.min(maxWidth, newLeftWidth));
+          setPanelSizes(prev => ({ ...prev, left: clampedWidth }));
+        } else if (isDragging === 'right') {
+          const newRightWidth = containerRect.right - e.clientX;
+          const minWidth = 200;
+          const maxWidth = containerWidth - panelSizes.left - 40;
+          const clampedWidth = Math.max(minWidth, Math.min(maxWidth, newRightWidth));
+          setPanelSizes(prev => ({ ...prev, right: clampedWidth }));
+        }
+      }
     };
+    
+    const handleMouseUp = () => {
+      setIsDragging(null);
+    };
+    
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, panelSizes.right, panelSizes.left]);
 
   // 倒计时逻辑
   useEffect(() => {
@@ -5294,10 +5331,13 @@ export default function DataAnalysisCourse() {
                           </div>
                         </div>
 
-                        {/* 主内容区 */}
-                        <div className="flex h-[60vh]">
+                        {/* 主内容区 - 可拖拽面板 */}
+                        <div className="panel-container flex h-[60vh]">
                           {/* 左侧数据集预览和任务列表 */}
-                          <div className="w-80 bg-gray-50 border-r border-gray-200 flex flex-col overflow-hidden">
+                          <div 
+                            className="bg-gray-50 border-r border-gray-200 flex flex-col overflow-hidden"
+                            style={{ width: `${panelSizes.left}px` }}
+                          >
                             {/* 数据集预览 */}
                             <div className="p-4 border-b border-gray-200 bg-white">
                               <h3 className="text-md font-semibold mb-3 text-gray-800 flex items-center gap-2">
@@ -5363,6 +5403,18 @@ export default function DataAnalysisCourse() {
                             </div>
                           </div>
 
+                          {/* 左侧分割条 - 可拖拽 */}
+                          <div
+                            className="w-1 bg-gray-200 cursor-col-resize hover:bg-gray-400 transition-colors group relative"
+                            onMouseDown={() => setIsDragging('left')}
+                          >
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 15h2m2 4H9m-2-4h2m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                              </svg>
+                            </div>
+                          </div>
+
                           {/* 中间代码编辑区 */}
                           <div className="flex-1 flex flex-col">
                             <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
@@ -5389,8 +5441,23 @@ export default function DataAnalysisCourse() {
                             </div>
                           </div>
 
+                          {/* 右侧分割条 - 可拖拽 */}
+                          <div
+                            className="w-1 bg-gray-200 cursor-col-resize hover:bg-gray-400 transition-colors group relative"
+                            onMouseDown={() => setIsDragging('right')}
+                          >
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 15h2m2 4H9m-2-4h2m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                              </svg>
+                            </div>
+                          </div>
+
                           {/* 右侧执行结果区 */}
-                          <div className="w-80 bg-gray-50 border-l border-gray-200 flex flex-col">
+                          <div 
+                            className="bg-gray-50 border-l border-gray-200 flex flex-col"
+                            style={{ width: `${panelSizes.right}px` }}
+                          >
                             <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
                               <span className="text-sm font-medium text-gray-700">执行结果</span>
                               {executionResult && !errorMessage && (
