@@ -18,6 +18,7 @@ interface Project {
   duration: string;
   icon: string;
   color: string;
+  dataset: string;
   showFullFlow: boolean;
   learningResources: {
     docs: string[];
@@ -113,9 +114,10 @@ const projects: Project[] = [
       '预处理总结'
     ],
     difficulty: 'beginner',
-    duration: '2小时',
+    duration: '30分钟',
     icon: '🧹',
     color: 'from-blue-500 to-cyan-400',
+    dataset: 'retail_orders.csv',
     codeExample: `import pandas as pd
 from sklearn.preprocessing import StandardScaler
 import numpy as np
@@ -478,9 +480,10 @@ print("✅ 数据预处理完成！")`,
       '关联分析结论'
     ],
     difficulty: 'beginner',
-    duration: '2小时',
+    duration: '30分钟',
     icon: '📊',
     color: 'from-purple-500 to-pink-400',
+    dataset: 'retail_orders.csv',
     codeExample: `import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -688,9 +691,10 @@ print(strong_corr.stack())`,
       '捆绑销售策略建议'
     ],
     difficulty: 'intermediate',
-    duration: '2.5小时',
+    duration: '45分钟',
     icon: '🛒',
     color: 'from-green-500 to-emerald-400',
+    dataset: 'market_basket.csv',
     codeExample: `import pandas as pd
 from mlxtend.frequent_patterns import apriori, association_rules
 
@@ -902,9 +906,10 @@ for _, row in rules.head(3).iterrows():
       '分群特征解读+业务建议'
     ],
     difficulty: 'intermediate',
-    duration: '3小时',
+    duration: '45分钟',
     icon: '🔍',
     color: 'from-orange-500 to-amber-400',
+    dataset: 'customer_features.csv',
     codeExample: `import pandas as pd
 import numpy as np
 from sklearn.cluster import KMeans
@@ -1143,9 +1148,10 @@ print("分群2：流失用户 → 推送唤醒优惠券")`,
       '分层运营策略方案'
     ],
     difficulty: 'intermediate',
-    duration: '2.5小时',
+    duration: '45分钟',
     icon: '👥',
     color: 'from-red-500 to-rose-400',
+    dataset: 'customer_features.csv',
     codeExample: `import pandas as pd
 import numpy as np
 
@@ -1396,9 +1402,10 @@ print("""
       '影响因子解读+预测示例'
     ],
     difficulty: 'intermediate',
-    duration: '3小时',
+    duration: '45分钟',
     icon: '📈',
     color: 'from-indigo-500 to-violet-400',
+    dataset: 'retail_orders.csv',
     codeExample: `import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
@@ -1640,9 +1647,10 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
       '模型对比分析报告'
     ],
     difficulty: 'advanced',
-    duration: '3小时',
+    duration: '60分钟',
     icon: '🌲',
     color: 'from-teal-500 to-cyan-400',
+    dataset: 'retail_orders.csv',
     codeExample: `import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
@@ -1903,9 +1911,10 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
       '预测评估+库存建议'
     ],
     difficulty: 'advanced',
-    duration: '3小时',
+    duration: '45分钟',
     icon: '⏰',
     color: 'from-yellow-500 to-orange-400',
+    dataset: 'time_series_sales.csv',
     codeExample: `import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -2167,9 +2176,10 @@ print(f"建议安全库存量：{forecast_mean * 1.2:.0f}")`,
       '异常解读+处理建议'
     ],
     difficulty: 'advanced',
-    duration: '2.5小时',
+    duration: '45分钟',
     icon: '🚨',
     color: 'from-rose-500 to-pink-400',
+    dataset: 'customer_features.csv',
     codeExample: `import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -2442,9 +2452,10 @@ print("""
       '完整数据分析报告'
     ],
     difficulty: 'advanced',
-    duration: '5小时',
+    duration: '60分钟',
     icon: '🏆',
     color: 'from-emerald-500 to-green-400',
+    dataset: 'retail_orders.csv',
     codeExample: `"""
 全流程综合大项目
 目标：提升电商营收
@@ -3233,16 +3244,27 @@ export default function DataAnalysisCourse() {
                   <span className="text-3xl">📊</span>
                 </div>
               </div>
+              <div className="mb-3">
+                <span className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full text-sm font-medium">
+                  实战课程 · 无需安装
+                </span>
+              </div>
               <h1 className="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-                Python数据分析全栈实战
+                Pandas 数据分析实战训练营
               </h1>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                十个独立项目，从入门到精通，边练边学，形成完整的学习闭环
+                10个精选实战项目，从入门到进阶，完全在浏览器中运行代码 · 让你从零开始掌握数据分析核心技能
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
-                {['学习 → 实操 → 测试', '闭环学习', '可运行代码', '真实数据集'].map((tag, i) => (
-                  <span key={i} className="px-4 py-1.5 bg-gray-100 rounded-full border border-gray-200 text-sm text-gray-600">
-                    {tag}
+                {[
+                  { icon: '📁', text: '真实数据集' },
+                  { icon: '⚡', text: '实时运行代码' },
+                  { icon: '📈', text: '循序渐进' },
+                  { icon: '🏆', text: '徽章认证' }
+                ].map((tag, i) => (
+                  <span key={i} className="px-4 py-2 bg-gradient-to-r from-gray-50 to-gray-100 rounded-full border border-gray-200 text-sm text-gray-700 flex items-center gap-2 shadow-sm">
+                    <span>{tag.icon}</span>
+                    <span>{tag.text}</span>
                   </span>
                 ))}
               </div>
@@ -3328,15 +3350,12 @@ export default function DataAnalysisCourse() {
                               </span>
                             )}
                           </div>
-                          <div className="flex gap-2 mb-4">
-                            {project.coreKnowledge.slice(0, 3).map((knowledge, i) => (
-                              <span key={i} className="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-600">
-                                {knowledge.split('（')[0]}
-                              </span>
-                            ))}
+                          <div className="flex items-center gap-2 mb-4 text-xs text-gray-400">
+                            <span>📁</span>
+                            <span>{project.dataset}</span>
                           </div>
                           <button
-                            className="w-full py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-all"
+                            className="w-full py-2.5 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 rounded-lg text-sm font-medium text-white transition-all shadow-md hover:shadow-lg"
                             onClick={(e) => {
                               e.stopPropagation();
                               selectProject(project.id);
@@ -3348,6 +3367,12 @@ export default function DataAnalysisCourse() {
                       </motion.div>
                     );
                   })}
+                </div>
+                
+                {/* 底部行动号召 */}
+                <div className="mt-12 text-center py-8 px-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border border-gray-200">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">开始你的数据分析之旅</h3>
+                  <p className="text-gray-500 text-sm">无需任何安装，点击上方项目卡片即可开始练习</p>
                 </div>
               </motion.div>
             ) : (
