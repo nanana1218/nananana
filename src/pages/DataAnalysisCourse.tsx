@@ -3974,12 +3974,17 @@ export default function DataAnalysisCourse() {
                 </div>
 
                 {/* 实际案例项目展示 */}
-                <div className="mb-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 border border-blue-500/30">
+                <div 
+                  className="mb-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 border border-blue-500/30 cursor-pointer hover:shadow-lg hover:border-blue-500/50 transition-all duration-300 hover:scale-[1.01]"
+                  onClick={() => {
+                    // 点击后可以滚动到项目列表或者其他操作
+                  }}
+                >
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">📊</span>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900">实际案例项目展示</h3>
-                      <p className="text-sm text-gray-500">精选10个数据分析实战项目，从入门到高级完整覆盖</p>
+                      <p className="text-sm text-gray-500">包含数据预处理、关联规则、用户分群、销量预测等10个具体项目的案例分析</p>
                     </div>
                   </div>
                 </div>
