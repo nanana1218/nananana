@@ -3974,16 +3974,7 @@ export default function DataAnalysisCourse() {
                 </div>
 
                 {/* 实际案例项目展示 */}
-                <div 
-                  className="mb-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 border border-blue-500/30 cursor-pointer hover:shadow-lg hover:border-blue-500/50 transition-all duration-300 hover:scale-[1.01]"
-                  onClick={() => {
-                    // 点击后滚动到项目列表
-                    const projectsSection = document.getElementById('projects-list');
-                    if (projectsSection) {
-                      projectsSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                >
+                <div className="mb-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 border border-blue-500/30 hover:shadow-lg hover:border-blue-500/50 transition-all duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <span className="text-3xl">📊</span>
                     <div>
@@ -3992,7 +3983,7 @@ export default function DataAnalysisCourse() {
                     </div>
                   </div>
                   {/* 购物车分析报告 */}
-                  <div className="mt-4 p-4 bg-white rounded-xl border border-blue-200 shadow-sm">
+                  <div className="mt-4 p-4 bg-white rounded-xl border border-blue-200 shadow-sm cursor-pointer hover:border-blue-400 transition-all duration-300">
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">🛒</span>
                       <div className="flex-1">
@@ -4001,11 +3992,11 @@ export default function DataAnalysisCourse() {
                       </div>
                       <a 
                         href="/在线零售业务数据分析报告.docx" 
-                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg text-sm font-medium hover:shadow-md transition-all duration-300"
-                        onClick={(e) => e.stopPropagation()}
                       >
-                        下载报告
+                        查看报告
                       </a>
                     </div>
                   </div>
