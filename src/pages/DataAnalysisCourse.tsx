@@ -558,6 +558,13 @@ print("✅ 数据预处理完成！")`,
       '第四步：使用 seaborn 的 heatmap() 绘制相关性热力图，添加注释和标题',
       '第五步：分析相关系数大于0.7的强相关指标，识别多重共线性'
     ],
+    taskExamples: [
+      'import pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nimport numpy as np\n\ndf = pd.read_csv("processed_data.csv")\ndf["营收"] = df["消费金额"] * df["消费频次"]\nprint("数据读取成功！")',
+      '# 描述统计\nnumeric_cols = ["营收", "消费金额", "消费频次", "浏览时长"]\ndesc_stats = df[numeric_cols].describe()\nprint("描述统计结果：")\nprint(desc_stats)',
+      '# 计算相关性系数\npearson_corr = df[numeric_cols].corr(method="pearson")\nspearman_corr = df[numeric_cols].corr(method="spearman")\nprint("皮尔逊相关系数：")\nprint(pearson_corr)',
+      '# 绘制热力图\nplt.figure(figsize=(10, 8))\nsns.heatmap(pearson_corr, annot=True, cmap="coolwarm", center=0, fmt=".2f", square=True, linewidths=1)\nplt.title("相关性热力图（皮尔逊）", fontsize=14)\nplt.tight_layout()\nplt.savefig("correlation_heatmap.png", dpi=300)',
+      '# 分析强相关指标\nstrong_corr = pearson_corr[(pearson_corr.abs() >= 0.7) & (pearson_corr.abs() < 1)]\nprint("强相关指标（|r|≥0.7）：")\nprint(strong_corr.stack())'
+    ],
     pitfalls: [
       '混淆皮尔逊和斯皮尔曼相关系数',
       '误将"相关性"当作"因果关系"',
@@ -768,6 +775,13 @@ print(strong_corr.stack())`,
       '第三步：使用 apriori() 函数挖掘频繁项集，设置合适的 min_support 参数',
       '第四步：使用 association_rules() 函数生成关联规则，设置合适的 min_threshold',
       '第五步：筛选 lift>1 的规则，分析有效关联关系，给出捆绑销售建议'
+    ],
+    taskExamples: [
+      'import pandas as pd\nfrom mlxtend.frequent_patterns import apriori, association_rules\n\ndf = pd.read_csv("cart_data.csv")\nprint("购物车数据读取成功！")',
+      '# 数据预处理 - 转换成one-hot编码格式\nbasket = df.groupby(["订单ID", "商品名称"])["商品名称"].count().unstack().reset_index().fillna(0).set_index("订单ID")\nbasket = (basket > 0).astype(int)\nprint("数据转换完成！")',
+      '# 用Apriori算法挖掘频繁项集\nfrequent_itemsets = apriori(basket, min_support=0.05, use_colnames=True, max_len=3)\nprint(f"找到 {len(frequent_itemsets)} 个频繁项集")',
+      '# 生成关联规则\nrules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)\nprint(f"生成 {len(rules)} 条关联规则")',
+      '# 筛选有价值的规则（提升度>1）\nrules = rules[rules["lift"] > 1].sort_values(["lift", "confidence"], ascending=[False, False])\nprint("Top10关联规则：")\nprint(rules.head(10))'
     ],
     pitfalls: [
       '支持度设置过高或过低',
@@ -983,6 +997,13 @@ for _, row in rules.head(3).iterrows():
       '第三步：使用肘部法则确定最佳k值，查看inertia的变化趋势',
       '第四步：使用 KMeans() 进行聚类，设置合适的 n_clusters 参数',
       '第五步：使用 PCA() 进行降维，可视化聚类结果，分析每个分群的特征'
+    ],
+    taskExamples: [
+      'import pandas as pd\nimport numpy as np\nfrom sklearn.cluster import KMeans\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\nimport matplotlib.pyplot as plt\n\ndf_user = pd.read_csv("processed_data.csv")\nuser_features = ["消费金额", "消费频次", "最近消费天数", "浏览时长"]\nX_user = df_user[user_features].dropna()\nprint("数据读取成功！")',
+      '# 数据标准化\nscaler = StandardScaler()\nX_user_scaled = scaler.fit_transform(X_user)\nprint("数据标准化完成！")',
+      '# 肘部法则确定k值\ninertias = []\nk_range = range(2, 10)\nfor k in k_range:\n    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)\n    kmeans.fit(X_user_scaled)\n    inertias.append(kmeans.inertia_)\nplt.plot(k_range, inertias, "bo-")\nplt.xlabel("Number of clusters (k)")\nplt.ylabel("Inertia")\nplt.title("Elbow Method")\nplt.savefig("elbow_method.png", dpi=300)',
+      '# KMeans聚类（选择k=4）\nkmeans = KMeans(n_clusters=4, random_state=42, n_init=10)\nX_user["cluster"] = kmeans.fit_predict(X_user_scaled)\nprint("聚类完成！")',
+      '# PCA降维可视化\npca = PCA(n_components=2)\nX_pca = pca.fit_transform(X_user_scaled)\nplt.figure(figsize=(10, 8))\nfor cluster in range(4):\n    mask = X_user["cluster"] == cluster\n    plt.scatter(X_pca[mask, 0], X_pca[mask, 1], label=f"Cluster {cluster}", alpha=0.6)\nplt.legend()\nplt.title("KMeans Clustering Result (PCA)")\nplt.savefig("clustering_result.png", dpi=300)'
     ],
     pitfalls: [
       '聚类前不标准化数据',
@@ -1225,6 +1246,13 @@ print("分群2：流失用户 → 推送唤醒优惠券")`,
       '第三步：注意R指标需要反向打分：最近消费天数越少分数越高',
       '第四步：计算RFM总分，定义分层函数并应用到数据中',
       '第五步：使用 groupby() 统计各层级的数据，绘制饼图进行可视化'
+    ],
+    taskExamples: [
+      'import pandas as pd\nimport numpy as np\n\ndf = pd.read_csv("user_rfm.csv")\nprint("RFM数据读取成功！")',
+      '# 指标分箱 - R反向打分，F/M正向打分\ndf["R分"] = pd.qcut(df["最近消费天数"], 5, labels=[5, 4, 3, 2, 1])\ndf["F分"] = pd.qcut(df["消费频次"], 5, labels=[1, 2, 3, 4, 5])\ndf["M分"] = pd.qcut(df["消费金额"], 5, labels=[1, 2, 3, 4, 5])\ndf[["R分", "F分", "M分"]] = df[["R分", "F分", "M分"]].astype(int)',
+      '# 计算RFM总分\ndf["RFM总分"] = df["R分"] + df["F分"] + df["M分"]',
+      '# 用户分层\ndef rfm_level(score):\n    if score >= 13:\n        return "高价值用户"\n    elif score >= 10:\n        return "潜力用户"\n    elif score >= 7:\n        return "一般用户"\n    else:\n        return "流失用户"\n\ndf["用户层级"] = df["RFM总分"].apply(rfm_level)',
+      '# 统计分析\nrfm_stats = df.groupby("用户层级").agg({"用户ID": "count", "消费金额": ["sum", "mean"]})\nrfm_stats.columns = ["用户数量", "总消费金额", "平均消费金额"]\nprint("RFM分层统计：")\nprint(rfm_stats)'
     ],
     pitfalls: [
       'R指标打分错误（没有反向）',
@@ -1480,6 +1508,13 @@ print("""
       '第四步：使用 variance_inflation_factor 计算VIF值检测多重共线性',
       '第五步：删除VIF>10的特征来优化模型，使用 .coef_ 和 .intercept_ 解读回归系数'
     ],
+    taskExamples: [
+      'import pandas as pd\nimport numpy as np\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error\nfrom statsmodels.stats.outliers_influence import variance_inflation_factor\n\ndf = pd.read_csv("sales_data.csv")\nprint("销量数据读取成功！")',
+      '# 一元线性回归\nX_simple = df[["广告费"]]\ny = df["销量"]\nmodel_simple = LinearRegression()\nmodel_simple.fit(X_simple, y)\ny_pred_simple = model_simple.predict(X_simple)\nprint(f"一元回归R² = {r2_score(y, y_pred_simple):.3f}")',
+      '# 多元线性回归\nX_multi = df[["广告费", "活动次数", "客单价", "竞品价格"]]\ny = df["销量"]\nmodel_multi = LinearRegression()\nmodel_multi.fit(X_multi, y)\ny_pred_multi = model_multi.predict(X_multi)\nprint(f"多元回归R² = {r2_score(y, y_pred_multi):.3f}")',
+      '# 检测多重共线性（VIF）\nvif_data = pd.DataFrame()\nvif_data["特征"] = X_multi.columns\nvif_data["VIF"] = [variance_inflation_factor(X_multi.values, i) for i in range(X_multi.shape[1])]\nprint("VIF值：")\nprint(vif_data)',
+      '# 模型优化与预测\nX_optimized = X_multi.drop(["竞品价格"], axis=1)\nmodel_optimized = LinearRegression()\nmodel_optimized.fit(X_optimized, y)\nsample_input = pd.DataFrame({"广告费": [1000], "活动次数": [3], "客单价": [80]})\npredicted = model_optimized.predict(sample_input)\nprint(f"预测销量：{predicted[0]:.1f}")'
+    ],
     pitfalls: [
       '忽略多重共线性',
       '盲目追求高R²，忽略模型的业务意义',
@@ -1724,6 +1759,13 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
       '第三步：使用 RandomForestRegressor() 进行随机森林回归建模',
       '第四步：调整 n_estimators 和 max_depth 参数进行调优，找到最佳参数组合',
       '第五步：使用 .feature_importances_ 获取特征重要性，绘制特征重要性图表'
+    ],
+    taskExamples: [
+      'import pandas as pd\nimport numpy as np\nfrom sklearn.ensemble import RandomForestRegressor\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import r2_score, mean_absolute_error\n\ndf = pd.read_csv("sales_data.csv")\nX = df[["广告费", "活动次数", "客单价", "竞品价格"]]\ny = df["销量"]\nprint("数据读取成功！")',
+      '# 数据拆分\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)',
+      '# 模型调参 - 测试不同参数\nfor n_estimators in [50, 100, 200]:\n    for max_depth in [3, 5, 7]:\n        model = RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth, random_state=42)\n        model.fit(X_train, y_train)\n        y_pred = model.predict(X_test)\n        print(f"n_estimators={n_estimators}, max_depth={max_depth}, R²={r2_score(y_test, y_pred):.3f}")',
+      '# 使用最优参数训练（n_estimators=100, max_depth=5）\nbest_model = RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42)\nbest_model.fit(X_train, y_train)\ny_pred = best_model.predict(X_test)\nprint(f"测试集 R² = {r2_score(y_test, y_pred):.3f}")',
+      '# 特征重要性\nfeature_importance = pd.DataFrame({"特征": X.columns, "重要性": best_model.feature_importances_})\nfeature_importance = feature_importance.sort_values("重要性", ascending=False)\nprint("特征重要性：")\nprint(feature_importance)'
     ],
     pitfalls: [
       '模型参数设置过于极端',
@@ -1989,6 +2031,13 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
       '第四步：使用 pivot() 重塑数据并绘制月度销量热力图，识别周期性',
       '第五步：使用 ARIMA() 模型进行时序预测，预测未来3个月的销量' 
     ],
+    taskExamples: [
+      'import pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom statsmodels.tsa.arima.model import ARIMA\n\ndf = pd.read_csv("time_series_sales.csv")\ndf["日期"] = pd.to_datetime(df["日期"])\ndf.set_index("日期", inplace=True)\nprint("时间序列数据读取成功！")',
+      '# 按月度重采样\ndf_monthly = df.resample("M").sum()\nprint("月度数据：")\nprint(df_monthly.head())',
+      '# 趋势分析 - 移动平均\ndf_monthly["3月移动平均"] = df_monthly["销量"].rolling(window=3).mean()\nprint("移动平均计算完成！")',
+      '# 周期识别 - 月度热力图\ndf_monthly["年份"] = df_monthly.index.year\ndf_monthly["月份"] = df_monthly.index.month\nmonthly_pivot = df_monthly.pivot(index="年份", columns="月份", values="销量")\nprint("月度热力图数据准备完成！")',
+      '# ARIMA模型预测\nmodel = ARIMA(df_monthly["销量"], order=(1, 1, 1))\nresults = model.fit()\nforecast = results.get_forecast(steps=3)\nforecast_df = forecast.summary_frame()\nprint("未来3个月预测：")\nprint(forecast_df)'
+    ],
     pitfalls: [
       '未做日期格式转换',
       '移动平均窗口设置不合理',
@@ -2253,6 +2302,42 @@ print(f"建议安全库存量：{forecast_mean * 1.2:.0f}")`,
       '第三步：使用 IQR 方法进行箱线图异常检测',
       '第四步：使用 IsolationForest() 进行孤立森林异常检测，注意设置 contamination 参数',
       '第五步：结合多种方法的异常结果，分析异常类型并给出业务处理建议' 
+    ],
+    taskExamples: [
+      `import pandas as pd
+import numpy as np
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
+
+df = pd.read_csv("order_data.csv")
+print("订单数据读取成功！")`,
+      `# 统计异常检测 - 3σ原则
+mean = df["订单金额"].mean()
+std = df["订单金额"].std()
+lower = mean - 3 * std
+upper = mean + 3 * std
+outliers_3sigma = df[(df["订单金额"] < lower) | (df["订单金额"] > upper)]
+print("3σ原则检测到", len(outliers_3sigma), "个异常")`,
+      `# 统计异常检测 - 箱线图
+Q1 = df["订单金额"].quantile(0.25)
+Q3 = df["订单金额"].quantile(0.75)
+IQR = Q3 - Q1
+lower = Q1 - 1.5 * IQR
+upper = Q3 + 1.5 * IQR
+outliers_boxplot = df[(df["订单金额"] < lower) | (df["订单金额"] > upper)]
+print("箱线图检测到", len(outliers_boxplot), "个异常")`,
+      `# 孤立森林异常检测
+features = ["订单金额", "下单频次", "支付时长"]
+X = df[features].dropna()
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+iso_forest = IsolationForest(contamination=0.05, random_state=42)
+df["孤立森林异常"] = iso_forest.fit_predict(X_scaled)
+df["孤立森林异常"] = df["孤立森林异常"].map({1: 0, -1: 1})
+print("孤立森林检测到", df["孤立森林异常"].sum(), "个异常")`,
+      `# 合并异常结果
+outlier_ids = set(outliers_3sigma.index) | set(outliers_boxplot.index) | set(df[df["孤立森林异常"] == 1].index)
+print("综合检测到", len(outlier_ids), "个异常订单")`
     ],
     pitfalls: [
       '将"正常极端值"当作异常值',
@@ -2529,6 +2614,13 @@ print("""
       '第三步：复用RFM用户分层方法，分析用户价值分布',
       '第四步：复用随机森林和时间序列分析方法，分析销量影响因素和趋势',
       '第五步：结合多种分析方法的结果，给出综合业务建议，生成可视化报告' 
+    ],
+    taskExamples: [
+      '# 数据准备\ndf_user = pd.read_csv("processed_data.csv")\ndf_sales = pd.read_csv("sales_data.csv")\ndf_ts = pd.read_csv("time_series_sales.csv")\ndf_order = pd.read_csv("order_data.csv")\nprint("数据整合完成！")',
+      '# 核心指标概览\ntotal_revenue = (df_user["消费金额"] * df_user["消费频次"]).sum()\navg_order_value = df_user["消费金额"].mean()\nprint(f"总营收：{total_revenue:,.0f} 元，客单价：{avg_order_value:.0f} 元")',
+      '# RFM用户分层\ndf_user["R分"] = pd.qcut(df_user["最近消费天数"], 5, labels=[5, 4, 3, 2, 1])\ndf_user["F分"] = pd.qcut(df_user["消费频次"], 5, labels=[1, 2, 3, 4, 5])\ndf_user["M分"] = pd.qcut(df_user["消费金额"], 5, labels=[1, 2, 3, 4, 5])\ndf_user["RFM总分"] = df_user["R分"].astype(int) + df_user["F分"].astype(int) + df_user["M分"].astype(int)\nprint("RFM分层完成！")',
+      '# 销量影响因素分析\nfrom sklearn.ensemble import RandomForestRegressor\nX = df_sales[["广告费", "活动次数", "客单价", "竞品价格"]]\ny = df_sales["销量"]\nmodel = RandomForestRegressor(n_estimators=100, random_state=42)\nmodel.fit(X, y)\nfeature_importance = pd.DataFrame({"特征": X.columns, "重要性": model.feature_importances_})\nprint("特征重要性分析完成！")',
+      '# 业务策略建议\nprint("\\n📋 业务策略建议：")\nprint("1. 高价值用户：专属福利，提升留存")\nprint("2. 潜力用户：满减优惠券，提升客单价")\nprint("3. 重点优化：广告费和活动次数的ROI")\nprint("4. 库存规划：参考时间序列预测结果")'
     ],
     pitfalls: [
       '数据整合混乱',
