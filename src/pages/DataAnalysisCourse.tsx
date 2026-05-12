@@ -3983,21 +3983,30 @@ export default function DataAnalysisCourse() {
                     </div>
                   </div>
                   {/* 购物车分析报告 */}
-                  <div className="mt-4 p-4 bg-white rounded-xl border border-blue-200 shadow-sm cursor-pointer hover:border-blue-400 transition-all duration-300">
+                  <div className="mt-4 p-4 bg-white rounded-xl border border-blue-200 shadow-sm hover:border-blue-400 transition-all duration-300">
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">🛒</span>
                       <div className="flex-1">
                         <h4 className="font-semibold text-gray-900">购物车分析 - 在线零售业务数据分析报告</h4>
                         <p className="text-sm text-gray-500 mt-1">包含完整的购物篮关联规则挖掘、用户行为分析、销量预测等实战案例</p>
                       </div>
-                      <a 
-                        href="/在线零售业务数据分析报告.docx" 
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg text-sm font-medium hover:shadow-md transition-all duration-300"
-                      >
-                        查看报告
-                      </a>
+                      <div className="flex gap-2">
+                        <a 
+                          href="/在线零售业务数据分析报告.docx" 
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg text-sm font-medium hover:shadow-md transition-all duration-300"
+                        >
+                          查看报告
+                        </a>
+                        <a 
+                          href="/在线零售业务数据分析报告.docx" 
+                          download
+                          className="px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all duration-300"
+                        >
+                          下载报告
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
