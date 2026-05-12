@@ -2955,9 +2955,10 @@ export default function DataAnalysisCourse() {
   const [showSyllabus, setShowSyllabus] = useState(false);
   const [panelSizes, setPanelSizes] = useState({
     left: 320,
-    right: 320
+    right: 320,
+    top: 200
   });
-  const [isDragging, setIsDragging] = useState<'left' | 'right' | null>(null);
+  const [isDragging, setIsDragging] = useState<'left' | 'right' | 'vertical' | null>(null);
   const [collapsedSections, setCollapsedSections] = useState({
     dataset: false,
     tasks: false
@@ -2999,6 +3000,12 @@ export default function DataAnalysisCourse() {
           const maxWidth = containerWidth - panelSizes.left - 40;
           const clampedWidth = Math.max(minWidth, Math.min(maxWidth, newRightWidth));
           setPanelSizes(prev => ({ ...prev, right: clampedWidth }));
+        } else if (isDragging === 'vertical') {
+          const newTopHeight = e.clientY - containerRect.top;
+          const minHeight = 150;
+          const maxHeight = containerRect.height - 150;
+          const clampedHeight = Math.max(minHeight, Math.min(maxHeight, newTopHeight));
+          setPanelSizes(prev => ({ ...prev, top: clampedHeight }));
         }
       }
     };
@@ -3013,7 +3020,7 @@ export default function DataAnalysisCourse() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, panelSizes.right, panelSizes.left]);
+  }, [isDragging, panelSizes.right, panelSizes.left, panelSizes.top]);
 
   // 倒计时逻辑
   useEffect(() => {
@@ -5442,8 +5449,11 @@ export default function DataAnalysisCourse() {
                             className="bg-gray-50 border-r border-gray-200 flex flex-col overflow-hidden"
                             style={{ width: `${panelSizes.left}px` }}
                           >
-                            {/* 数据集预览 */}
-                            <div className="border-b border-gray-200 bg-white">
+                            {/* 数据集预览 - 可调整高度 */}
+                            <div 
+                              className="border-b border-gray-200 bg-white overflow-hidden"
+                              style={{ height: `${panelSizes.top}px` }}
+                            >
                               <button
                                 onClick={() => setCollapsedSections(prev => ({ ...prev, dataset: !prev.dataset }))}
                                 className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
@@ -5464,7 +5474,7 @@ export default function DataAnalysisCourse() {
                                 </svg>
                               </button>
                               {!collapsedSections.dataset && (
-                                <div className="px-4 pb-4">
+                                <div className="px-4 pb-4 h-[calc(100%-56px)] overflow-y-auto">
                                   <div className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
                                     <div className="bg-gray-100 px-3 py-2 border-b border-gray-200">
                                       <span className="text-sm font-medium text-gray-700">{currentProject.dataset}</span>
@@ -5499,6 +5509,18 @@ export default function DataAnalysisCourse() {
                                   </div>
                                 </div>
                               )}
+                            </div>
+
+                            {/* 水平分割条 - 可上下拖动 */}
+                            <div
+                              className="h-1 bg-gray-200 cursor-row-resize hover:bg-gray-400 transition-colors group relative"
+                              onMouseDown={() => setIsDragging('vertical')}
+                            >
+                              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13l-3 3m0 0l-3-3m3 3V8" />
+                                </svg>
+                              </div>
                             </div>
                             
                             {/* 任务清单 */}
