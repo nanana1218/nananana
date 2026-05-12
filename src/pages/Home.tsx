@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 
 interface Course {
   id: string;
@@ -11,82 +10,8 @@ interface Course {
   skills: string[];
 }
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  icon: string;
-  color: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  duration: string;
-  dataset: string;
-}
-
 export default function Home() {
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
-
-  const projects: Project[] = [
-    {
-      id: 1,
-      title: '数据预处理高阶版',
-      description: '铺垫所有算法前置能力，掌握数据清洗、特征工程的核心技能',
-      icon: '🧹',
-      color: 'from-blue-500 to-cyan-400',
-      difficulty: 'beginner',
-      duration: '30分钟',
-      dataset: 'retail_orders.csv'
-    },
-    {
-      id: 2,
-      title: '多维统计+深度相关性分析',
-      description: '通过统计学方法探索数据关系，发现隐藏的业务洞察',
-      icon: '📊',
-      color: 'from-purple-500 to-pink-400',
-      difficulty: 'beginner',
-      duration: '35分钟',
-      dataset: 'sales_data.csv'
-    },
-    {
-      id: 3,
-      title: '购物篮关联规则挖掘',
-      description: '使用Apriori算法发现商品关联关系，优化商品推荐策略',
-      icon: '🛒',
-      color: 'from-green-500 to-emerald-400',
-      difficulty: 'intermediate',
-      duration: '45分钟',
-      dataset: 'transactions.csv'
-    },
-    {
-      id: 4,
-      title: '用户分群与精准营销',
-      description: '基于K-Means聚类实现用户细分，制定差异化运营策略',
-      icon: '👥',
-      color: 'from-orange-500 to-amber-400',
-      difficulty: 'intermediate',
-      duration: '40分钟',
-      dataset: 'user_behaviour.csv'
-    },
-    {
-      id: 5,
-      title: '销量预测与库存优化',
-      description: '时间序列预测未来销量，智能优化库存水平',
-      icon: '📈',
-      color: 'from-cyan-500 to-teal-400',
-      difficulty: 'intermediate',
-      duration: '50分钟',
-      dataset: 'product_sales.csv'
-    },
-    {
-      id: 6,
-      title: '用户流失预警系统',
-      description: '机器学习构建流失预测模型，提前干预降低用户流失',
-      icon: '⚠️',
-      color: 'from-red-500 to-rose-400',
-      difficulty: 'advanced',
-      duration: '55分钟',
-      dataset: 'customer_churn.csv'
-    }
-  ];
 
   const courses: Course[] = [
     {
@@ -253,76 +178,6 @@ export default function Home() {
               <div className="text-4xl font-bold text-indigo-400 mb-2">∞</div>
               <div className="text-gray-400">学习潜力</div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 实际案例项目展示 */}
-      <section className="py-16 px-4 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">
-              实际案例项目展示
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              精选数据分析实战项目，每个项目都包含完整数据集和详细指导
-            </p>
-          </div>
-          <div className="space-y-6">
-            {projects.map((project, index) => (
-              <Link 
-                to="/data-analysis-course"
-                key={project.id}
-                className="block"
-              >
-                <div 
-                  className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100"
-                  style={{
-                    animationDelay: `${index * 0.1}s`
-                  }}
-                >
-                  <div className="flex items-center gap-8">
-                    <div className={`w-32 h-32 rounded-2xl bg-gradient-to-br ${project.color} flex items-center justify-center shadow-lg shadow-current/30 flex-shrink-0`}>
-                      <span className="text-5xl">{project.icon}</span>
-                    </div>
-                    
-                    <div className="flex-1">
-                      <div className="flex items-center gap-4 mb-4">
-                        <span className={`px-4 py-2 rounded-full text-lg font-medium ${
-                          project.difficulty === 'beginner' ? 'bg-green-100 text-green-600' :
-                          project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-600' :
-                          'bg-red-100 text-red-600'
-                        }`}>
-                          {project.difficulty === 'beginner' ? '入门' :
-                           project.difficulty === 'intermediate' ? '进阶' : '高级'}
-                        </span>
-                        <span className="text-2xl text-gray-500 font-medium">
-                          {project.duration}
-                        </span>
-                      </div>
-                      
-                      <h3 className="text-4xl font-bold text-gray-900 mb-4">
-                        {project.title}
-                      </h3>
-                      
-                      <p className="text-2xl text-gray-500 mb-6 leading-relaxed">
-                        {project.description}
-                      </p>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3 text-gray-400 text-xl">
-                          <span className="text-3xl">📁</span>
-                          <span>{project.dataset}</span>
-                        </div>
-                        <div className="px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-2xl text-white text-2xl font-semibold hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300">
-                          开始学习
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
           </div>
         </div>
       </section>

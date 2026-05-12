@@ -4013,7 +4013,7 @@ export default function DataAnalysisCourse() {
                     </button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-6">
                     {filteredProjects.map((project, index) => {
                       const progress = learningState.projectProgress[project.id];
                       const isCompleted = progress?.learnCompleted && progress?.practiceCompleted && progress?.testScore !== null;
@@ -4026,7 +4026,7 @@ export default function DataAnalysisCourse() {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: isAnimated ? 1 : 0, y: isAnimated ? 0 : 20 }}
                           transition={{ duration: 0.3, delay: index * 0.05 }}
-                          whileHover={{ scale: 1.02, y: -4 }}
+                          whileHover={{ scale: 1.01, y: -2 }}
                           onHoverStart={() => setHoveredProject(project.id)}
                           onHoverEnd={() => setHoveredProject(null)}
                           className={`bg-white rounded-2xl border ${isCompleted ? 'border-green-500/50' : 'border-gray-200'} overflow-hidden transition-all duration-300 cursor-pointer ${
@@ -4034,58 +4034,52 @@ export default function DataAnalysisCourse() {
                           }`}
                           onClick={() => selectProject(project.id)}
                         >
-                          <div className="p-6">
-                            <div className="flex items-start gap-4">
-                              {/* 左侧图标 */}
-                              <div className={`relative w-14 h-14 bg-gradient-to-br ${project.color} rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-md ${
-                                isHovered ? 'scale-110' : ''
+                          <div className="p-8">
+                            <div className="flex items-center gap-8">
+                              {/* 左侧大图标 */}
+                              <div className={`relative w-32 h-32 bg-gradient-to-br ${project.color} rounded-2xl flex items-center justify-center text-5xl flex-shrink-0 shadow-lg shadow-current/30 ${
+                                isHovered ? 'scale-105' : ''
                               } transition-transform duration-300`}>
                                 {project.icon}
-                                {/* 快捷键提示 */}
-                                {index < 9 && (
-                                  <div className={`absolute -top-2 -right-2 w-5 h-5 bg-gray-800 text-white text-xs rounded-full flex items-center justify-center font-bold transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-                                    {index + 1}
-                                  </div>
-                                )}
                                 {/* 完成徽章 */}
                                 {isCompleted && (
-                                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm">
+                                  <div className="absolute -top-3 -right-3 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center text-xl">
                                     ✓
                                   </div>
                                 )}
                               </div>
                               
                               {/* 右侧内容 */}
-                              <div className="flex-1 min-w-0">
+                              <div className="flex-1">
                                 {/* 难度和时长 */}
-                                <div className="flex items-center gap-2 mb-2">
-                                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${project.difficulty === 'beginner' ? 'bg-green-100 text-green-600' : project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}`}>
+                                <div className="flex items-center gap-4 mb-4">
+                                  <span className={`px-4 py-2 rounded-full text-lg font-medium ${project.difficulty === 'beginner' ? 'bg-green-100 text-green-600' : project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}`}>
                                     {project.difficulty === 'beginner' ? '入门' : project.difficulty === 'intermediate' ? '进阶' : '高级'}
                                   </span>
-                                  <span className="text-sm text-gray-500">{project.duration}</span>
+                                  <span className="text-2xl text-gray-500 font-medium">{project.duration}</span>
                                   {isCompleted && (
-                                    <span className="text-xs text-green-600 font-medium">✅ 已完成</span>
+                                    <span className="text-lg text-green-600 font-medium">✅ 已完成</span>
                                   )}
                                 </div>
                                 
                                 {/* 标题 */}
-                                <h3 className="text-lg font-semibold text-gray-900 mb-1">{project.title}</h3>
+                                <h3 className="text-4xl font-bold text-gray-900 mb-4">{project.title}</h3>
                                 
                                 {/* 描述 */}
-                                <p className="text-gray-500 text-sm mb-3 line-clamp-2">{project.description}</p>
+                                <p className="text-2xl text-gray-500 mb-6 leading-relaxed">{project.description}</p>
                                 
                                 {/* 数据集和按钮 */}
                                 <div className="flex items-center justify-between">
-                                  <span className="text-xs text-gray-400 flex items-center gap-1">
-                                    <span>📁</span>
+                                  <div className="flex items-center gap-3 text-gray-400 text-xl">
+                                    <span className="text-3xl">📁</span>
                                     <span>{project.dataset}</span>
-                                  </span>
+                                  </div>
                                   <button
-                                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-sm ${
+                                    className={`px-8 py-4 rounded-2xl text-2xl font-semibold transition-all shadow-lg ${
                                       isCompleted
                                         ? 'bg-green-500 hover:bg-green-600 text-white'
-                                        : 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white'
-                                    } ${isHovered ? 'scale-105 shadow-md' : ''}`}
+                                        : 'bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white'
+                                    } ${isHovered ? 'scale-105 shadow-xl' : ''}`}
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       selectProject(project.id);
