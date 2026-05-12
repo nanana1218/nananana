@@ -3977,7 +3977,11 @@ export default function DataAnalysisCourse() {
                 <div 
                   className="mb-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 border border-blue-500/30 cursor-pointer hover:shadow-lg hover:border-blue-500/50 transition-all duration-300 hover:scale-[1.01]"
                   onClick={() => {
-                    // 点击后可以滚动到项目列表或者其他操作
+                    // 点击后滚动到项目列表
+                    const projectsSection = document.getElementById('projects-list');
+                    if (projectsSection) {
+                      projectsSection.scrollIntoView({ behavior: 'smooth' });
+                    }
                   }}
                 >
                   <div className="flex items-center gap-3">
@@ -3988,6 +3992,9 @@ export default function DataAnalysisCourse() {
                     </div>
                   </div>
                 </div>
+
+                {/* 项目列表 - 添加 id 用于滚动 */}
+                <div id="projects-list">
 
                 {/* 筛选结果信息 */}
                 <div className="mb-4 flex items-center justify-between">
@@ -4118,6 +4125,7 @@ export default function DataAnalysisCourse() {
                     })}
                   </div>
                 )}
+                </div> {/* 结束 projects-list div */}
                 
                 {/* 底部行动号召 */}
                 <div className="mt-12 text-center py-8 px-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border border-gray-200">
