@@ -2964,14 +2964,14 @@ export default function DataAnalysisCourse() {
     tasks: false
   });
   const [expandedSections, setExpandedSections] = useState({
-    overview: true,
-    knowledge: true,
-    metrics: true,
-    steps: true,
-    pitfalls: true,
-    tips: true,
-    deliverables: true,
-    resources: true
+    overview: false,
+    knowledge: false,
+    metrics: false,
+    steps: false,
+    pitfalls: false,
+    tips: false,
+    deliverables: false,
+    resources: false
   });
   
   const [selectedKnowledge, setSelectedKnowledge] = useState<number | null>(null);
@@ -3060,6 +3060,22 @@ export default function DataAnalysisCourse() {
     setTimerActive(false);
     // 只有数据预处理高阶班（id=1）默认显示代码框架，其余项目默认空白，形成学习阶梯
     setUserCode(project?.id === 1 ? project.codeExample : '');
+    // 重置所有学习面板为收起状态
+    setExpandedSections({
+      overview: false,
+      knowledge: false,
+      metrics: false,
+      steps: false,
+      pitfalls: false,
+      tips: false,
+      deliverables: false,
+      resources: false
+    });
+    // 重置左侧面板为收起状态
+    setCollapsedSections({
+      dataset: false,
+      tasks: false
+    });
 
 
   };
