@@ -3670,6 +3670,21 @@ export default function DataAnalysisCourse() {
                 <span className="text-cyan-300">零门槛掌握数据分析全栈技能</span>
               </p>
 
+              {/* 自我介绍 */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="flex items-center justify-center gap-3 mb-8"
+              >
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-blue-500/30">
+                  👋
+                </div>
+                <p className="text-lg text-blue-100 bg-blue-500/10 backdrop-blur-sm border border-blue-400/20 rounded-full px-6 py-3">
+                  <span className="text-white font-medium">大家好！</span> 我是来自广东科学技术职业学院商学院商务数据分析与应用的学生，欢迎使用！
+                </p>
+              </motion.div>
+
               {/* 数据统计展示 - 可点击展开 */}
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
