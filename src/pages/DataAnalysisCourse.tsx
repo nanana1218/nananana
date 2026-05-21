@@ -3621,22 +3621,13 @@ export default function DataAnalysisCourse() {
       {!currentProject ? (
         <section className="relative py-20 px-4">
           <div className="max-w-7xl mx-auto">
-            {/* 返回上一页按钮和分享按钮 */}
+            {/* 分享按钮 */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="mb-8 flex flex-wrap items-center justify-between gap-4"
+              className="mb-8 flex justify-end"
             >
-              <button
-                onClick={() => window.history.back()}
-                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg text-white text-sm font-medium transition-all hover:scale-105"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                <span>返回上一页</span>
-              </button>
               <SocialShare />
             </motion.div>
 
