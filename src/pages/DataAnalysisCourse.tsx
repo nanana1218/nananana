@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import SocialShare from '@/components/SocialShare';
+import ProgressTracker from '@/components/ProgressTracker';
+import SEO from '@/components/SEO';
 
 interface StatItem {
   value: string;
@@ -3611,16 +3614,19 @@ export default function DataAnalysisCourse() {
         transition={{ type: "spring", stiffness: 30, damping: 25 }}
       ></motion.div>
 
+      {/* SEO组件 */}
+      <SEO />
+
       {/* Hero区域 - 增强视觉冲击力 */}
       {!currentProject ? (
         <section className="relative py-20 px-4">
           <div className="max-w-7xl mx-auto">
-            {/* 返回上一页按钮 */}
+            {/* 返回上一页按钮和分享按钮 */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="mb-8"
+              className="mb-8 flex flex-wrap items-center justify-between gap-4"
             >
               <button
                 onClick={() => window.history.back()}
@@ -3631,6 +3637,7 @@ export default function DataAnalysisCourse() {
                 </svg>
                 <span>返回上一页</span>
               </button>
+              <SocialShare />
             </motion.div>
 
             <motion.div 
@@ -3907,40 +3914,8 @@ export default function DataAnalysisCourse() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                {/* 学习进度统计面板 */}
-                <div className="mb-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-6 text-white shadow-lg">
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div>
-                      <h2 className="text-2xl font-bold mb-1">📊 我的学习进度</h2>
-                      <p className="text-white/80">持续学习，稳步提升数据分析能力</p>
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <div className="text-center">
-                        <div className="text-3xl font-bold">{completedCount}</div>
-                        <div className="text-sm text-white/70">已完成</div>
-                      </div>
-                      <div className="w-px h-12 bg-white/30"></div>
-                      <div className="text-center">
-                        <div className="text-3xl font-bold">{totalProjects - completedCount}</div>
-                        <div className="text-sm text-white/70">待完成</div>
-                      </div>
-                      <div className="w-px h-12 bg-white/30"></div>
-                      <div className="text-center">
-                        <div className="text-3xl font-bold">{completionRate}%</div>
-                        <div className="text-sm text-white/70">完成率</div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* 进度条 */}
-                  <div className="mt-4 bg-white/20 rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${completionRate}%` }}
-                      transition={{ duration: 1, ease: "easeOut" }}
-                      className="bg-white rounded-full h-full"
-                    />
-                  </div>
-                </div>
+                {/* 学习进度追踪面板 */}
+                <ProgressTracker />
 
                 {/* 搜索和筛选区域 */}
                 <div className="mb-6 flex flex-col md:flex-row gap-4">
