@@ -85,6 +85,11 @@ const StatCard = ({ stat, index }: { stat: StatItem; index: number }) => {
   );
 };
 
+interface ResourceItem {
+  title: string;
+  url: string;
+}
+
 interface Project {
   id: number;
   title: string;
@@ -106,13 +111,13 @@ interface Project {
   dataset: string;
   showFullFlow: boolean;
   learningResources: {
-    docs: string[];
-    videos: string[];
-    examples: string[];
+    docs: ResourceItem[];
+    videos: ResourceItem[];
+    examples: ResourceItem[];
   };
   communitySupport: {
-    forum: string;
-    discussion: string[];
+    forum: ResourceItem;
+    discussion: ResourceItem[];
   };
   detailedContent?: {
     overview: string;
@@ -352,27 +357,27 @@ print("✅ 数据预处理完成！")`,
     ],
     learningResources: {
       docs: [
-        'pandas官方文档：数据清洗与处理',
-        'scikit-learn官方文档：特征预处理',
-        '统计学习方法：数据预处理章节'
+        { title: 'pandas官方文档：数据清洗与处理', url: 'https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html' },
+        { title: 'scikit-learn官方文档：特征预处理', url: 'https://scikit-learn.org/stable/modules/preprocessing.html' },
+        { title: '统计学习方法：数据预处理章节', url: 'https://zh-hans.d2l.ai/chapter_preliminaries/index.html' }
       ],
       videos: [
-        '数据预处理实战教程：缺失值处理',
-        '特征工程详解：分桶与编码',
-        '数据标准化方法对比与应用'
+        { title: '数据预处理实战教程：缺失值处理', url: 'https://www.bilibili.com/video/BV1uJ411W7R2' },
+        { title: '特征工程详解：分桶与编码', url: 'https://www.bilibili.com/video/BV1Vh411J7W7' },
+        { title: '数据标准化方法对比与应用', url: 'https://www.bilibili.com/video/BV15J411i7sL' }
       ],
       examples: [
-        '真实电商数据集预处理示例',
-        '金融数据清洗实战',
-        '医疗数据预处理案例'
+        { title: '真实电商数据集预处理示例', url: 'https://github.com/IBM/telco-customer-churn-on-icp4d' },
+        { title: '金融数据清洗实战', url: 'https://github.com/firmai/financial-machine-learning' },
+        { title: '医疗数据预处理案例', url: 'https://mimic.mit.edu/' }
       ]
     },
     communitySupport: {
-      forum: '数据分析社区 - 数据预处理板块',
+      forum: { title: '数据分析社区 - 数据预处理板块', url: 'https://www.kaggle.com/forums' },
       discussion: [
-        '如何处理高维度稀疏特征？',
-        '缺失值填充方法的选择策略',
-        '特征工程最佳实践分享'
+        { title: '如何处理高维度稀疏特征？', url: 'https://www.zhihu.com/question/28095369' },
+        { title: '缺失值填充方法的选择策略', url: 'https://zhuanlan.zhihu.com/p/91524519' },
+        { title: '特征工程最佳实践分享', url: 'https://zhuanlan.zhihu.com/p/43241652' }
       ]
     },
     showFullFlow: true,
@@ -727,27 +732,27 @@ print(strong_corr.stack())`,
     ],
     learningResources: {
       docs: [
-        'pandas官方文档：描述统计',
-        'seaborn官方文档：热力图',
-        '统计学习方法：相关性分析章节'
+        { title: 'pandas官方文档：描述统计', url: 'https://pandas.pydata.org/docs/reference/series.html#descriptive-statistics' },
+        { title: 'seaborn官方文档：热力图', url: 'https://seaborn.pydata.org/generated/seaborn.heatmap.html' },
+        { title: '统计学习方法：相关性分析章节', url: 'https://zh-hans.d2l.ai/chapter_linear-networks/linear-regression.html' }
       ],
       videos: [
-        '相关性分析实战教程',
-        '热力图绘制技巧',
-        '统计指标解读与应用'
+        { title: '相关性分析实战教程', url: 'https://www.bilibili.com/video/BV1iJ411S79F' },
+        { title: '热力图绘制技巧', url: 'https://www.bilibili.com/video/BV1qJ411N71A' },
+        { title: '统计指标解读与应用', url: 'https://www.bilibili.com/video/BV1W5411u7w6' }
       ],
       examples: [
-        '电商营收影响因子分析示例',
-        '金融数据相关性分析',
-        '医疗数据关联分析'
+        { title: '电商营收影响因子分析示例', url: 'https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce' },
+        { title: '金融数据相关性分析', url: 'https://www.kaggle.com/datasets/stefanoleone992/imdb-extensive-dataset' },
+        { title: '医疗数据关联分析', url: 'https://www.kaggle.com/datasets/mirichoi0218/insurance' }
       ]
     },
     communitySupport: {
-      forum: '数据分析社区 - 统计分析板块',
+      forum: { title: '数据分析社区 - 统计分析板块', url: 'https://www.kaggle.com/forums' },
       discussion: [
-        '如何选择合适的相关性分析方法？',
-        '热力图美化技巧',
-        '相关性分析的常见误区'
+        { title: '如何选择合适的相关性分析方法？', url: 'https://www.zhihu.com/question/28168814' },
+        { title: '热力图美化技巧', url: 'https://zhuanlan.zhihu.com/p/108172222' },
+        { title: '相关性分析的常见误区', url: 'https://zhuanlan.zhihu.com/p/57093550' }
       ]
     },
     showFullFlow: false
@@ -949,27 +954,27 @@ for _, row in rules.head(3).iterrows():
     ],
     learningResources: {
       docs: [
-        'mlxtend官方文档：Apriori算法',
-        '数据挖掘导论：关联规则章节',
-        '电商推荐系统：关联规则应用'
+        { title: 'mlxtend官方文档：Apriori算法', url: 'https://rasbt.github.io/mlxtend/user_guide/frequent_patterns/apriori/' },
+        { title: '数据挖掘导论：关联规则章节', url: 'https://www.cs.uregina.ca/Links/class-info/411/AssociationRules/' },
+        { title: '电商推荐系统：关联规则应用', url: 'https://towardsdatascience.com/market-basket-analysis-association-rules-fa4b98958853' }
       ],
       videos: [
-        '关联规则挖掘实战教程',
-        'Apriori算法原理详解',
-        '购物篮分析案例分析'
+        { title: '关联规则挖掘实战教程', url: 'https://www.bilibili.com/video/BV1Zt411p7F7' },
+        { title: 'Apriori算法原理详解', url: 'https://www.bilibili.com/video/BV1QW411P7wL' },
+        { title: '购物篮分析案例分析', url: 'https://www.bilibili.com/video/BV1xW411T78Q' }
       ],
       examples: [
-        '电商购物车关联规则示例',
-        '超市商品组合分析',
-        '线上零售关联推荐'
+        { title: '电商购物车关联规则示例', url: 'https://www.kaggle.com/code/datatheque/association-rules-mining-market-basket-analysis' },
+        { title: '超市商品组合分析', url: 'https://www.kaggle.com/code/heeraldedhia/market-basket-analysis' },
+        { title: '线上零售关联推荐', url: 'https://www.kaggle.com/code/sagarnildass/market-basket-analysis-apriori-algorithm' }
       ]
     },
     communitySupport: {
-      forum: '数据分析社区 - 关联规则板块',
+      forum: { title: '数据分析社区 - 关联规则板块', url: 'https://www.kaggle.com/forums' },
       discussion: [
-        '如何优化Apriori算法性能？',
-        '提升度和置信度的权衡',
-        '关联规则在推荐系统中的应用'
+        { title: '如何优化Apriori算法性能？', url: 'https://www.zhihu.com/question/29979833' },
+        { title: '提升度和置信度的权衡', url: 'https://zhuanlan.zhihu.com/p/34239885' },
+        { title: '关联规则在推荐系统中的应用', url: 'https://zhuanlan.zhihu.com/p/26226954' }
       ]
     },
     showFullFlow: false
@@ -1200,27 +1205,27 @@ print("分群2：流失用户 → 推送唤醒优惠券")`,
     ],
     learningResources: {
       docs: [
-        'scikit-learn官方文档：KMeans算法',
-        '机器学习实战：聚类分析章节',
-        '数据可视化：PCA降维应用'
+        { title: 'scikit-learn官方文档：KMeans算法', url: 'https://scikit-learn.org/stable/modules/clustering.html#k-means' },
+        { title: '机器学习实战：聚类分析章节', url: 'https://www.python-course.eu/k_means_clustering.php' },
+        { title: '数据可视化：PCA降维应用', url: 'https://scikit-learn.org/stable/modules/decomposition.html#pca' }
       ],
       videos: [
-        'KMeans聚类算法详解',
-        '肘部法则确定k值实战',
-        '聚类结果可视化技巧'
+        { title: 'KMeans聚类算法详解', url: 'https://www.bilibili.com/video/BV1Sx411T7QQ' },
+        { title: '肘部法则确定k值实战', url: 'https://www.bilibili.com/video/BV15T4y1G76B' },
+        { title: '聚类结果可视化技巧', url: 'https://www.bilibili.com/video/BV1iJ411W7w9' }
       ],
       examples: [
-        '用户分群案例分析',
-        '商品聚类实战',
-        '客户细分应用'
+        { title: '用户分群案例分析', url: 'https://www.kaggle.com/code/vipulgandhi/customer-segmentation-tutorial' },
+        { title: '商品聚类实战', url: 'https://www.kaggle.com/code/ibrahimsoboh/customer-segmentation-using-k-means-clustering' },
+        { title: '客户细分应用', url: 'https://www.kaggle.com/code/carlolepelaars/customer-segmentation-using-k-means' }
       ]
     },
     communitySupport: {
-      forum: '数据分析社区 - 聚类分析板块',
+      forum: { title: '数据分析社区 - 聚类分析板块', url: 'https://www.kaggle.com/forums' },
       discussion: [
-        '如何选择合适的聚类算法？',
-        'k值确定的最佳实践',
-        '聚类结果的业务解读'
+        { title: '如何选择合适的聚类算法？', url: 'https://www.zhihu.com/question/29530213' },
+        { title: 'k值确定的最佳实践', url: 'https://zhuanlan.zhihu.com/p/105028515' },
+        { title: '聚类结果的业务解读', url: 'https://zhuanlan.zhihu.com/p/78491521' }
       ]
     },
     showFullFlow: false
@@ -1458,27 +1463,27 @@ print("""
     ],
     learningResources: {
       docs: [
-        'RFM模型官方文档',
-        '客户生命周期管理：RFM应用',
-        '用户分层最佳实践'
+        { title: 'RFM模型官方文档', url: 'https://www.putler.com/blog/rfm-analysis/' },
+        { title: '客户生命周期管理：RFM应用', url: 'https://neilpatel.com/blog/rfm-analysis/' },
+        { title: '用户分层最佳实践', url: 'https://www.shopify.com/blog/rfm-analysis' }
       ],
       videos: [
-        'RFM模型详解与应用',
-        '用户分层实战教程',
-        '客户价值评估方法'
+        { title: 'RFM模型详解与应用', url: 'https://www.bilibili.com/video/BV1Xk4y1M7yL' },
+        { title: '用户分层实战教程', url: 'https://www.bilibili.com/video/BV1QK4y1Z7rJ' },
+        { title: '客户价值评估方法', url: 'https://www.bilibili.com/video/BV1q5411776m' }
       ],
       examples: [
-        '电商用户RFM分析案例',
-        '金融客户分层应用',
-        '零售行业RFM实践'
+        { title: '电商用户RFM分析案例', url: 'https://www.kaggle.com/code/duygut/rfm-analysis-eda' },
+        { title: '金融客户分层应用', url: 'https://www.kaggle.com/code/vetrirah/customer-segmentation-with-rfm' },
+        { title: '零售行业RFM实践', url: 'https://www.kaggle.com/code/ashydv/customer-segmentation-using-rfm-analysis' }
       ]
     },
     communitySupport: {
-      forum: '数据分析社区 - RFM模型板块',
+      forum: { title: '数据分析社区 - RFM模型板块', url: 'https://www.kaggle.com/forums' },
       discussion: [
-        'RFM模型的最佳分箱方法',
-        '如何结合其他模型优化RFM',
-        'RFM在不同行业的应用差异'
+        { title: 'RFM模型的最佳分箱方法', url: 'https://www.zhihu.com/question/37133426' },
+        { title: '如何结合其他模型优化RFM', url: 'https://zhuanlan.zhihu.com/p/136307710' },
+        { title: 'RFM在不同行业的应用差异', url: 'https://zhuanlan.zhihu.com/p/62126491' }
       ]
     },
     showFullFlow: false
@@ -1711,27 +1716,27 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
     ],
     learningResources: {
       docs: [
-        'scikit-learn官方文档：线性回归',
-        '统计学习方法：回归分析章节',
-        '多重共线性处理指南'
+        { title: 'scikit-learn官方文档：线性回归', url: 'https://scikit-learn.org/stable/modules/linear_model.html#ordinary-least-squares' },
+        { title: '统计学习方法：回归分析章节', url: 'https://www.stat.cmu.edu/~cshalizi/mreg/' },
+        { title: '多重共线性处理指南', url: 'https://www.oreilly.com/library/view/python-for-data/9781491957660/' }
       ],
       videos: [
-        '线性回归模型详解',
-        '多重共线性检测与处理',
-        '回归系数解读实战'
+        { title: '线性回归模型详解', url: 'https://www.bilibili.com/video/BV1PE411c7Dp' },
+        { title: '多重共线性检测与处理', url: 'https://www.bilibili.com/video/BV1rE411A768' },
+        { title: '回归系数解读实战', url: 'https://www.bilibili.com/video/BV14J411T7sX' }
       ],
       examples: [
-        '销量预测案例分析',
-        '房价预测应用',
-        '金融回归分析'
+        { title: '销量预测案例分析', url: 'https://www.kaggle.com/code/ashydv/sales-prediction-simple-linear-regression' },
+        { title: '房价预测应用', url: 'https://www.kaggle.com/code/serigne/house-prices-advanced-regression-techniques' },
+        { title: '金融回归分析', url: 'https://www.kaggle.com/code/carlmcbrideellis/linear-regression-sample-stock-notebook' }
       ]
     },
     communitySupport: {
-      forum: '数据分析社区 - 回归分析板块',
+      forum: { title: '数据分析社区 - 回归分析板块', url: 'https://www.kaggle.com/forums' },
       discussion: [
-        '如何处理线性回归中的异常值？',
-        '特征选择的最佳实践',
-        '线性回归与其他模型的对比'
+        { title: '如何处理线性回归中的异常值？', url: 'https://www.zhihu.com/question/22499010' },
+        { title: '特征选择的最佳实践', url: 'https://zhuanlan.zhihu.com/p/26433852' },
+        { title: '线性回归与其他模型的对比', url: 'https://zhuanlan.zhihu.com/p/13039578' }
       ]
     },
     showFullFlow: false
@@ -1982,27 +1987,27 @@ print(f"预测销量 = {predicted_sales[0]:.0f}")`,
     ],
     learningResources: {
       docs: [
-        'scikit-learn官方文档：随机森林',
-        '机器学习实战：集成学习章节',
-        '特征重要性分析指南'
+        { title: 'scikit-learn官方文档：随机森林', url: 'https://scikit-learn.org/stable/modules/ensemble.html#random-forests' },
+        { title: '机器学习实战：集成学习章节', url: 'https://www.oreilly.com/library/view/hands-on-machine-learning/9781492032632/' },
+        { title: '特征重要性分析指南', url: 'https://towardsdatascience.com/feature-importance-with-tree-based-models-870c4e3d817f' }
       ],
       videos: [
-        '随机森林算法详解',
-        '模型调参实战教程',
-        '特征重要性解读'
+        { title: '随机森林算法详解', url: 'https://www.bilibili.com/video/BV1rE411A7jP' },
+        { title: '模型调参实战教程', url: 'https://www.bilibili.com/video/BV1ZJ411M7uA' },
+        { title: '特征重要性解读', url: 'https://www.bilibili.com/video/BV1mE411V7tS' }
       ],
       examples: [
-        '销量预测随机森林案例',
-        '金融预测应用',
-        '医疗数据回归分析'
+        { title: '销量预测随机森林案例', url: 'https://www.kaggle.com/code/kashnitsky/topic-10-bagging-random-forests' },
+        { title: '金融预测应用', url: 'https://www.kaggle.com/code/faressayah/random-forest-classifier-prediction' },
+        { title: '医疗数据回归分析', url: 'https://www.kaggle.com/code/uciml/breast-cancer-wisconsin-data' }
       ]
     },
     communitySupport: {
-      forum: '数据分析社区 - 集成学习板块',
+      forum: { title: '数据分析社区 - 集成学习板块', url: 'https://www.kaggle.com/forums' },
       discussion: [
-        '随机森林参数调优技巧',
-        '特征重要性的正确解读',
-        '随机森林与梯度提升树的对比'
+        { title: '随机森林参数调优技巧', url: 'https://www.zhihu.com/question/28070043' },
+        { title: '特征重要性的正确解读', url: 'https://zhuanlan.zhihu.com/p/84247963' },
+        { title: '随机森林与梯度提升树的对比', url: 'https://zhuanlan.zhihu.com/p/67334233' }
       ]
     },
     showFullFlow: false
@@ -2256,27 +2261,27 @@ print(f"建议安全库存量：{forecast_mean * 1.2:.0f}")`,
     ],
     learningResources: {
       docs: [
-        'statsmodels官方文档：ARIMA模型',
-        '时间序列分析：预测与控制',
-        'pandas时间序列处理指南'
+        { title: 'statsmodels官方文档：ARIMA模型', url: 'https://www.statsmodels.org/dev/examples/notebooks/generated/tsa_arma_0.html' },
+        { title: '时间序列分析：预测与控制', url: 'https://otexts.com/fpp2/' },
+        { title: 'pandas时间序列处理指南', url: 'https://pandas.pydata.org/docs/user_guide/timeseries.html' }
       ],
       videos: [
-        '时间序列分析实战教程',
-        'ARIMA模型参数选择',
-        '时间序列可视化技巧'
+        { title: '时间序列分析实战教程', url: 'https://www.bilibili.com/video/BV1uf4y1U7N5' },
+        { title: 'ARIMA模型参数选择', url: 'https://www.bilibili.com/video/BV1fT4y1c7rX' },
+        { title: '时间序列可视化技巧', url: 'https://www.bilibili.com/video/BV1hJ411v7nC' }
       ],
       examples: [
-        '销量预测案例分析',
-        '库存规划应用',
-        '经济指标预测'
+        { title: '销量预测案例分析', url: 'https://www.kaggle.com/code/jeevaragavan/time-series-forecasting-arima' },
+        { title: '库存规划应用', url: 'https://www.kaggle.com/code/ekami666/demand-forecasting-with-arima' },
+        { title: '经济指标预测', url: 'https://www.kaggle.com/code/sudalairajkumar/time-series-forecasting-using-arima' }
       ]
     },
     communitySupport: {
-      forum: '数据分析社区 - 时间序列板块',
+      forum: { title: '数据分析社区 - 时间序列板块', url: 'https://www.kaggle.com/forums' },
       discussion: [
-        '如何选择合适的时间序列模型？',
-        'ARIMA与Prophet的对比',
-        '时间序列异常检测方法'
+        { title: '如何选择合适的时间序列模型？', url: 'https://www.zhihu.com/question/21225065' },
+        { title: 'ARIMA与Prophet的对比', url: 'https://zhuanlan.zhihu.com/p/134166305' },
+        { title: '时间序列异常检测方法', url: 'https://zhuanlan.zhihu.com/p/122508085' }
       ]
     },
     showFullFlow: false
@@ -2563,27 +2568,27 @@ print("""
     ],
     learningResources: {
       docs: [
-        'scikit-learn官方文档：异常检测',
-        '异常检测：原理与应用',
-        '孤立森林算法详解'
+        { title: 'scikit-learn官方文档：异常检测', url: 'https://scikit-learn.org/stable/modules/outlier_detection.html' },
+        { title: '异常检测：原理与应用', url: 'https://towardsdatascience.com/top-10-anomaly-detection-algorithms-8183106e4450' },
+        { title: '孤立森林算法详解', url: 'https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icdm08b.pdf' }
       ],
       videos: [
-        '异常检测实战教程',
-        '孤立森林算法原理',
-        '异常检测可视化技巧'
+        { title: '异常检测实战教程', url: 'https://www.bilibili.com/video/BV1nJ411K7cH' },
+        { title: '孤立森林算法原理', url: 'https://www.bilibili.com/video/BV1RJ411F7a4' },
+        { title: '异常检测可视化技巧', url: 'https://www.bilibili.com/video/BV1oK4y1V7wY' }
       ],
       examples: [
-        '电商订单异常检测案例',
-        '信用卡欺诈检测',
-        '网络入侵检测'
+        { title: '电商订单异常检测案例', url: 'https://www.kaggle.com/code/vittoriotriassi/anomaly-detection-in-e-commerce-data' },
+        { title: '信用卡欺诈检测', url: 'https://www.kaggle.com/code/mlg-ulb/creditcardfraud' },
+        { title: '网络入侵检测', url: 'https://www.kaggle.com/code/ryanholbrook/anomaly-detection' }
       ]
     },
     communitySupport: {
-      forum: '数据分析社区 - 异常检测板块',
+      forum: { title: '数据分析社区 - 异常检测板块', url: 'https://www.kaggle.com/forums' },
       discussion: [
-        '如何平衡假阳性和假阴性？',
-        '异常检测在不同行业的应用',
-        '统计方法与机器学习方法的对比'
+        { title: '如何平衡假阳性和假阴性？', url: 'https://www.zhihu.com/question/31093758' },
+        { title: '异常检测在不同行业的应用', url: 'https://zhuanlan.zhihu.com/p/126800428' },
+        { title: '统计方法与机器学习方法的对比', url: 'https://zhuanlan.zhihu.com/p/97207768' }
       ]
     },
     showFullFlow: false
@@ -2908,27 +2913,27 @@ print("=" * 60)`,
     ],
     learningResources: {
       docs: [
-        '数据分析实战指南',
-        '业务分析：从数据到决策',
-        '数据可视化最佳实践'
+        { title: '数据分析实战指南', url: 'https://www.kdnuggets.com/2020/09/complete-guide-data-analysis.html' },
+        { title: '业务分析：从数据到决策', url: 'https://hbr.org/2013/01/data-and-the-decision' },
+        { title: '数据可视化最佳实践', url: 'https://www.tableau.com/learn/whitepapers/best-practices-for-data-visualizations' }
       ],
       videos: [
-        '数据分析全流程实战',
-        '业务报告撰写技巧',
-        '数据驱动决策案例分析'
+        { title: '数据分析全流程实战', url: 'https://www.bilibili.com/video/BV1NE411c7pZ' },
+        { title: '业务报告撰写技巧', url: 'https://www.bilibili.com/video/BV1zE411h7Tj' },
+        { title: '数据驱动决策案例分析', url: 'https://www.bilibili.com/video/BV17J411X7xN' }
       ],
       examples: [
-        '电商营收提升案例',
-        '金融数据分析实战',
-        '医疗数据综合分析'
+        { title: '电商营收提升案例', url: 'https://www.kaggle.com/code/olistbr/brazilian-ecommerce' },
+        { title: '金融数据分析实战', url: 'https://www.kaggle.com/code/rohanrao/financial-data-analysis' },
+        { title: '医疗数据综合分析', url: 'https://www.kaggle.com/code/abhinavwalia95/heart-failure-clinical-records' }
       ]
     },
     communitySupport: {
-      forum: '数据分析社区 - 综合项目板块',
+      forum: { title: '数据分析社区 - 综合项目板块', url: 'https://www.kaggle.com/forums' },
       discussion: [
-        '如何构建完整的数据分析报告？',
-        '业务问题定义的最佳实践',
-        '数据分析师的职业发展路径'
+        { title: '如何构建完整的数据分析报告？', url: 'https://www.zhihu.com/question/23379469' },
+        { title: '业务问题定义的最佳实践', url: 'https://zhuanlan.zhihu.com/p/66228459' },
+        { title: '数据分析师的职业发展路径', url: 'https://zhuanlan.zhihu.com/p/37385827' }
       ]
     },
     showFullFlow: false
@@ -5316,35 +5321,31 @@ export default function DataAnalysisCourse() {
                               {currentProject.learningResources.docs.map((doc, i) => (
                                 <motion.a 
                                   key={i}
-                                  href="#"
+                                  href={doc.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
                                   className="flex items-center gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 border border-indigo-100 hover:shadow-sm hover:border-indigo-300 transition-all cursor-pointer"
                                   initial={{ opacity: 0, scale: 0.95 }}
                                   animate={{ opacity: 1, scale: 1 }}
                                   transition={{ delay: i * 0.1 }}
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    alert(`正在打开：${doc}`);
-                                  }}
                                 >
                                   <span className="text-indigo-500">📄</span>
-                                  <span className="text-gray-700 text-sm">{doc}</span>
+                                  <span className="text-gray-700 text-sm">{doc.title}</span>
                                 </motion.a>
                               ))}
                               {currentProject.learningResources.videos.map((video, i) => (
                                 <motion.a 
                                   key={i}
-                                  href="#"
+                                  href={video.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
                                   className="flex items-center gap-3 bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-3 border border-red-100 hover:shadow-sm hover:border-red-300 transition-all cursor-pointer"
                                   initial={{ opacity: 0, scale: 0.95 }}
                                   animate={{ opacity: 1, scale: 1 }}
                                   transition={{ delay: i * 0.1 }}
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    alert(`正在打开视频：${video}`);
-                                  }}
                                 >
                                   <span className="text-red-500">🎥</span>
-                                  <span className="text-gray-700 text-sm">{video}</span>
+                                  <span className="text-gray-700 text-sm">{video.title}</span>
                                 </motion.a>
                               ))}
                             </div>
@@ -5460,17 +5461,15 @@ export default function DataAnalysisCourse() {
                           {currentProject.learningResources.docs.map((doc, i) => (
                             <motion.a 
                               key={i}
-                              href={`#${encodeURIComponent(doc)}`}
+                              href={doc.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
                               className="bg-gray-50 rounded-lg p-2 hover:bg-gray-100 transition-all cursor-pointer block border border-gray-100"
                               whileHover={{ y: -2 }}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                alert(`正在跳转到：${doc}`);
-                              }}
                             >
                               <span className="text-blue-600 text-sm flex items-center gap-2">
                                 <span>→</span>
-                                {doc}
+                                {doc.title}
                               </span>
                             </motion.a>
                           ))}
@@ -5487,17 +5486,15 @@ export default function DataAnalysisCourse() {
                           {currentProject.learningResources.videos.map((video, i) => (
                             <motion.a 
                               key={i}
-                              href={`#${encodeURIComponent(video)}`}
+                              href={video.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
                               className="bg-gray-50 rounded-lg p-2 hover:bg-gray-100 transition-all cursor-pointer block border border-gray-100"
                               whileHover={{ y: -2 }}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                alert(`正在跳转到视频教程：${video}`);
-                              }}
                             >
                               <span className="text-blue-600 text-sm flex items-center gap-2">
                                 <span>→</span>
-                                {video}
+                                {video.title}
                               </span>
                             </motion.a>
                           ))}
@@ -5514,17 +5511,15 @@ export default function DataAnalysisCourse() {
                           {currentProject.learningResources.examples.map((example, i) => (
                             <motion.a 
                               key={i}
-                              href={`#${encodeURIComponent(example)}`}
+                              href={example.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
                               className="bg-gray-50 rounded-lg p-2 hover:bg-gray-100 transition-all cursor-pointer block border border-gray-100"
                               whileHover={{ y: -2 }}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                alert(`正在跳转到代码示例：${example}`);
-                              }}
                             >
                               <span className="text-blue-600 text-sm flex items-center gap-2">
                                 <span>→</span>
-                                {example}
+                                {example.title}
                               </span>
                             </motion.a>
                           ))}
@@ -5538,33 +5533,29 @@ export default function DataAnalysisCourse() {
                           社区支持
                         </h3>
                         <motion.a 
-                          href={`#${encodeURIComponent(currentProject.communitySupport.forum)}`}
+                          href={currentProject.communitySupport.forum.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="bg-gray-50 rounded-lg p-3 mb-3 hover:bg-gray-100 transition-all cursor-pointer block border border-gray-100"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            alert(`正在跳转到社区论坛：${currentProject.communitySupport.forum}`);
-                          }}
                         >
                           <span className="text-blue-600 flex items-center gap-2">
                             <span>→</span>
-                            {currentProject.communitySupport.forum}
+                            {currentProject.communitySupport.forum.title}
                           </span>
                         </motion.a>
                         <div className="space-y-2">
                           {currentProject.communitySupport.discussion.map((topic, i) => (
                             <motion.a 
                               key={i}
-                              href={`#${encodeURIComponent(topic)}`}
+                              href={topic.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
                               className="bg-gray-50 rounded-lg p-2 hover:bg-gray-100 transition-all cursor-pointer block border border-gray-100"
                               whileHover={{ y: -2 }}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                alert(`正在跳转到讨论：${topic}`);
-                              }}
                             >
                               <span className="text-blue-600 text-sm flex items-center gap-2">
                                 <span>→</span>
-                                {topic}
+                                {topic.title}
                               </span>
                             </motion.a>
                           ))}
