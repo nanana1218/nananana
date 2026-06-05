@@ -4,18 +4,36 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>王娜 - 个人主页</title>
-    <script type="module">
-      if (import.meta.hot?.on) {
-        import.meta.hot.on('vite:error', (error) => {
-          if (error.err) {
-            console.error(
-              [error.err.message, error.err.frame].filter(Boolean).join('\n'),
-            )
-          }
-        })
+    <meta name="description" content="Pandas数据分析实战训练营 - 从零开始掌握数据分析技能" />
+    <meta name="keywords" content="数据分析,Python,Pandas,机器学习,数据科学" />
+    <meta name="author" content="广东科学技术职业学院" />
+    <!-- 性能优化：预连接 -->
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <!-- 性能优化：DNS预解析 -->
+    <link rel="dns-prefetch" href="//www.google-analytics.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <!-- 性能优化：预加载关键资源 -->
+    <link rel="modulepreload" href="/src/main.tsx">
+    <meta name="theme-color" content="#1e40af" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="cache-control" content="public, max-age=31536000" />
+    <title>Pandas数据分析实战训练营</title>
+    <!-- 内联关键样式，避免 FOUC -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+        min-height: 100vh;
       }
-    </script>
+      #root {
+        min-height: 100vh;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
