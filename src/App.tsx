@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 // 懒加载组件 - 只有当路由被访问时才会加载
+const Home = lazy(() => import("@/pages/Home"));
 const DataAnalysisPlatform = lazy(() => import("@/pages/DataAnalysisPlatform"));
 const DataAnalysisCourse = lazy(() => import("@/pages/DataAnalysisCourse"));
 const PythonCourse = lazy(() => import("@/pages/PythonCourse"));
@@ -25,7 +26,8 @@ export default function App() {
     <Router>
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route path="/" element={<DataAnalysisCourse />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/data-analysis" element={<DataAnalysisPlatform />} />
           <Route path="/data-analysis-course" element={<DataAnalysisCourse />} />
           <Route path="/python" element={<PythonCourse />} />

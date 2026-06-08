@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import SocialShare from '@/components/SocialShare';
 import ProgressTracker from '@/components/ProgressTracker';
 import SEO from '@/components/SEO';
@@ -2941,6 +2942,8 @@ print("=" * 60)`,
 ];
 
 export default function DataAnalysisCourse() {
+  const navigate = useNavigate();
+  
   const [learningState, setLearningState] = useState<LearningState>({
     currentProject: null,
     currentPhase: null,
@@ -3622,9 +3625,27 @@ export default function DataAnalysisCourse() {
       {/* SEO组件 */}
       <SEO />
 
+      {/* 返回个人主页导航 */}
+      <div className="relative z-20 px-4 pt-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.button
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white hover:bg-white/20 transition-all"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span>返回个人主页</span>
+          </motion.button>
+        </div>
+      </div>
+
       {/* Hero区域 - 增强视觉冲击力 */}
       {!currentProject ? (
-        <section className="relative py-20 px-4">
+        <section className="relative py-12 px-4">
           <div className="max-w-7xl mx-auto">
             {/* 分享按钮 */}
             <motion.div
