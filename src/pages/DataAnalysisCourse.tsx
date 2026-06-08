@@ -3986,14 +3986,15 @@ export default function DataAnalysisCourse() {
                         <p className="text-sm text-gray-500 mt-1">包含完整的购物篮关联规则挖掘、用户行为分析、销量预测等实战案例</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <svg 
-                          className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${reportExpanded ? 'rotate-180' : ''}`}
-                          fill="none" 
-                          stroke="currentColor" 
-                          viewBox="0 0 24 24"
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setReportExpanded(!reportExpanded);
+                          }}
+                          className="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-200 transition-all duration-300"
                         >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
+                          {reportExpanded ? '收起报告' : '查看报告'}
+                        </button>
                         <a 
                           href="/在线零售业务数据分析报告.docx" 
                           download
@@ -4186,14 +4187,15 @@ export default function DataAnalysisCourse() {
                         <p className="text-sm text-gray-500 mt-1">包含用户行为分析、K-Means聚类、用户画像构建、精准营销策略等实战案例</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <svg 
-                          className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${taobaoReportExpanded ? 'rotate-180' : ''}`}
-                          fill="none" 
-                          stroke="currentColor" 
-                          viewBox="0 0 24 24"
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setTaobaoReportExpanded(!taobaoReportExpanded);
+                          }}
+                          className="px-4 py-2 bg-purple-100 text-purple-600 rounded-lg text-sm font-medium hover:bg-purple-200 transition-all duration-300"
                         >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
+                          {taobaoReportExpanded ? '收起报告' : '查看报告'}
+                        </button>
                         <a 
                           href="/淘宝用户聚类分析报告.docx" 
                           download
