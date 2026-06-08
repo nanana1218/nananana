@@ -25,7 +25,7 @@ export default function App() {
     <Router>
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<DataAnalysisCourse />} />
           <Route path="/home" element={<Home />} />
           <Route path="/data-analysis" element={<Navigate to="/data-analysis-course" />} />
           <Route path="/data-analysis-course" element={<DataAnalysisCourse />} />
