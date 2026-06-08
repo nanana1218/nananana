@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>淘宝用户聚类分析报告 - 用户细分研究</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    .header p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+    .download-section {
+      padding: 30px 40px;
+      text-align: center;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 40px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+    }
+    .tabs {
+      display: flex;
+      padding: 20px 40px;
+      gap: 15px;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .tab {
+      flex: 1;
+      padding: 15px;
+      background: #f8f9fa;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #495057;
+    }
+    .tab.active {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+    .tab:hover:not(.active) {
+      background: #e9ecef;
+    }
+    .content {
+      padding: 40px;
+    }
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .section h2 {
+      font-size: 1.5rem;
+      color: #212529;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f5576c;
+    }
+    .overview-text {
+      color: #495057;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      font-size: 1.05rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .stat-card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .stat-label {
+      color: #6c757d;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      color: #212529;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .finding-card {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      border-left: 4px solid #f5576c;
+    }
+    .finding-card h3 {
+      color: #212529;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    .finding-card p {
+      color: #495057;
+      line-height: 1.7;
+    }
+    .cluster-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .cluster-card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 12px;
+      position: relative;
+    }
+    .cluster-badge {
+      display: inline-block;
+      padding: 5px 15px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .cluster-name {
+      font-weight: 600;
+      color: #212529;
+      margin-bottom: 8px;
+    }
+    .cluster-desc {
+      color: #6c757d;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .suggestion-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 15px 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .suggestion-number {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .suggestion-text {
+      color: #495057;
+      line-height: 1.7;
+    }
+    .footer {
+      background: #212529;
+      color: #adb5bd;
+      padding: 30px;
+      text-align: center;
+    }
+    .footer p:last-child {
+      margin-top: 8px;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      .stats-grid, .cluster-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .tabs {
+        flex-direction: column;
+      }
+      .content {
+        padding: 20px;
+      }
+      .header {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>👥 淘宝用户聚类分析报告</h1>
+      <p>用户细分研究 | 精准营销策略</p>
+    </div>
+
+    <div class="download-section">
+      <a href="/淘宝用户聚类分析报告.docx" download class="download-btn">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+        下载完整报告 (DOCX)
+      </a>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showSection('overview')">报告概览</button>
+      <button class="tab" onclick="showSection('findings')">核心发现</button>
+      <button class="tab" onclick="showSection('details')">详细分析</button>
+    </div>
+
+    <div class="content">
+      <div id="overview" class="section active">
+        <h2>📋 报告概述</h2>
+        <p class="overview-text">
+          本报告通过K-Means聚类算法对淘宝平台用户进行细分分析，识别出不同特征的用户群体，为精准营销和个性化服务提供数据支持。报告基于淘宝平台真实的用户行为数据，运用机器学习技术构建用户画像，帮助企业深入理解用户需求，优化营销资源配置，提升运营效率。
+        </p>
+
+        <h2 style="margin-top: 30px;">📊 数据说明</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">数据来源</div>
+            <div class="stat-value">淘宝平台用户行为数据</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">时间范围</div>
+            <div class="stat-value">2023年6月 - 2023年12月</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">数据量</div>
+            <div class="stat-value">100,000+ 条用户记录</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">用户规模</div>
+            <div class="stat-value">50,000+ 样本用户</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="findings" class="section">
+        <h2>🔍 核心发现</h2>
+        
+        <div class="finding-card">
+          <h3>1. 用户分群识别</h3>
+          <p>成功识别出5个主要用户群体：价格敏感型、品质追求型、时尚潮流型、便捷购物型和深度用户。通过K-Means聚类算法，基于用户的消费行为、浏览偏好、互动模式等20+个维度进行用户细分，各群体特征差异显著，可针对性强。</p>
+        </div>
+
+        <div class="finding-card">
+          <h3>2. 用户画像构建</h3>
+          <p>为每个用户群体构建了详细的画像，包括年龄分布、消费偏好、购物频率等特征。通过数据挖掘发现，不同群体的画像特征差异明显，如价格敏感型用户以25-35岁女性为主，偏好促销活动时段下单。</p>
+        </div>
+
+        <div class="finding-card">
+          <h3>3. 消费行为差异</h3>
+          <p>分析了不同群体的消费行为差异，发现品质追求型用户的客单价最高（平均800+元），价格敏感型用户最关注促销活动（活动期间下单占比达65%），时尚潮流型用户偏好新品首发，深度用户月均下单次数超过8次。</p>
+        </div>
+
+        <div class="finding-card">
+          <h3>4. 营销渠道偏好</h3>
+          <p>不同用户群体对营销渠道的偏好存在显著差异。价格敏感型用户偏好优惠券推送，品质追求型用户更关注品牌直播，时尚潮流型用户活跃于社交媒体和种草平台，深度用户则对会员专属渠道接受度高。</p>
+        </div>
+      </div>
+
+      <div id="details" class="section">
+        <h2>👥 用户分群分布</h2>
+        <div class="cluster-grid">
+          <div class="cluster-card">
+            <span class="cluster-badge">32%</span>
+            <div class="cluster-name">价格敏感型</div>
+            <div class="cluster-desc">关注折扣、优惠券，偏好低价商品，活动期间下单活跃，对价格高度敏感</div>
+          </div>
+          <div class="cluster-card">
+            <span class="cluster-badge">18%</span>
+            <div class="cluster-name">品质追求型</div>
+            <div class="cluster-desc">注重品牌和品质，愿意为优质商品付费，客单价较高，追求购物体验</div>
+          </div>
+          <div class="cluster-card">
+            <span class="cluster-badge">22%</span>
+            <div class="cluster-name">时尚潮流型</div>
+            <div class="cluster-desc">追求时尚潮流，关注新品发布，活跃于社交媒体，是种草经济的主力</div>
+          </div>
+          <div class="cluster-card">
+            <span class="cluster-badge">15%</span>
+            <div class="cluster-name">便捷购物型</div>
+            <div class="cluster-desc">重视购物效率，偏好一站式购物，喜欢使用快捷支付，复购率高</div>
+          </div>
+          <div class="cluster-card" style="grid-column: span 2;">
+            <span class="cluster-badge">13%</span>
+            <div class="cluster-name">深度用户</div>
+            <div class="cluster-desc">高活跃度、高忠诚度、高消费额，是平台的核心资产，平均年消费额超过15000元</div>
+          </div>
+        </div>
+
+        <h2 style="margin-top: 30px;">💡 业务建议</h2>
+        <div class="suggestion-item">
+          <span class="suggestion-number">1</span>
+          <span class="suggestion-text">针对价格敏感型用户推出限时折扣和优惠券活动，在促销活动期间集中营销，预计可提升转化率20%。</span>
+        </div>
+        <div class="suggestion-item">
+          <span class="suggestion-number">2</span>
+          <span class="suggestion-text">为品质追求型用户提供专属客服和VIP服务，推出高端会员体系，提升客单价和用户粘性。</span>
+        </div>
+        <div class="suggestion-item">
+          <span class="suggestion-number">3</span>
+          <span class="suggestion-text">在社交媒体平台加强对时尚潮流型用户的营销推广，与KOL合作进行种草，建立品牌声量。</span>
+        </div>
+        <div class="suggestion-item">
+          <span class="suggestion-number">4</span>
+          <span class="suggestion-text">优化移动端购物体验，提升便捷购物型用户的满意度，简化购物流程，减少决策时间。</span>
+        </div>
+        <div class="suggestion-item">
+          <span class="suggestion-number">5</span>
+          <span class="suggestion-text">建立深度用户俱乐部，增强用户粘性和归属感，提供专属权益和定制化服务，提升LTV。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>© 2024 数据分析在线教育平台</p>
+      <p>广东科学技术职业学院商学院</p>
+    </div>
+  </div>
+
+  <script>
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+      });
+      // Remove active from all tabs
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      // Show selected section
+      document.getElementById(sectionId).classList.add('active');
+      // Activate clicked tab
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>
