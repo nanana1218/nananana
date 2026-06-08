@@ -9,6 +9,7 @@ const FinancialAnalysisCourse = lazy(() => import("@/pages/FinancialAnalysisCour
 const DataCollectionCourse = lazy(() => import("@/pages/DataCollectionCourse"));
 const SupplyChainCourse = lazy(() => import("@/pages/SupplyChainCourse"));
 const DatabaseCourse = lazy(() => import("@/pages/DatabaseCourse"));
+const ReportViewer = lazy(() => import("@/pages/ReportViewer"));
 
 // 加载中状态组件
 const PageLoader = () => (
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/supply-chain" element={<SupplyChainCourse />} />
           <Route path="/database" element={<DatabaseCourse />} />
           <Route path="/other" element={<div className="text-center text-xl">Other Page - Coming Soon</div>} />
+          <Route path="/report/:reportId" element={<ReportViewer />} />
         </Routes>
       </Suspense>
     </Router>
