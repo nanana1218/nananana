@@ -1,9 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 // 懒加载组件 - 只有当路由被访问时才会加载
 const Home = lazy(() => import("@/pages/Home"));
-const DataAnalysisPlatform = lazy(() => import("@/pages/DataAnalysisPlatform"));
 const DataAnalysisCourse = lazy(() => import("@/pages/DataAnalysisCourse"));
 const PythonCourse = lazy(() => import("@/pages/PythonCourse"));
 const FinancialAnalysisCourse = lazy(() => import("@/pages/FinancialAnalysisCourse"));
@@ -28,7 +27,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/data-analysis" element={<DataAnalysisPlatform />} />
+          <Route path="/data-analysis" element={<Navigate to="/data-analysis-course" />} />
           <Route path="/data-analysis-course" element={<DataAnalysisCourse />} />
           <Route path="/python" element={<PythonCourse />} />
           <Route path="/financial-analysis" element={<FinancialAnalysisCourse />} />

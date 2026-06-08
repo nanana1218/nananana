@@ -252,7 +252,7 @@ export default function Home() {
                         )}
                         {course.id === '2' && (
                           <a 
-                            href="/data-analysis" 
+                            href="/data-analysis-course" 
                             className="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
                           >
                             查看课程详情
