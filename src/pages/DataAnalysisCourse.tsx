@@ -3792,7 +3792,7 @@ export default function DataAnalysisCourse() {
                 className="flex flex-col sm:flex-row gap-4 justify-center items-center"
               >
                 <button 
-                  onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('projects-list')?.scrollIntoView({ behavior: 'smooth' })}
                   className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-xl font-semibold text-lg shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 transition-all flex items-center gap-2"
                 >
                   <span>开始学习之旅</span>
