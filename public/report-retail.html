@@ -29,6 +29,27 @@
       color: white;
       padding: 40px;
       text-align: center;
+      position: relative;
+    }
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      color: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .back-btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateX(-2px);
     }
     .header h1 {
       font-size: 2rem;
@@ -226,6 +247,12 @@
 <body>
   <div class="container">
     <div class="header">
+      <button onclick="goBack()" class="back-btn">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        返回实战训练营
+      </button>
       <h1>🛒 在线零售业务数据分析报告</h1>
       <p>购物车分析 | 数据驱动决策</p>
     </div>
@@ -382,6 +409,10 @@
       document.getElementById(sectionId).classList.add('active');
       // Activate clicked tab
       event.target.classList.add('active');
+    }
+
+    function goBack() {
+      window.location.href = '/';
     }
   </script>
 </body>
