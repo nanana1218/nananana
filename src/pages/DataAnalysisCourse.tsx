@@ -3551,6 +3551,7 @@ export default function DataAnalysisCourse() {
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const [animatedProjects, setAnimatedProjects] = useState<number[]>([]);
   const [reportExpanded, setReportExpanded] = useState(false);
+  const [taobaoReportExpanded, setTaobaoReportExpanded] = useState(false);
 
   // 筛选后的项目列表
   const filteredProjects = projects.filter(project => {
@@ -4162,6 +4163,170 @@ export default function DataAnalysisCourse() {
                                     <div>
                                       <h6 className="font-semibold text-gray-900">时段营销</h6>
                                       <p className="text-sm text-gray-600 mt-1">在下午 4-6 点和晚间购物高峰推送限时优惠，刺激转化</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </section>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* 淘宝用户聚类分析报告 */}
+                  <div className="mt-4 bg-white rounded-xl border border-purple-200 shadow-sm hover:border-purple-400 transition-all duration-300 overflow-hidden">
+                    <div 
+                      className="p-4 cursor-pointer flex items-center gap-3 hover:bg-purple-50/50 transition-colors"
+                      onClick={() => setTaobaoReportExpanded(!taobaoReportExpanded)}
+                    >
+                      <span className="text-2xl">👥</span>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900">用户聚类分析 - 淘宝用户细分报告</h4>
+                        <p className="text-sm text-gray-500 mt-1">包含用户行为分析、K-Means聚类、用户画像构建、精准营销策略等实战案例</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <svg 
+                          className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${taobaoReportExpanded ? 'rotate-180' : ''}`}
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                        <a 
+                          href="/淘宝用户聚类分析报告.docx" 
+                          download
+                          onClick={(e) => e.stopPropagation()}
+                          className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-sm font-medium hover:shadow-md transition-all duration-300"
+                        >
+                          下载报告
+                        </a>
+                      </div>
+                    </div>
+                    <AnimatePresence>
+                      {taobaoReportExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="border-t border-gray-100 p-6 bg-gray-50">
+                            <div className="max-w-4xl mx-auto space-y-6">
+                              <section>
+                                <h5 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                  <span className="text-purple-500">📋</span>
+                                  报告概述
+                                </h5>
+                                <p className="text-gray-700 leading-relaxed">
+                                  本报告基于淘宝平台真实用户行为数据，运用K-Means聚类算法对用户进行细分，构建用户画像，为精准营销和个性化推荐提供数据支撑。
+                                </p>
+                              </section>
+                              <section>
+                                <h5 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                  <span className="text-green-500">📊</span>
+                                  数据说明
+                                </h5>
+                                <ul className="space-y-2 text-gray-700">
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-purple-400 mt-1">•</span>
+                                    <span>数据来源：淘宝平台匿名用户行为数据</span>
+                                  </li>
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-purple-400 mt-1">•</span>
+                                    <span>时间范围：2024年1月-2024年6月</span>
+                                  </li>
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-purple-400 mt-1">•</span>
+                                    <span>数据量：50,000+ 用户行为记录</span>
+                                  </li>
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-purple-400 mt-1">•</span>
+                                    <span>用户规模：10,000+ 独立用户</span>
+                                  </li>
+                                </ul>
+                              </section>
+                              <section>
+                                <h5 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                  <span className="text-purple-500">🔍</span>
+                                  核心发现
+                                </h5>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                                    <h6 className="font-semibold text-gray-900 mb-2">发现1：用户分层明显</h6>
+                                    <p className="text-sm text-gray-600">通过K-Means聚类将用户分为5个群体：高价值用户、潜力用户、普通用户、新用户、流失用户</p>
+                                  </div>
+                                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                                    <h6 className="font-semibold text-gray-900 mb-2">发现2：购买行为差异</h6>
+                                    <p className="text-sm text-gray-600">高价值用户平均客单价是普通用户的3.5倍，购买频率是普通用户的2.8倍</p>
+                                  </div>
+                                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                                    <h6 className="font-semibold text-gray-900 mb-2">发现3：浏览深度</h6>
+                                    <p className="text-sm text-gray-600">高价值用户平均浏览深度达8页，而流失用户仅浏览2页左右</p>
+                                  </div>
+                                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                                    <h6 className="font-semibold text-gray-900 mb-2">发现4：复购周期</h6>
+                                    <p className="text-sm text-gray-600">高价值用户平均复购周期为12天，普通用户为28天</p>
+                                  </div>
+                                </div>
+                              </section>
+                              <section>
+                                <h5 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                  <span className="text-orange-500">🎯</span>
+                                  用户分群分布
+                                </h5>
+                                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                                  <div className="flex flex-wrap gap-4">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                                      <span className="text-gray-700">高价值用户：15%</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                                      <span className="text-gray-700">潜力用户：20%</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                      <span className="text-gray-700">普通用户：40%</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                                      <span className="text-gray-700">新用户：15%</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-3 h-3 rounded-full bg-gray-400"></div>
+                                      <span className="text-gray-700">流失用户：10%</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </section>
+                              <section>
+                                <h5 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                  <span className="text-green-500">💡</span>
+                                  业务建议
+                                </h5>
+                                <div className="space-y-3">
+                                  <div className="flex items-start gap-3 bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
+                                    <span className="text-red-500 text-xl">⭐</span>
+                                    <div>
+                                      <h6 className="font-semibold text-gray-900">VIP专属服务</h6>
+                                      <p className="text-sm text-gray-600 mt-1">为高价值用户提供专属客服、优先发货、专属折扣等VIP服务，提升忠诚度</p>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-start gap-3 bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+                                    <span className="text-purple-500 text-xl">🎁</span>
+                                    <div>
+                                      <h6 className="font-semibold text-gray-900">潜力用户培育</h6>
+                                      <p className="text-sm text-gray-600 mt-1">通过个性化推荐和定向优惠券，将潜力用户转化为高价值用户</p>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-start gap-3 bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                                    <span className="text-orange-500 text-xl">🔔</span>
+                                    <div>
+                                      <h6 className="font-semibold text-gray-900">流失用户召回</h6>
+                                      <p className="text-sm text-gray-600 mt-1">对流失用户发送个性化召回邮件和专属优惠，重新激活用户</p>
                                     </div>
                                   </div>
                                 </div>
