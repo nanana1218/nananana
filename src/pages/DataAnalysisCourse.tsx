@@ -3059,8 +3059,9 @@ export default function DataAnalysisCourse() {
     setLearningState(prev => ({
       ...prev,
       currentProject: projectId,
-      currentPhase: 'learn'
+      currentPhase: 'practice'
     }));
+    setShowPracticeEditor(true);
     setTestAnswers({});
     setShowResults(false);
     setShowReferenceAnswer(false);
