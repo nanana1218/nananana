@@ -71,7 +71,7 @@ export default function Home() {
   ];
 
   const toggleCourse = (courseId: string) => {
-    setExpandedCourse(expandedCourse === courseId ? null : courseId);
+    setExpandedCourse(prev => prev === courseId ? null : courseId);
   };
 
   return (
