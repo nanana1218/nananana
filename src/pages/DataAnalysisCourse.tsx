@@ -3550,8 +3550,8 @@ export default function DataAnalysisCourse() {
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const [animatedProjects, setAnimatedProjects] = useState<number[]>([]);
-  const [reportExpanded, setReportExpanded] = useState(false);
-  const [taobaoReportExpanded, setTaobaoReportExpanded] = useState(false);
+  const [reportExpanded, setReportExpanded] = useState(true);
+  const [taobaoReportExpanded, setTaobaoReportExpanded] = useState(true);
 
   // 筛选后的项目列表
   const filteredProjects = projects.filter(project => {
