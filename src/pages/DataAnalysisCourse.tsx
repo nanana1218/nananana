@@ -3202,7 +3202,14 @@ export default function DataAnalysisCourse() {
       
       // 生成详细的执行结果报告
       let resultText = '';
-      resultText += totalScore === 100 ? '🎉 执行成功！代码完整度满分\n\n' : '✅ 执行成功！\n\n';
+      // 根据完成程度显示不同状态
+      if (totalScore === 100) {
+        resultText += '🎉 执行成功！代码完整度满分\n\n';
+      } else if (totalScore >= 60) {
+        resultText += '⚠️ 代码部分完成！\n\n';
+      } else {
+        resultText += '❌ 代码不完整！\n\n';
+      }
       resultText += `得分：${totalScore}/100\n\n`;
       resultText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
       resultText += `任务完成情况检查：\n`;
