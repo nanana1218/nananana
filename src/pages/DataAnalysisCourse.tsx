@@ -2962,7 +2962,7 @@ export default function DataAnalysisCourse() {
   const [randomQuestions, setRandomQuestions] = useState<Question[]>([]);
   const [practiceScore, setPracticeScore] = useState<number>(0);
   const [completedTasks, setCompletedTasks] = useState<number[]>([]);
-  const [showPracticeEditor, setShowPracticeEditor] = useState(false);
+  const [showPracticeEditor, setShowPracticeEditor] = useState(true);
   const [showSyllabus, setShowSyllabus] = useState(false);
   const [panelSizes, setPanelSizes] = useState({
     left: 320,
