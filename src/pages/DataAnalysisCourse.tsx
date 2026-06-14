@@ -3110,265 +3110,132 @@ export default function DataAnalysisCourse() {
       const project = getCurrentProject();
       if (!project) return;
       
-      let score = 0;
-      const completed = [];
+      // 定义每个项目的任务列表（名称、检测关键词、详细提示）
+      const taskDefinitions: Record<number, { name: string; keywords: string[]; hint: string; score: number }[]> = {
+        1: [
+          { name: '数据读取', keywords: ['pd.read_csv', 'read_csv'], hint: '缺少数据读取步骤，请添加 pd.read_csv() 读取数据', score: 20 },
+          { name: '缺失值处理', keywords: ['fillna', 'dropna'], hint: '缺少缺失值处理步骤，请添加 df.fillna() 处理缺失值', score: 20 },
+          { name: '数据标准化', keywords: ['StandardScaler'], hint: '缺少数据标准化步骤，请使用 StandardScaler 进行特征缩放', score: 20 },
+          { name: '数据保存', keywords: ['to_csv'], hint: '缺少数据保存步骤，请添加 df.to_csv() 保存处理后的数据', score: 20 },
+          { name: '特征处理（分桶/编码）', keywords: ['qcut', 'cut', 'LabelEncoder', 'OneHotEncoder'], hint: '缺少特征处理步骤，请添加 pd.qcut() / pd.cut() 或 LabelEncoder 进行特征分桶和编码', score: 20 },
+        ],
+        2: [
+          { name: '数据读取', keywords: ['pd.read_csv', 'read_csv'], hint: '缺少数据读取步骤，请添加 pd.read_csv() 读取数据', score: 20 },
+          { name: '描述统计分析', keywords: ['describe', 'mean', 'median', 'std'], hint: '缺少描述统计分析，请添加 df.describe() 进行描述性统计', score: 20 },
+          { name: '相关性分析', keywords: ['corr', 'corrcoef'], hint: '缺少相关性分析，请添加 df.corr() 计算变量间相关性', score: 20 },
+          { name: '相关性热力图绘制', keywords: ['heatmap'], hint: '缺少热力图绘制，请使用 sns.heatmap() 绘制相关性热力图', score: 20 },
+          { name: '强相关指标分析', keywords: ['abs', '0.7', '0.6'], hint: '缺少强相关指标分析，请分析相关系数绝对值 > 0.7 的指标', score: 20 },
+        ],
+        3: [
+          { name: '频繁项集挖掘', keywords: ['apriori', 'frequent_itemsets'], hint: '缺少频繁项集挖掘，请使用 apriori() 函数挖掘频繁项集', score: 25 },
+          { name: '关联规则生成', keywords: ['association_rules'], hint: '缺少关联规则生成，请使用 association_rules() 生成关联规则', score: 25 },
+          { name: '有效规则筛选', keywords: ['lift', 'support', 'confidence'], hint: '缺少规则筛选步骤，请筛选 lift > 1 的有效关联规则', score: 25 },
+          { name: '结果保存与输出', keywords: ['to_csv', 'print'], hint: '缺少结果保存步骤，请将分析结果保存到 CSV 文件或打印输出', score: 25 },
+        ],
+        4: [
+          { name: '数据标准化', keywords: ['StandardScaler', 'scale'], hint: '缺少数据标准化步骤，请使用 StandardScaler 对特征进行标准化处理', score: 25 },
+          { name: 'KMeans聚类建模', keywords: ['KMeans', 'fit_predict', 'fit'], hint: '缺少KMeans聚类步骤，请使用 KMeans() 进行聚类分析', score: 25 },
+          { name: 'PCA降维可视化', keywords: ['PCA'], hint: '缺少PCA降维步骤，请使用 PCA() 对数据进行降维以便可视化', score: 25 },
+          { name: '分群特征分析', keywords: ['groupby', 'cluster', 'label'], hint: '缺少分群特征分析，请用 groupby() 分析每个聚类的特征统计', score: 25 },
+        ],
+        5: [
+          { name: '数据读取与预处理', keywords: ['pd.read_csv', 'read_csv'], hint: '缺少数据读取步骤，请添加 pd.read_csv() 读取数据', score: 25 },
+          { name: 'RFM指标分箱', keywords: ['qcut', 'cut', 'quantile'], hint: '缺少RFM指标分箱步骤，请使用 pd.qcut() 对 RFM 指标进行分箱评分', score: 25 },
+          { name: '用户分层统计分析', keywords: ['groupby', 'agg'], hint: '缺少统计分析步骤，请使用 groupby() 对各分层用户进行统计分析', score: 25 },
+          { name: '用户分层应用', keywords: ['apply', 'map', 'assign'], hint: '缺少用户分层应用，请使用 apply() 或自定义函数将用户分到不同层级', score: 25 },
+        ],
+        6: [
+          { name: '线性回归模型训练', keywords: ['LinearRegression', 'fit'], hint: '缺少模型训练步骤，请使用 LinearRegression() 训练回归模型', score: 25 },
+          { name: '模型评估', keywords: ['r2_score', 'mean_squared_error', 'MSE'], hint: '缺少模型评估步骤，请使用 r2_score 或 MSE 评估模型性能', score: 25 },
+          { name: '多重共线性检测', keywords: ['variance_inflation_factor', 'VIF'], hint: '缺少多重共线性检测，请使用 variance_inflation_factor 计算 VIF 值', score: 25 },
+          { name: '模型预测与应用', keywords: ['predict'], hint: '缺少预测应用步骤，请使用 model.predict() 进行预测', score: 25 },
+        ],
+        7: [
+          { name: '随机森林模型训练', keywords: ['RandomForestRegressor', 'RandomForestClassifier', 'fit'], hint: '缺少随机森林训练步骤，请使用 RandomForestRegressor() 训练模型', score: 25 },
+          { name: '训练集测试集拆分', keywords: ['train_test_split'], hint: '缺少数据拆分步骤，请使用 train_test_split() 拆分训练集和测试集', score: 25 },
+          { name: '特征重要性分析', keywords: ['feature_importances_'], hint: '缺少特征重要性分析，请使用 model.feature_importances_ 分析各特征的重要性', score: 25 },
+          { name: '模型性能评估', keywords: ['r2_score', 'mean_squared_error', 'score'], hint: '缺少模型评估步骤，请使用 r2_score 或 MSE 评估模型性能', score: 25 },
+        ],
+        8: [
+          { name: '日期格式转换', keywords: ['to_datetime', 'pd.DatetimeIndex'], hint: '缺少日期转换步骤，请使用 pd.to_datetime() 将时间字段转为日期格式', score: 25 },
+          { name: '时间序列重采样', keywords: ['resample', 'asfreq'], hint: '缺少时间序列重采样步骤，请使用 df.resample() 按时间聚合数据', score: 25 },
+          { name: 'ARIMA模型训练', keywords: ['ARIMA', 'SARIMAX', 'fit'], hint: '缺少ARIMA模型训练步骤，请使用 ARIMA() 训练时间序列模型', score: 25 },
+          { name: '时序预测与可视化', keywords: ['get_forecast', 'forecast', 'predict'], hint: '缺少预测步骤，请使用 model.get_forecast() 或 model.predict() 进行预测', score: 25 },
+        ],
+        9: [
+          { name: '孤立森林异常检测', keywords: ['IsolationForest', 'fit_predict'], hint: '缺少孤立森林检测步骤，请使用 IsolationForest() 检测异常值', score: 33 },
+          { name: '数据标准化预处理', keywords: ['StandardScaler', 'scale'], hint: '缺少数据标准化步骤，请使用 StandardScaler 进行特征缩放', score: 33 },
+          { name: '3σ原则统计检测', keywords: ['3 * std', 'mean', 'std', 'abs'], hint: '缺少3σ原则检测步骤，请使用 mean ± 3*std 规则检测统计异常', score: 34 },
+        ],
+        10: [
+          { name: '多数据源整合', keywords: ['read_csv', 'merge', 'concat'], hint: '缺少数据整合步骤，请整合多个数据源，使用 pd.merge() 或 pd.concat() 合并数据', score: 20 },
+          { name: '核心业务指标计算', keywords: ['groupby', 'sum', 'mean', 'count'], hint: '缺少核心指标计算，请计算总营收、客单价、订单数等核心业务指标', score: 20 },
+          { name: '销量影响因素分析', keywords: ['RandomForestRegressor', 'LinearRegression', 'corr'], hint: '缺少销量影响因素分析，请使用回归模型或相关性分析找出影响销量的关键因素', score: 20 },
+          { name: '时间序列趋势分析', keywords: ['resample', 'to_datetime', 'rolling'], hint: '缺少时间序列分析，请分析数据的时间趋势和周期性规律', score: 20 },
+          { name: 'RFM用户分层分析', keywords: ['qcut', 'groupby', 'RFM'], hint: '缺少RFM用户分层，请根据 RFM 指标对用户进行分层分析', score: 20 },
+        ],
+      };
       
-      // 根据不同项目进行特定的错误检测和评分
-      switch (project.id) {
-        case 1: // 数据预处理高阶班
-          if (!userCode.includes('import pandas as pd')) {
-            setErrorMessage('错误：缺少导入 pandas 库的代码');
-            return;
-          }
-          if (userCode.includes('pd.read_csv')) {
-            score += 20;
-            completed.push(0);
-          }
-          if (userCode.includes('fillna')) {
-            score += 20;
-            completed.push(1);
-          }
-          if (userCode.includes('StandardScaler')) {
-            score += 20;
-            completed.push(2);
-          }
-          if (userCode.includes('to_csv')) {
-            score += 20;
-            completed.push(3);
-          }
-          if (userCode.includes('qcut') || userCode.includes('cut')) {
-            score += 20;
-            completed.push(4);
-          }
-          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 数据读取完成\n' : ''}${completed.includes(1) ? '✅ 缺失值处理完成\n' : ''}${completed.includes(2) ? '✅ 数据标准化完成\n' : ''}${completed.includes(3) ? '✅ 数据保存完成\n' : ''}${completed.includes(4) ? '✅ 特征处理完成\n' : ''}`);
-          break;
-          
-        case 2: // 多维统计+深度相关性分析
-          if (!userCode.includes('import pandas as pd')) {
-            setErrorMessage('错误：缺少导入 pandas 库的代码');
-            return;
-          }
-          if (userCode.includes('pd.read_csv')) {
-            score += 20;
-            completed.push(0);
-          }
-          if (userCode.includes('describe')) {
-            score += 20;
-            completed.push(1);
-          }
-          if (userCode.includes('corr')) {
-            score += 20;
-            completed.push(2);
-          }
-          if (userCode.includes('heatmap')) {
-            score += 20;
-            completed.push(3);
-          }
-          if (userCode.includes('abs() >= 0.7')) {
-            score += 20;
-            completed.push(4);
-          }
-          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 数据读取完成\n' : ''}${completed.includes(1) ? '✅ 描述统计完成\n' : ''}${completed.includes(2) ? '✅ 相关性分析完成\n' : ''}${completed.includes(3) ? '✅ 热力图绘制完成\n' : ''}${completed.includes(4) ? '✅ 强相关指标分析完成\n' : ''}`);
-          break;
-          
-        case 3: // 购物车关联规则挖掘
-          if (!userCode.includes('import pandas as pd')) {
-            setErrorMessage('错误：缺少导入 pandas 库的代码');
-            return;
-          }
-          if (userCode.includes('apriori')) {
-            score += 25;
-            completed.push(0);
-          }
-          if (userCode.includes('association_rules')) {
-            score += 25;
-            completed.push(1);
-          }
-          if (userCode.includes('lift')) {
-            score += 25;
-            completed.push(2);
-          }
-          if (userCode.includes('to_csv')) {
-            score += 25;
-            completed.push(3);
-          }
-          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 频繁项集挖掘完成\n' : ''}${completed.includes(1) ? '✅ 关联规则生成完成\n' : ''}${completed.includes(2) ? '✅ 有效规则筛选完成\n' : ''}${completed.includes(3) ? '✅ 结果保存完成\n' : ''}`);
-          break;
-          
-        case 4: // KMeans聚类分析实战
-          if (!userCode.includes('import pandas as pd')) {
-            setErrorMessage('错误：缺少导入 pandas 库的代码');
-            return;
-          }
-          if (userCode.includes('StandardScaler')) {
-            score += 25;
-            completed.push(0);
-          }
-          if (userCode.includes('KMeans')) {
-            score += 25;
-            completed.push(1);
-          }
-          if (userCode.includes('PCA')) {
-            score += 25;
-            completed.push(2);
-          }
-          if (userCode.includes('groupby')) {
-            score += 25;
-            completed.push(3);
-          }
-          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 数据标准化完成\n' : ''}${completed.includes(1) ? '✅ KMeans聚类完成\n' : ''}${completed.includes(2) ? '✅ PCA降维完成\n' : ''}${completed.includes(3) ? '✅ 分群特征分析完成\n' : ''}`);
-          break;
-          
-        case 5: // RFM模型用户分层
-          if (!userCode.includes('import pandas as pd')) {
-            setErrorMessage('错误：缺少导入 pandas 库的代码');
-            return;
-          }
-          if (userCode.includes('pd.read_csv')) {
-            score += 25;
-            completed.push(0);
-          }
-          if (userCode.includes('qcut')) {
-            score += 25;
-            completed.push(1);
-          }
-          if (userCode.includes('groupby')) {
-            score += 25;
-            completed.push(2);
-          }
-          if (userCode.includes('apply')) {
-            score += 25;
-            completed.push(3);
-          }
-          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 数据读取完成\n' : ''}${completed.includes(1) ? '✅ 指标分箱完成\n' : ''}${completed.includes(2) ? '✅ 统计分析完成\n' : ''}${completed.includes(3) ? '✅ 用户分层完成\n' : ''}`);
-          break;
-          
-        case 6: // 一元+多元线性回归
-          if (!userCode.includes('import pandas as pd')) {
-            setErrorMessage('错误：缺少导入 pandas 库的代码');
-            return;
-          }
-          if (userCode.includes('LinearRegression')) {
-            score += 25;
-            completed.push(0);
-          }
-          if (userCode.includes('r2_score')) {
-            score += 25;
-            completed.push(1);
-          }
-          if (userCode.includes('variance_inflation_factor')) {
-            score += 25;
-            completed.push(2);
-          }
-          if (userCode.includes('predict')) {
-            score += 25;
-            completed.push(3);
-          }
-          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 模型训练完成\n' : ''}${completed.includes(1) ? '✅ 模型评估完成\n' : ''}${completed.includes(2) ? '✅ 多重共线性检测完成\n' : ''}${completed.includes(3) ? '✅ 预测应用完成\n' : ''}`);
-          break;
-          
-        case 7: // 随机森林回归+特征重要性
-          if (!userCode.includes('import pandas as pd')) {
-            setErrorMessage('错误：缺少导入 pandas 库的代码');
-            return;
-          }
-          if (userCode.includes('RandomForestRegressor')) {
-            score += 25;
-            completed.push(0);
-          }
-          if (userCode.includes('train_test_split')) {
-            score += 25;
-            completed.push(1);
-          }
-          if (userCode.includes('feature_importances_')) {
-            score += 25;
-            completed.push(2);
-          }
-          if (userCode.includes('r2_score')) {
-            score += 25;
-            completed.push(3);
-          }
-          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 随机森林训练完成\n' : ''}${completed.includes(1) ? '✅ 数据拆分完成\n' : ''}${completed.includes(2) ? '✅ 特征重要性分析完成\n' : ''}${completed.includes(3) ? '✅ 模型评估完成\n' : ''}`);
-          break;
-          
-        case 8: // 时间序列完整分析
-          if (!userCode.includes('import pandas as pd')) {
-            setErrorMessage('错误：缺少导入 pandas 库的代码');
-            return;
-          }
-          if (userCode.includes('to_datetime')) {
-            score += 25;
-            completed.push(0);
-          }
-          if (userCode.includes('resample')) {
-            score += 25;
-            completed.push(1);
-          }
-          if (userCode.includes('ARIMA')) {
-            score += 25;
-            completed.push(2);
-          }
-          if (userCode.includes('get_forecast')) {
-            score += 25;
-            completed.push(3);
-          }
-          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 日期格式转换完成\n' : ''}${completed.includes(1) ? '✅ 数据重采样完成\n' : ''}${completed.includes(2) ? '✅ ARIMA模型训练完成\n' : ''}${completed.includes(3) ? '✅ 时序预测完成\n' : ''}`);
-          break;
-          
-        case 9: // 综合异常检测
-          if (!userCode.includes('import pandas as pd')) {
-            setErrorMessage('错误：缺少导入 pandas 库的代码');
-            return;
-          }
-          if (userCode.includes('IsolationForest')) {
-            score += 33;
-            completed.push(0);
-          }
-          if (userCode.includes('StandardScaler')) {
-            score += 33;
-            completed.push(1);
-          }
-          if (userCode.includes('3 * std')) {
-            score += 34;
-            completed.push(2);
-          }
-          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 孤立森林异常检测完成\n' : ''}${completed.includes(1) ? '✅ 数据标准化完成\n' : ''}${completed.includes(2) ? '✅ 统计异常检测完成\n' : ''}`);
-          break;
-          
-        case 10: // 全流程综合大项目
-          if (!userCode.includes('import pandas as pd')) {
-            setErrorMessage('错误：缺少导入 pandas 库的代码');
-            return;
-          }
-          if (userCode.includes('read_csv')) {
-            score += 20;
-            completed.push(0);
-          }
-          if (userCode.includes('groupby')) {
-            score += 20;
-            completed.push(1);
-          }
-          if (userCode.includes('RandomForestRegressor')) {
-            score += 20;
-            completed.push(2);
-          }
-          if (userCode.includes('resample')) {
-            score += 20;
-            completed.push(3);
-          }
-          if (userCode.includes('qcut')) {
-            score += 20;
-            completed.push(4);
-          }
-          setExecutionResult(`执行成功！\n\n得分：${score}/100\n\n${completed.includes(0) ? '✅ 数据整合完成\n' : ''}${completed.includes(1) ? '✅ 核心指标计算完成\n' : ''}${completed.includes(2) ? '✅ 销量影响因素分析完成\n' : ''}${completed.includes(3) ? '✅ 时间序列趋势分析完成\n' : ''}${completed.includes(4) ? '✅ RFM用户分层完成\n' : ''}`);
-          break;
-          
-        default:
-          setExecutionResult('执行成功！');
+      // 获取当前项目的任务定义
+      const tasks = taskDefinitions[project.id];
+      if (!tasks) {
+        setExecutionResult('执行成功！');
+        setPracticeScore(100);
+        return;
       }
       
-      setPracticeScore(score);
-      setCompletedTasks(completed);
+      // 检查每个任务是否完成
+      const taskResults = tasks.map((task, idx) => {
+        const isDone = task.keywords.some(kw => userCode.includes(kw));
+        return {
+          index: idx,
+          name: task.name,
+          hint: task.hint,
+          score: task.score,
+          isDone: isDone,
+        };
+      });
+      
+      // 计算总得分
+      const totalScore = taskResults.filter(t => t.isDone).reduce((sum, t) => sum + t.score, 0);
+      const completedTasks = taskResults.filter(t => t.isDone).map(t => t.index);
+      
+      // 生成详细的执行结果报告
+      let resultText = '';
+      resultText += totalScore === 100 ? '🎉 执行成功！代码完整度满分\n\n' : '✅ 执行成功！\n\n';
+      resultText += `得分：${totalScore}/100\n\n`;
+      resultText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+      resultText += `任务完成情况检查：\n`;
+      resultText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+      
+      taskResults.forEach((task, idx) => {
+        if (task.isDone) {
+          resultText += `✅ ${task.name}（+${task.score}分）\n`;
+        } else {
+          resultText += `❌ ${task.name}（缺失，-${task.score}分）\n`;
+          resultText += `   💡 ${task.hint}\n`;
+        }
+        resultText += `\n`;
+      });
+      
+      // 如果有缺失的任务，给出汇总提示
+      const missingTasks = taskResults.filter(t => !t.isDone);
+      if (missingTasks.length > 0) {
+        resultText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        resultText += `📝 改进建议：\n`;
+        resultText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+        resultText += `当前代码缺少 ${missingTasks.length} 个关键步骤，请参考上面 💡 的提示补充代码以获得更高分数。\n\n`;
+        missingTasks.forEach((task, idx) => {
+          resultText += `${idx + 1}. ${task.name}：${task.hint.replace('缺少', '需要添加')}\n`;
+        });
+      } else {
+        resultText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        resultText += `🌟 完美！所有关键步骤都已完成，代码结构清晰。\n`;
+      }
+      
+      setExecutionResult(resultText);
+      setPracticeScore(totalScore);
+      setCompletedTasks(completedTasks);
     }, 1000);
   };
 
